@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { renderId } from '@/utils'
+import { renderId } from './utils'
 
 const queryClient = new QueryClient({
   defaultOptions: {
