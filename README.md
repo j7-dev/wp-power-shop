@@ -11,7 +11,8 @@
    and `npm run init`, `npm run dev`, that's all the steps
 
 2. Integrate with WordPress RestFul API<br>
-   change the `VITE_API_URL` to your site url in `.env.development`
+   API URL will be `{site_url}/wp-json` by default.<br />
+	 site_url is as same as your WordPres site site_url
 
 3. CRUD utility function<br>
    Default with `getPost` and `getUser` Example, check [more utilities](#functions-simple-crud-for-wordpress-restful-api)
@@ -59,7 +60,7 @@ Tech stacks (knowledge you need to have)
    npm run dev
    ```
 
-3. Change the API url to your project in `.env.development`
+3. Change the settings of your project in `.env.development`
 
    ```sh
    VITE_BASE_URL='/'
@@ -68,10 +69,6 @@ Tech stacks (knowledge you need to have)
    VITE_RENDER_ID='my-app'
    # by default, the footer will render a <div id="my-app"></div> container at footer
    # You can custom the render id
-
-   VITE_API_URL='http://wpdev.local/wp-json'
-   # ↑ ⭐ change this to your site WordPress URL
-   # {site_url}/wp-json
 
    VITE_API_TIMEOUT='30000'
    ```
