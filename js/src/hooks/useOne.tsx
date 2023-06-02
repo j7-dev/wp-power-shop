@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
 import { getResource } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 
-const useOne = (options: {
+export const useOne = (options: {
   resource: string
-  id: number
+  pathParams?: string[]
+  args?: Record<string, string>
   queryOptions?: {
     staleTime?: number
     cacheTime?: number
@@ -17,34 +17,31 @@ const useOne = (options: {
     enabled?: boolean
   }
 }) => {
-  const [
-    fetchedData,
-    setFetchedData,
-  ] = useState<any>(null)
+  const resource = options?.resource || 'post'
+  const pathParams = options?.pathParams || []
+  const args = options?.args || undefined
+
+  const queryKey = args
+    ? [
+        `get_${resource}`,
+        pathParams,
+        args,
+      ]
+    : [
+        `get_${resource}`,
+        pathParams,
+      ]
+
   const getResult = useQuery(
-    [
-      `get_${options.resource}`,
-      options.id,
-    ],
+    queryKey,
     async () =>
       getResource({
-        resource: options.resource,
-        id: options.id,
+        resource,
+        pathParams,
+        args,
       }),
     options.queryOptions || {},
   )
-  const { isSuccess, data, isFetching } = getResult
 
-  useEffect(() => {
-    if (data) {
-      setFetchedData(data.data || null)
-    }
-  }, [
-    isSuccess,
-    isFetching,
-  ])
-
-  return fetchedData
+  return getResult
 }
-
-export default useOne

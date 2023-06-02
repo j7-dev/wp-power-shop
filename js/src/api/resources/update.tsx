@@ -3,17 +3,17 @@ import { apiUrl } from '@/utils'
 
 export const updateResource = async ({
   resource,
-  id,
+  pathParams = [],
   args = {},
 }: {
   resource: string
-  id: number
+  pathParams: string[]
   args: {
     [key: string]: any
   }
 }) => {
   const updateResult = await axios.post(
-    `${apiUrl}/wp/v2/${resource}/${id}`,
+    `${apiUrl}/wp/v2/${resource}/${new URLSearchParams(args).toString()}/`,
     args,
   )
 

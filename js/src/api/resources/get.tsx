@@ -3,15 +3,15 @@ import { apiUrl } from '@/utils'
 
 export const getResource = async ({
   resource,
-  id,
+  pathParams = [],
   args = {},
 }: {
   resource: string
-  id: number
-  args?: Record<string, any>
+  pathParams: string[]
+  args?: Record<string, string>
 }) => {
   const getResult = await axios.get(
-    `${apiUrl}/wp/v2/${resource}/${id}/?${new URLSearchParams(
+    `${apiUrl}/wp/v2/${resource}/${pathParams.join('/')}/?${new URLSearchParams(
       args,
     ).toString()}`,
   )
@@ -21,13 +21,17 @@ export const getResource = async ({
 
 export const getResources = async ({
   resource,
+  pathParams = [],
   args = {},
 }: {
   resource: string
-  args?: Record<string, any>
+  pathParams: string[]
+  args?: Record<string, string>
 }) => {
   const getResult = await axios.get(
-    `${apiUrl}/wp/v2/${resource}/?${new URLSearchParams(args).toString()}`,
+    `${apiUrl}/wp/v2/${resource}/${pathParams.join('/')}/?${new URLSearchParams(
+      args,
+    ).toString()}`,
   )
 
   return getResult

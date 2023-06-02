@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
 import { getResources } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 
-const useMany = (options: {
+export const useMany = (options: {
   resource: string
-  args?: Record<string, any>
+  pathParams?: string[]
+  args?: Record<string, string>
   queryOptions?: {
     staleTime?: number
     cacheTime?: number
@@ -17,40 +17,31 @@ const useMany = (options: {
     enabled?: boolean
   }
 }) => {
-  const queryKey = !!options?.args
+  const resource = options?.resource || 'post'
+  const pathParams = options?.pathParams || []
+  const args = options?.args || undefined
+
+  const queryKey = args
     ? [
-        `get_${options.resource}s`,
-        options?.args,
+        `get_${resource}s`,
+        pathParams,
+        args,
       ]
     : [
-        `get_${options.resource}s`,
+        `get_${resource}s`,
+        pathParams,
       ]
 
-  const [
-    fetchedData,
-    setFetchedData,
-  ] = useState<any>(null)
   const getResult = useQuery(
     queryKey,
     async () =>
       getResources({
-        resource: options.resource,
-        args: options.args,
+        resource,
+        pathParams,
+        args,
       }),
     options.queryOptions || {},
   )
-  const { isSuccess, data, isFetching } = getResult
 
-  useEffect(() => {
-    if (data) {
-      setFetchedData(data.data || null)
-    }
-  }, [
-    isSuccess,
-    isFetching,
-  ])
-
-  return fetchedData
+  return getResult
 }
-
-export default useMany

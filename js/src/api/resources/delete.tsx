@@ -3,12 +3,14 @@ import { apiUrl } from '@/utils'
 
 export const deleteResource = async ({
   resource,
-  id,
+  pathParams = [],
 }: {
   resource: string
-  id: number
+  pathParams: string[]
 }) => {
-  const deleteResult = await axios.delete(`${apiUrl}/wp/v2/${resource}/${id}`)
+  const deleteResult = await axios.delete(
+    `${apiUrl}/wp/v2/${resource}/${pathParams.join('/')}/`,
+  )
 
   return deleteResult
 }
