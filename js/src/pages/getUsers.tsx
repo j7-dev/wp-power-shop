@@ -2,12 +2,14 @@ import { useMany } from '@/hooks'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 
 const GetUsersPage = () => {
-  const users = useMany({
+  const usersResult = useMany({
     resource: 'users',
     queryOptions: {
       enabled: true,
     },
   })
+
+  const users = usersResult?.data?.data || []
 
   return (
     <>

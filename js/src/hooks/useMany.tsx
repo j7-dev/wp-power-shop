@@ -4,7 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 export const useMany = (options: {
   resource: string
   pathParams?: string[]
-  args?: Record<string, string>
+  args?: {
+    [key: string]: any
+  }
   queryOptions?: {
     staleTime?: number
     cacheTime?: number

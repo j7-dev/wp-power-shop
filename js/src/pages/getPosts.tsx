@@ -3,19 +3,20 @@ import { renderHTML } from '@/utils'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 
 const GetPostsPage = () => {
-  const posts = useMany({
+  const postsResult = useMany({
     resource: 'posts',
     queryOptions: {
       enabled: true,
     },
   })
+  const posts = postsResult?.data?.data || []
 
   const featureImgIds = !!posts
     ? posts.map((post: any) => post?.featured_media)
     : []
-  const uniqueFeatureImgIds = Array.from(new Set(featureImgIds))
+  const uniqueFeatureImgIds = Array.from(new Set(featureImgIds)) as number[]
 
-  const images = useMany({
+  const imagesResult = useMany({
     resource: 'media',
     args: {
       include: uniqueFeatureImgIds,
@@ -24,6 +25,8 @@ const GetPostsPage = () => {
       enabled: (!!posts && posts.length > 0) || false,
     },
   })
+
+  const images = imagesResult?.data?.data || []
 
   return (
     <>
