@@ -1,3 +1,5 @@
 <?php
+require_once 'class/class-functions.php';
 
-include_once 'class/class-cpt.php';
+
+require_once 'class/class-cpt.php';

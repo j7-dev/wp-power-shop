@@ -16,5 +16,5 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/inc/backend.php';
 
 
-$instance = new Backend\Bootstrap();
+$instance = new FastShop\Bootstrap();
 $instance->init();

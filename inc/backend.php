@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace J7\ViteReactWPPlugin\Backend;
+namespace J7\ViteReactWPPlugin\FastShop;
 
 use Kucrut\Vite;
 
 class Bootstrap
 {
 
-	const PROJECT_NAME = 'fast-shop';
+	const TEXT_DOMAIN = 'fast-shop';
+	const LABEL = 'Fast Shop';
 
 	public function init(): void
 	{
@@ -35,27 +36,24 @@ class Bootstrap
 			dirname(__DIR__) . '/js/dist',
 			'js/src/main.tsx',
 			[
-				'handle' => self::PROJECT_NAME,
+				'handle' => self::TEXT_DOMAIN,
 				'in-footer' => true,
 			]
 		);
 
-		\wp_localize_script(self::PROJECT_NAME, 'appData', array(
+		\wp_localize_script(self::TEXT_DOMAIN, 'appData', array(
 			'apiUrl' => \site_url() . '/wp-json',
 			'userId' => \wp_get_current_user()->data->ID,
 		));
 
-		\wp_localize_script(self::PROJECT_NAME, 'wpApiSettings', array(
+		\wp_localize_script(self::TEXT_DOMAIN, 'wpApiSettings', array(
 			'root' => \esc_url_raw(rest_url()),
 			'nonce' => \wp_create_nonce('wp_rest'),
 		));
 	}
 }
 
-
-
-
-
-
-
 require_once __DIR__ . '/custom/includes.php';
+
+
+new CPT();
