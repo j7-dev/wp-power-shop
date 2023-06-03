@@ -38,15 +38,18 @@ function DefaultPage() {
       </div>
       <h1>Vite + React + WordPress</h1>
       <div className="flex justify-center mb-8">
-        <button onClick={() => setCount((theCount) => theCount + 1)}>
+        <button
+          type="button"
+          onClick={() => setCount((theCount) => theCount + 1)}
+        >
           Count is {count}
         </button>
 
-        <button onClick={() => setShowPosts(!showPosts)}>
+        <button type="button" onClick={() => setShowPosts(!showPosts)}>
           Get Posts Example
         </button>
 
-        <button onClick={() => setShowUsers(!showUsers)}>
+        <button type="button" onClick={() => setShowUsers(!showUsers)}>
           Get Users Example
         </button>
       </div>

@@ -9,12 +9,12 @@
  * Version: 0.0.1
  */
 
-namespace J7\ViteReactWPPlugin;
+namespace J7\ViteReactWPPlugin\FastShop;
 
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/inc/backend.php';
+require_once __DIR__ . '/inc/admin.php';
 
 
-$instance = new FastShop\Bootstrap();
+$instance = new Admin\Bootstrap();
 $instance->init();

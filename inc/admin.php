@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace J7\ViteReactWPPlugin\FastShop;
+namespace J7\ViteReactWPPlugin\FastShop\Admin;
 
 use Kucrut\Vite;
 
@@ -14,8 +14,8 @@ class Bootstrap
 
 	public function init(): void
 	{
-		\add_action('wp_enqueue_scripts', [$this, 'enqueue_script']);
-		\add_action('wp_footer', [$this, 'render_app']);
+		\add_action('admin_enqueue_scripts', [$this, 'enqueue_script']);
+		// \add_action('wp_footer', [$this, 'render_app']);
 	}
 
 	/**
