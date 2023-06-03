@@ -1,10 +1,14 @@
 import { getResource } from '@/api'
 import { useQuery } from '@tanstack/react-query'
+import { TPostArgs } from '@/types'
 
 export const useOne = (options: {
   resource: string
+  dataProvider?: 'wp' | 'wc'
   pathParams?: string[]
-  args?: Record<string, string>
+  args?: TPostArgs & {
+    [key: string]: any
+  }
   queryOptions?: {
     staleTime?: number
     cacheTime?: number
@@ -18,17 +22,20 @@ export const useOne = (options: {
   }
 }) => {
   const resource = options?.resource || 'post'
+  const dataProvider = options?.dataProvider || 'wp'
   const pathParams = options?.pathParams || []
   const args = options?.args || undefined
 
   const queryKey = args
     ? [
         `get_${resource}`,
+        dataProvider,
         pathParams,
         args,
       ]
     : [
         `get_${resource}`,
+        dataProvider,
         pathParams,
       ]
 
@@ -37,6 +44,7 @@ export const useOne = (options: {
     async () =>
       getResource({
         resource,
+        dataProvider,
         pathParams,
         args,
       }),

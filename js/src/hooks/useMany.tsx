@@ -1,10 +1,12 @@
 import { getResources } from '@/api'
 import { useQuery } from '@tanstack/react-query'
+import { TPostsArgs } from '@/types'
 
 export const useMany = (options: {
   resource: string
+  dataProvider?: 'wp' | 'wc'
   pathParams?: string[]
-  args?: {
+  args?: TPostsArgs & {
     [key: string]: any
   }
   queryOptions?: {
@@ -20,17 +22,20 @@ export const useMany = (options: {
   }
 }) => {
   const resource = options?.resource || 'post'
+  const dataProvider = options?.dataProvider || 'wp'
   const pathParams = options?.pathParams || []
   const args = options?.args || undefined
 
   const queryKey = args
     ? [
         `get_${resource}s`,
+        dataProvider,
         pathParams,
         args,
       ]
     : [
         `get_${resource}s`,
+        dataProvider,
         pathParams,
       ]
 
@@ -39,6 +44,7 @@ export const useMany = (options: {
     async () =>
       getResources({
         resource,
+        dataProvider,
         pathParams,
         args,
       }),

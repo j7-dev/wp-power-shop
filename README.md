@@ -356,4 +356,5 @@ If this project is useful for you, please give me a github star ⭐
 
 1. Inspired by [Vite for WP](https://github.com/kucrut/vite-for-wp)
 2. API design Inspired by [Refine](https://refine.dev/)
-3. [WordPress REST API Handbook](https://developer.wordpress.org/rest-api/reference/)
+3. [WordPress REST API](https://developer.wordpress.org/rest-api/reference/)
+4. [Woocommerce REST API](https://woocommerce.github.io/woocommerce-rest-api-docs/?shell#introduction)

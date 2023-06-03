@@ -40,3 +40,12 @@ export const getTypeText = (
       return `${resourceText} ${methodText}`
   }
 }
+
+export const getDataProviderUrlParams = (dataProvider: 'wp' | 'wc') => {
+  switch (dataProvider) {
+    case 'wc':
+      return 'wc/v3'
+    default:
+      return 'wp/v2'
+  }
+}

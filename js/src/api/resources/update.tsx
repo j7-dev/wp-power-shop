@@ -1,19 +1,24 @@
 import { axios } from '@/api'
-import { apiUrl } from '@/utils'
+import { apiUrl, getDataProviderUrlParams } from '@/utils'
 
 export const updateResource = async ({
   resource,
+  dataProvider = 'wp',
   pathParams = [],
   args = {},
 }: {
   resource: string
-  pathParams: string[]
-  args: {
+  dataProvider?: 'wp' | 'wc'
+  pathParams?: string[]
+  args?: {
     [key: string]: any
   }
 }) => {
+  const dataProviderUrlParams = getDataProviderUrlParams(dataProvider)
   const updateResult = await axios.post(
-    `${apiUrl}/wp/v2/${resource}/${new URLSearchParams(args).toString()}/`,
+    `${apiUrl}/${dataProviderUrlParams}/${resource}/${pathParams.join(
+      '/',
+    )}?${new URLSearchParams(args).toString()}`,
     args,
   )
 

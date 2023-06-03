@@ -1,67 +1,95 @@
 import { useState } from 'react'
-import reactLogo from '../assets/images/react.svg'
-import viteLogo from '../assets/images/vite.svg'
-import wpLogo from '../assets/images/wp.png'
-import GetPostsPage from './getPosts'
-import GetUsersPage from './getUsers'
+
+import { Select, Button } from 'antd'
+import { useMany } from '@/hooks'
+import { TProduct, TProductCat } from '@/types'
 
 function DefaultPage() {
   const [
-    count,
-    setCount,
-  ] = useState(0)
-  const [
-    showPosts,
-    setShowPosts,
-  ] = useState(false)
-  const [
-    showUsers,
-    setShowUsers,
-  ] = useState(false)
+    selectedCatId,
+    setSelectedCatId,
+  ] = useState<number | undefined>(undefined)
+  const productCatsResult = useMany({
+    resource: 'products/categories',
+    dataProvider: 'wc',
+    args: {
+      per_page: 100,
+    },
+  })
+
+  const productCats: TProductCat[] = productCatsResult?.data?.data ?? []
+
+  const productCatItems = productCats.map((cat) => ({
+    value: cat.id,
+    label: cat?.name ?? '未知分類',
+  }))
+
+  const handleChange = (value: number) => {
+    setSelectedCatId(value)
+  }
+
+  const productResult = useMany({
+    resource: 'products',
+    dataProvider: 'wc',
+    args: {
+      per_page: 100,
+      category: selectedCatId,
+    },
+    queryOptions: {
+      enabled: !!selectedCatId,
+    },
+  })
+
+  const products: TProduct[] = productResult?.data?.data ?? []
+  console.log('🚀 ~ file: index.tsx:44 ~ DefaultPage ~ products:', products)
+
+  const productItems = products.map((product) => ({
+    value: product.id,
+    label: product?.name ?? '未知商品名稱',
+  }))
 
   return (
     <div className="App py-20">
-      <div className="flex justify-center">
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer noopener">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer noopener">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-        <a
-          href="https://wordpress.org"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          <img src={wpLogo} className="logo wp" alt="WordPress logo" />
-        </a>
+      <div className="flex md:flex-row flex-col">
+        <Select
+          className="w-full md:mr-4 mb-2 md:mb-0"
+          allowClear
+          size="large"
+          showSearch
+          placeholder="選擇商品分類"
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            (option?.label ?? '').includes(input)
+          }
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? '')
+              .toLowerCase()
+              .localeCompare((optionB?.label ?? '').toLowerCase())
+          }
+          options={productCatItems}
+          onChange={handleChange}
+        />
+        <Select
+          className="w-full md:mr-4 mb-2 md:mb-0"
+          allowClear
+          size="large"
+          showSearch
+          placeholder="選擇產品"
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            (option?.label ?? '').includes(input)
+          }
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? '')
+              .toLowerCase()
+              .localeCompare((optionB?.label ?? '').toLowerCase())
+          }
+          options={productItems}
+        />
+        <Button size="large" type="primary" className="mx-0">
+          新增
+        </Button>
       </div>
-      <h1>Vite + React + WordPress</h1>
-      <div className="flex justify-center mb-8">
-        <button
-          type="button"
-          onClick={() => setCount((theCount) => theCount + 1)}
-        >
-          Count is {count}
-        </button>
-
-        <button type="button" onClick={() => setShowPosts(!showPosts)}>
-          Get Posts Example
-        </button>
-
-        <button type="button" onClick={() => setShowUsers(!showUsers)}>
-          Get Users Example
-        </button>
-      </div>
-      <p>
-        Edit <code>src/App.tsx</code> and save to test HMR
-      </p>
-      <p className="read-the-docs">
-        Click on the Vite, React and WordPress logos to learn more
-      </p>
-
-      {showPosts && <GetPostsPage />}
-      {showUsers && <GetUsersPage />}
     </div>
   )
 }
