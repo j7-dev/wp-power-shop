@@ -1,8 +1,8 @@
 import '@/assets/scss/index.scss'
-import DefaultPage from './pages'
+import AddProduct from './pages/AddProduct'
 
 function App() {
-  return <DefaultPage />
+  return <AddProduct />
 }
 
 export default App

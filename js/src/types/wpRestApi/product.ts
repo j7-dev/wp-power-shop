@@ -75,13 +75,28 @@ export type TProduct = {
     name: string
     alt: string
   }[]
-  attributes: any[]
+  attributes: TAttribute[]
   default_attributes: any[]
-  variations: any[]
+  variations: number[]
   grouped_products: any[]
   menu_order: number
-  meta_data: any[]
+  meta_data: TMeta[]
   _links: {
     [key: string]: any
   }
+}
+
+type TMeta = {
+  id: number
+  key: string
+  value: string
+}
+
+type TAttribute = {
+  id: number
+  name: string
+  position: number
+  visible: boolean
+  variation: boolean
+  options: string[]
 }

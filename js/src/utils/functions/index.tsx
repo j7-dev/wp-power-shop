@@ -29,3 +29,5 @@ export const getCopyableJson = (variable: any) => {
   }
   return !!variable ? jsonString : ''
 }
+
+export * from './product'
