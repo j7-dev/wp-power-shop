@@ -40,14 +40,14 @@ class Bootstrap
 			]
 		);
 
-		wp_localize_script(self::PROJECT_NAME, 'appData', array(
-			'apiUrl' => site_url() . '/wp-json',
-			'userId' => wp_get_current_user()->data->ID,
+		\wp_localize_script(self::PROJECT_NAME, 'appData', array(
+			'apiUrl' => \site_url() . '/wp-json',
+			'userId' => \wp_get_current_user()->data->ID,
 		));
 
-		wp_localize_script(self::PROJECT_NAME, 'wpApiSettings', array(
-			'root' => esc_url_raw(rest_url()),
-			'nonce' => wp_create_nonce('wp_rest'),
+		\wp_localize_script(self::PROJECT_NAME, 'wpApiSettings', array(
+			'root' => \esc_url_raw(rest_url()),
+			'nonce' => \wp_create_nonce('wp_rest'),
 		));
 	}
 }
