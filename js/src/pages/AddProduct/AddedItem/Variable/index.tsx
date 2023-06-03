@@ -1,24 +1,44 @@
-import { CloseCircleFilled } from '@ant-design/icons'
-import { Space, Tag, Form, InputNumber } from 'antd'
-import { TProduct } from '@/types'
+import { useState } from 'react'
+import {
+  CloseCircleFilled,
+  ArrowsAltOutlined,
+  ShrinkOutlined,
+} from '@ant-design/icons'
+import { Space, Tag } from 'antd'
+import { TProduct, TProductVariation } from '@/types'
 import { getProductImageSrc } from '@/utils'
-import { addedProductsAtom } from '../atoms'
+import { addedProductsAtom } from '../../atoms'
 import { useAtom } from 'jotai'
+import { useMany } from '@/hooks'
+import Variation from './Variation'
 
 const Variable: React.FC<{
   product: TProduct
 }> = ({ product }) => {
-  console.log('🚀 ~ file: Variable.tsx:11 ~ product:', product)
   const [
-    addedProducts,
+    isExpended,
+    setIsExpended,
+  ] = useState(false)
+  const [
+    _,
     setAddedProducts,
   ] = useAtom(addedProductsAtom)
   const id = product?.id ?? 0
   const name = product?.name ?? '未知商品'
   const imageSrc = getProductImageSrc(product)
-  const salesPrice = product?.sale_price ?? '0'
-  const regularPrice = product?.regular_price ?? '0'
   const categories = product?.categories ?? []
+  const variations = product?.variations ?? []
+
+  const productVariationsResult = useMany({
+    resource: `products/${id}/variations`,
+    dataProvider: 'wc',
+    queryOptions: {
+      enabled: variations.length > 0,
+    },
+  })
+
+  const productVariations: TProductVariation[] =
+    productVariationsResult?.data?.data ?? []
 
   const handleRemoveProduct = () => {
     setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
@@ -47,28 +67,18 @@ const Variable: React.FC<{
             </Space>
             <h6 className="text-[1rem] mt-2 mb-0">{name}</h6>
             <div className="flex">
-              <Form.Item
-                name={[
-                  id,
-                  'regularPrice',
-                ]}
-                label="原價"
-                className="w-full mr-4"
-                initialValue={regularPrice}
+              <span
+                className="underline text-blue-500 cursor-pointer mt-2 mb-4"
+                onClick={() => setIsExpended(!isExpended)}
               >
-                <InputNumber className="w-full" />
-              </Form.Item>
-              <Form.Item
-                name={[
-                  id,
-                  'salesPrice',
-                ]}
-                label="特價"
-                className="w-full"
-                initialValue={salesPrice}
-              >
-                <InputNumber className="w-full" />
-              </Form.Item>
+                {isExpended ? (
+                  <ShrinkOutlined className="mr-1" />
+                ) : (
+                  <ArrowsAltOutlined className="mr-1" />
+                )}
+
+                {isExpended ? '收起' : '展開'}
+              </span>
             </div>
           </div>
         </div>
@@ -80,6 +90,14 @@ const Variable: React.FC<{
           />
         </div>
       </div>
+      {isExpended && (
+        <div className="pl-20 pr-8">
+          {productVariations.map((variation) => (
+            <Variation key={variation?.id} variation={variation} />
+          ))}
+        </div>
+      )}
+
       <hr className="mb-8" />
     </>
   )
