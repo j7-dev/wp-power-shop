@@ -2,34 +2,34 @@
 
 declare(strict_types=1);
 
-namespace J7\ViteReactWPPlugin\Frontend;
+namespace J7\ViteReactWPPlugin\Backend;
 
 use Kucrut\Vite;
 
 class Bootstrap
 {
 
-	const PROJECT_NAME = 'your-project';
+	const PROJECT_NAME = 'fast-shop';
 
-	function __construct()
+	public function init(): void
 	{
-		add_action('wp_enqueue_scripts', [__CLASS__, 'enqueue_script']);
-		add_action('wp_footer', [__CLASS__, 'render_app']);
+		\add_action('wp_enqueue_scripts', [$this, 'enqueue_script']);
+		\add_action('wp_footer', [$this, 'render_app']);
 	}
 
 	/**
 	 * Render application's markup
 	 */
-	public static function render_app(): void
+	public function render_app(): void
 	{
-		printf('<div id="my-app" class="my-app"></div>');
+		\printf('<div id="my-app" class="my-app"></div>');
 	}
 
 
 	/**
 	 * Enqueue script
 	 */
-	public static function enqueue_script(): void
+	public function enqueue_script(): void
 	{
 		Vite\enqueue_asset(
 			dirname(__DIR__) . '/js/dist',
@@ -58,4 +58,4 @@ class Bootstrap
 
 
 
-include_once __DIR__ . '/custom/includes.php';
+require_once __DIR__ . '/custom/includes.php';
