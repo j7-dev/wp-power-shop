@@ -101,7 +101,9 @@ const Add = () => {
     addedProducts.some((addedProduct) => addedProduct?.id === selectedProductId)
 
   return (
-    <div className="App py-20">
+    <div className="mb-8">
+      <p className="mb-2 text-[1rem] font-semibold">選擇要加入的商品</p>
+
       <div className="flex md:flex-row flex-col">
         <Select
           loading={productCatsResult.isLoading}

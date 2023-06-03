@@ -4,6 +4,7 @@ import { TProduct } from '@/types'
 import { getProductImageSrc } from '@/utils'
 import { addedProductsAtom } from '../atoms'
 import { useAtom } from 'jotai'
+import { toNumber } from 'lodash-es'
 
 const Simple: React.FC<{
   product: TProduct
@@ -15,8 +16,8 @@ const Simple: React.FC<{
   const id = product?.id ?? 0
   const name = product?.name ?? '未知商品'
   const imageSrc = getProductImageSrc(product)
-  const salesPrice = product?.sale_price ?? '0'
-  const regularPrice = product?.regular_price ?? '0'
+  const salesPrice = toNumber(product?.sale_price ?? '0')
+  const regularPrice = toNumber(product?.regular_price ?? '0')
   const categories = product?.categories ?? []
 
   const handleRemoveProduct = () => {
