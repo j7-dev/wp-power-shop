@@ -94,10 +94,6 @@ const Add = () => {
           ...prev,
           selectedProduct,
         ]
-        console.log(
-          '🚀 ~ file: Add.tsx:97 ~ setAddedProducts ~ newAddedProducts:',
-          newAddedProducts,
-        )
         return newAddedProducts
       })
     }

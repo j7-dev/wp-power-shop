@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef } from 'react'
 import { Form } from 'antd'
 import Add from './Add'
 import AddedItem from './AddedItem'
@@ -7,6 +7,7 @@ import { useAtom } from 'jotai'
 import { getQueryString } from '@/utils'
 import { useOne, useMany } from '@/hooks'
 import { TFastShopMeta } from '@/types'
+import { sortBy } from 'lodash-es'
 
 const AddProduct = () => {
   const postId = getQueryString('post')
@@ -17,8 +18,9 @@ const AddProduct = () => {
     },
   })
   const post = postResult?.data?.data || {}
-  const fast_shop_meta_obj = JSON.parse(post?.meta?.fast_shop_meta || '{}')
-  const fast_shop_meta = Object.values(fast_shop_meta_obj) as TFastShopMeta[]
+  const fast_shop_meta = JSON.parse(
+    post?.meta?.fast_shop_meta || '[]',
+  ) as TFastShopMeta[]
   const fast_shop_meta_product_ids = fast_shop_meta.map(
     (item) => item.productId,
   )
@@ -38,6 +40,7 @@ const AddProduct = () => {
     addedProducts,
     setAddedProducts,
   ] = useAtom(addedProductsAtom)
+
   const [form] = Form.useForm()
   const testRef = useRef<HTMLInputElement>(null)
 
@@ -46,11 +49,15 @@ const AddProduct = () => {
     e.stopPropagation()
 
     const postForm = document.getElementById('post') as HTMLFormElement | null
-    const allFields = form.getFieldsValue()
-    console.log('🚀 ~ file: index.tsx:50 ~ handleSave ~ allFields:', allFields)
+    const allFields_obj = form.getFieldsValue()
+    const allFields = Object.values(allFields_obj) as TFastShopMeta[]
+    const sortOrder = addedProducts.map((product) => product.id)
+    const sortedAllFields = sortBy(allFields, (field) => {
+      return sortOrder.indexOf(field.productId)
+    })
     const input = testRef.current
     if (!input) return null
-    input.value = JSON.stringify(allFields)
+    input.value = JSON.stringify(sortedAllFields)
     postForm?.prepend(input)
     if (!postForm) return null
 
