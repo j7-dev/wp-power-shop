@@ -31,3 +31,4 @@ export const getCopyableJson = (variable: any) => {
 }
 
 export * from './product'
+export * from './post'

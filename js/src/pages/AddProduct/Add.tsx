@@ -2,7 +2,12 @@ import { useState } from 'react'
 import { Select, Button } from 'antd'
 import { useMany } from '@/hooks'
 import { TProduct, TProductCat } from '@/types'
-import { renderHTML, getProductImageSrc } from '@/utils'
+import {
+  renderHTML,
+  getProductImageSrc,
+  setFormData,
+  formateMeta,
+} from '@/utils'
 import { addedProductsAtom } from './atoms'
 import { useAtom } from 'jotai'
 
@@ -89,10 +94,21 @@ const Add = () => {
       (product) => product.id === selectedProductId,
     )
     if (!!selectedProduct) {
-      setAddedProducts((prev) => [
-        ...prev,
-        selectedProduct,
-      ])
+      setAddedProducts((prev) => {
+        const newAddedProducts = [
+          ...prev,
+          selectedProduct,
+        ]
+
+        const fast_shop_meta = formateMeta(newAddedProducts)
+
+        setFormData({
+          key: 'fast_shop_meta',
+          value: fast_shop_meta,
+        })
+
+        return newAddedProducts
+      })
     }
   }
 

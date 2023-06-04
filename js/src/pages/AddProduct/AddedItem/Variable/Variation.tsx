@@ -1,10 +1,13 @@
-import { Form, InputNumber, Tooltip } from 'antd'
+import { Form, InputNumber, Tooltip, Input } from 'antd'
 import { TProductVariation, TSimpleAttribute } from '@/types'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 
 const Variation: React.FC<{
   variation: TProductVariation
-}> = ({ variation }) => {
+  parentIndex: number
+  index: number
+}> = ({ variation, parentIndex, index }) => {
+  const form = Form.useFormInstance()
   const id = variation?.id ?? 0
   const attributes = (variation?.attributes ?? []) as TSimpleAttribute[]
   const name = attributes.map((item) => (
@@ -16,6 +19,18 @@ const Variation: React.FC<{
   const imageSrc = variation?.image?.src ?? defaultImage
   const salesPrice = variation?.sale_price ?? '0'
   const regularPrice = variation?.regular_price ?? '0'
+
+  if (!!id) {
+    form.setFieldValue(
+      [
+        parentIndex,
+        'variations',
+        index,
+        'variationId',
+      ],
+      id,
+    )
+  }
 
   return (
     <>
@@ -29,7 +44,21 @@ const Variation: React.FC<{
             <div className="flex">
               <Form.Item
                 name={[
-                  id,
+                  parentIndex,
+                  'variations',
+                  index,
+                  'variationId',
+                ]}
+                initialValue={id}
+                hidden
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name={[
+                  parentIndex,
+                  'variations',
+                  index,
                   'regularPrice',
                 ]}
                 label="原價"
@@ -40,7 +69,9 @@ const Variation: React.FC<{
               </Form.Item>
               <Form.Item
                 name={[
-                  id,
+                  parentIndex,
+                  'variations',
+                  index,
                   'salesPrice',
                 ]}
                 label="特價"

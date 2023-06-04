@@ -8,7 +8,9 @@ import { toNumber } from 'lodash-es'
 
 const Simple: React.FC<{
   product: TProduct
-}> = ({ product }) => {
+  index: number
+}> = ({ product, index }) => {
+  const form = Form.useFormInstance()
   const [
     addedProducts,
     setAddedProducts,
@@ -22,6 +24,16 @@ const Simple: React.FC<{
 
   const handleRemoveProduct = () => {
     setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
+  }
+
+  if (!!id) {
+    form.setFieldValue(
+      [
+        index,
+        'productId',
+      ],
+      id,
+    )
   }
 
   return (
@@ -49,7 +61,17 @@ const Simple: React.FC<{
             <div className="flex">
               <Form.Item
                 name={[
-                  id,
+                  index,
+                  'productId',
+                ]}
+                hidden
+                initialValue={id}
+              >
+                <InputNumber className="w-full" />
+              </Form.Item>
+              <Form.Item
+                name={[
+                  index,
                   'regularPrice',
                 ]}
                 label="原價"
@@ -60,7 +82,7 @@ const Simple: React.FC<{
               </Form.Item>
               <Form.Item
                 name={[
-                  id,
+                  index,
                   'salesPrice',
                 ]}
                 label="特價"

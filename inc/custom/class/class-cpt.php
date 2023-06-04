@@ -53,28 +53,48 @@ class CPT extends Functions
 
 	// public function save_metabox($post_id, $post)
 	// {
-	// 	// Add nonce for security and authentication.
-	// 	$nonce_name   = isset($_POST['custom_nonce']) ? $_POST['custom_nonce'] : '';
-	// 	$nonce_action = 'custom_nonce_action';
+	// /*
+	// 	 * We need to verify this came from the our screen and with proper authorization,
+	// 	 * because save_post can be triggered at other times.
+	// 	 */
 
-	// 	// Check if nonce is valid.
-	// 	if (!wp_verify_nonce($nonce_name, $nonce_action)) {
-	// 		return;
+	// 	// Check if our nonce is set.
+	// 	if ( ! isset( $_POST['myplugin_inner_custom_box_nonce'] ) ) {
+	// 		return $post_id;
 	// 	}
 
-	// 	// Check if user has permissions to save data.
-	// 	if (!current_user_can('edit_post', $post_id)) {
-	// 		return;
+	// 	$nonce = $_POST['myplugin_inner_custom_box_nonce'];
+
+	// 	// Verify that the nonce is valid.
+	// 	if ( ! wp_verify_nonce( $nonce, 'myplugin_inner_custom_box' ) ) {
+	// 		return $post_id;
 	// 	}
 
-	// 	// Check if not an autosave.
-	// 	if (wp_is_post_autosave($post_id)) {
-	// 		return;
+	// 	/*
+	// 	 * If this is an autosave, our form has not been submitted,
+	// 	 * so we don't want to do anything.
+	// 	 */
+	// 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+	// 		return $post_id;
 	// 	}
 
-	// 	// Check if not a revision.
-	// 	if (wp_is_post_revision($post_id)) {
-	// 		return;
+	// 	// Check the user's permissions.
+	// 	if ( 'page' == $_POST['post_type'] ) {
+	// 		if ( ! current_user_can( 'edit_page', $post_id ) ) {
+	// 			return $post_id;
+	// 		}
+	// 	} else {
+	// 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+	// 			return $post_id;
+	// 		}
 	// 	}
+
+	// 	/* OK, it's safe for us to save the data now. */
+
+	// 	// Sanitize the user input.
+	// 	$mydata = sanitize_text_field( $_POST['myplugin_new_field'] );
+
+	// 	// Update the meta field.
+	// 	update_post_meta( $post_id, '_my_meta_value_key', $mydata );
 	// }
 }

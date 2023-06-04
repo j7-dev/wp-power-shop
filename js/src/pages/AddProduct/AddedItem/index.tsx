@@ -4,15 +4,16 @@ import { TProduct } from '@/types'
 
 const AddedItem: React.FC<{
   product: TProduct
-}> = ({ product }) => {
+  index: number
+}> = ({ product, index }) => {
   const type = product?.type ?? ''
 
   if (type === 'simple') {
-    return <Simple product={product} />
+    return <Simple product={product} index={index} />
   }
 
   if (type === 'variable') {
-    return <Variable product={product} />
+    return <Variable product={product} index={index} />
   }
 
   return null

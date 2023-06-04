@@ -4,7 +4,7 @@ import {
   ArrowsAltOutlined,
   ShrinkOutlined,
 } from '@ant-design/icons'
-import { Space, Tag } from 'antd'
+import { Space, Tag, Form, Input } from 'antd'
 import { TProduct, TProductVariation } from '@/types'
 import { getProductImageSrc } from '@/utils'
 import { addedProductsAtom } from '../../atoms'
@@ -14,7 +14,8 @@ import Variation from './Variation'
 
 const Variable: React.FC<{
   product: TProduct
-}> = ({ product }) => {
+  index: number
+}> = ({ product, index }) => {
   const [
     isExpended,
     setIsExpended,
@@ -23,8 +24,10 @@ const Variable: React.FC<{
     _,
     setAddedProducts,
   ] = useAtom(addedProductsAtom)
+  const form = Form.useFormInstance()
   const id = product?.id ?? 0
   const name = product?.name ?? '未知商品'
+  const type = product?.type ?? ''
   const imageSrc = getProductImageSrc(product)
   const categories = product?.categories ?? []
   const variations = product?.variations ?? []
@@ -42,6 +45,26 @@ const Variable: React.FC<{
 
   const handleRemoveProduct = () => {
     setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
+  }
+
+  if (!!type) {
+    form.setFieldValue(
+      [
+        index,
+        'type',
+      ],
+      type,
+    )
+  }
+
+  if (!!id) {
+    form.setFieldValue(
+      [
+        index,
+        'productId',
+      ],
+      id,
+    )
   }
 
   return (
@@ -90,13 +113,37 @@ const Variable: React.FC<{
           />
         </div>
       </div>
-      {isExpended && (
-        <div className="pl-20 pr-8">
-          {productVariations.map((variation) => (
-            <Variation key={variation?.id} variation={variation} />
-          ))}
-        </div>
-      )}
+      <Form.Item
+        name={[
+          index,
+          'productId',
+        ]}
+        initialValue={id}
+        hidden
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name={[
+          index,
+          'type',
+        ]}
+        initialValue={type}
+        hidden
+      >
+        <Input />
+      </Form.Item>
+
+      <div className={`pl-20 pr-8 ${isExpended ? 'block' : 'hidden'}`}>
+        {productVariations.map((variation, i) => (
+          <Variation
+            key={variation?.id}
+            variation={variation}
+            parentIndex={index}
+            index={i}
+          />
+        ))}
+      </div>
 
       <hr className="mb-8" />
     </>

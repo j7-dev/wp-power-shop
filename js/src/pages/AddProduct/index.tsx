@@ -1,55 +1,57 @@
-import { Form, Button } from 'antd'
+import { useEffect } from 'react'
+import { Form } from 'antd'
 import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom } from './atoms'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
+import { setFormData } from '@/utils'
 
 const AddProduct = () => {
-  const [
-    addedProducts,
-    setAddedProducts,
-  ] = useAtom(addedProductsAtom)
+  const addedProducts = useAtomValue(addedProductsAtom)
   const [form] = Form.useForm()
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+
+  const handleSetFormData = () => {
+    const allFields = form.getFieldsValue()
+    setFormData({
+      key: 'fast_shop_meta',
+      value: allFields,
+    })
   }
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
-  }
+  useEffect(() => {
+    const saveBtn = document.querySelector(
+      '#publishing-action input[type="submit"]',
+    )
+    const postForm = document.getElementById('post') as HTMLFormElement | null
+    const handleSave = (e: Event) => {
+      e.preventDefault()
+      e.stopPropagation()
+      handleSetFormData()
+      if (!postForm) return null
+
+      // postForm.submit()
+    }
+    if (!!saveBtn) {
+      saveBtn.addEventListener('click', handleSave)
+    }
+    return () => {
+      if (!!saveBtn) {
+        saveBtn.removeEventListener('click', handleSave)
+      }
+    }
+  }, [])
 
   return (
     <Form
       className="pt-8"
       layout="vertical"
       form={form}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
+      onFieldsChange={handleSetFormData}
     >
-      {addedProducts.map((product) => (
-        <AddedItem key={product?.id} product={product} />
+      {addedProducts.map((product, i) => (
+        <AddedItem key={product?.id} product={product} index={i} />
       ))}
       <Add />
-      <div className="flex justify-between mb-8">
-        <Button
-          size="large"
-          className="mx-0"
-          danger
-          onClick={() => setAddedProducts([])}
-        >
-          刪除所有
-        </Button>
-        <Form.Item noStyle>
-          <Button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            className="mx-0"
-          >
-            儲存
-          </Button>
-        </Form.Item>
-      </div>
     </Form>
   )
 }
