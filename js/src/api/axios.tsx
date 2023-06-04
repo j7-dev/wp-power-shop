@@ -6,7 +6,10 @@ const wpApiSettings = window?.wpApiSettings || {}
 const instance: AxiosInstance = axios.create({
   baseURL: baseUrl,
   timeout: parseInt(apiTimeout, 10),
-  headers: { 'X-WP-Nonce': wpApiSettings?.nonce || '' },
+  headers: {
+    'X-WP-Nonce': wpApiSettings?.nonce || '',
+    'Content-Type': 'application/json',
+  },
 })
 
 instance.interceptors.response.use(

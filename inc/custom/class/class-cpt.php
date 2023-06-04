@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace J7\ViteReactWPPlugin\FastShop\Admin;
 
-
 use J7\ViteReactWPPlugin\FastShop\Admin\Bootstrap;
-
 
 class CPT extends Functions
 {
-
 	function __construct()
 	{
-
-		if (is_admin()) {
-			add_action('init', [$this, 'init']);
-			add_action('load-post.php',     [$this, 'init_metabox']);
-			add_action('load-post-new.php', [$this, 'init_metabox']);
-		}
+		\add_action('init', [$this, 'init']);
+		\add_action('load-post.php',     [$this, 'init_metabox']);
+		\add_action('load-post-new.php', [$this, 'init_metabox']);
 	}
 
 	public function init(): void
@@ -31,8 +25,17 @@ class CPT extends Functions
 	 */
 	public function init_metabox(): void
 	{
-		add_action('add_meta_boxes', [$this, 'add_metaboxs']);
-		add_action('save_post',      [$this, 'save_metabox'], 10, 2);
+		\add_action('add_meta_boxes', [$this, 'add_metaboxs']);
+		\add_action('save_post',      [$this, 'save_metabox'], 10, 2);
+		\add_filter('rewrite_rules_array', [$this, 'custom_post_type_rewrite_rules']);
+	}
+
+
+	public function custom_post_type_rewrite_rules($rules)
+	{
+		global $wp_rewrite;
+		$wp_rewrite->flush_rules();
+		return $rules;
 	}
 
 	/**

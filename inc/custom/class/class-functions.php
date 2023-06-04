@@ -68,8 +68,9 @@ class Functions
 			'capability_type'     => 'post',
 			'supports'            => ['title', 'editor', 'thumbnail', 'custom-fields', 'author'],
 			'taxonomies'          => [],
+			'rest_controller_class' => 'WP_REST_Posts_Controller',
 			'rewrite'             => [
-				'with_front' => false,
+				'with_front' => true,
 			],
 		];
 
