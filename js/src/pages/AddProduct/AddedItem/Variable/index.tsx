@@ -24,7 +24,6 @@ const Variable: React.FC<{
     _,
     setAddedProducts,
   ] = useAtom(addedProductsAtom)
-  const form = Form.useFormInstance()
   const id = product?.id ?? 0
   const name = product?.name ?? '未知商品'
   const type = product?.type ?? ''
@@ -45,26 +44,6 @@ const Variable: React.FC<{
 
   const handleRemoveProduct = () => {
     setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
-  }
-
-  if (!!type) {
-    form.setFieldValue(
-      [
-        index,
-        'type',
-      ],
-      type,
-    )
-  }
-
-  if (!!id) {
-    form.setFieldValue(
-      [
-        index,
-        'productId',
-      ],
-      id,
-    )
   }
 
   return (

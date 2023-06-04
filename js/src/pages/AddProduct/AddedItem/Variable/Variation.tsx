@@ -7,7 +7,6 @@ const Variation: React.FC<{
   parentIndex: number
   index: number
 }> = ({ variation, parentIndex, index }) => {
-  const form = Form.useFormInstance()
   const id = variation?.id ?? 0
   const attributes = (variation?.attributes ?? []) as TSimpleAttribute[]
   const name = attributes.map((item) => (
@@ -19,18 +18,6 @@ const Variation: React.FC<{
   const imageSrc = variation?.image?.src ?? defaultImage
   const salesPrice = variation?.sale_price ?? '0'
   const regularPrice = variation?.regular_price ?? '0'
-
-  if (!!id) {
-    form.setFieldValue(
-      [
-        parentIndex,
-        'variations',
-        index,
-        'variationId',
-      ],
-      id,
-    )
-  }
 
   return (
     <>

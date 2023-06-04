@@ -8,15 +8,12 @@ const AddedItem: React.FC<{
 }> = ({ product, index }) => {
   const type = product?.type ?? ''
 
-  if (type === 'simple') {
-    return <Simple product={product} index={index} />
-  }
-
-  if (type === 'variable') {
-    return <Variable product={product} index={index} />
-  }
-
-  return null
+  return (
+    <>
+      {type === 'simple' && <Simple product={product} index={index} />}
+      {type === 'variable' && <Variable product={product} index={index} />}
+    </>
+  )
 }
 
 export default AddedItem

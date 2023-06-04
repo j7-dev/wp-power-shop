@@ -10,7 +10,6 @@ const Simple: React.FC<{
   product: TProduct
   index: number
 }> = ({ product, index }) => {
-  const form = Form.useFormInstance()
   const [
     addedProducts,
     setAddedProducts,
@@ -24,16 +23,6 @@ const Simple: React.FC<{
 
   const handleRemoveProduct = () => {
     setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
-  }
-
-  if (!!id) {
-    form.setFieldValue(
-      [
-        index,
-        'productId',
-      ],
-      id,
-    )
   }
 
   return (
