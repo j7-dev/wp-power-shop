@@ -73,11 +73,11 @@ class Functions
 			],
 		];
 
-		// register_meta('post', 'project_data', [
-		// 	'type' => 'string',
-		// 	'show_in_rest' => true,
-		// 	'single' => true,
-		// ]);
+		register_meta('post', Bootstrap::DB_DOMAIN . '_meta', [
+			'type' => 'string',
+			'show_in_rest' => true,
+			'single' => true,
+		]);
 
 		register_post_type(Bootstrap::TEXT_DOMAIN, $args);
 	}

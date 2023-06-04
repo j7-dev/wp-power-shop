@@ -10,6 +10,7 @@ class Bootstrap
 {
 
 	const TEXT_DOMAIN = 'fast-shop';
+	const DB_DOMAIN = 'fast_shop';
 	const LABEL = 'Fast Shop';
 
 	public function init(): void

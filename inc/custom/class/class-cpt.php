@@ -32,7 +32,7 @@ class CPT extends Functions
 	public function init_metabox(): void
 	{
 		add_action('add_meta_boxes', [$this, 'add_metaboxs']);
-		// add_action('save_post',      [$this, 'save_metabox'], 10, 2);
+		add_action('save_post',      [$this, 'save_metabox'], 10, 2);
 	}
 
 	/**
@@ -51,50 +51,39 @@ class CPT extends Functions
 	}
 
 
-	// public function save_metabox($post_id, $post)
-	// {
-	// /*
-	// 	 * We need to verify this came from the our screen and with proper authorization,
-	// 	 * because save_post can be triggered at other times.
-	// 	 */
+	public function save_metabox($post_id, $post)
+	{
 
-	// 	// Check if our nonce is set.
-	// 	if ( ! isset( $_POST['myplugin_inner_custom_box_nonce'] ) ) {
-	// 		return $post_id;
-	// 	}
+		/*
+		 * We need to verify this came from the our screen and with proper authorization,
+		 * because save_post can be triggered at other times.
+		 */
 
-	// 	$nonce = $_POST['myplugin_inner_custom_box_nonce'];
+		// Check if our nonce is set.
+		if (!isset($_POST['_wpnonce'])) 	return $post_id;
 
-	// 	// Verify that the nonce is valid.
-	// 	if ( ! wp_verify_nonce( $nonce, 'myplugin_inner_custom_box' ) ) {
-	// 		return $post_id;
-	// 	}
+		$nonce = $_POST['_wpnonce'];
 
-	// 	/*
-	// 	 * If this is an autosave, our form has not been submitted,
-	// 	 * so we don't want to do anything.
-	// 	 */
-	// 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-	// 		return $post_id;
-	// 	}
 
-	// 	// Check the user's permissions.
-	// 	if ( 'page' == $_POST['post_type'] ) {
-	// 		if ( ! current_user_can( 'edit_page', $post_id ) ) {
-	// 			return $post_id;
-	// 		}
-	// 	} else {
-	// 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-	// 			return $post_id;
-	// 		}
-	// 	}
+		/*
+		 * If this is an autosave, our form has not been submitted,
+		 * so we don't want to do anything.
+		 */
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return $post_id;
 
-	// 	/* OK, it's safe for us to save the data now. */
 
-	// 	// Sanitize the user input.
-	// 	$mydata = sanitize_text_field( $_POST['myplugin_new_field'] );
 
-	// 	// Update the meta field.
-	// 	update_post_meta( $post_id, '_my_meta_value_key', $mydata );
-	// }
+		// Check the user's permissions.
+		if ('fast-shop' !== $_POST['post_type']) return $post_id;
+		if (!\current_user_can('edit_post', $post_id)) return $post_id;
+
+		/* OK, it's safe for us to save the data now. */
+
+		// Sanitize the user input.
+		$meta_data = \sanitize_text_field($_POST[Bootstrap::DB_DOMAIN . '_meta']);
+
+
+		// Update the meta field.
+		\update_post_meta($post_id, Bootstrap::DB_DOMAIN . '_meta', $meta_data);
+	}
 }
