@@ -9,3 +9,15 @@ export const formateMeta = (addedProducts: TProduct[]) => {
   }))
   return meta
 }
+
+export const getProductTypeLabel = (type: string) => {
+  switch (type) {
+    case 'simple':
+      return '簡單商品'
+    case 'variable':
+      return '可變商品'
+
+    default:
+      return '未知類型'
+  }
+}

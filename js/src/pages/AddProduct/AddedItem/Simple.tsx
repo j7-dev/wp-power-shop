@@ -1,7 +1,7 @@
 import { CloseCircleFilled } from '@ant-design/icons'
 import { Space, Tag, Form, InputNumber } from 'antd'
 import { TProduct } from '@/types'
-import { getProductImageSrc } from '@/utils'
+import { getProductImageSrc, getProductTypeLabel } from '@/utils'
 import { addedProductsAtom } from '../atoms'
 import { useAtom } from 'jotai'
 import { toNumber } from 'lodash-es'
@@ -20,6 +20,7 @@ const Simple: React.FC<{
   const salesPrice = toNumber(product?.sale_price ?? '0')
   const regularPrice = toNumber(product?.regular_price ?? '0')
   const categories = product?.categories ?? []
+  const type = product?.type ?? ''
 
   const handleRemoveProduct = () => {
     setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
@@ -31,6 +32,10 @@ const Simple: React.FC<{
         <div className="flex flex-1 mr-4">
           <div className="mr-4">
             <img className="h-16 w-16 rounded-xl object-cover" src={imageSrc} />
+            <p className="m-0 text-xs text-gray-400">
+              {getProductTypeLabel(type)}
+            </p>
+            <p className="m-0 text-xs text-gray-400">ID: #{id}</p>
           </div>
           <div className="flex-1">
             <Space

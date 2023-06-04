@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons'
 import { Space, Tag, Form, Input } from 'antd'
 import { TProduct, TProductVariation } from '@/types'
-import { getProductImageSrc } from '@/utils'
+import { getProductImageSrc, getProductTypeLabel } from '@/utils'
 import { addedProductsAtom } from '../../atoms'
 import { useAtom } from 'jotai'
 import { useMany } from '@/hooks'
@@ -52,6 +52,10 @@ const Variable: React.FC<{
         <div className="flex flex-1 mr-4">
           <div className="mr-4">
             <img className="h-16 w-16 rounded-xl object-cover" src={imageSrc} />
+            <p className="m-0 text-xs text-gray-400">
+              {getProductTypeLabel(type)}
+            </p>
+            <p className="m-0 text-xs text-gray-400">ID: #{id}</p>
           </div>
           <div className="flex-1">
             <Space

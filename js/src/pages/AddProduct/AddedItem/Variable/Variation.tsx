@@ -25,6 +25,7 @@ const Variation: React.FC<{
         <div className="flex flex-1 mr-4">
           <div className="mr-4">
             <img className="h-16 w-16 rounded-xl object-cover" src={imageSrc} />
+            <p className="m-0 text-xs text-gray-400">ID: #{id}</p>
           </div>
           <div className="flex-1">
             {name}

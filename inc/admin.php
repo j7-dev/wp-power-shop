@@ -16,6 +16,8 @@ class Bootstrap
 	public function init(): void
 	{
 		\add_action('admin_enqueue_scripts', [$this, 'enqueue_script']);
+		\add_action('wp_enqueue_scripts', [$this, 'enqueue_script']);
+
 		// \add_action('wp_footer', [$this, 'render_app']);
 	}
 
@@ -60,3 +62,4 @@ require_once __DIR__ . '/custom/includes.php';
 
 
 new CPT();
+new ShortCode();
