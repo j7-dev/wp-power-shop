@@ -1,0 +1,17 @@
+.fast-shop-products {
+}
+.ant-modal-content {
+	p.fs-variation {
+		margin-bottom: 0.5rem;
+		border-radius: 0.5rem;
+		border: 1px solid #999;
+		color: #999;
+		padding: 0rem 0.5rem;
+		cursor: pointer;
+		&:hover,
+		&.active {
+			color: #333;
+			border: 1px solid #333;
+		}
+	}
+}

@@ -1,4 +1,5 @@
 import React from 'react'
+import { toLocaleString } from 'lodash-es'
 
 export const windowOuterWidth = window?.outerWidth || 1200
 
@@ -35,4 +36,14 @@ export const getQueryString = (name: string) => {
   const urlParams = new URLSearchParams(window.location.search)
   const paramValue = urlParams.get(name)
   return paramValue
+}
+
+export const getCurrencyString = ({
+  price,
+  symbol = 'NT$',
+}: {
+  price: number
+  symbol?: string
+}) => {
+  return `${symbol} ${price.toLocaleString()}`
 }

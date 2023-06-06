@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Form } from 'antd'
+import { Form, Alert } from 'antd'
 import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom } from './atoms'
@@ -87,7 +87,13 @@ const AddProduct = () => {
   }, [productsResult?.isLoading])
 
   return (
-    <Form className="pt-8" layout="vertical" form={form}>
+    <Form className="pt-4" layout="vertical" form={form}>
+      <Alert
+        className="mb-4"
+        message="要在頁面使用這些商品，請使用 [fast_shop_product] 這個 shortcode"
+        type="info"
+        showIcon
+      />
       {addedProducts.map((product, i) => (
         <AddedItem key={product?.id} product={product} index={i} />
       ))}

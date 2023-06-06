@@ -1,13 +1,13 @@
 export type TVariation = {
   variationId: number
-  regularPrice: string
-  salesPrice: string
+  regularPrice: number
+  salesPrice: number
 }
 
 export type TFastShopMeta = {
   productId: number
   type: string
   variations?: TVariation[]
-  regularPrice?: string
-  salesPrice?: string
+  regularPrice?: number
+  salesPrice?: number
 }

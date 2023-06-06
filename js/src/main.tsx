@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import App2 from './App2'
+import App3 from './App3'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { renderId, renderId2, renderId3 } from './utils'
@@ -46,7 +47,7 @@ if (!!id3) {
   ReactDOM.createRoot(id3).render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <App2 />
+        <App3 />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </React.StrictMode>,

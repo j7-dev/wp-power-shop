@@ -47,6 +47,7 @@ class Bootstrap
 		\wp_localize_script(self::TEXT_DOMAIN, 'appData', array(
 			'apiUrl' => \site_url() . '/wp-json',
 			'userId' => \wp_get_current_user()->data->ID,
+			'postId' => \get_the_ID(),
 		));
 
 		\wp_localize_script(self::TEXT_DOMAIN, 'wpApiSettings', array(
