@@ -13,16 +13,18 @@ const Gallery: React.FC<{ images: TImage[] }> = ({ images }) => {
   return (
     <>
       <img className="aspect-square w-full" src={mainSrc} />
-      <div className="mt-2 w-full overflow-auto h-16 flex flex-nowrap">
-        {images.map((image) => (
-          <img
-            key={nanoid()}
-            className="aspect-square w-16 mr-2 cursor-pointer"
-            onClick={() => setMainSrc(image.src)}
-            src={image.src}
-          />
-        ))}
-      </div>
+      {images.length > 1 && (
+        <div className="mt-2 w-full overflow-auto h-16 flex flex-nowrap">
+          {images.map((image) => (
+            <img
+              key={nanoid()}
+              className="aspect-square w-16 mr-2 cursor-pointer"
+              onClick={() => setMainSrc(image.src)}
+              src={image.src}
+            />
+          ))}
+        </div>
+      )}
     </>
   )
 }

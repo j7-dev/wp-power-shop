@@ -16,14 +16,9 @@ const useCartModal = () => {
     product: TProduct
     meta: TFastShopMeta | undefined
   }) => {
-    console.log(
-      '🚀 ~ file: useCartModal.tsx:17 ~ useCartModal ~ product:',
-      product,
-    )
     const modalProps: ModalProps = {
       centered: true,
       ...defaultModalProps,
-      open: true,
       footer: null,
     }
 
