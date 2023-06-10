@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Form, InputNumber, Tooltip, Input } from 'antd'
 import { TProductVariation, TSimpleAttribute } from '@/types/wcRestApi'
 import defaultImage from '@/assets/images/defaultImage.jpg'
@@ -14,10 +15,43 @@ const Variation: React.FC<{
       <Tooltip title={item?.name}>{item?.option}</Tooltip>
     </span>
   ))
+  const form = Form.useFormInstance()
 
   const imageSrc = variation?.image?.src ?? defaultImage
   const salesPrice = variation?.sale_price ?? '0'
   const regularPrice = variation?.regular_price ?? '0'
+
+  useEffect(() => {
+    form.setFieldValue(
+      [
+        parentIndex,
+        'variations',
+        index,
+        'variationId',
+      ],
+      id,
+    )
+
+    form.setFieldValue(
+      [
+        parentIndex,
+        'variations',
+        index,
+        'regularPrice',
+      ],
+      regularPrice,
+    )
+
+    form.setFieldValue(
+      [
+        parentIndex,
+        'variations',
+        index,
+        'salesPrice',
+      ],
+      salesPrice,
+    )
+  }, [id])
 
   return (
     <>

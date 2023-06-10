@@ -89,13 +89,10 @@ const Add = () => {
       (product) => product.id === selectedProductId,
     )
     if (!!selectedProduct) {
-      setAddedProducts((prev) => {
-        const newAddedProducts = [
-          ...prev,
-          selectedProduct,
-        ]
-        return newAddedProducts
-      })
+      setAddedProducts([
+        ...addedProducts,
+        selectedProduct,
+      ])
     }
   }
 

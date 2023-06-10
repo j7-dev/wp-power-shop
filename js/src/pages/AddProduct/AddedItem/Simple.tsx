@@ -5,6 +5,7 @@ import { getProductImageSrc, getProductTypeLabel } from '@/utils'
 import { addedProductsAtom } from '../atoms'
 import { useAtom } from 'jotai'
 import { toNumber } from 'lodash-es'
+import { useEffect } from 'react'
 
 const Simple: React.FC<{
   product: TProduct
@@ -21,10 +22,36 @@ const Simple: React.FC<{
   const regularPrice = toNumber(product?.regular_price ?? '0')
   const categories = product?.categories ?? []
   const type = product?.type ?? ''
-
+  const form = Form.useFormInstance()
   const handleRemoveProduct = () => {
     setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
   }
+
+  useEffect(() => {
+    form.setFieldValue(
+      [
+        index,
+        'productId',
+      ],
+      id,
+    )
+
+    form.setFieldValue(
+      [
+        index,
+        'regularPrice',
+      ],
+      regularPrice,
+    )
+
+    form.setFieldValue(
+      [
+        index,
+        'salesPrice',
+      ],
+      salesPrice,
+    )
+  }, [id])
 
   return (
     <>
@@ -59,7 +86,6 @@ const Simple: React.FC<{
                   'productId',
                 ]}
                 hidden
-                initialValue={id}
               >
                 <InputNumber className="w-full" />
               </Form.Item>

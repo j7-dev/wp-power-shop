@@ -6,6 +6,7 @@ const AddedItem: React.FC<{
   product: TProduct
   index: number
 }> = ({ product, index }) => {
+  console.log('🚀 ~ file: index.tsx:9 ~ product:', product)
   const type = product?.type ?? ''
 
   return (

@@ -1,4 +1,4 @@
-type TImage = {
+export type TImage = {
   id: number
   src: string
   thumbnail: string
@@ -8,14 +8,14 @@ type TImage = {
   alt: string
 }
 
-type TProductTerm = {
+export type TProductTerm = {
   id: number
   name: string
   slug: string
   link: string
 }
 
-type TProductAttribute = {
+export type TProductAttribute = {
   id: number
   name: string
   taxonomy: string
@@ -27,7 +27,7 @@ type TProductAttribute = {
   }[]
 }
 
-type TProductVariation = {
+export type TProductVariation = {
   id: number
   attributes: {
     name: string

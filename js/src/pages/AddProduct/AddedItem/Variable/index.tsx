@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   CloseCircleFilled,
   ArrowsAltOutlined,
@@ -31,6 +31,9 @@ const Variable: React.FC<{
   const categories = product?.categories ?? []
   const variations = product?.variations ?? []
 
+  const form = Form.useFormInstance()
+  console.log('🚀 ~ file: index.tsx:70 ~ form', form.getFieldsValue())
+
   const productVariationsResult = useMany({
     resource: `products/${id}/variations`,
     dataProvider: 'wc',
@@ -45,6 +48,16 @@ const Variable: React.FC<{
   const handleRemoveProduct = () => {
     setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
   }
+
+  useEffect(() => {
+    form.setFieldValue(
+      [
+        index,
+        'productId',
+      ],
+      id,
+    )
+  }, [id])
 
   return (
     <>
@@ -102,16 +115,6 @@ const Variable: React.FC<{
           'productId',
         ]}
         initialValue={id}
-        hidden
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name={[
-          index,
-          'type',
-        ]}
-        initialValue={type}
         hidden
       >
         <Input />
