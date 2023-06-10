@@ -8,6 +8,7 @@ import { getQueryString } from '@/utils'
 import { useOne, useMany } from '@/hooks'
 import { TFastShopMeta } from '@/types'
 import { sortBy } from 'lodash-es'
+import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 
 const AddProduct = () => {
   const postId = getQueryString('post')
@@ -87,19 +88,29 @@ const AddProduct = () => {
   }, [productsResult?.isLoading])
 
   return (
-    <Form className="pt-4" layout="vertical" form={form}>
-      <Alert
-        className="mb-4"
-        message="要在頁面使用這些商品，請使用 [fast_shop_product] 這個 shortcode"
-        type="info"
-        showIcon
-      />
-      {addedProducts.map((product, i) => (
-        <AddedItem key={product?.id} product={product} index={i} />
-      ))}
-      <Add />
-      <input ref={testRef} type="hidden" name="fast_shop_meta" value="" />
-    </Form>
+    <div className="">
+      {postResult?.isLoading && <LoadingWrap />}
+      <Form className="pt-4" layout="vertical" form={form}>
+        <Alert
+          className="mb-4"
+          message="要在頁面使用這些商品，請使用 [fast_shop_product] 這個 shortcode"
+          type="info"
+          showIcon
+        />
+        {productsResult?.isLoading
+          ? [
+              1,
+              2,
+              3,
+            ].map((i) => <LoadingCard ratio="h-[8rem]" key={i} />)
+          : addedProducts.map((product, i) => (
+              <AddedItem key={product?.id} product={product} index={i} />
+            ))}
+
+        <Add />
+        <input ref={testRef} type="hidden" name="fast_shop_meta" value="" />
+      </Form>
+    </div>
   )
 }
 
