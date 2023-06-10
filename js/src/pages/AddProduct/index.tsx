@@ -10,6 +10,8 @@ import { TFastShopMeta } from '@/types'
 import { sortBy } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 
+// FIXME: 順序好像會有問題
+
 const AddProduct = () => {
   const postId = getQueryString('post')
   const postResult = useOne({

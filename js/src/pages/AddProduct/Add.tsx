@@ -128,7 +128,7 @@ const Add = () => {
         />
         <Select
           loading={productResult.isLoading && !!selectedCatId}
-          disabled={!selectedCatId}
+          disabled={!selectedCatId || productResult.isLoading}
           className="w-full md:mr-4 mb-2 md:mb-0"
           allowClear
           size="large"
