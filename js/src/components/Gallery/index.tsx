@@ -1,4 +1,4 @@
-import { TImage } from '@/types'
+import { TImage } from '@/types/wcStoreApi'
 import React, { useState } from 'react'
 import { nanoid } from 'nanoid'
 

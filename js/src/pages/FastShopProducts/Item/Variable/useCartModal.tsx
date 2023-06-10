@@ -2,7 +2,7 @@ import { useModal } from '@/hooks'
 import { Modal, ModalProps, Col, Row, Button } from 'antd'
 import { renderHTML } from '@/utils'
 import { TFastShopMeta } from '@/types'
-import { TProduct } from '@/types/wcRestApi'
+import { TProduct } from '@/types/wcStoreApi'
 import InputNumber from '@/components/InputNumber'
 import Gallery from '@/components/Gallery'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
@@ -25,6 +25,10 @@ const useCartModal = () => {
     }
 
     const id = product?.id ?? 0
+    console.log(
+      '🚀 ~ file: useCartModal.tsx:28 ~ useCartModal ~ product:',
+      product,
+    )
     const name = product?.name ?? '未知商品'
     const description = renderHTML(product?.description ?? '')
     const images = product?.images ?? []
@@ -53,11 +57,11 @@ const useCartModal = () => {
                 <p className="m-0 text-red-800">{salesPrice}</p>
               </>
             ) : (
-              <p className="m-0">{price_html}</p>
+              <div>{price_html}</div>
             )} */}
-            <p className="m-0">{price_html}</p>
+            <div>{price_html}</div>
 
-            <p className="my-4">{description}</p>
+            <div className="my-4">{description}</div>
             <ProductVariationsSelect product={product} />
 
             <p className="mb-0 mt-4">數量</p>

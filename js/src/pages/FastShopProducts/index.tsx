@@ -1,7 +1,7 @@
 import { postId } from '@/utils'
 import { useOne, useMany } from '@/hooks'
 import { TFastShopMeta } from '@/types'
-import { TProduct } from '@/types/wcRestApi'
+import { TProduct } from '@/types/wcStoreApi'
 import Item from './Item'
 
 const FastShopProducts = () => {

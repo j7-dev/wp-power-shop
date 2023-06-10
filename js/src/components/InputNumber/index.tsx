@@ -10,7 +10,7 @@ const InputNumber = () => {
   ] = useState(defaultValue)
 
   const handleMinus = () => {
-    if (value > 0) {
+    if (value > 1) {
       setValue((pre) => pre - 1)
     }
   }

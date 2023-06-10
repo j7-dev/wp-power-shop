@@ -2,7 +2,7 @@ import { useModal } from '@/hooks'
 import { Modal, ModalProps, Col, Row, Button } from 'antd'
 import { getCurrencyString, renderHTML } from '@/utils'
 import { TFastShopMeta } from '@/types'
-import { TProduct } from '@/types/wcRestApi'
+import { TProduct } from '@/types/wcStoreApi'
 import InputNumber from '@/components/InputNumber'
 import Gallery from '@/components/Gallery'
 
@@ -60,7 +60,7 @@ const useCartModal = () => {
               <p className="m-0">{regularPrice}</p>
             )}
 
-            <p className="my-4">{description}</p>
+            <div className="my-4">{description}</div>
             {/* <p className="fs-variation">5片 $539 ( $108/片)</p>
             <p className="fs-variation">10片 $1050 ( $105/片)</p>
             <p className="fs-variation">20片 $1999 ($100/片)</p>

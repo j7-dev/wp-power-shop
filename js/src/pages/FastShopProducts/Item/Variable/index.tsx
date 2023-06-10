@@ -1,6 +1,6 @@
 import React from 'react'
 import { TFastShopMeta } from '@/types'
-import { TProduct } from '@/types/wcRestApi'
+import { TProduct } from '@/types/wcStoreApi'
 import { getProductImageSrc, renderHTML } from '@/utils'
 import { Button } from 'antd'
 import useCartModal from './useCartModal'
@@ -21,7 +21,7 @@ const Variable: React.FC<{
         <img src={imageSrc} className="w-full aspect-square" />
       </div>
       <p className="m-0">{name}</p>
-      <p className="m-0">{price_html}</p>
+      <div>{price_html}</div>
       <Button
         onClick={showModal}
         type="primary"
