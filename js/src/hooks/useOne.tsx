@@ -1,10 +1,10 @@
 import { getResource } from '@/api'
 import { useQuery } from '@tanstack/react-query'
-import { TPostArgs } from '@/types'
+import { TPostArgs, TDataProvider } from '@/types'
 
 export const useOne = (options: {
   resource: string
-  dataProvider?: 'wp' | 'wc'
+  dataProvider?: TDataProvider
   pathParams?: string[]
   args?: TPostArgs & {
     [key: string]: any

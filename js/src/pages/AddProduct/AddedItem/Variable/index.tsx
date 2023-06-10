@@ -5,7 +5,7 @@ import {
   ShrinkOutlined,
 } from '@ant-design/icons'
 import { Space, Tag, Form, Input } from 'antd'
-import { TProduct, TProductVariation } from '@/types'
+import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel } from '@/utils'
 import { addedProductsAtom } from '../../atoms'
 import { useAtom } from 'jotai'

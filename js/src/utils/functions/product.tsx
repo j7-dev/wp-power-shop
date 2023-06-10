@@ -1,4 +1,4 @@
-import { TProduct } from '@/types'
+import { TProduct } from '@/types/wcRestApi'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 
 export const getProductImageSrc = (product: TProduct) => {

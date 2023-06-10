@@ -1,6 +1,7 @@
 import { postId } from '@/utils'
 import { useOne, useMany } from '@/hooks'
-import { TFastShopMeta, TProduct } from '@/types'
+import { TFastShopMeta } from '@/types'
+import { TProduct } from '@/types/wcRestApi'
 import Item from './Item'
 
 const FastShopProducts = () => {
@@ -18,7 +19,7 @@ const FastShopProducts = () => {
 
   const productsResult = useMany({
     resource: 'products',
-    dataProvider: 'wc',
+    dataProvider: 'wc-store',
     args: {
       include: product_ids,
     },
@@ -28,6 +29,10 @@ const FastShopProducts = () => {
   })
 
   const products = (productsResult?.data?.data ?? []) as TProduct[]
+  console.log(
+    '🚀 ~ file: index.tsx:32 ~ FastShopProducts ~ products:',
+    products,
+  )
 
   return (
     <div className="fast-shop-products">

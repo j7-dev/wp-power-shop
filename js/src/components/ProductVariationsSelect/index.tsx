@@ -1,6 +1,6 @@
 import React from 'react'
 import { useMany } from '@/hooks'
-import { TProduct, TProductVariation } from '@/types'
+import { TProduct, TProductVariation } from '@/types/wcRestApi'
 
 const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
   product,
@@ -21,10 +21,14 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
   return (
     <>
       {productVariations.map((productVariation) => {
+        console.log(
+          '🚀 ~ file: index.tsx:26 ~ {productVariations.map ~ productVariation:',
+          productVariation,
+        )
         const attributes = productVariation?.attributes ?? []
         const attributesLabel = attributes
           .map((attribute) => `${attribute.name}: ${attribute.option}`)
-          .join(', ')
+          .join(' ')
 
         return (
           <p key={productVariation?.id} className="fs-variation">

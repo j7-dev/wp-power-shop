@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Select, Button } from 'antd'
 import { useMany } from '@/hooks'
-import { TProduct, TProductCat } from '@/types'
+import { TProduct, TProductCat } from '@/types/wcRestApi'
 import { renderHTML, getProductImageSrc } from '@/utils'
 import { addedProductsAtom } from './atoms'
 import { useAtom } from 'jotai'

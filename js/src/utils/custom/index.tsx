@@ -1,4 +1,4 @@
-import { TProduct } from '@/types'
+import { TProduct } from '@/types/wcRestApi'
 
 export const formateMeta = (addedProducts: TProduct[]) => {
   const meta = addedProducts.map((product) => ({

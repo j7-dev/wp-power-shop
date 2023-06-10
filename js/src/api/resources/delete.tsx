@@ -1,5 +1,6 @@
 import { axios } from '@/api'
 import { apiUrl, getDataProviderUrlParams } from '@/utils'
+import { TDataProvider } from '@/types'
 
 export const deleteResource = async ({
   resource,
@@ -7,7 +8,7 @@ export const deleteResource = async ({
   pathParams = [],
 }: {
   resource: string
-  dataProvider?: 'wp' | 'wc'
+  dataProvider?: TDataProvider
   pathParams?: string[]
 }) => {
   const dataProviderUrlParams = getDataProviderUrlParams(dataProvider)

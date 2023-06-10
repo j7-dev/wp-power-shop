@@ -1,7 +1,8 @@
 import { useModal } from '@/hooks'
 import { Modal, ModalProps, Col, Row, Button } from 'antd'
-import { getCurrencyString, getProductImageSrc, renderHTML } from '@/utils'
-import { TProduct, TFastShopMeta } from '@/types'
+import { getCurrencyString, renderHTML } from '@/utils'
+import { TFastShopMeta } from '@/types'
+import { TProduct } from '@/types/wcRestApi'
 import InputNumber from '@/components/InputNumber'
 import Gallery from '@/components/Gallery'
 

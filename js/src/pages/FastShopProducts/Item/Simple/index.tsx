@@ -1,5 +1,6 @@
 import React from 'react'
-import { TFastShopMeta, TProduct } from '@/types'
+import { TFastShopMeta } from '@/types'
+import { TProduct } from '@/types/wcRestApi'
 import { getProductImageSrc, getCurrencyString } from '@/utils'
 import { Button } from 'antd'
 import useCartModal from './useCartModal'

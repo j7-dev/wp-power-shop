@@ -1,5 +1,5 @@
 import { Form, InputNumber, Tooltip, Input } from 'antd'
-import { TProductVariation, TSimpleAttribute } from '@/types'
+import { TProductVariation, TSimpleAttribute } from '@/types/wcRestApi'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 
 const Variation: React.FC<{

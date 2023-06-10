@@ -1,5 +1,6 @@
 import { axios } from '@/api'
 import { apiUrl, getDataProviderUrlParams } from '@/utils'
+import { TDataProvider } from '@/types'
 
 export const updateResource = async ({
   resource,
@@ -8,7 +9,7 @@ export const updateResource = async ({
   args = {},
 }: {
   resource: string
-  dataProvider?: 'wp' | 'wc'
+  dataProvider?: TDataProvider
   pathParams?: string[]
   args?: {
     [key: string]: any

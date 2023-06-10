@@ -1,5 +1,6 @@
 import React from 'react'
-import { TFastShopMeta, TProduct } from '@/types'
+import { TFastShopMeta } from '@/types'
+import { TProduct } from '@/types/wcRestApi'
 import Simple from './Simple'
 import Variable from './Variable'
 

@@ -1,6 +1,6 @@
 import { CloseCircleFilled } from '@ant-design/icons'
 import { Space, Tag, Form, InputNumber } from 'antd'
-import { TProduct } from '@/types'
+import { TProduct } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel } from '@/utils'
 import { addedProductsAtom } from '../atoms'
 import { useAtom } from 'jotai'

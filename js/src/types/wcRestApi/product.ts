@@ -1,4 +1,4 @@
-import { TImage } from './media'
+import { TImage } from '@/types'
 
 export type TProductBase = {
   id: number

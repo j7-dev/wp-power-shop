@@ -1,6 +1,6 @@
 import Simple from './Simple'
 import Variable from './Variable'
-import { TProduct } from '@/types'
+import { TProduct } from '@/types/wcRestApi'
 
 const AddedItem: React.FC<{
   product: TProduct
