@@ -35,6 +35,17 @@ class Bootstrap
 	 */
 	public function enqueue_script(): void
 	{
+		if (\is_admin()) {
+			// 後台網頁 screen id 必須符合才引入
+			$screen = \get_current_screen();
+			if (($screen->id !== 'fast-shop')) return;
+		} else {
+			// 前台網頁必須包含 fast-shop 字串 才引用
+			if (strpos($_SERVER['REQUEST_URI'], 'fast-shop') === false) return;
+		}
+
+
+		// if (!\is_admin() && ($screen->id !== 'fast-shop')) return;
 		Vite\enqueue_asset(
 			dirname(__DIR__) . '/js/dist',
 			'js/src/main.tsx',

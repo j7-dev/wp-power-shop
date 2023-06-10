@@ -29,6 +29,7 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
       itemToBeAdded,
     ])
   }
+  console.log('🚀 ~ file: index.tsx:62 ~ selected:', selected)
 
   return (
     <>
@@ -36,16 +37,16 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
         const terms = attribute?.terms ?? []
         const selectedTerm = selected.find(
           (item) => item.attributeId === attribute?.id,
-        ) ?? { id: 0 }
+        ) ?? { slug: '' }
         return (
           <div key={attribute?.id} className="mb-4">
             <p className="mb-0">{attribute?.name}</p>
             <div className="flex">
               {terms.map((term) => (
                 <div
-                  key={term?.id}
+                  key={term?.slug}
                   className={`fs-product-attribute-option ${
-                    selectedTerm?.id === term?.id ? 'active' : ''
+                    selectedTerm?.slug === term?.slug ? 'active' : ''
                   }`}
                   onClick={handleClick(attribute?.id, term)}
                 >
