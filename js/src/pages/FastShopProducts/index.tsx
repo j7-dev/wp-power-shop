@@ -29,10 +29,6 @@ const FastShopProducts = () => {
   })
 
   const products = (productsResult?.data?.data ?? []) as TProduct[]
-  console.log(
-    '🚀 ~ file: index.tsx:32 ~ FastShopProducts ~ products:',
-    products,
-  )
 
   return (
     <div className="fast-shop-products">

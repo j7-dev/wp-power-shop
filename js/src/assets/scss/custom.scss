@@ -14,4 +14,20 @@
 			border: 1px solid #333;
 		}
 	}
+	.fs-product-attribute-option {
+		border: 1px solid #ddd;
+		margin-right: 0.5rem;
+		padding: 2px;
+		cursor: pointer;
+		font-size: 0.75rem;
+		color: #999;
+		& > div {
+			background-color: #ddd;
+			padding: 0.25rem 0.5rem;
+		}
+		&.active {
+			border: 1px solid red;
+			color: #333;
+		}
+	}
 }
