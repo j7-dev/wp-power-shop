@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react'
 import { Form, Alert } from 'antd'
 import Add from './Add'
 import AddedItem from './AddedItem'
-import { addedProductsAtom } from './atoms'
-import { useAtom } from 'jotai'
+import { addedProductsAtom, fastShopMetaAtom } from './atoms'
+import { useAtom, useSetAtom } from 'jotai'
 import { getQueryString } from '@/utils'
 import { useOne, useMany } from '@/hooks'
 import { TFastShopMeta } from '@/types'
@@ -13,6 +13,7 @@ import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 // FIXME: 順序好像會有問題
 
 const AddProduct = () => {
+  const setFastShopMeta = useSetAtom(fastShopMetaAtom)
   const postId = getQueryString('post')
   const postResult = useOne({
     resource: `fast-shop/${postId}`,
@@ -45,7 +46,7 @@ const AddProduct = () => {
   ] = useAtom(addedProductsAtom)
 
   const [form] = Form.useForm()
-  const testRef = useRef<HTMLInputElement>(null)
+  const ref = useRef<HTMLInputElement>(null)
 
   const handleSave = (e: Event) => {
     e.preventDefault()
@@ -58,7 +59,7 @@ const AddProduct = () => {
     const sortedAllFields = sortBy(allFields, (field) => {
       return sortOrder.indexOf(field.productId)
     })
-    const input = testRef.current
+    const input = ref.current
     if (!input) return null
     input.value = JSON.stringify(sortedAllFields)
     postForm?.prepend(input)
@@ -86,6 +87,7 @@ const AddProduct = () => {
     if (!productsResult?.isLoading) {
       const products = productsResult?.data?.data || []
       setAddedProducts(products)
+      setFastShopMeta(fast_shop_meta)
     }
   }, [productsResult?.isLoading])
 
@@ -110,7 +112,7 @@ const AddProduct = () => {
             ))}
 
         <Add />
-        <input ref={testRef} type="hidden" name="fast_shop_meta" value="" />
+        <input ref={ref} type="hidden" name="fast_shop_meta" value="" />
       </Form>
     </div>
   )

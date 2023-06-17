@@ -2,8 +2,8 @@ import { CloseCircleFilled } from '@ant-design/icons'
 import { Space, Tag, Form, InputNumber } from 'antd'
 import { TProduct } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel } from '@/utils'
-import { addedProductsAtom } from '../atoms'
-import { useAtom } from 'jotai'
+import { addedProductsAtom, fastShopMetaAtom } from '../atoms'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { toNumber } from 'lodash-es'
 import { useEffect } from 'react'
 
@@ -11,15 +11,18 @@ const Simple: React.FC<{
   product: TProduct
   index: number
 }> = ({ product, index }) => {
-  const [
-    addedProducts,
-    setAddedProducts,
-  ] = useAtom(addedProductsAtom)
+  const setAddedProducts = useSetAtom(addedProductsAtom)
+  const fastShopMeta = useAtomValue(fastShopMetaAtom)
   const id = product?.id ?? 0
+  const matchProduct = fastShopMeta.find((item) => item.productId === id)
   const name = product?.name ?? '未知商品'
   const imageSrc = getProductImageSrc(product)
-  const salesPrice = toNumber(product?.sale_price ?? '0')
-  const regularPrice = toNumber(product?.regular_price ?? '0')
+  const salesPrice = !!matchProduct
+    ? toNumber(matchProduct?.salesPrice)
+    : toNumber(product?.sale_price ?? '0')
+  const regularPrice = !!matchProduct
+    ? toNumber(matchProduct?.regularPrice)
+    : toNumber(product?.regular_price ?? '0')
   const categories = product?.categories ?? []
   const type = product?.type ?? ''
   const form = Form.useFormInstance()
@@ -28,29 +31,13 @@ const Simple: React.FC<{
   }
 
   useEffect(() => {
-    form.setFieldValue(
-      [
-        index,
-        'productId',
-      ],
-      id,
-    )
-
-    form.setFieldValue(
-      [
-        index,
-        'regularPrice',
-      ],
-      regularPrice,
-    )
-
-    form.setFieldValue(
-      [
-        index,
-        'salesPrice',
-      ],
-      salesPrice,
-    )
+    form.setFieldsValue({
+      [index]: {
+        productId: id,
+        regularPrice,
+        salesPrice,
+      },
+    })
   }, [id])
 
   return (

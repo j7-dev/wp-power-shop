@@ -7,8 +7,8 @@ import {
 import { Space, Tag, Form, Input } from 'antd'
 import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel } from '@/utils'
-import { addedProductsAtom } from '../../atoms'
-import { useAtom } from 'jotai'
+import { addedProductsAtom, fastShopMetaAtom } from '../../atoms'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { useMany } from '@/hooks'
 import Variation from './Variation'
 
@@ -20,11 +20,10 @@ const Variable: React.FC<{
     isExpended,
     setIsExpended,
   ] = useState(false)
-  const [
-    _,
-    setAddedProducts,
-  ] = useAtom(addedProductsAtom)
+  const setAddedProducts = useSetAtom(addedProductsAtom)
+  const fastShopMeta = useAtomValue(fastShopMetaAtom)
   const id = product?.id ?? 0
+  const matchProduct = fastShopMeta.find((item) => item.productId === id)
   const name = product?.name ?? '未知商品'
   const type = product?.type ?? ''
   const imageSrc = getProductImageSrc(product)
@@ -32,7 +31,6 @@ const Variable: React.FC<{
   const variations = product?.variations ?? []
 
   const form = Form.useFormInstance()
-  console.log('🚀 ~ file: index.tsx:70 ~ form', form.getFieldsValue())
 
   const productVariationsResult = useMany({
     resource: `products/${id}/variations`,
@@ -50,13 +48,11 @@ const Variable: React.FC<{
   }
 
   useEffect(() => {
-    form.setFieldValue(
-      [
-        index,
-        'productId',
-      ],
-      id,
-    )
+    form.setFieldsValue({
+      [index]: {
+        productId: id,
+      },
+    })
   }, [id])
 
   return (
@@ -127,6 +123,7 @@ const Variable: React.FC<{
             variation={variation}
             parentIndex={index}
             index={i}
+            matchProduct={matchProduct}
           />
         ))}
       </div>

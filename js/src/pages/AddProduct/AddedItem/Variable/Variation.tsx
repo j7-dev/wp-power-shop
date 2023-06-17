@@ -2,55 +2,47 @@ import { useEffect } from 'react'
 import { Form, InputNumber, Tooltip, Input } from 'antd'
 import { TProductVariation, TSimpleAttribute } from '@/types/wcRestApi'
 import defaultImage from '@/assets/images/defaultImage.jpg'
+import { nanoid } from 'nanoid'
+import { TFastShopMeta } from '@/types'
 
 const Variation: React.FC<{
   variation: TProductVariation
   parentIndex: number
   index: number
-}> = ({ variation, parentIndex, index }) => {
+  matchProduct: TFastShopMeta | undefined
+}> = ({ variation, parentIndex, index, matchProduct }) => {
   const id = variation?.id ?? 0
+  const matchVariation = !!matchProduct
+    ? matchProduct?.variations?.find((v) => v.variationId === id)
+    : null
   const attributes = (variation?.attributes ?? []) as TSimpleAttribute[]
-  const name = attributes.map((item) => (
-    <span key={item?.id} className="mr-2 font-medium">
-      <Tooltip title={item?.name}>{item?.option}</Tooltip>
+  const name = attributes.map((a) => (
+    <span key={nanoid()} className="mr-2 font-medium">
+      <Tooltip title={a?.name}>{a?.option}</Tooltip>
     </span>
   ))
   const form = Form.useFormInstance()
 
   const imageSrc = variation?.image?.src ?? defaultImage
-  const salesPrice = variation?.sale_price ?? '0'
-  const regularPrice = variation?.regular_price ?? '0'
+  const salesPrice = !!matchVariation
+    ? matchVariation?.salesPrice
+    : variation?.sale_price ?? '0'
+  const regularPrice = !!matchVariation
+    ? matchVariation?.regularPrice
+    : variation?.regular_price ?? '0'
 
   useEffect(() => {
-    form.setFieldValue(
-      [
-        parentIndex,
-        'variations',
-        index,
-        'variationId',
-      ],
-      id,
-    )
-
-    form.setFieldValue(
-      [
-        parentIndex,
-        'variations',
-        index,
-        'regularPrice',
-      ],
-      regularPrice,
-    )
-
-    form.setFieldValue(
-      [
-        parentIndex,
-        'variations',
-        index,
-        'salesPrice',
-      ],
-      salesPrice,
-    )
+    form.setFieldsValue({
+      [parentIndex]: {
+        variations: {
+          [index]: {
+            variationId: id,
+            regularPrice,
+            salesPrice,
+          },
+        },
+      },
+    })
   }, [id])
 
   return (
