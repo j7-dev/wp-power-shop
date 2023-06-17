@@ -1,4 +1,4 @@
-import { useModal } from '@/hooks'
+import { useModal, useOne } from '@/hooks'
 import { Modal, ModalProps, Col, Row, Button } from 'antd'
 import { renderHTML } from '@/utils'
 import { TFastShopMeta } from '@/types'
@@ -6,41 +6,59 @@ import { TProduct } from '@/types/wcStoreApi'
 import InputNumber from '@/components/InputNumber'
 import Gallery from '@/components/Gallery'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
+import { useAtomValue } from 'jotai'
+import { selectedVariationIdAtom } from './atoms'
+
+type TCartModalProps = {
+  product: TProduct
+  meta: TFastShopMeta | undefined
+}
 
 const useCartModal = () => {
   const utils = useModal()
   const { modalProps: defaultModalProps } = utils
+  const selectedVariationId = useAtomValue(selectedVariationIdAtom)
 
-  const renderCartModal = ({
-    product,
-    meta,
-  }: {
-    product: TProduct
-    meta: TFastShopMeta | undefined
-  }) => {
+  const variationProductsResult = useOne({
+    resource: `products/${selectedVariationId}`,
+    dataProvider: 'wc-store',
+    queryOptions: {
+      enabled: !!selectedVariationId,
+    },
+  })
+
+  const variationProduct = variationProductsResult?.data?.data ?? []
+
+  const renderCartModal = ({ product, meta }: TCartModalProps) => {
     const modalProps: ModalProps = {
       centered: true,
       ...defaultModalProps,
       footer: null,
     }
 
+    console.log('meta', meta)
+
     const id = product?.id ?? 0
-    console.log(
-      '🚀 ~ file: useCartModal.tsx:28 ~ useCartModal ~ product:',
-      product,
-    )
     const name = product?.name ?? '未知商品'
-    const description = renderHTML(product?.description ?? '')
+    const description = !!selectedVariationId
+      ? renderHTML(variationProduct?.description ?? '')
+      : renderHTML(product?.description ?? '')
     const images = product?.images ?? []
+    const selectedImageId = !!selectedVariationId
+      ? variationProduct?.images?.[0]?.id
+      : null
+
+    //FIXME 錯的，應該要拿後台的價格
+
     const price_html = renderHTML(product?.price_html ?? '')
 
     return (
       <Modal {...modalProps}>
-        <Row gutter={24}>
-          <Col span={10}>
-            <Gallery images={images} />
+        <Row gutter={24} className="max-h-[75vh] overflow-y-auto">
+          <Col span={24} lg={{ span: 10 }} className="mb-4">
+            <Gallery images={images} selectedImageId={selectedImageId} />
           </Col>
-          <Col span={14}>
+          <Col span={24} lg={{ span: 14 }}>
             <h2 className="text-xl mb-4">{name}</h2>
             {/* <div
               className="pl-2 mb-2 ml-1"
@@ -61,6 +79,7 @@ const useCartModal = () => {
             )} */}
             <div>{price_html}</div>
 
+            {/* TODO: 展開註解 */}
             <div className="my-4">{description}</div>
             <ProductVariationsSelect product={product} />
 

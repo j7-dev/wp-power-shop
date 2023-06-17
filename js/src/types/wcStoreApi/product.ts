@@ -1,3 +1,4 @@
+import { TVariation } from './../custom/index'
 export type TImage = {
   id: number
   src: string
@@ -15,24 +16,28 @@ export type TProductTerm = {
   link: string
 }
 
+export type TProductAttributeTerm = {
+  id: number
+  name: string
+  slug: string
+}
+
 export type TProductAttribute = {
   id: number
   name: string
   taxonomy: string
   has_variations: boolean
-  terms: {
-    id: number
-    name: string
-    slug: string
-  }[]
+  terms: TProductAttributeTerm[]
+}
+
+export type TProductVariationAttribute = {
+  name: string
+  value: string
 }
 
 export type TProductVariation = {
   id: number
-  attributes: {
-    name: string
-    value: string
-  }[]
+  attributes: TProductVariationAttribute[]
 }
 
 export type TProduct = {

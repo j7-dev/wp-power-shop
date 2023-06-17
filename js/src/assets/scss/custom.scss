@@ -17,6 +17,7 @@
 	.fs-product-attribute-option {
 		border: 1px solid #ddd;
 		margin-right: 0.5rem;
+		margin-bottom: 0.5rem;
 		padding: 2px;
 		cursor: pointer;
 		font-size: 0.75rem;
@@ -28,6 +29,14 @@
 		&.active {
 			border: 1px solid $primary;
 			color: #333;
+		}
+		&.disabled {
+			border: 1px solid #ccc;
+			color: #ccc;
+			cursor: not-allowed;
+			& > div {
+				background-color: #eee;
+			}
 		}
 	}
 }

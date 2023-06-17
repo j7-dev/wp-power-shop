@@ -1,54 +1,72 @@
-import React, { useState } from 'react'
-import { useMany } from '@/hooks'
-import { TProduct } from '@/types/wcStoreApi'
+import React, { useState, useEffect } from 'react'
+import { useOne } from '@/hooks'
+import {
+  TProduct,
+  TProductAttribute,
+  TProductVariationAttribute,
+  TProductAttributeTerm,
+} from '@/types/wcStoreApi'
+import { useSetAtom } from 'jotai'
+import { selectedVariationIdAtom } from '@/pages/FastShopProducts/Item/Variable/atoms'
+import { getVariationIdByAttributes } from '@/utils/wcStoreApi'
+import { sortBy } from 'lodash-es'
+import { nanoid } from 'nanoid'
 
-type TTerm = {
-  id: number
-  name: string
-  slug: string
-}
 const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
   product,
 }) => {
-  const id = product?.id ?? 0
+  const setSelectedVariationId = useSetAtom(selectedVariationIdAtom)
+
   const attributes = product?.attributes ?? []
+
   const [
     selected,
     setSelected,
-  ] = useState<(TTerm & { attributeId: number })[]>([])
-  const handleClick = (attributeId: number, term: TTerm) => () => {
-    const otherSelectedAttribute = selected.filter(
-      (item) => item.attributeId !== attributeId,
-    )
-    const itemToBeAdded = {
-      ...term,
-      attributeId,
+  ] = useState<TProductVariationAttribute[]>([])
+
+  const handleClick =
+    (attribute: TProductAttribute, term: TProductAttributeTerm) => () => {
+      const order = attributes.map((a) => a.name)
+      const attributeName = attribute?.name ?? ''
+      const otherSelectedAttribute = selected.filter(
+        (item) => item.name !== attributeName,
+      )
+      const itemToBeAdded = {
+        name: attributeName,
+        value: term?.slug ?? '',
+      }
+      const newSelected = [
+        ...otherSelectedAttribute,
+        itemToBeAdded,
+      ]
+      const sortedNewSelected = sortBy(newSelected, (item) => {
+        const index = order.indexOf(item.name)
+        return index !== -1 ? index : Infinity
+      })
+
+      setSelected(sortedNewSelected)
+      const variationId = getVariationIdByAttributes(product, sortedNewSelected)
+      setSelectedVariationId(variationId)
     }
-    setSelected([
-      ...otherSelectedAttribute,
-      itemToBeAdded,
-    ])
-  }
-  console.log('🚀 ~ file: index.tsx:62 ~ selected:', selected)
 
   return (
     <>
       {attributes.map((attribute) => {
         const terms = attribute?.terms ?? []
         const selectedTerm = selected.find(
-          (item) => item.attributeId === attribute?.id,
-        ) ?? { slug: '' }
+          (item) => item.name === attribute?.name,
+        ) ?? { name: '', value: '' }
         return (
-          <div key={attribute?.id} className="mb-4">
+          <div key={nanoid()} className="mb-4">
             <p className="mb-0">{attribute?.name}</p>
-            <div className="flex">
+            <div className="flex flex-wrap">
               {terms.map((term) => (
                 <div
                   key={term?.slug}
                   className={`fs-product-attribute-option ${
-                    selectedTerm?.slug === term?.slug ? 'active' : ''
+                    selectedTerm?.value === term?.slug ? 'active' : ''
                   }`}
-                  onClick={handleClick(attribute?.id, term)}
+                  onClick={handleClick(attribute, term)}
                 >
                   <div>{term?.name}</div>
                 </div>
