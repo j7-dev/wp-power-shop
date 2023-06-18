@@ -51,18 +51,9 @@ const useCartModal = () => {
       footer: null,
     }
 
-    const id = product?.id ?? 0
-
     const name = product?.name ?? '未知商品'
-    const description = !!selectedVariationId
-      ? renderHTML(variationProduct?.description ?? '')
-      : renderHTML(product?.description ?? '')
+    const description = renderHTML(product?.description ?? '')
     const images = product?.images ?? []
-    const selectedImageId = !!selectedVariationId
-      ? variationProduct?.images?.[0]?.id
-      : null
-
-    //FIXME 錯的，應該要拿後台的價格
 
     const price_html = renderHTML(product?.price_html ?? '')
 
@@ -79,7 +70,7 @@ const useCartModal = () => {
       <Modal {...modalProps}>
         <Row gutter={24} className="max-h-[75vh] overflow-y-auto">
           <Col span={24} lg={{ span: 10 }} className="mb-4">
-            <Gallery images={images} selectedImageId={selectedImageId} />
+            <Gallery images={images} />
           </Col>
           <Col span={24} lg={{ span: 14 }}>
             <h2 className="text-xl mb-4">{name}</h2>
@@ -130,11 +121,6 @@ const useCartModal = () => {
         )
       : null
 
-    console.log(
-      '🚀 ~ file: useCartModal.tsx:33 ~ useCartModal ~ matchVariation:',
-      matchVariation,
-    )
-
     const name = product?.name ?? '未知商品'
     const description = !!selectedVariationId
       ? renderHTML(variationProduct?.description ?? '')
@@ -143,8 +129,6 @@ const useCartModal = () => {
     const selectedImageId = !!selectedVariationId
       ? variationProduct?.images?.[0]?.id
       : null
-
-    //FIXME 錯的，應該要拿後台的價格
 
     const price_html = renderHTML(product?.price_html ?? '')
     const price = !!matchVariation ? (
