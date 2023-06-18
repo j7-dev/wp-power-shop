@@ -2,18 +2,18 @@ import { useEffect, useRef } from 'react'
 import { Form, Alert } from 'antd'
 import Add from './Add'
 import AddedItem from './AddedItem'
-import { addedProductsAtom, fastShopMetaAtom } from './atoms'
+import { addedProductsAtom, FSMetaAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
 import { getQueryString } from '@/utils'
 import { useOne, useMany } from '@/hooks'
-import { TFastShopMeta } from '@/types'
+import { TFSMeta } from '@/types'
 import { sortBy } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 
 // FIXME: 順序好像會有問題
 
 const AddProduct = () => {
-  const setFastShopMeta = useSetAtom(fastShopMetaAtom)
+  const setFSMeta = useSetAtom(FSMetaAtom)
   const postId = getQueryString('post')
   const postResult = useOne({
     resource: `fast-shop/${postId}`,
@@ -24,7 +24,7 @@ const AddProduct = () => {
   const post = postResult?.data?.data || {}
   const fast_shop_meta = JSON.parse(
     post?.meta?.fast_shop_meta || '[]',
-  ) as TFastShopMeta[]
+  ) as TFSMeta[]
   const fast_shop_meta_product_ids = fast_shop_meta.map(
     (item) => item.productId,
   )
@@ -54,7 +54,7 @@ const AddProduct = () => {
 
     const postForm = document.getElementById('post') as HTMLFormElement | null
     const allFields_obj = form.getFieldsValue()
-    const allFields = Object.values(allFields_obj) as TFastShopMeta[]
+    const allFields = Object.values(allFields_obj) as TFSMeta[]
     const sortOrder = addedProducts.map((product) => product.id)
     const sortedAllFields = sortBy(allFields, (field) => {
       return sortOrder.indexOf(field.productId)
@@ -87,7 +87,7 @@ const AddProduct = () => {
     if (!productsResult?.isLoading) {
       const products = productsResult?.data?.data || []
       setAddedProducts(products)
-      setFastShopMeta(fast_shop_meta)
+      setFSMeta(fast_shop_meta)
     }
   }, [productsResult?.isLoading])
 

@@ -7,7 +7,7 @@ import {
 import { Space, Tag, Form, Input } from 'antd'
 import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel } from '@/utils'
-import { addedProductsAtom, fastShopMetaAtom } from '../../atoms'
+import { addedProductsAtom, FSMetaAtom } from '../../atoms'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { useMany } from '@/hooks'
 import Variation from './Variation'
@@ -21,9 +21,9 @@ const Variable: React.FC<{
     setIsExpended,
   ] = useState(false)
   const setAddedProducts = useSetAtom(addedProductsAtom)
-  const fastShopMeta = useAtomValue(fastShopMetaAtom)
+  const FSMeta = useAtomValue(FSMetaAtom)
   const id = product?.id ?? 0
-  const matchProduct = fastShopMeta.find((item) => item.productId === id)
+  const matchProduct = FSMeta.find((item) => item.productId === id)
   const name = product?.name ?? '未知商品'
   const type = product?.type ?? ''
   const imageSrc = getProductImageSrc(product)

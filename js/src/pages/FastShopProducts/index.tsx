@@ -1,8 +1,18 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { createContext } from 'react'
 import { postId } from '@/utils'
 import { useOne, useMany } from '@/hooks'
-import { TFastShopMeta } from '@/types'
+import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcStoreApi'
 import Item from './Item'
+import useCartModal from './hooks/useCartModal'
+
+export const ProductsContext = createContext({
+  products: [] as TProduct[],
+  fast_shop_meta: [] as TFSMeta[],
+  showFSModal:
+    (_props: { product: TProduct; FSMeta: TFSMeta | undefined }) => () => {},
+})
 
 const FastShopProducts = () => {
   const postResult = useOne({
@@ -14,7 +24,7 @@ const FastShopProducts = () => {
   const post = postResult?.data?.data || {}
   const fast_shop_meta = JSON.parse(
     post?.meta?.fast_shop_meta || '[]',
-  ) as TFastShopMeta[]
+  ) as TFSMeta[]
   const product_ids = fast_shop_meta.map((meta) => meta.productId)
 
   const productsResult = useMany({
@@ -30,16 +40,24 @@ const FastShopProducts = () => {
 
   const products = (productsResult?.data?.data ?? []) as TProduct[]
 
+  const { renderCartModal, showFSModal } = useCartModal()
+
   return (
     <div className="fast-shop-products">
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-        {products.map((product) => {
-          const productMeta = fast_shop_meta.find(
-            (meta) => meta.productId === product.id,
-          )
-          return <Item key={product?.id} product={product} meta={productMeta} />
-        })}
-      </div>
+      <ProductsContext.Provider
+        value={{
+          products,
+          fast_shop_meta,
+          showFSModal,
+        }}
+      >
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
+          {products.map((product) => {
+            return <Item key={product?.id} productId={product?.id} />
+          })}
+        </div>
+      </ProductsContext.Provider>
+      {renderCartModal()}
     </div>
   )
 }

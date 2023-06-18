@@ -6,6 +6,7 @@ const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
   selectedImageId,
 }) => {
   if (images.length === 0) return null
+  const isInclude = images.some((i) => i.id === selectedImageId)
 
   const [
     selected,
@@ -19,8 +20,10 @@ const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
   const mainSrc = images.find((image) => image.id === selected)?.src ?? ''
 
   useEffect(() => {
-    if (!!selectedImageId) {
+    if (!!selectedImageId && isInclude) {
       setSelected(selectedImageId)
+    } else {
+      setSelected(images[0].id)
     }
   }, [selectedImageId])
 

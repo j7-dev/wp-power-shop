@@ -3,17 +3,17 @@ import { Form, InputNumber, Tooltip, Input } from 'antd'
 import { TProductVariation, TSimpleAttribute } from '@/types/wcRestApi'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 import { nanoid } from 'nanoid'
-import { TFastShopMeta } from '@/types'
+import { TFSMeta } from '@/types'
 
 const Variation: React.FC<{
   variation: TProductVariation
   parentIndex: number
   index: number
-  matchProduct: TFastShopMeta | undefined
+  matchProduct: TFSMeta | undefined
 }> = ({ variation, parentIndex, index, matchProduct }) => {
   const id = variation?.id ?? 0
   const matchVariation = !!matchProduct
-    ? matchProduct?.variations?.find((v) => v.variationId === id)
+    ? (matchProduct?.variations ?? [])?.find((v) => v.variationId === id)
     : null
   const attributes = (variation?.attributes ?? []) as TSimpleAttribute[]
   const name = attributes.map((a) => (
@@ -52,6 +52,12 @@ const Variation: React.FC<{
           <div className="mr-4">
             <img className="h-16 w-16 rounded-xl object-cover" src={imageSrc} />
             <p className="m-0 text-xs text-gray-400">ID: #{id}</p>
+            <p className="m-0 text-xs text-gray-400">
+              原價: {variation?.regular_price ?? ''}
+            </p>
+            <p className="m-0 text-xs text-gray-400">
+              特價: {variation?.sale_price ?? ''}
+            </p>
           </div>
           <div className="flex-1">
             {name}

@@ -2,7 +2,7 @@ import { CloseCircleFilled } from '@ant-design/icons'
 import { Space, Tag, Form, InputNumber } from 'antd'
 import { TProduct } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel } from '@/utils'
-import { addedProductsAtom, fastShopMetaAtom } from '../atoms'
+import { addedProductsAtom, FSMetaAtom } from '../atoms'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { toNumber } from 'lodash-es'
 import { useEffect } from 'react'
@@ -12,9 +12,9 @@ const Simple: React.FC<{
   index: number
 }> = ({ product, index }) => {
   const setAddedProducts = useSetAtom(addedProductsAtom)
-  const fastShopMeta = useAtomValue(fastShopMetaAtom)
+  const FSMeta = useAtomValue(FSMetaAtom)
   const id = product?.id ?? 0
-  const matchProduct = fastShopMeta.find((item) => item.productId === id)
+  const matchProduct = FSMeta.find((item) => item.productId === id)
   const name = product?.name ?? '未知商品'
   const imageSrc = getProductImageSrc(product)
   const salesPrice = !!matchProduct
@@ -50,6 +50,12 @@ const Simple: React.FC<{
               {getProductTypeLabel(type)}
             </p>
             <p className="m-0 text-xs text-gray-400">ID: #{id}</p>
+            <p className="m-0 text-xs text-gray-400">
+              原價: {product?.regular_price ?? ''}
+            </p>
+            <p className="m-0 text-xs text-gray-400">
+              特價: {product?.sale_price ?? ''}
+            </p>
           </div>
           <div className="flex-1">
             <Space

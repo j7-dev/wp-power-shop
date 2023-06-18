@@ -1,5 +1,4 @@
 import React from 'react'
-import { toLocaleString } from 'lodash-es'
 
 export const windowOuterWidth = window?.outerWidth || 1200
 
@@ -42,8 +41,10 @@ export const getCurrencyString = ({
   price,
   symbol = 'NT$',
 }: {
-  price: number
+  price: number | string | undefined
   symbol?: string
 }) => {
-  return `${symbol} ${price.toLocaleString()}`
+  if (typeof price === 'undefined') return ''
+  if (typeof price === 'string') return `${symbol} ${price}`
+  return `${symbol} ${price.toString()}`
 }

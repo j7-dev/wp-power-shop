@@ -1,19 +1,17 @@
-import React from 'react'
-import { TFastShopMeta } from '@/types'
-import { TProduct } from '@/types/wcStoreApi'
+import { useContext } from 'react'
 import Simple from './Simple'
 import Variable from './Variable'
+import { ProductsContext } from '..'
 
-const Item: React.FC<{
-  product: TProduct
-  meta: TFastShopMeta | undefined
-}> = ({ product, meta }) => {
+const Item: React.FC<{ productId: number }> = ({ productId }) => {
+  const { products } = useContext(ProductsContext)
+  const product = products.find((p) => p.id === productId)
   const type = product?.type ?? ''
 
   return (
     <>
-      {type === 'simple' && <Simple product={product} meta={meta} />}
-      {type === 'variable' && <Variable product={product} meta={meta} />}
+      {type === 'simple' && !!product && <Simple product={product} />}
+      {type === 'variable' && !!product && <Variable product={product} />}
     </>
   )
 }

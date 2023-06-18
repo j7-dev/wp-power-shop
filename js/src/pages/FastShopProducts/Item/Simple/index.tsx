@@ -1,25 +1,17 @@
-import React from 'react'
-import { TFastShopMeta } from '@/types'
+import React, { useContext } from 'react'
 import { TProduct } from '@/types/wcStoreApi'
-import { getProductImageSrc, getCurrencyString } from '@/utils'
+import { getProductImageSrc } from '@/utils'
 import { Button } from 'antd'
-import useCartModal from './useCartModal'
+import { ProductsContext } from '../..'
+import Price from '@/components/Price'
 
 const Simple: React.FC<{
   product: TProduct
-  meta: TFastShopMeta | undefined
-}> = ({ product, meta }) => {
+}> = ({ product }) => {
+  const { fast_shop_meta, showFSModal } = useContext(ProductsContext)
+  const FSMeta = fast_shop_meta.find((m) => m.productId === product.id)
   const name = product?.name ?? '未知商品'
   const imageSrc = getProductImageSrc(product)
-
-  const regularPrice = getCurrencyString({
-    price: meta?.regularPrice ?? 0,
-  })
-  const salesPrice = getCurrencyString({
-    price: meta?.salesPrice ?? 0,
-  })
-
-  const { renderCartModal, showModal } = useCartModal()
 
   return (
     <div className="relative pb-12">
@@ -27,24 +19,20 @@ const Simple: React.FC<{
         <img src={imageSrc} className="w-full aspect-square" />
       </div>
       <p className="m-0">{name}</p>
-      {!!meta?.salesPrice ? (
-        <>
-          <p className="m-0">
-            <del>{regularPrice}</del>
-          </p>
-          <p className="m-0 text-red-800">{salesPrice}</p>
-        </>
-      ) : (
-        <p className="m-0">{regularPrice}</p>
-      )}
+      <Price
+        salePrice={FSMeta?.salesPrice ?? 0}
+        regularPrice={FSMeta?.regularPrice ?? 0}
+      />
       <Button
-        onClick={showModal}
+        onClick={showFSModal({
+          product,
+          FSMeta,
+        })}
         type="primary"
         className="w-full absolute bottom-0"
       >
         加入購物車
       </Button>
-      {renderCartModal({ product, meta })}
     </div>
   )
 }
