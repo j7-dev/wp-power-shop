@@ -16,6 +16,7 @@ const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
   const handleClick = (id: number) => () => {
     setSelected(id)
   }
+	console.log('🚀 ~ file: index.tsx:50 ~ selected:', images,selected)
 
   const mainSrc = images.find((image) => image.id === selected)?.src ?? ''
 
@@ -26,6 +27,12 @@ const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
       setSelected(images[0].id)
     }
   }, [selectedImageId])
+
+	useEffect(() => {
+		if(images.length > 0){
+		setSelected(images[0].id)
+	}
+	}, [images])
 
   return (
     <>

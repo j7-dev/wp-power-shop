@@ -1,13 +1,17 @@
-import { useState } from 'react'
-import { InputNumber as AntdInputNumber } from 'antd'
+import { FC } from 'react'
+import { InputNumber } from 'antd'
 import './style.scss'
 
-const InputNumber = () => {
-  const defaultValue = 1
-  const [
-    value,
-    setValue,
-  ] = useState(defaultValue)
+const PlusMinusInput:FC<{
+	value: number
+	setValue: React.Dispatch<React.SetStateAction<number>>
+	defaultValue: number
+}> = ({
+	value,
+	setValue,
+	defaultValue
+}) => {
+
 
   const handleMinus = () => {
     if (value > 1) {
@@ -20,7 +24,7 @@ const InputNumber = () => {
   }
 
   return (
-    <AntdInputNumber
+    <InputNumber
       className="w-full"
       addonBefore={
         <span className="fs-addon" onClick={handleMinus}>
@@ -38,4 +42,4 @@ const InputNumber = () => {
   )
 }
 
-export default InputNumber
+export default PlusMinusInput
