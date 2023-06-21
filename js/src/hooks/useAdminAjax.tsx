@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { adminAjax, TAdminAjaxArgs } from '@/api'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
-import { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 
 export const useAdminAjax = (options?: {
   args?: TAdminAjaxArgs
 	config?: AxiosRequestConfig<{[key: string]: any;}> | undefined
-  mutationOptions?: UseMutationOptions<unknown, unknown, TAdminAjaxArgs>
+  mutationOptions?: UseMutationOptions<AxiosResponse, AxiosError, TAdminAjaxArgs>
 }) => {
   const args = options?.args || undefined
 	const config = options?.config || undefined

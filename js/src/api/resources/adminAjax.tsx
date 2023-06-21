@@ -3,24 +3,34 @@ import { ajaxUrl } from '@/utils'
 import { AxiosRequestConfig } from 'axios'
 
 export type TAdminAjaxArgs = {
-	action: string
-	nonce: string
-	[key: string]: any
+  action: string
+  nonce: string
+  [key: string]: any
 }
 
 export const adminAjax = async ({
   args,
-	config = undefined,
+  config = undefined,
 }: {
   args?: TAdminAjaxArgs
-	config?: AxiosRequestConfig<{[key: string]: any;}> | undefined
+  config?: AxiosRequestConfig<{ [key: string]: any }> | undefined
 }) => {
+	const formData = new FormData()
 
-  const result = await axios.post(
-    ajaxUrl,
-    args,
-		config
-  )
+  if (!!args) {
+    Object.keys(args).forEach((key) => {
+      formData.append(key, args[key])
+    })
+  }
+
+  const result = await axios.post(ajaxUrl, formData, {
+		...config,
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+			'Accept': 'application/json',
+		}
+	})
+
 
   return result
 }

@@ -73,17 +73,28 @@ class Bootstrap
 		));
 	}
 
-	private function handle_cart_price_callback()
+	public function handle_cart_price_callback()
 	{
 		// Security check
 		\check_ajax_referer(self::TEXT_DOMAIN, 'nonce');
 
+		// global $woocommerce;
+
+		$product_id = $_POST['id'];
+		$quantity = $_POST['quantity'];
+		\WC()->cart->add_to_cart($product_id, $quantity);
+
 		$return = array(
-			'message'  => 'Success!',
-			'ID'       => 1
+			'message'  => 'success',
+			'data'       => [
+				'product_id' => $product_id,
+				'quantity' => $quantity,
+			]
 		);
 
 		\wp_send_json($return);
+
+		\wp_die();
 	}
 }
 

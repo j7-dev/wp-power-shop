@@ -12,6 +12,7 @@
 namespace J7\ViteReactWPPlugin\FastShop;
 
 
+
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/inc/admin.php';
 

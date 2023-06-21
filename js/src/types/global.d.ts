@@ -6,7 +6,6 @@ declare global {
   var appData: {
     ajaxUrl: string
     ajaxNonce: string
-    ajaxAction: string
     userId: string
     postId: string
   }

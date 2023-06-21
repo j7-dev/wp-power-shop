@@ -5,7 +5,6 @@ export const renderId3 = import.meta.env.VITE_RENDER_ID_3 || 'my-app'
 export const apiUrl = window?.wpApiSettings?.root || '/wp-json'
 export const ajaxUrl = window?.appData?.ajaxUrl || '/wp-admin/admin-ajax.php'
 export const ajaxNonce = window?.appData?.ajaxNonce || ''
-export const ajaxAction = window?.appData?.ajaxAction || ''
 export const currentUserId = window?.appData?.userId || 0
 export const postId = window?.appData?.postId || 0
 

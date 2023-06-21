@@ -1,7 +1,9 @@
 import React from 'react'
 import { Button } from 'antd'
 import { useAdminAjax } from '@/hooks'
-import { ajaxNonce, ajaxAction } from '@/utils'
+import { ajaxNonce } from '@/utils'
+import { AxiosResponse } from 'axios'
+import { useQueryClient } from '@tanstack/react-query'
 
 const AddToCartButton: React.FC<{
   productId: number
@@ -11,15 +13,21 @@ const AddToCartButton: React.FC<{
     value: string
   }[]
 }> = (props) => {
+	const queryClient = useQueryClient()
   const { mutate } = useAdminAjax()
   const handleClick = () => {
     mutate({
-      action: ajaxAction,
+      action: 'handle_cart_price',
       nonce: ajaxNonce,
       id: props.productId,
       quantity: props.quantity,
       variation: props?.variation,
-    })
+    },{
+			onSuccess: (data :AxiosResponse) => {
+				console.log(data?.data)
+				queryClient.invalidateQueries({ queryKey: ['get_cart'] })
+			}
+		})
   }
   return (
     <Button className="w-full mt-4" type="primary" onClick={handleClick}>

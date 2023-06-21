@@ -2,7 +2,7 @@
 import { updateResource } from '@/api'
 import { TDataProvider } from '@/types'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
-import { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 
 export const useUpdate = (options: {
   resource: string
@@ -12,7 +12,7 @@ export const useUpdate = (options: {
     [key: string]: any
   }
 	config?: AxiosRequestConfig<{[key: string]: any;}> | undefined
-  mutationOptions?: UseMutationOptions<unknown, unknown, { [key: string]: any }>
+  mutationOptions?: UseMutationOptions<AxiosResponse, AxiosError, { [key: string]: any }>
 }) => {
   const resource = options?.resource || 'post'
   const dataProvider = options?.dataProvider || 'wp'
