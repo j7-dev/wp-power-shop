@@ -28,6 +28,7 @@
 	],
 	"rules": {
 		"@wordpress/no-unused-vars-before-return": "off",
+		"prettier/prettier": "off",
 		"semi": [
 			"error",
 			"never"

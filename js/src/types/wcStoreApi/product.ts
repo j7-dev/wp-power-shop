@@ -1,4 +1,3 @@
-import { TVariation } from './../custom/index'
 export type TImage = {
   id: number
   src: string

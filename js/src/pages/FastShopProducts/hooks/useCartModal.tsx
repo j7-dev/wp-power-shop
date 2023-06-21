@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { useModal, useOne } from '@/hooks'
 import { Modal, ModalProps, Col, Row, Button } from 'antd'
 import { renderHTML } from '@/utils'
-import { TFSMeta, defaultFSMeta } from '@/types'
+import { TFSMeta } from '@/types'
 import { TProduct, defaultProduct } from '@/types/wcStoreApi'
 import InputNumber from '@/components/InputNumber'
 import Gallery from '@/components/Gallery'
 import Price from '@/components/Price'
+import AddToCartButton from '@/components/AddToCartButton'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
 import { useAtomValue } from 'jotai'
 import { selectedVariationIdAtom } from '../Item/Variable/atoms'
@@ -28,9 +29,9 @@ const useCartModal = () => {
     setProductFSMeta(props)
   }
   const product = productFSMeta?.product ?? defaultProduct
+  const productId = product?.id ?? 0
   const type = product?.type ?? 'simple'
   const FSMeta = productFSMeta?.FSMeta ?? null
-  console.log('🚀 ~ file: useCartModal.tsx:33 ~ useCartModal ~ FSMeta:', FSMeta)
 
   const selectedVariationId = useAtomValue(selectedVariationIdAtom)
 
@@ -50,6 +51,10 @@ const useCartModal = () => {
       ...defaultModalProps,
       footer: null,
     }
+    const [
+      qty,
+      setQty,
+    ] = useState(1)
 
     const name = product?.name ?? '未知商品'
     const description = renderHTML(product?.description ?? '')
@@ -99,9 +104,11 @@ const useCartModal = () => {
 
             <p className="mb-0 mt-4">數量</p>
             <InputNumber />
-            <Button className="w-full mt-4" type="primary">
-              加入購物車
-            </Button>
+            <AddToCartButton
+              productId={productId}
+              quantity={qty}
+              variation={undefined}
+            />
           </Col>
         </Row>
       </Modal>

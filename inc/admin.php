@@ -17,6 +17,8 @@ class Bootstrap
 	{
 		\add_action('admin_enqueue_scripts', [$this, 'enqueue_script']);
 		\add_action('wp_enqueue_scripts', [$this, 'enqueue_script']);
+		\add_action('wp_ajax_handle_cart_price', [$this, 'handle_cart_price_callback']);
+		\add_action('wp_ajax_nopriv_handle_cart_price', [$this, 'handle_cart_price_callback']);
 
 		// \add_action('wp_footer', [$this, 'render_app']);
 	}
@@ -56,7 +58,8 @@ class Bootstrap
 		);
 
 		\wp_localize_script(self::TEXT_DOMAIN, 'appData', array(
-			'apiUrl' => \site_url() . '/wp-json',
+			'ajaxUrl' => \admin_url('admin-ajax.php'),
+			'nonce'  => \wp_create_nonce(self::TEXT_DOMAIN),
 			'userId' => \wp_get_current_user()->data->ID,
 			'postId' => \get_the_ID(),
 		));
@@ -65,6 +68,19 @@ class Bootstrap
 			'root' => \esc_url_raw(rest_url()),
 			'nonce' => \wp_create_nonce('wp_rest'),
 		));
+	}
+
+	private function handle_cart_price_callback()
+	{
+		// Security check
+		\check_ajax_referer(self::TEXT_DOMAIN, 'nonce');
+
+		$return = array(
+			'message'  => 'Success!',
+			'ID'       => 1
+		);
+
+		\wp_send_json($return);
 	}
 }
 

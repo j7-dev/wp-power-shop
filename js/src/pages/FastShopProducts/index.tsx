@@ -6,6 +6,7 @@ import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcStoreApi'
 import Item from './Item'
 import useCartModal from './hooks/useCartModal'
+import Cart from './Cart'
 
 export const ProductsContext = createContext({
   products: [] as TProduct[],
@@ -58,6 +59,9 @@ const FastShopProducts = () => {
         </div>
       </ProductsContext.Provider>
       {renderCartModal()}
+      <div className="mt-20">
+        <Cart />
+      </div>
     </div>
   )
 }

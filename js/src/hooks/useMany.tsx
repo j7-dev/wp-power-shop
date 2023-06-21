@@ -1,6 +1,7 @@
 import { getResources } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 import { TPostsArgs, TDataProvider } from '@/types'
+import {AxiosRequestConfig} from 'axios'
 
 export const useMany = (options: {
   resource: string
@@ -9,6 +10,7 @@ export const useMany = (options: {
   args?: TPostsArgs & {
     [key: string]: any
   }
+	config?: AxiosRequestConfig<{[key: string]: any;}> | undefined
   queryOptions?: {
     staleTime?: number
     cacheTime?: number
@@ -25,6 +27,7 @@ export const useMany = (options: {
   const dataProvider = options?.dataProvider || 'wp'
   const pathParams = options?.pathParams || []
   const args = options?.args || undefined
+	const config = options?.config || undefined
 
   const queryKey = args
     ? [
@@ -47,6 +50,7 @@ export const useMany = (options: {
         dataProvider,
         pathParams,
         args,
+				config,
       }),
     options.queryOptions || {},
   )

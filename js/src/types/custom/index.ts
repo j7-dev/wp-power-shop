@@ -1,4 +1,4 @@
-export type TVariation = {
+export type TFSVariation = {
   variationId: number
   regularPrice: number
   salesPrice: number
@@ -7,7 +7,7 @@ export type TVariation = {
 export type TFSMeta = {
   productId: number
   type: string
-  variations?: TVariation[]
+  variations?: TFSVariation[]
   regularPrice?: number
   salesPrice?: number
 }
