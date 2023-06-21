@@ -12,13 +12,15 @@ class Bootstrap
 	const TEXT_DOMAIN = 'fast-shop';
 	const DB_DOMAIN = 'fast_shop';
 	const LABEL = 'Fast Shop';
+	const ACTION = 'handle_cart_price';
+
 
 	public function init(): void
 	{
 		\add_action('admin_enqueue_scripts', [$this, 'enqueue_script']);
 		\add_action('wp_enqueue_scripts', [$this, 'enqueue_script']);
-		\add_action('wp_ajax_handle_cart_price', [$this, 'handle_cart_price_callback']);
-		\add_action('wp_ajax_nopriv_handle_cart_price', [$this, 'handle_cart_price_callback']);
+		\add_action('wp_ajax_' . self::ACTION, [$this,  self::ACTION . '_callback']);
+		\add_action('wp_ajax_nopriv_' . self::ACTION, [$this, self::ACTION . '_callback']);
 
 		// \add_action('wp_footer', [$this, 'render_app']);
 	}
@@ -59,7 +61,8 @@ class Bootstrap
 
 		\wp_localize_script(self::TEXT_DOMAIN, 'appData', array(
 			'ajaxUrl' => \admin_url('admin-ajax.php'),
-			'nonce'  => \wp_create_nonce(self::TEXT_DOMAIN),
+			'ajaxNonce'  => \wp_create_nonce(self::TEXT_DOMAIN),
+			'ajaxAction' => self::ACTION,
 			'userId' => \wp_get_current_user()->data->ID,
 			'postId' => \get_the_ID(),
 		));

@@ -1,8 +1,7 @@
 import React from 'react'
 import { Button } from 'antd'
-import { useUpdate } from '@/hooks'
-import { useAtomValue } from 'jotai'
-import { storeApiNonceAtom } from '@/pages/FastShopProducts/atom'
+import { useAdminAjax } from '@/hooks'
+import { ajaxNonce, ajaxAction } from '@/utils'
 
 const AddToCartButton: React.FC<{
   productId: number
@@ -12,21 +11,14 @@ const AddToCartButton: React.FC<{
     value: string
   }[]
 }> = (props) => {
-	const nonce = useAtomValue(storeApiNonceAtom)
-  const { mutate } = useUpdate({
-    resource: 'cart/add-item',
-    dataProvider: 'wc-store',
-		config: {
-			headers: {
-				'Nonce': nonce,
-			}
-		}
-  })
+  const { mutate } = useAdminAjax()
   const handleClick = () => {
     mutate({
+      action: ajaxAction,
+      nonce: ajaxNonce,
       id: props.productId,
       quantity: props.quantity,
-      variation: props.variation,
+      variation: props?.variation,
     })
   }
   return (
