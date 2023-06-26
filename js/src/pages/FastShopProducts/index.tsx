@@ -57,11 +57,12 @@ const FastShopProducts = () => {
             return <Item key={product?.id} productId={product?.id} />
           })}
         </div>
+
+        {renderCartModal()}
+        <div className="mt-20">
+          <Cart />
+        </div>
       </ProductsContext.Provider>
-      {renderCartModal()}
-      <div className="mt-20">
-        <Cart />
-      </div>
     </div>
   )
 }

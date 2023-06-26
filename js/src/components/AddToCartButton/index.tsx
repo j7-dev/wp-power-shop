@@ -1,38 +1,64 @@
 import React from 'react'
-import { Button } from 'antd'
+import { Button, notification } from 'antd'
 import { useAdminAjax } from '@/hooks'
 import { ajaxNonce } from '@/utils'
-import { AxiosResponse } from 'axios'
 import { useQueryClient } from '@tanstack/react-query'
 
 const AddToCartButton: React.FC<{
   productId: number
   quantity: number
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   variation?: {
     attribute: string
     value: string
   }[]
+  variationId?: number | null
 }> = (props) => {
-	const queryClient = useQueryClient()
-  const { mutate } = useAdminAjax()
+  const queryClient = useQueryClient()
+  const { mutate, isLoading } = useAdminAjax()
+  const [
+    api,
+    contextHolder,
+  ] = notification.useNotification()
   const handleClick = () => {
-    mutate({
-      action: 'handle_cart_price',
-      nonce: ajaxNonce,
-      id: props.productId,
-      quantity: props.quantity,
-      variation: props?.variation,
-    },{
-			onSuccess: (data :AxiosResponse) => {
-				console.log(data?.data)
-				queryClient.invalidateQueries({ queryKey: ['get_cart'] })
-			}
-		})
+    mutate(
+      {
+        action: 'handle_cart_price',
+        nonce: ajaxNonce,
+        id: props.productId,
+        quantity: props.quantity,
+        variation: props?.variation,
+        variationId: props?.variationId ?? undefined,
+      },
+      {
+        onSuccess: () => {
+          props.setIsModalOpen(false)
+          api.success({
+            message: '加入購物車成功',
+          })
+          queryClient.invalidateQueries({ queryKey: ['get_cart'] })
+        },
+        onError: (error) => {
+          console.log('Error', error)
+          api.error({
+            message: '加入購物車失敗',
+          })
+        },
+      },
+    )
   }
   return (
-    <Button className="w-full mt-4" type="primary" onClick={handleClick}>
-      加入購物車
-    </Button>
+    <>
+      {contextHolder}
+      <Button
+        className="w-full mt-4"
+        type="primary"
+        onClick={handleClick}
+        loading={isLoading}
+      >
+        加入購物車
+      </Button>
+    </>
   )
 }
 
