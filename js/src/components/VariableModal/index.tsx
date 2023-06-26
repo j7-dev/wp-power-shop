@@ -7,7 +7,7 @@ import Price from '@/components/Price'
 import Gallery from '@/components/Gallery'
 import PlusMinusInput from '@/components/PlusMinusInput'
 import AddToCartButton from '@/components/AddToCartButton'
-import { usePlusMinusInput, useOne } from '@/hooks'
+import { usePlusMinusInput } from '@/hooks'
 import { useAtomValue } from 'jotai'
 import { selectedVariationIdAtom } from '@/pages/FastShopProducts/Item/Variable/atoms'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
@@ -19,6 +19,7 @@ const VariableModal: FC<{
   FSMeta: TFSMeta | null
 }> = ({ product, modalProps: defaultModalProps, setIsModalOpen, FSMeta }) => {
   const productId = product?.id ?? 0
+  const variations = product?.variations ?? []
 
   const modalProps: ModalProps = {
     centered: true,
@@ -27,38 +28,24 @@ const VariableModal: FC<{
   }
 
   const selectedVariationId = useAtomValue(selectedVariationIdAtom)
+  const selectedAttributes =
+    variations.find((v) => v.id === selectedVariationId)?.attributes ?? []
 
-  const variationProductsResult = useOne({
-    resource: `products/${selectedVariationId}`,
-    dataProvider: 'wc-store',
-    queryOptions: {
-      enabled: !!selectedVariationId,
-    },
-  })
-
-  const variationProduct = variationProductsResult?.data?.data ?? []
-  console.log('⭐ ~ product:', product)
-
-  const matchVariation = !!FSMeta
+  const matchVariationMeta = !!FSMeta
     ? (FSMeta?.variations ?? []).find(
         (v) => v.variationId === selectedVariationId,
       )
     : null
 
   const name = product?.name ?? '未知商品'
-  const description = !!selectedVariationId
-    ? renderHTML(variationProduct?.description ?? '')
-    : renderHTML(product?.description ?? '')
+  const description = renderHTML(product?.description ?? '')
   const images = product?.images ?? []
-  const selectedImageId = !!selectedVariationId
-    ? variationProduct?.images?.[0]?.id
-    : null
 
   const price_html = renderHTML(product?.price_html ?? '')
-  const price = !!matchVariation ? (
+  const price = !!matchVariationMeta ? (
     <Price
-      salePrice={matchVariation?.salesPrice}
-      regularPrice={matchVariation?.regularPrice}
+      salePrice={matchVariationMeta?.salesPrice}
+      regularPrice={matchVariationMeta?.regularPrice}
     />
   ) : (
     price_html
@@ -76,7 +63,7 @@ const VariableModal: FC<{
     <Modal {...modalProps}>
       <Row gutter={24} className="max-h-[75vh] overflow-y-auto">
         <Col span={24} lg={{ span: 10 }} className="mb-4">
-          <Gallery images={images} selectedImageId={selectedImageId} />
+          <Gallery images={images} />
         </Col>
         <Col span={24} lg={{ span: 14 }}>
           <h2 className="text-xl mb-4">{name}</h2>
@@ -108,7 +95,7 @@ const VariableModal: FC<{
           <AddToCartButton
             productId={productId}
             quantity={qty}
-            variation={undefined}
+            variation={selectedAttributes}
             variationId={selectedVariationId}
             setIsModalOpen={setIsModalOpen}
           />

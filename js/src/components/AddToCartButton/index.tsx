@@ -8,10 +8,7 @@ const AddToCartButton: React.FC<{
   productId: number
   quantity: number
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-  variation?: {
-    attribute: string
-    value: string
-  }[]
+  variation?: any[]
   variationId?: number | null
 }> = (props) => {
   const queryClient = useQueryClient()
@@ -23,12 +20,12 @@ const AddToCartButton: React.FC<{
   const handleClick = () => {
     mutate(
       {
-        action: 'handle_cart_price',
+        action: 'handle_add_cart',
         nonce: ajaxNonce,
         id: props.productId,
         quantity: props.quantity,
-        variation: props?.variation,
-        variationId: props?.variationId ?? undefined,
+        variation: JSON.stringify(props?.variation ?? []),
+        variation_id: props?.variationId ?? undefined,
       },
       {
         onSuccess: () => {
