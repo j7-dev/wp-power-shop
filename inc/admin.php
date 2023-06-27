@@ -14,6 +14,7 @@ class Bootstrap
 	const LABEL = 'Fast Shop';
 	const ADD_CART_ACTION = 'handle_add_cart';
 	const REMOVE_CART_ACTION = 'handle_remove_cart';
+	const PLUGIN_DIR = __DIR__ . '/../';
 
 
 
