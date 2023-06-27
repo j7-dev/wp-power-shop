@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, notification } from 'antd'
 import { useAdminAjax } from '@/hooks'
-import { ajaxNonce } from '@/utils'
+import { ajaxNonce, postId } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 
 const AddToCartButton: React.FC<{
@@ -22,6 +22,7 @@ const AddToCartButton: React.FC<{
       {
         action: 'handle_add_cart',
         nonce: ajaxNonce,
+        post_id: postId,
         id: props.productId,
         quantity: props.quantity,
         variation: JSON.stringify(props?.variation ?? []),

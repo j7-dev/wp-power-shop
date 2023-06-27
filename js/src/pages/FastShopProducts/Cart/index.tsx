@@ -117,6 +117,13 @@ const Cart = () => {
               </tr>
             )
           })}
+          <tr>
+            <th>合計</th>
+            <th></th>
+            <th></th>
+            <th>小計</th>
+            <th></th>
+          </tr>
         </tbody>
       </table>
     </div>

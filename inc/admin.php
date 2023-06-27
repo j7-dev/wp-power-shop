@@ -15,6 +15,7 @@ class Bootstrap
 	const ADD_CART_ACTION = 'handle_add_cart';
 	const REMOVE_CART_ACTION = 'handle_remove_cart';
 	const PLUGIN_DIR = __DIR__ . '/../';
+	const META_KEY = 'fast_shop_meta';
 
 
 
@@ -36,8 +37,8 @@ class Bootstrap
 	public function render_app(): void
 	{
 		\printf('<div id="my-app" class="my-app"></div>');
-		global $woocommerce;
-	}
+
+}
 
 
 	/**
@@ -85,19 +86,25 @@ class Bootstrap
 		\check_ajax_referer(self::TEXT_DOMAIN, 'nonce');
 
 		// global $woocommerce;
-
+		$post_id = $_POST['post_id'] ?? 0;
+		if(empty($post_id)) return;
 		$product_id = $_POST['id'];
 		$quantity = $_POST['quantity'];
 		$variation_id = $_POST['variation_id'] ?? 0;
 		$variation_stringfy = $_POST['variation'] ?? '[]';
+		$fast_shop_meta_string = get_post_meta($post_id, self::META_KEY, true) ?? '[]';
+
 		try {
 			$variation_obj_arr = json_decode(str_replace('\\', '',$variation_stringfy));
 			$variation = [];
 			foreach ($variation_obj_arr as $variation_obj) {
 				$variation[$variation_obj->name] = $variation_obj->value;
 			}
+
+			$fast_shop_meta = (json_decode($fast_shop_meta_string));
 		} catch (\Throwable $th) {
 			$variation = [];
+			$fast_shop_meta = [];
 		}
 
 		/**
