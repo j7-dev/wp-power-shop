@@ -11,6 +11,11 @@ class ShortCode
 	function __construct()
 	{
 		\add_shortcode(Bootstrap::DB_DOMAIN . '_products', [$this, 'shortcode_callback']);
+		/**
+ * 路克決定直接接好用板就好
+ * XXX checkout 可以刪除
+ */
+		\add_shortcode(Bootstrap::DB_DOMAIN . '_checkout', [$this, 'checkout_shortcode_callback']);
 	}
 
 
@@ -22,14 +27,18 @@ class ShortCode
 		?>
 <div id="fast_shop_products_app"></div>
 		<?php
-		// self::checkout();
 		$html .= ob_get_clean();
 
 		return $html;
 	}
+/**
+ * 路克決定直接接好用板就好
+ * XXX 可以刪除
+ */
+	public function checkout_shortcode_callback(){
 
-	private static  function checkout(){
-		// Show non-cart errors.
+		try {
+			// Show non-cart errors.
 		\do_action( 'woocommerce_before_checkout_form_cart_notices' );
 
 		// Check cart has contents.
@@ -65,6 +74,8 @@ class ShortCode
 			\wc_get_template( 'checkout/form-checkout.php', array( 'checkout' => $checkout ), '', $default_path );
 
 		}
+		} catch (\Throwable $th) { return;}
+
 
 	}
 }
