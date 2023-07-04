@@ -16,7 +16,7 @@ class Cart
 
 	function __construct()
 	{
-		\add_action('woocommerce_before_calculate_totals', [$this, 'rudr_custom_price_refresh']);
+		\add_action('woocommerce_before_calculate_totals', [$this, 'price_refresh']);
 		\add_action('wp_ajax_' . self::ADD_CART_ACTION, [$this,  self::ADD_CART_ACTION . '_callback']);
 		\add_action('wp_ajax_nopriv_' . self::ADD_CART_ACTION, [$this, self::ADD_CART_ACTION . '_callback']);
 		\add_action('wp_ajax_' . self::REMOVE_CART_ACTION, [$this,  self::REMOVE_CART_ACTION . '_callback']);
@@ -25,9 +25,21 @@ class Cart
 
 
 
-	public function rudr_custom_price_refresh()
+	public function price_refresh($cart_object)
 	{
-
+		foreach ( $cart_object->get_cart() as $item ) {
+			// echo '<pre>';
+			// var_dump($item);
+			// echo '</pre>';
+			if( !empty( $item['fs_sales_price'] ) ) {
+				$item[ 'data' ]->set_price( $item[ 'fs_sales_price' ] );
+				break;
+			}
+			if( !empty( $item['fs_regular_price'] ) ) {
+				$item[ 'data' ]->set_price( $item[ 'fs_regular_price' ] );
+				break;
+			}
+		}
 	}
 
 
@@ -37,11 +49,11 @@ class Cart
 		\check_ajax_referer(Bootstrap::TEXT_DOMAIN, 'nonce');
 
 		// global $woocommerce;
-		$post_id = $_POST['post_id'] ?? 0;
+		$post_id = array_key_exists('post_id', $_POST) ? $_POST['post_id'] : 0;
 		if(empty($post_id)) return;
 		$product_id = $_POST['id'];
 		$quantity = $_POST['quantity'];
-		$variation_id = $_POST['variation_id'] ?? 0;
+		$variation_id = empty($_POST['variation_id']) ? 0 : $_POST['variation_id'];
 		$variation_stringfy = $_POST['variation'] ?? '[]';
 		$fast_shop_meta_string = get_post_meta($post_id, Bootstrap::META_KEY, true) ?? '[]';
 
@@ -74,16 +86,16 @@ class Cart
 		 // 加入購物車 簡單商品
 		 if(empty($variation_id)){
 			\WC()->cart->add_to_cart($product_id, $quantity, 0, [], [
-				'regular_price' => $the_product_meta['regularPrice'],
-				'sale_price' => $the_product_meta['salePrice'],
+				'fs_regular_price' => $the_product_meta['regularPrice'],
+				'fs_sales_price' => $the_product_meta['salesPrice'],
 			]);
 		 }else{
 			// 加入購物車 可變商品
 			$the_variations_meta = $the_product_meta['variations'] ?? [];
 			$the_variation_meta = find($the_variations_meta, ['variationId' => $variation_id]) ?? [];
 			\WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation, [
-				'regular_price' => $the_variation_meta['regularPrice'],
-				'sale_price' => $the_variation_meta['salePrice'],
+				'fs_regular_price' => $the_variation_meta['regularPrice'],
+				'fs_sales_price' => $the_variation_meta['salesPrice'],
 			]);
 		 }
 
@@ -96,7 +108,12 @@ class Cart
 				'variation' => $variation,
 				'variable' => $_POST,
 				'empty' => empty($variation_id),
-				'fast_shop_meta' => $fast_shop_meta
+				'fast_shop_meta' => $fast_shop_meta,
+				'the_product_meta["salesPrice"]' => $the_product_meta['salesPrice'],
+				'the_product_meta' => $the_product_meta,
+
+				'the_variations_meta' => $the_variations_meta,
+				'the_variation_meta' => $the_variation_meta,
 			]
 		);
 

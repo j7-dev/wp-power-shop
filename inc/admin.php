@@ -29,8 +29,7 @@ class Bootstrap
 	public function render_app(): void
 	{
 		\printf('<div id="my-app" class="my-app"></div>');
-
-}
+	}
 
 
 	/**

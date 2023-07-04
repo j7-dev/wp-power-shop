@@ -26,7 +26,7 @@ const AddToCartButton: React.FC<{
         id: props.productId,
         quantity: props.quantity,
         variation: JSON.stringify(props?.variation ?? []),
-        variation_id: props?.variationId ?? undefined,
+        variation_id: props?.variationId ?? '',
       },
       {
         onSuccess: () => {
