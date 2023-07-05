@@ -29,17 +29,20 @@ class Cart
 
 	public function price_refresh($cart_object)
 	{
-		foreach ( $cart_object->get_cart() as $item ) {
+
+		foreach ( $cart_object->get_cart_contents() as $key => $item ) {
+		// 	if($item['product_id'] == 13){
 			// echo '<pre>';
 			// var_dump($item);
 			// echo '</pre>';
+		// }
 			if( !empty( $item['fs_sales_price'] ) ) {
 				$item[ 'data' ]->set_price( $item[ 'fs_sales_price' ] );
-				break;
+
 			}
-			if( !empty( $item['fs_regular_price'] ) ) {
+			if( !empty( $item['fs_regular_price'])  && empty( $item['fs_sales_price'] ) ) {
 				$item[ 'data' ]->set_price( $item[ 'fs_regular_price' ] );
-				break;
+
 			}
 		}
 	}

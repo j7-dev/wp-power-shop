@@ -28,6 +28,7 @@ const VariableModal: FC<{
   }
 
   const selectedVariationId = useAtomValue(selectedVariationIdAtom)
+
   const selectedAttributes =
     variations.find((v) => v.id === selectedVariationId)?.attributes ?? []
 

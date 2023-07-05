@@ -32,7 +32,6 @@ const Cart = () => {
 	const total_shipping = cartData?.totals?.total_shipping || 0
 	const total_price = cartData?.totals?.total_price || 0
 
-  console.log('⭐ ~ Cart ~ cartData:', cartData)
   const items = cartData?.items || []
 
 
