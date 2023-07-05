@@ -9,6 +9,7 @@ import { Popconfirm, notification } from 'antd'
 import { ajaxNonce } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 
+
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
   const { fast_shop_meta } = useContext(ProductsContext)
@@ -19,6 +20,7 @@ const Cart = () => {
   ] = notification.useNotification()
   const queryClient = useQueryClient()
 
+
   const cartResult = useOne({
     resource: 'cart',
     dataProvider: 'wc-store',
@@ -26,7 +28,13 @@ const Cart = () => {
   const wcStoreApiNonce =
     cartResult?.data?.headers?.['x-wc-store-api-nonce'] || ''
   const cartData = cartResult?.data?.data || {}
+	const total_items	= cartData?.totals?.total_items	|| 0
+	const total_shipping = cartData?.totals?.total_shipping || 0
+	const total_price = cartData?.totals?.total_price || 0
+
+  console.log('⭐ ~ Cart ~ cartData:', cartData)
   const items = cartData?.items || []
+
 
   useEffect(() => {
     setStoreApiNonce(wcStoreApiNonce)
@@ -55,6 +63,7 @@ const Cart = () => {
       },
     )
   }
+
 
   return (
     <div>
@@ -118,10 +127,24 @@ const Cart = () => {
             )
           })}
           <tr>
+            <th>小計</th>
+            <th></th>
+            <th></th>
+            <th>{total_items}</th>
+            <th></th>
+          </tr>
+					<tr>
+            <th>運費</th>
+            <th></th>
+            <th></th>
+            <th>{total_shipping}</th>
+            <th></th>
+          </tr>
+					<tr>
             <th>合計</th>
             <th></th>
             <th></th>
-            <th>小計</th>
+            <th>{total_price}</th>
             <th></th>
           </tr>
         </tbody>

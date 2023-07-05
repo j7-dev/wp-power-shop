@@ -12,15 +12,17 @@ class Cart
 
 	const ADD_CART_ACTION = 'handle_add_cart';
 	const REMOVE_CART_ACTION = 'handle_remove_cart';
+	const GET_CART_ACTION = 'handle_get_cart';
+
 
 
 	function __construct()
 	{
 		\add_action('woocommerce_before_calculate_totals', [$this, 'price_refresh']);
-		\add_action('wp_ajax_' . self::ADD_CART_ACTION, [$this,  self::ADD_CART_ACTION . '_callback']);
-		\add_action('wp_ajax_nopriv_' . self::ADD_CART_ACTION, [$this, self::ADD_CART_ACTION . '_callback']);
-		\add_action('wp_ajax_' . self::REMOVE_CART_ACTION, [$this,  self::REMOVE_CART_ACTION . '_callback']);
-		\add_action('wp_ajax_nopriv_' . self::REMOVE_CART_ACTION, [$this, self::REMOVE_CART_ACTION . '_callback']);
+		foreach ([self::ADD_CART_ACTION, self::REMOVE_CART_ACTION, self::GET_CART_ACTION] as $action) {
+				\add_action('wp_ajax_' . $action, [$this,  $action . '_callback']);
+				\add_action('wp_ajax_nopriv_' . $action, [$this, $action . '_callback']);
+		}
 	}
 
 
@@ -99,6 +101,8 @@ class Cart
 			]);
 		 }
 
+		$totals = \WC()->cart->get_totals();
+
 		$return = array(
 			'message'  => 'success',
 			'data'       => [
@@ -109,11 +113,9 @@ class Cart
 				'variable' => $_POST,
 				'empty' => empty($variation_id),
 				'fast_shop_meta' => $fast_shop_meta,
-				'the_product_meta["salesPrice"]' => $the_product_meta['salesPrice'],
 				'the_product_meta' => $the_product_meta,
-
-				'the_variations_meta' => $the_variations_meta,
 				'the_variation_meta' => $the_variation_meta,
+				'totals' => $totals,
 			]
 		);
 
@@ -137,6 +139,26 @@ class Cart
 			'message'  => 'success',
 			'data'       => [
 				'variable' => $_POST,
+			]
+		);
+
+		\wp_send_json($return);
+
+		\wp_die();
+	}
+
+	public function handle_get_cart_callback()
+	{
+		// Security check
+		\check_ajax_referer(Bootstrap::TEXT_DOMAIN, 'nonce');
+
+		$totals = \WC()->cart->get_totals();
+
+		$return = array(
+			'message'  => 'success',
+			'data'       => [
+				'variable' => $_POST,
+				'totals' => $totals,
 			]
 		);
 

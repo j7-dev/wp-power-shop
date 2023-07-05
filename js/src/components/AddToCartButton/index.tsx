@@ -17,6 +17,7 @@ const AddToCartButton: React.FC<{
     api,
     contextHolder,
   ] = notification.useNotification()
+
   const handleClick = () => {
     mutate(
       {
