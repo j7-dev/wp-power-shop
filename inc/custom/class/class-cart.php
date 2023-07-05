@@ -42,7 +42,6 @@ class Cart
 			}
 			if( !empty( $item['fs_regular_price'])  && empty( $item['fs_sales_price'] ) ) {
 				$item[ 'data' ]->set_price( $item[ 'fs_regular_price' ] );
-
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import { TProduct } from '@/types/wcStoreApi'
 import Item from './Item'
 import useCartModal from './hooks/useCartModal'
 import Cart from './Cart'
+import { LoadingCard } from '@/components/PureComponents'
 
 export const ProductsContext = createContext({
   products: [] as TProduct[],
@@ -53,7 +54,8 @@ const FastShopProducts = () => {
         }}
       >
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-          {products.map((product) => {
+					{productsResult.isLoading && [1,2,3,4].map((i) => <LoadingCard key={i} ratio='aspect-[260/385]' />)}
+          {!productsResult.isLoading && products.map((product) => {
             return <Item key={product?.id} productId={product?.id} />
           })}
         </div>

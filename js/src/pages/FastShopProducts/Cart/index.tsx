@@ -8,6 +8,7 @@ import { TFSMeta } from '@/types'
 import { Popconfirm, notification } from 'antd'
 import { ajaxNonce } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
+import {LoadingText, LoadingCard} from '@/components/PureComponents'
 
 
 const Cart = () => {
@@ -66,7 +67,8 @@ const Cart = () => {
 
   return (
     <div>
-      {contextHolder}
+			{items.length === 0 ? null : <>
+				{contextHolder}
       <table className="fs-cart-table">
         <thead>
           <tr>
@@ -99,19 +101,20 @@ const Cart = () => {
               <tr key={item.key}>
                 <td>
                   <div className="flex">
-                    <img
+										{isLoading ? <div className='w-16 h-16 mr-2'><LoadingCard ratio='aspect-square' /></div> : <img
                       className="w-16 h-16 rounded-md aspect-square object-cover mr-2"
                       src={image}
-                    />
+                    />}
+
                     <div className="text-left">
-                      <h6 className="font-normal text-lg mb-2">{item?.name}</h6>
-                      <p className="my-0 text-xs">{variationText}</p>
+                      <h6 className="font-normal text-lg mb-2"><LoadingText width='w-[8rem]' content={item?.name} isLoading={isLoading} /></h6>
+                      <p className="my-0 text-xs"><LoadingText width='w-[12rem]' content={variationText} isLoading={isLoading} /></p>
                     </div>
                   </div>
                 </td>
-                <td>{quantity}</td>
-                <td>${price}</td>
-                <td>${price * quantity}</td>
+                <td><LoadingText width='w-[2rem]' content={quantity} isLoading={isLoading} /></td>
+                <td><LoadingText width='w-[4rem]' content={`$${price}`} isLoading={isLoading} /></td>
+                <td><LoadingText width='w-[4rem]' content={`$${price * quantity}`} isLoading={isLoading} /></td>
                 <td>
                   <Popconfirm
                     title="確定要從購物車移除嗎?"
@@ -126,21 +129,21 @@ const Cart = () => {
             )
           })}
           <tr>
-            <th>小計</th>
+            <th className='text-left pl-4'>小計</th>
             <th></th>
             <th></th>
             <th>{total_items}</th>
             <th></th>
           </tr>
 					<tr>
-            <th>運費</th>
+            <th className='text-left pl-4'>運費</th>
             <th></th>
             <th></th>
             <th>{total_shipping}</th>
             <th></th>
           </tr>
 					<tr>
-            <th>合計</th>
+            <th className='text-left pl-4'>合計</th>
             <th></th>
             <th></th>
             <th>{total_price}</th>
@@ -148,6 +151,7 @@ const Cart = () => {
           </tr>
         </tbody>
       </table>
+			</>}
     </div>
   )
 }
