@@ -26,10 +26,6 @@ class Cart
 		\add_action('woocommerce_checkout_create_order_line_item', [$this, 'save_custom_data_to_order_meta'], 10, 4);
 	}
 
-
-
-
-
 	public function price_refresh($cart_object)
 	{
 

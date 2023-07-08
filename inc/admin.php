@@ -86,4 +86,5 @@ require_once __DIR__ . '/custom/includes.php';
 new CPT();
 new ShortCode();
 new Cart();
+new Ajax();
 

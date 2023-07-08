@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { createContext } from 'react'
-import { postId } from '@/utils'
-import { useOne, useMany } from '@/hooks'
+import { createContext, useEffect, useState } from 'react'
+import { postId, ajaxNonce } from '@/utils'
+import { useMany, useAdminAjax } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcStoreApi'
 import Item from './Item'
@@ -17,16 +17,35 @@ export const ProductsContext = createContext({
 })
 
 const FastShopProducts = () => {
-  const postResult = useOne({
-    resource: `fast-shop/${postId}`,
-    queryOptions: {
-      enabled: !!postId,
-    },
-  })
-  const post = postResult?.data?.data || {}
-  const fast_shop_meta = JSON.parse(
-    post?.meta?.fast_shop_meta || '[]',
-  ) as TFSMeta[]
+  const [
+    fast_shop_meta,
+    setFast_shop_meta,
+  ] = useState<TFSMeta[]>([])
+
+  const { mutate } = useAdminAjax()
+
+  useEffect(() => {
+    mutate(
+      {
+        action: 'handle_get_post_meta',
+        nonce: ajaxNonce,
+        post_id: postId,
+        meta_key: 'fast_shop_meta',
+      },
+      {
+        onSuccess: (data) => {
+          const post_meta = JSON.parse(
+            data?.data?.data?.post_meta || '[]',
+          ) as TFSMeta[]
+          setFast_shop_meta(post_meta)
+        },
+        onError: (error) => {
+          console.log(error)
+        },
+      },
+    )
+  }, [])
+
   const product_ids = fast_shop_meta.map((meta) => meta.productId)
 
   const productsResult = useMany({
@@ -54,10 +73,17 @@ const FastShopProducts = () => {
         }}
       >
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-					{productsResult.isLoading && [1,2,3,4].map((i) => <LoadingCard key={i} ratio='aspect-[260/385]' />)}
-          {!productsResult.isLoading && products.map((product) => {
-            return <Item key={product?.id} productId={product?.id} />
-          })}
+          {productsResult.isLoading &&
+            [
+              1,
+              2,
+              3,
+              4,
+            ].map((i) => <LoadingCard key={i} ratio="aspect-[260/385]" />)}
+          {!productsResult.isLoading &&
+            products.map((product) => {
+              return <Item key={product?.id} productId={product?.id} />
+            })}
         </div>
 
         {renderCartModal()}
