@@ -68,7 +68,7 @@ const SimpleModal: FC<{
           <div>{price}</div>
 
           {/* TODO: 展開註解 */}
-          <div className="my-4">{description}</div>
+          <div className="my-4 h-[14rem] overflow-y-auto">{description}</div>
 
           <p className="mb-0 mt-4">數量</p>
           <PlusMinusInput {...plusMinusInputProps} />
