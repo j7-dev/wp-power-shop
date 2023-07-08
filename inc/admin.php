@@ -6,6 +6,12 @@ namespace J7\ViteReactWPPlugin\FastShop\Admin;
 
 use Kucrut\Vite;
 
+/**
+ * [ ] - 每次到快速商店就清除購物車，可以避免跨商店結帳
+ * [ ] - 選擇運費
+ * [ ] - 使用COUPON
+ */
+
 
 class Bootstrap
 {

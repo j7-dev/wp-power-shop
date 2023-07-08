@@ -5,10 +5,12 @@ import { storeApiNonceAtom } from '../atom'
 import { DeleteOutlined } from '@ant-design/icons'
 import { ProductsContext } from '@/pages/FastShopProducts'
 import { TFSMeta } from '@/types'
+import { TCart } from '@/types/wcStoreApi'
 import { Popconfirm, notification } from 'antd'
 import { ajaxNonce } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { LoadingText, LoadingCard } from '@/components/PureComponents'
+import ShippingField from './ShippingField'
 
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
@@ -26,10 +28,10 @@ const Cart = () => {
   })
   const wcStoreApiNonce =
     cartResult?.data?.headers?.['x-wc-store-api-nonce'] || ''
-  const cartData = cartResult?.data?.data || {}
-  const total_items = cartData?.totals?.total_items || 0
-  const total_shipping = cartData?.totals?.total_shipping || 0
-  const total_price = cartData?.totals?.total_price || 0
+  const cartData = (cartResult?.data?.data || {}) as TCart
+  const cartIsLoading = cartResult?.isLoading || false
+  const total_items = cartData?.totals?.total_items || '0'
+  const total_price = cartData?.totals?.total_price || '0'
 
   const items = cartData?.items || []
 
@@ -174,22 +176,7 @@ const Cart = () => {
                 </th>
                 <th></th>
               </tr>
-              <tr>
-                <th className="text-left pl-4">運費</th>
-                <th></th>
-                <th></th>
-                <th>
-                  <LoadingText
-                    width="w-[4rem]"
-                    content={`$ ${parseInt(
-                      total_shipping,
-                      10,
-                    ).toLocaleString()}`}
-                    isLoading={isLoading}
-                  />
-                </th>
-                <th></th>
-              </tr>
+              <ShippingField cartData={cartData} isLoading={cartIsLoading} />
               <tr>
                 <th className="text-left pl-4">合計</th>
                 <th></th>

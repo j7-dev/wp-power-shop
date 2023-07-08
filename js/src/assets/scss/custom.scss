@@ -23,6 +23,9 @@
 			font-weight: 600;
 			text-align: center;
 			color: #333;
+			&:nth-child(4) {
+				text-align: right;
+			}
 		}
 		td {
 			padding-top: 0.5rem;
@@ -33,6 +36,9 @@
 			font-weight: 400;
 			text-align: center;
 			color: #333;
+			&:nth-child(4) {
+				text-align: right;
+			}
 		}
 	}
 }

@@ -20,10 +20,10 @@ class ShortCode
 		$html = '';
 		ob_start();
 		?>
-<div id="fast_shop_products_app"></div>
+			<div id="fast_shop_products_app"></div>
 		<?php
 		$html .= ob_get_clean();
-		// TODO 隱藏購物車跟COUPON
+		// [ ] - 隱藏購物車跟COUPON
 		$html .= do_shortcode( '[woocommerce_checkout]' );
 
 		return $html;
