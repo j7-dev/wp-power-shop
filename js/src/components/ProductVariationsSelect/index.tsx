@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { useOne } from '@/hooks'
+import React, { useState } from 'react'
 import {
   TProduct,
   TProductAttribute,
