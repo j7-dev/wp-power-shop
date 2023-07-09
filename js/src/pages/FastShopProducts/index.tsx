@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { createContext, useEffect, useState } from 'react'
-import { postId, ajaxNonce } from '@/utils'
-import { useMany, useAdminAjax } from '@/hooks'
+import { createContext } from 'react'
+import { postId } from '@/utils'
+import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcStoreApi'
 import Item from './Item'
@@ -17,36 +17,14 @@ export const ProductsContext = createContext({
 })
 
 const FastShopProducts = () => {
-  const [
-    fast_shop_meta,
-    setFast_shop_meta,
-  ] = useState<TFSMeta[]>([])
+  const fast_shop_meta =
+    useAjaxGetPostMeta<TFSMeta[]>({
+      post_id: postId,
+      meta_key: 'fast_shop_meta',
+      formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
+    }) ?? []
 
-  const { mutate } = useAdminAjax()
-
-  useEffect(() => {
-    mutate(
-      {
-        action: 'handle_get_post_meta',
-        nonce: ajaxNonce,
-        post_id: postId,
-        meta_key: 'fast_shop_meta',
-      },
-      {
-        onSuccess: (data) => {
-          const post_meta = JSON.parse(
-            data?.data?.data?.post_meta || '[]',
-          ) as TFSMeta[]
-          setFast_shop_meta(post_meta)
-        },
-        onError: (error) => {
-          console.log(error)
-        },
-      },
-    )
-  }, [])
-
-  const product_ids = fast_shop_meta.map((meta) => meta.productId)
+  const product_ids = fast_shop_meta?.map((meta) => meta.productId) ?? []
 
   const productsResult = useMany({
     resource: 'products',

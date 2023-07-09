@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react'
-import { useOne, useAdminAjax } from '@/hooks'
+import { useOne, useAjax } from '@/hooks'
 import { useSetAtom } from 'jotai'
 import { storeApiNonceAtom } from '../atom'
 import { DeleteOutlined } from '@ant-design/icons'
@@ -16,7 +16,7 @@ import { BiMoneyWithdraw } from 'react-icons/bi'
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
   const { fast_shop_meta } = useContext(ProductsContext)
-  const { mutate, isLoading } = useAdminAjax()
+  const { mutate, isLoading } = useAjax()
   const [
     api,
     contextHolder,

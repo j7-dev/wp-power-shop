@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, notification } from 'antd'
-import { useAdminAjax } from '@/hooks'
+import { useAjax } from '@/hooks'
 import { ajaxNonce, postId } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -12,7 +12,7 @@ const AddToCartButton: React.FC<{
   variationId?: number | null
 }> = (props) => {
   const queryClient = useQueryClient()
-  const { mutate, isLoading } = useAdminAjax()
+  const { mutate, isLoading } = useAjax()
   const [
     api,
     contextHolder,

@@ -23,10 +23,7 @@ class ShortCode
 		$html = '';
 		ob_start();
 		?>
-			<div class="fast_shop_products_app">
 				<div id="fast_shop_products_app"></div>
-				<?php  // echo \do_shortcode( '[woocommerce_checkout]' ) ?>
-			</div>
 		<?php
 		$html .= ob_get_clean();
 
