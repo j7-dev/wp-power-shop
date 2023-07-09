@@ -6,11 +6,12 @@ import { DeleteOutlined } from '@ant-design/icons'
 import { ProductsContext } from '@/pages/FastShopProducts'
 import { TFSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
-import { Popconfirm, notification } from 'antd'
+import { Popconfirm, notification, Button } from 'antd'
 import { ajaxNonce } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { LoadingText, LoadingCard } from '@/components/PureComponents'
 import ShippingField from './ShippingField'
+import { BiMoneyWithdraw } from 'react-icons/bi'
 
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
@@ -192,6 +193,16 @@ const Cart = () => {
               </tr>
             </tbody>
           </table>
+          <div className="text-right mb-8">
+            <Button
+              icon={<BiMoneyWithdraw className="relative top-[2px]" />}
+              size="large"
+              className="px-12"
+              type="primary"
+            >
+              前往結帳
+            </Button>
+          </div>
         </>
       )}
     </div>
