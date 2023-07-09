@@ -13,7 +13,8 @@ export function useAjaxGetPostMeta<T>(props: TProps) {
     meta,
     setMeta,
   ] = useState<T | undefined>(undefined)
-  const { mutate } = useAjax()
+  const mutation = useAjax()
+  const { mutate } = mutation
 
   useEffect(() => {
     mutate(
@@ -40,5 +41,8 @@ export function useAjaxGetPostMeta<T>(props: TProps) {
     )
   }, [])
 
-  return meta
+  return {
+    ...mutation,
+    meta,
+  }
 }

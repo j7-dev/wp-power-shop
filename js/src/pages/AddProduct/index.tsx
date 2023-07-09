@@ -4,8 +4,8 @@ import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom, FSMetaAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
-import { getQueryString } from '@/utils'
-import { useOne, useMany } from '@/hooks'
+import { postId } from '@/utils'
+import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { sortBy } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
@@ -14,17 +14,14 @@ import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 
 const AddProduct = () => {
   const setFSMeta = useSetAtom(FSMetaAtom)
-  const postId = getQueryString('post')
-  const postResult = useOne({
-    resource: `fast-shop/${postId}`,
-    queryOptions: {
-      enabled: !!postId,
-    },
+
+  const mutation = useAjaxGetPostMeta<TFSMeta[]>({
+    post_id: postId,
+    meta_key: 'fast_shop_meta',
+    formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
   })
-  const post = postResult?.data?.data || {}
-  const fast_shop_meta = JSON.parse(
-    post?.meta?.fast_shop_meta || '[]',
-  ) as TFSMeta[]
+  const fast_shop_meta = mutation?.meta ?? []
+
   const fast_shop_meta_product_ids = fast_shop_meta.map(
     (item) => item.productId,
   )
@@ -93,7 +90,7 @@ const AddProduct = () => {
 
   return (
     <div className="">
-      {postResult?.isLoading && <LoadingWrap />}
+      {mutation?.isLoading && <LoadingWrap />}
       <Form className="pt-4" layout="vertical" form={form}>
         <Alert
           className="mb-4"

@@ -17,12 +17,12 @@ export const ProductsContext = createContext({
 })
 
 const FastShopProducts = () => {
-  const fast_shop_meta =
-    useAjaxGetPostMeta<TFSMeta[]>({
-      post_id: postId,
-      meta_key: 'fast_shop_meta',
-      formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
-    }) ?? []
+  const mutation = useAjaxGetPostMeta<TFSMeta[]>({
+    post_id: postId,
+    meta_key: 'fast_shop_meta',
+    formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
+  })
+  const fast_shop_meta = mutation?.meta ?? []
 
   const product_ids = fast_shop_meta?.map((meta) => meta.productId) ?? []
 
