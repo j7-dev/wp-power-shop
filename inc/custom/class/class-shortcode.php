@@ -18,10 +18,8 @@ class ShortCode
 	public function shortcode_callback()
 	{
 		// NOTE 每次進到頁面先清空購物車
-		// \WC()->cart->empty_cart();
+		\WC()->cart->empty_cart();
 
-		// Get checkout object.
-		$checkout = \WC()->checkout();
 		$html = '';
 		ob_start();
 		?>
