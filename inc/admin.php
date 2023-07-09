@@ -66,11 +66,17 @@ class Bootstrap
 			]
 		);
 
+		// get checkout url
+		global $woocommerce;
+		$checkout_page_url = function_exists( 'wc_get_cart_url' ) ?
+\wc_get_checkout_url() : $woocommerce->cart->get_checkout_url();
+
 		\wp_localize_script(self::TEXT_DOMAIN, 'appData', array(
 			'ajaxUrl' => \admin_url('admin-ajax.php'),
 			'ajaxNonce'  => \wp_create_nonce(self::TEXT_DOMAIN),
 			'userId' => \wp_get_current_user()->data->ID,
 			'postId' => \get_the_ID(),
+			'checkoutUrl' => $checkout_page_url,
 		));
 
 		\wp_localize_script(self::TEXT_DOMAIN, 'wpApiSettings', array(

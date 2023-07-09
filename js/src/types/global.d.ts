@@ -8,6 +8,7 @@ declare global {
     ajaxNonce: string
     userId: string
     postId: string
+    checkoutUrl: string
   }
 }
 

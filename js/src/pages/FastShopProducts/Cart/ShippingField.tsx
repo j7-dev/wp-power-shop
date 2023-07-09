@@ -1,11 +1,12 @@
 import React from 'react'
-import { LoadingText, LoadingCard } from '@/components/PureComponents'
+import { LoadingText } from '@/components/PureComponents'
 import { TCart, TShippingRates } from '@/types/wcStoreApi'
-import { Select } from 'antd'
+import { Select, Tooltip } from 'antd'
 import { useUpdate } from '@/hooks'
 import { useAtomValue } from 'jotai'
 import { storeApiNonceAtom } from '../atom'
 import { useQueryClient } from '@tanstack/react-query'
+import { InfoCircleFilled } from '@ant-design/icons'
 
 const renderItem = (shipping_rate: TShippingRates) => {
   return (
@@ -76,7 +77,7 @@ const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({
 
   return (
     <tr>
-      <th className="text-left pl-4">
+      <th className="text-left pl-4" colSpan={3}>
         <span className="mr-2">運費</span>
         <Select
           className="min-w-[12rem]"
@@ -88,10 +89,13 @@ const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({
           loading={isLoading}
           disabled={options.length === 0}
         />
+        {options.length === 0 && (
+          <Tooltip title='請確認您的地址"國家"欄位有可用的運送方式'>
+            <InfoCircleFilled className="ml-2 text-orange-500" />
+          </Tooltip>
+        )}
       </th>
-      <th></th>
-      <th></th>
-      <th>
+      <th className="text-right">
         <LoadingText
           width="w-[8rem]"
           content={`$ ${parseInt(total_shipping, 10).toLocaleString()}`}

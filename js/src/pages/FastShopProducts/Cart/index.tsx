@@ -7,7 +7,7 @@ import { ProductsContext } from '@/pages/FastShopProducts'
 import { TFSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
 import { Popconfirm, notification, Button } from 'antd'
-import { ajaxNonce } from '@/utils'
+import { ajaxNonce, checkoutUrl } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { LoadingText, LoadingCard } from '@/components/PureComponents'
 import ShippingField from './ShippingField'
@@ -194,14 +194,16 @@ const Cart = () => {
             </tbody>
           </table>
           <div className="text-right mb-8">
-            <Button
-              icon={<BiMoneyWithdraw className="relative top-[2px]" />}
-              size="large"
-              className="px-12"
-              type="primary"
-            >
-              前往結帳
-            </Button>
+            <a href={checkoutUrl}>
+              <Button
+                icon={<BiMoneyWithdraw className="relative top-[2px]" />}
+                size="large"
+                className="px-12"
+                type="primary"
+              >
+                前往結帳
+              </Button>
+            </a>
           </div>
         </>
       )}
