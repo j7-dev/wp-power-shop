@@ -39,6 +39,13 @@ const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({
     }
   })
 
+  const nonOptions = [
+    {
+      value: 'none',
+      label: <>找不到運送方式</>,
+    },
+  ]
+
   const defaultOption =
     shipping_rates.find((shipping_rate) => shipping_rate.selected)?.rate_id ??
     ''
@@ -73,10 +80,13 @@ const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({
         <span className="mr-2">運費</span>
         <Select
           className="min-w-[12rem]"
-          defaultValue={defaultOption}
-          options={options}
+          defaultValue={
+            options.length > 0 ? defaultOption : nonOptions[0].value
+          }
+          options={options.length > 0 ? options : nonOptions}
           onChange={handleChange}
           loading={isLoading}
+          disabled={options.length === 0}
         />
       </th>
       <th></th>
