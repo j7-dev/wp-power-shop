@@ -1,8 +1,8 @@
 import '@/assets/scss/index.scss'
-import DefaultPage from './pages/AddProduct'
+import SalesStats from './pages/SalesStats'
 
 function App2() {
-  return <h1>Sales Stats</h1>
+  return <SalesStats />
 }
 
 export default App2

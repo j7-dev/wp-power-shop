@@ -19,7 +19,11 @@ class Cart
 	function __construct()
 	{
 		\add_action('woocommerce_before_calculate_totals', [$this, 'price_refresh']);
-		foreach ([self::ADD_CART_ACTION, self::REMOVE_CART_ACTION, self::GET_CART_ACTION] as $action) {
+		foreach ( [
+			self::ADD_CART_ACTION,
+			self::REMOVE_CART_ACTION,
+			self::GET_CART_ACTION,
+			] as $action) {
 				\add_action('wp_ajax_' . $action, [$this,  $action . '_callback']);
 				\add_action('wp_ajax_nopriv_' . $action, [$this, $action . '_callback']);
 		}
@@ -169,7 +173,6 @@ class Cart
 
 		\wp_die();
 	}
-
 
 	public function save_custom_data_to_order_meta($item, $cart_item_key, $values, $order) {
 		if (isset($values['fast_shop_post_id'])) {

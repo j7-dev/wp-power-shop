@@ -13,6 +13,7 @@ class Ajax
 
 
 
+
 	function __construct()
 	{
 		foreach ([self::GET_POST_META_ACTION] as $action) {
@@ -44,7 +45,6 @@ class Ajax
 
 		\wp_die();
 	}
-
 
 
 

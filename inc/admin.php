@@ -72,6 +72,7 @@ class Bootstrap
 \wc_get_checkout_url() : $woocommerce->cart->get_checkout_url();
 
 		\wp_localize_script(self::TEXT_DOMAIN, 'appData', array(
+			'siteUrl' => \site_url(),
 			'ajaxUrl' => \admin_url('admin-ajax.php'),
 			'ajaxNonce'  => \wp_create_nonce(self::TEXT_DOMAIN),
 			'userId' => \wp_get_current_user()->data->ID,
@@ -97,5 +98,6 @@ require_once __DIR__ . '/custom/includes.php';
 new CPT();
 new ShortCode();
 new Cart();
+new Order();
 new Ajax();
 
