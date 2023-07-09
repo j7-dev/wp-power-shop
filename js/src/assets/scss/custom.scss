@@ -1,3 +1,10 @@
+// .fast_shop_products_app {
+// 	.cart-shortcode,
+// 	.woocommerce-form-coupon-toggle,
+// 	#order_review .woocommerce-checkout-review-order-table {
+// 		display: none !important;
+// 	}
+// }
 .fast-shop-products {
 	table.fs-cart-table {
 		border: none;
@@ -42,6 +49,7 @@
 		}
 	}
 }
+
 .ant-modal-content {
 	p.fs-variation {
 		margin-bottom: 0.5rem;

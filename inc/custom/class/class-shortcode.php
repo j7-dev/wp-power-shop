@@ -11,7 +11,6 @@ class ShortCode
 	function __construct()
 	{
 		\add_shortcode(Bootstrap::DB_DOMAIN . '_products', [$this, 'shortcode_callback']);
-		\add_action('woocommerce_before_checkout_form', [$this, 'render_app']);
 	}
 
 
@@ -26,20 +25,16 @@ class ShortCode
 		$html = '';
 		ob_start();
 		?>
-<div id="fast_shop_products_app"></div>
+			<div class="fast_shop_products_app">
+				<div id="fast_shop_products_app"></div>
+				<?php // echo \do_shortcode( '[woocommerce_checkout]' ) ?>
+			</div>
 		<?php
-		// \wc_get_template( 'checkout/form-checkout.php', array( 'checkout' => $checkout ) );
 		$html .= ob_get_clean();
-		// [ ] - 隱藏購物車跟COUPON
+
 
 		return $html;
 	}
 
-	public function render_app(): void
-	{
-		?>
-		<div id="fast_shop_products_app"></div>
-		<?php
-	}
 
 }

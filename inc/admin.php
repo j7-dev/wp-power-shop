@@ -10,6 +10,7 @@ use Kucrut\Vite;
  * [ ] - 每次到快速商店就清除購物車，可以避免跨商店結帳
  * [x] - 選擇運費
  * [ ] - 使用COUPON
+ * [ ] - 移除運費TOTAL add_action( 'woocommerce_checkout_order_review', 'woocommerce_order_review', 10 );
  */
 
 
@@ -24,8 +25,8 @@ class Bootstrap
 
 	public function init(): void
 	{
-		\add_action('admin_enqueue_scripts', [$this, 'enqueue_script']);
-		\add_action('wp_enqueue_scripts', [$this, 'enqueue_script']);
+		\add_action('admin_enqueue_scripts', [$this, 'enqueue_script'], 99);
+		\add_action('wp_enqueue_scripts', [$this, 'enqueue_script'], 99);
 		// \add_action('wp_footer', [$this, 'render_app']);
 	}
 
@@ -50,6 +51,8 @@ class Bootstrap
 		} else {
 			// 前台網頁必須包含 fast-shop 字串 才引用
 			if (strpos($_SERVER['REQUEST_URI'], 'fast-shop') === false) return;
+			// NOTE 如果需要引入 cat.min.js
+			// \wp_enqueue_script( 'wc-cart' );
 		}
 
 
@@ -75,6 +78,8 @@ class Bootstrap
 			'nonce' => \wp_create_nonce('wp_rest'),
 		));
 	}
+
+
 
 }
 

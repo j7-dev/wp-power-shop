@@ -121,6 +121,7 @@ class Cart
 
 		\wp_send_json($return);
 
+
 		\wp_die();
 	}
 
