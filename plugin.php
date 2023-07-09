@@ -91,14 +91,25 @@ function testtest(){
 	$sumToday = getSumByDate(0);
 	$sumWeek = getSumByDate(7);
 
+	$args = [
+		'type' => 'shop_order', //shop_order_refund
+		'limit' => 10,
+		'paged' => 1,
+		'meta_key' => 'fast_shop_post_id',
+		'meta_value' => $post_id,
+		'status' => ['wc-processing', 'wc-completed'],
+		// 'date_paid' => '2021-09-01...2021-09-30',
+		// 'date_completed' => '2021-09-01...2021-09-30',
+	];
 
+	$new_args = [
+		...$args,
+		'limit' => -1,
+	];
 
 
 echo '<pre>';
-var_dump($sumToday);
-var_dump($sumWeek);
-
-
+var_dump($new_args);
 echo '</pre>';
 }
 

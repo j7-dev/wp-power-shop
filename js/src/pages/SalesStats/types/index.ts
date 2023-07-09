@@ -17,3 +17,29 @@ export type TOrder = {
   order_id: number
   key: number
 }
+
+export type TOrderData = {
+  list: TOrder[]
+  info: {
+    sumTotal: number
+    sumToday: number
+    sumWeek: number
+    orderStatuses: {
+      value: string
+      label: string
+    }[]
+  }
+}
+
+export const defaultOrderData = {
+  list: [],
+  info: {
+    sumTotal: 0,
+    sumToday: 0,
+    sumWeek: 0,
+    orderStatuses: {
+      value: '',
+      label: '',
+    },
+  },
+}

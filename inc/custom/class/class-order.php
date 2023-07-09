@@ -31,7 +31,16 @@ class Order
 		if(!isset($_POST['post_id'])) return;
 		$post_id = $_POST['post_id'];
 
-
+		$args = [
+			'type' => 'shop_order', //shop_order_refund
+			'limit' => 10,
+			'paged' => 1,
+			'meta_key' => 'fast_shop_post_id',
+			'meta_value' => $post_id,
+			'status' => ['wc-processing', 'wc-completed'],
+			// 'date_paid' => '2021-09-01...2021-09-30',
+			// 'date_completed' => '2021-09-01...2021-09-30',
+		];
 
 		function formatOrders($order)
 		{
@@ -68,24 +77,27 @@ class Order
 			return $a + $b->get_total();
 		}
 
-		function getSumByDate($date_no){
+		function getSumByDate($date_no, $args){
 				date_default_timezone_set('Asia/Taipei');
-				$args = [
-					'type' => 'shop_order', //shop_order_refund
-					'limit' => 10,
-					'paged' => 1,
-					'meta_key' => 'fast_shop_post_id',
-					'meta_value' => 4462,
-					'date_created' => date("Y-m-d", strtotime('-' . $date_no . ' day')) . '...' . date("Y-m-d"),
-					// 'date_paid' => '2021-09-01...2021-09-30',
-					// 'date_completed' => '2021-09-01...2021-09-30',
-			];
+				if($date_no === -1){
+					$sum_args = [
+						...$args,
+						'limit' => -1,
+					];
+				}else{
+					$sum_args = [
+						...$args,
+						'date_created' => date("Y-m-d", strtotime('-' . $date_no . ' day')) . '...' . date("Y-m-d"),
+					];
+				}
 
-			$the_orders = \wc_get_orders( $args );
+			$the_orders = \wc_get_orders( $sum_args );
 
 			$sum = array_reduce($the_orders, __NAMESPACE__ . '\\sumOrder', 0);
 			return $sum;
 		}
+
+
 
 		/**
 		 * NOTE order status
@@ -102,18 +114,21 @@ class Order
 		 * wc-ry-at-cvs
 		 * wc-ry-out-cvs
 		 */
-		$args = [
-			'type' => 'shop_order', //shop_order_refund
-			'limit' => 10,
-			'paged' => 1,
-			'meta_key' => 'fast_shop_post_id',
-			'meta_value' => $post_id,
-			// 'status' => ['wc-processing', 'wc-completed'],
-		];
+
 		$orders = \wc_get_orders( $args );
 
-		$sumToday = getSumByDate(0);
-		$sumWeek = getSumByDate(7);
+		$sumTotal = getSumByDate(-1, $args);
+		$sumToday = getSumByDate(0, $args);
+		$sumWeek = getSumByDate(7, $args);
+		$order_statuses = \wc_get_order_statuses();
+		$orderStatuses = [];
+		$i = 0;
+		foreach ($order_statuses as $key => $value) {
+			$orderStatuses[$i]['value'] = $key;
+			$orderStatuses[$i]['label'] = $value;
+			$i++;
+		}
+
 
 		$list = array_map( __NAMESPACE__ . '\\formatOrders', $orders);
 
@@ -122,8 +137,10 @@ class Order
 			'data'       => [
 				'list' => $list,
 				'info' => [
+					'sumTotal' => $sumTotal,
 					'sumToday' => $sumToday,
 					'sumWeek' => $sumWeek,
+					'orderStatuses' => $orderStatuses,
 				]
 			]
 		);
