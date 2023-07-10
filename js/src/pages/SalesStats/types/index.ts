@@ -26,7 +26,6 @@ export type TOrderData = {
     sumWeek: number
     orderStatuses: {
       value: string
-      label: string
     }[]
   }
 }
@@ -37,9 +36,6 @@ export const defaultOrderData = {
     sumTotal: 0,
     sumToday: 0,
     sumWeek: 0,
-    orderStatuses: {
-      value: '',
-      label: '',
-    },
+    orderStatuses: [],
   },
 }

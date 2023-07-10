@@ -1,14 +1,43 @@
-import { DatePicker, Select, SelectProps, Input, Button, Row, Col } from 'antd'
+import { DatePicker, Select, Input, Button, Row, Col, Tag } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { orderDataAtom } from '@/pages/SalesStats/atom'
 import { useAtomValue } from 'jotai'
+import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
+import { getOrderStatus } from '@/utils'
 
 const { RangePicker } = DatePicker
 
 const Filter = () => {
   const orderData = useAtomValue(orderDataAtom)
   const orderStatuses = orderData?.info?.orderStatuses ?? []
+  const options = orderStatuses.map((orderStatus) => {
+    const { label } = getOrderStatus(orderStatus.value)
+    return {
+      label,
+      value: orderStatus.value,
+    }
+  })
   console.log('⭐  Filter  orderStatuses', orderStatuses)
+
+  const tagRender = (props: CustomTagProps) => {
+    const { value, closable, onClose } = props
+    const { label, color } = getOrderStatus(value)
+    const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    return (
+      <Tag
+        color={color}
+        onMouseDown={onPreventMouseDown}
+        closable={closable}
+        onClose={onClose}
+        style={{ marginRight: 3 }}
+      >
+        {label}
+      </Tag>
+    )
+  }
 
   return (
     <>
@@ -28,13 +57,15 @@ const Filter = () => {
           <Select
             mode="multiple"
             allowClear
+            showArrow
+            tagRender={tagRender}
             style={{ width: '100%' }}
             placeholder="Please select"
             defaultValue={[
               'wc-processing',
               'wc-completed',
             ]}
-            options={orderStatuses}
+            options={options}
           />
         </Col>
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">

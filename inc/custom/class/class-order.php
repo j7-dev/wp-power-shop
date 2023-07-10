@@ -125,7 +125,6 @@ class Order
 		$i = 0;
 		foreach ($order_statuses as $key => $value) {
 			$orderStatuses[$i]['value'] = $key;
-			$orderStatuses[$i]['label'] = $value;
 			$i++;
 		}
 

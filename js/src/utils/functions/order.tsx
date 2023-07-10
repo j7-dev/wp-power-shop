@@ -1,5 +1,6 @@
 export const getOrderStatus = (status: string) => {
-  switch (status) {
+  const rmPrefixStatus = status.replace('wc-', '')
+  switch (rmPrefixStatus) {
     case 'processing':
       return {
         label: '處理中',
