@@ -60,7 +60,6 @@ const Filter = () => {
             showArrow
             tagRender={tagRender}
             style={{ width: '100%' }}
-            placeholder="Please select"
             defaultValue={[
               'wc-processing',
               'wc-completed',
