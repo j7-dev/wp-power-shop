@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs'
+
 export type TOrderItem = {
   item_id: number
   name: string
@@ -32,7 +34,7 @@ export type TOrderData = {
   }
 }
 
-export const defaultOrderData = {
+export const defaultOrderData: TOrderData = {
   list: [],
   info: {
     total: 0,
@@ -49,7 +51,21 @@ export type TPagination = {
   limit: number
 }
 
-export const defaultPagination = {
+export const defaultPagination: TPagination = {
   paged: 1,
   limit: 10,
+}
+
+export type TFilter = {
+  email?: string
+  rangePicker?: Dayjs[]
+  status?: string[]
+}
+
+export const defaultFilter: TFilter = {
+  status: [
+    'wc-processing',
+    'wc-completed',
+  ],
+  email: '',
 }

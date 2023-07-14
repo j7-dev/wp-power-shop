@@ -22,34 +22,38 @@ export function useAjaxGetOrders<T>(props?: TProps) {
   const limit = props?.limit || 10
   const email = props?.email || ''
   const rangePicker = props?.rangePicker || []
-  const status = props?.status || []
+  const status = props?.status || null
   const mutation = useAjax()
   const { mutate } = mutation
 
   useEffect(() => {
-    mutate(
-      {
-        action: 'handle_get_orders',
-        nonce: ajaxNonce,
-        post_id,
-        paged,
-        limit,
-      },
-      {
-        onSuccess: (res) => {
-          const fetchedData = res?.data?.data || ({} as T)
+    if (status) {
+      mutate(
+        {
+          action: 'handle_get_orders',
+          nonce: ajaxNonce,
+          post_id,
+          paged,
+          limit,
+          status: JSON.stringify(status),
+        },
+        {
+          onSuccess: (res) => {
+            const fetchedData = res?.data?.data || ({} as T)
 
-          setOrderData(fetchedData)
+            setOrderData(fetchedData)
+          },
+          onError: (error) => {
+            console.log(error)
+          },
         },
-        onError: (error) => {
-          console.log(error)
-        },
-      },
-    )
+      )
+    }
   }, [
     post_id,
     paged,
     limit,
+    status,
   ])
 
   return {

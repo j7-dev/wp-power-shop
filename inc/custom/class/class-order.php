@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace J7\ViteReactWPPlugin\FastShop\Admin;
 
 use J7\ViteReactWPPlugin\FastShop\Admin\Bootstrap;
+use J7\ViteReactWPPlugin\FastShop\Admin\Function;
+
 
 class Order
 {
@@ -32,6 +34,9 @@ class Order
 		$post_id = $_POST['post_id'];
 		$paged = isset($_POST['paged']) ? $_POST['paged'] : 1;
 		$limit = isset($_POST['limit']) ? $_POST['limit'] : 10;
+		$status_stringfy = isset($_POST['status']) ? $_POST['status'] : '[]';
+		$status = Functions::json_parse($status_stringfy, []);
+
 
 
 		$args = [
@@ -40,7 +45,7 @@ class Order
 			'paged' => $paged,
 			'meta_key' => 'fast_shop_post_id',
 			'meta_value' => $post_id,
-			'status' => ['wc-processing', 'wc-completed'],
+			'status' => $status,
 			'paginate' => true,
 			// 'date_paid' => '2021-09-01...2021-09-30',
 			// 'date_completed' => '2021-09-01...2021-09-30',
@@ -152,7 +157,8 @@ class Order
 					'orderStatuses' => $orderStatuses,
 					'total' => $total,
 					'maxNumPages' => $max_num_pages,
-				]
+				],
+				'args' => $args,
 			]
 		);
 

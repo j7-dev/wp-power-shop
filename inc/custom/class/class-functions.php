@@ -102,4 +102,19 @@ class Functions
 	{
 		echo "<div id='{$metabox['args']['id']}_app'></div>";
 	}
+
+	/**
+	 * JSON Parse
+	 */
+	public static function json_parse($stringfy, $default = [])
+	{
+		$out_put = '';
+		try {
+			$out_put = json_decode(str_replace('\\', '', $stringfy));
+		} catch (\Throwable $th) {
+			$out_put = $default;
+		} finally {
+			return $out_put;
+		}
+	}
 }
