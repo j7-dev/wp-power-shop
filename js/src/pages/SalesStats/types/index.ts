@@ -21,6 +21,8 @@ export type TOrder = {
 export type TOrderData = {
   list: TOrder[]
   info: {
+    total: number
+    maxNumPages: number
     sumTotal: number
     sumToday: number
     sumWeek: number
@@ -33,9 +35,21 @@ export type TOrderData = {
 export const defaultOrderData = {
   list: [],
   info: {
+    total: 0,
+    maxNumPages: 1,
     sumTotal: 0,
     sumToday: 0,
     sumWeek: 0,
     orderStatuses: [],
   },
+}
+
+export type TPagination = {
+  paged: number
+  limit: number
+}
+
+export const defaultPagination = {
+  paged: 1,
+  limit: 10,
 }

@@ -15,11 +15,11 @@ class Order
 
 	function __construct()
 	{
-		foreach ( [
+		foreach ([
 			self::GET_ORDERS_ACTION,
-			] as $action) {
-				\add_action('wp_ajax_' . $action, [$this,  $action . '_callback']);
-				\add_action('wp_ajax_nopriv_' . $action, [$this, $action . '_callback']);
+		] as $action) {
+			\add_action('wp_ajax_' . $action, [$this,  $action . '_callback']);
+			\add_action('wp_ajax_nopriv_' . $action, [$this, $action . '_callback']);
 		}
 	}
 
@@ -28,16 +28,20 @@ class Order
 		// Security check
 		\check_ajax_referer(Bootstrap::TEXT_DOMAIN, 'nonce');
 
-		if(!isset($_POST['post_id'])) return;
+		if (!isset($_POST['post_id'])) return;
 		$post_id = $_POST['post_id'];
+		$paged = isset($_POST['paged']) ? $_POST['paged'] : 1;
+		$limit = isset($_POST['limit']) ? $_POST['limit'] : 10;
+
 
 		$args = [
-			'type' => 'shop_order', //shop_order_refund
-			'limit' => 10,
-			'paged' => 1,
+			'type' => 'shop_order', // 'shop_order' | 'shop_order_refund'
+			'limit' => $limit,
+			'paged' => $paged,
 			'meta_key' => 'fast_shop_post_id',
 			'meta_value' => $post_id,
 			'status' => ['wc-processing', 'wc-completed'],
+			'paginate' => true,
 			// 'date_paid' => '2021-09-01...2021-09-30',
 			// 'date_completed' => '2021-09-01...2021-09-30',
 		];
@@ -73,25 +77,28 @@ class Order
 			];
 		}
 
-		function sumOrder($a, $b){
+		function sumOrder($a, $b)
+		{
 			return $a + $b->get_total();
 		}
 
-		function getSumByDate($date_no, $args){
-				date_default_timezone_set('Asia/Taipei');
-				if($date_no === -1){
-					$sum_args = [
-						...$args,
-						'limit' => -1,
-					];
-				}else{
-					$sum_args = [
-						...$args,
-						'date_created' => date("Y-m-d", strtotime('-' . $date_no . ' day')) . '...' . date("Y-m-d"),
-					];
-				}
+		function getSumByDate($date_no, $args)
+		{
+			date_default_timezone_set('Asia/Taipei');
+			unset($args['paginate']);
+			if ($date_no === -1) {
+				$sum_args = [
+					...$args,
+					'limit' => -1,
+				];
+			} else {
+				$sum_args = [
+					...$args,
+					'date_created' => date("Y-m-d", strtotime('-' . $date_no . ' day')) . '...' . date("Y-m-d"),
+				];
+			}
 
-			$the_orders = \wc_get_orders( $sum_args );
+			$the_orders = \wc_get_orders($sum_args);
 
 			$sum = array_reduce($the_orders, __NAMESPACE__ . '\\sumOrder', 0);
 			return $sum;
@@ -115,7 +122,10 @@ class Order
 		 * wc-ry-out-cvs
 		 */
 
-		$orders = \wc_get_orders( $args );
+		$results = \wc_get_orders($args);
+		$orders = $results->orders ?? [];
+		$total = $results->total ?? 0;
+		$max_num_pages = $results->max_num_pages ?? 1;
 
 		$sumTotal = getSumByDate(-1, $args);
 		$sumToday = getSumByDate(0, $args);
@@ -129,7 +139,7 @@ class Order
 		}
 
 
-		$list = array_map( __NAMESPACE__ . '\\formatOrders', $orders);
+		$list = array_map(__NAMESPACE__ . '\\formatOrders', $orders);
 
 		$return = array(
 			'message'  => 'success',
@@ -140,6 +150,8 @@ class Order
 					'sumToday' => $sumToday,
 					'sumWeek' => $sumWeek,
 					'orderStatuses' => $orderStatuses,
+					'total' => $total,
+					'maxNumPages' => $max_num_pages,
 				]
 			]
 		);
@@ -148,6 +160,4 @@ class Order
 
 		\wp_die();
 	}
-
-
 }

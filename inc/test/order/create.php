@@ -3,7 +3,9 @@ require_once '../index.php';
 require_once WP_CORE_PATH;
 require_once WC_CORE_PATH;
 
-define('ORDER_QTY', 30);
+define('ORDER_QTY', 100);
+define('FAST_SHOP_POST_ID', '4462');
+
 
 $order_status = ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed', 'wc-wmp-in-transit', 'wc-wmp-shipped', 'wc-checkout-draft', 'wc-ry-at-cvs', 'wc-ry-out-cvs'];
 
@@ -13,7 +15,6 @@ if (!function_exists('WC')) {
 	exit;
 }
 
-// pick a  integer between 1 and 100
 
 try {
 	// 計時
@@ -26,7 +27,7 @@ try {
 		'return' => 'ids',
 	]);
 
-	$order_ids = '';
+	$output_order_ids = '';
 
 	for ($i = 0; $i < ORDER_QTY; $i++) {
 		$item_qty = mt_rand(1, 4);
@@ -44,10 +45,13 @@ try {
 		// 更新建立日期
 		$order->set_date_created(new WC_DateTime(getRandomTime()));
 
+		// 更新 meta
+		$order->update_meta_data('fast_shop_post_id', FAST_SHOP_POST_ID);
+
 		// 保存訂單變更
 		$order->save();
 
-		$order_ids .= $order->get_id() . ', ';
+		$output_order_ids .= $order->get_id() . ', ';
 	}
 
 
@@ -56,7 +60,7 @@ try {
 	$execution_time = $end_time - $start_time;
 
 	$output = "\n\n創建 " . ORDER_QTY . " 個訂單成功! 耗時 " . $execution_time .  " 秒\n\n";
-	$output .= "訂單編號: " . $order_ids . "\n\n";
+	$output .= "訂單編號: " . $output_order_ids . "\n\n";
 	$output = str_replace("\n", "" . PHP_EOL, $output);
 
 	echo $output;

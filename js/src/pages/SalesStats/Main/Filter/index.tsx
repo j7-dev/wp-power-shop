@@ -1,4 +1,4 @@
-import { DatePicker, Select, Input, Button, Row, Col, Tag } from 'antd'
+import { DatePicker, Select, Input, Button, Row, Col, Tag, Form } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { orderDataAtom } from '@/pages/SalesStats/atom'
 import { useAtomValue } from 'jotai'
@@ -8,6 +8,7 @@ import { getOrderStatus } from '@/utils'
 const { RangePicker } = DatePicker
 
 const Filter = () => {
+  const [form] = Form.useForm()
   const orderData = useAtomValue(orderDataAtom)
   const orderStatuses = orderData?.info?.orderStatuses ?? []
   const options = orderStatuses.map((orderStatus) => {
@@ -17,7 +18,6 @@ const Filter = () => {
       value: orderStatus.value,
     }
   })
-  console.log('⭐  Filter  orderStatuses', orderStatuses)
 
   const tagRender = (props: CustomTagProps) => {
     const { value, closable, onClose } = props
@@ -39,46 +39,67 @@ const Filter = () => {
     )
   }
 
+  const handleFilter = () => {
+    const values = form.getFieldsValue()
+    console.log('⭐  Filter  values', values)
+  }
+
   return (
-    <>
+    <Form form={form}>
       <Row gutter={16} className="mb-8">
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
           <p className="my-0">日期範圍</p>
-          <RangePicker
-            className="w-full"
-            placeholder={[
-              '開始日期',
-              '結束日期',
+          <Form.Item
+            name={[
+              'rangePicker',
             ]}
-          />
+            noStyle
+          >
+            <RangePicker
+              className="w-full"
+              placeholder={[
+                '開始日期',
+                '結束日期',
+              ]}
+            />
+          </Form.Item>
         </Col>
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
           <p className="my-0">選擇狀態</p>
-          <Select
-            mode="multiple"
-            allowClear
-            showArrow
-            tagRender={tagRender}
-            style={{ width: '100%' }}
-            defaultValue={[
-              'wc-processing',
-              'wc-completed',
-            ]}
-            options={options}
-          />
+          <Form.Item name={['status']} noStyle>
+            <Select
+              mode="multiple"
+              allowClear
+              showArrow
+              tagRender={tagRender}
+              style={{ width: '100%' }}
+              defaultValue={[
+                'wc-processing',
+                'wc-completed',
+              ]}
+              options={options}
+            />
+          </Form.Item>
         </Col>
-        <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
-          <p className="my-0">搜尋特定顧客 email</p>
-          <Input placeholder="搜尋 email" />
-        </Col>
+        <Form.Item name={['email']} noStyle>
+          <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
+            <p className="my-0">搜尋特定顧客 email</p>
+            <Input placeholder="搜尋 email" />
+          </Col>
+        </Form.Item>
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
           <p className="my-0">&nbsp;</p>
-          <Button className="w-full" type="primary" icon={<SearchOutlined />}>
+          <Button
+            className="w-full"
+            type="primary"
+            icon={<SearchOutlined />}
+            onClick={handleFilter}
+          >
             搜尋
           </Button>
         </Col>
       </Row>
-    </>
+    </Form>
   )
 }
 

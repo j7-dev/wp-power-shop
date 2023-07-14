@@ -4,13 +4,15 @@ import Table from './Table'
 import { postId } from '@/utils'
 import { useAjaxGetOrders } from '@/pages/SalesStats/hooks/useAjaxGetOrders'
 import { TOrderData, defaultOrderData } from '@/pages/SalesStats/types'
-import { orderDataAtom } from '@/pages/SalesStats/atom'
-import { useSetAtom } from 'jotai'
+import { orderDataAtom, paginationAtom } from '@/pages/SalesStats/atom'
+import { useSetAtom, useAtomValue } from 'jotai'
 import DownloadExcel from './DownloadExcel'
 import Filter from './Filter'
 
 const Main = () => {
+  const pagination = useAtomValue(paginationAtom)
   const mutation = useAjaxGetOrders<TOrderData>({
+    ...pagination,
     post_id: postId,
   })
   const isLoading = mutation?.isLoading ?? false
@@ -28,7 +30,7 @@ const Main = () => {
       <DashBoard />
       <Filter />
       <DownloadExcel />
-      <Table />
+      <Table isLoading={isLoading} />
     </div>
   )
 }
