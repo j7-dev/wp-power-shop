@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Form, Alert } from 'antd'
+import { Form, Alert, Typography } from 'antd'
 import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom, FSMetaAtom } from './atoms'
@@ -11,6 +11,8 @@ import { sortBy } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 
 // FIXME: 順序好像會有問題
+
+const { Paragraph } = Typography
 
 const AddProduct = () => {
   const setFSMeta = useSetAtom(FSMetaAtom)
@@ -94,7 +96,15 @@ const AddProduct = () => {
       <Form className="pt-4" layout="vertical" form={form}>
         <Alert
           className="mb-4"
-          message="要在頁面使用這些商品，請使用 [fast_shop_product] 這個 shortcode"
+          message={
+            <div className="flex">
+              要在頁面使用這些商品，請使用
+              <Paragraph className="mx-4 my-0" copyable>
+                [fast_shop_product]
+              </Paragraph>{' '}
+              這個 shortcode，在快速商店以外使用這個 shortcode 是沒有作用的
+            </div>
+          }
           type="info"
           showIcon
         />
