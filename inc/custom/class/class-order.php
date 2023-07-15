@@ -86,7 +86,7 @@ class Order
 				$customer_display_name = $customer->display_name;
 			} else {
 				$customer_id = 0;
-				$customer_display_name = '';
+				$customer_display_name = $order->get_billing_email();
 			}
 
 			return [

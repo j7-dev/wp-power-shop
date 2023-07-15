@@ -30,14 +30,22 @@ export const columns: ColumnsType<TOrder> = [
       const displayName = customer?.display_name || ''
       return (
         <>
-          <a
-            target="_blank"
-            href={`${siteUrl}/wp-admin/user-edit.php?user_id=${id}`}
-            rel="noreferrer"
-          >
-            {displayName} <LinkOutlined />
-          </a>
-          <sub className="ml-2">#{id}</sub>
+          {id ? (
+            <>
+              <a
+                target="_blank"
+                href={`${siteUrl}/wp-admin/user-edit.php?user_id=${id}`}
+                rel="noreferrer"
+              >
+                {displayName} <LinkOutlined />
+              </a>
+              <sub className="ml-2">#{id}</sub>
+            </>
+          ) : (
+            <>
+              {displayName} <sub className="ml-2">訪客</sub>
+            </>
+          )}
         </>
       )
     },

@@ -87,7 +87,7 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
           <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
             <p className="my-0">搜尋特定顧客 ID 或 E-mail</p>
             <Input
-              placeholder="搜尋 E-mail"
+              placeholder="搜尋顧客ID 或 E-mail"
               disabled={isLoading}
               allowClear
               className="py-[1px]"
