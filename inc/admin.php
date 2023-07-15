@@ -7,10 +7,9 @@ namespace J7\ViteReactWPPlugin\FastShop\Admin;
 use Kucrut\Vite;
 
 /**
- * [ ] - 每次到快速商店就清除購物車，可以避免跨商店結帳
+ * [x] - 每次到快速商店就清除購物車，可以避免跨商店結帳
  * [x] - 選擇運費
  * [ ] - 使用COUPON
- * [ ] - 移除運費TOTAL add_action( 'woocommerce_checkout_order_review', 'woocommerce_order_review', 10 );
  */
 
 
@@ -51,8 +50,6 @@ class Bootstrap
 		} else {
 			// 前台網頁必須包含 fast-shop 字串 才引用
 			if (strpos($_SERVER['REQUEST_URI'], 'fast-shop') === false) return;
-			// NOTE 如果需要引入 cat.min.js
-			// \wp_enqueue_script( 'wc-cart' );
 		}
 
 
@@ -68,8 +65,8 @@ class Bootstrap
 
 		// get checkout url
 		global $woocommerce;
-		$checkout_page_url = function_exists( 'wc_get_cart_url' ) ?
-\wc_get_checkout_url() : $woocommerce->cart->get_checkout_url();
+		$checkout_page_url = function_exists('wc_get_cart_url') ?
+			\wc_get_checkout_url() : $woocommerce->cart->get_checkout_url();
 
 		\wp_localize_script(self::TEXT_DOMAIN, 'appData', array(
 			'siteUrl' => \site_url(),
@@ -85,9 +82,6 @@ class Bootstrap
 			'nonce' => \wp_create_nonce('wp_rest'),
 		));
 	}
-
-
-
 }
 
 require_once __DIR__ . '/custom/includes.php';
@@ -100,4 +94,3 @@ new ShortCode();
 new Cart();
 new Order();
 new Ajax();
-

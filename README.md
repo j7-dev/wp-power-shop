@@ -1,30 +1,60 @@
-# Boilerplate-React-SPA-WP-Plugin (BRSWP)
+# Fast Shop 快速商店
 
-## Exmaple
+一句話講完快速商店:
 
-[demo link](https://test.yc-tech.co/)
+> 快速商店是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
 
-## ⚡Features⚡
+<br><br><br>
 
-1. Easy to Use<br>
-   Git clone this repository in `wp-content/plugins/`
-   and `npm run init`, `npm run dev`, that's all the steps
+## 範例網站
 
-2. Integrate with WordPress RestFul API<br>
-   API URL will be `{site_url}/wp-json` by default.<br />
-	 site_url is as same as your WordPres site site_url
+[測試商店](https://fs.yc-tech.co/fast-shop/test/)
 
-3. CRUD utility function<br>
-   Default with `getPost` and `getUser` Example, check [more utilities](#functions-simple-crud-for-wordpress-restful-api)
+管理員帳密請私訊作者索取
 
-4. Integrate with JWT<br>
-   We use `usefulteam/jwt-auth` in composer, every time a WordPress user logged in, he will get JWT (for call API, if the user has enough capability) automatically.
+<br><br><br>
 
-## Before getting start
+## ⚡ 主要功能 ⚡
 
-Tech stacks (knowledge you need to have)
+1. 創建多個一頁商店<br>
+   每個商店就如同頁面一樣，可以搭配你自己喜歡的頁面編輯器(如: Elementor)，每個頁面，需要插入後台提供的短代碼`[fast_shop_products]` 你可以自訂商品應該要出現在頁面的哪裡
 
-#### Front-end
+2. 隨你喜好，任你挑選<br>
+   在快速商店裡面，可以隨意挑選你想要的商品<br>
+   <img src="https://github.com/j7-dev/fast-shop.wp-plugin/assets/9213776/a03a2fd0-813c-4cfa-977a-cdc14b773eb5" />
+
+3. 自訂商品的價格<br>
+   挑選完商品，你可以看到每個商品的預設價格，但你可以自己決定自己挑選的商品要賣多少<br>
+   <img src="https://github.com/j7-dev/fast-shop.wp-plugin/assets/9213776/861903f9-2238-474c-9c82-cd65a1d57c6c" />
+
+4. 更流暢的購物車<br>
+   購物車使用 Woocommerce Store API 以及 ajax 實作，讓使用者的購物體驗更加流暢<br>
+
+5. 統計每一個快速商店的訂單<br>
+   每一筆訂單都會紀錄是由哪一個快速商店產生的，在每一頁快速商店頁面底下也會統計近期的銷售與訂單狀態，方便統計分潤<br>
+   <img src="https://github.com/j7-dev/fast-shop.wp-plugin/assets/9213776/b3887d76-ac1d-40f1-bbeb-03bc7814db64" />
+
+<br><br><br>
+
+## 🐞 Bug 回報
+
+[BUG 回報規範](https://doc.clickup.com/9009088049/d/h/8cfqhhh-520/f1f334803b7a672/8cfqhhh-860)
+
+<br><br><br>
+
+## 開發 RoadMap
+
+[ ] Excel 訂單下載
+
+[ ] Coupon 支援
+
+[ ] 多語系
+
+<br><br><br>
+
+## 開發使用技術
+
+#### 前端
 
 1. [Vite](https://vitejs.dev/) - build tool
 2. [React v18](https://beta.reactjs.org/)
@@ -32,329 +62,15 @@ Tech stacks (knowledge you need to have)
 4. [Tailwind v3](https://tailwindcss.com/) - you can install any UI library, like Ant Design, MUI, Chakra...etc
 5. [SCSS](https://sass-lang.com/documentation/syntax)
 6. [React Query v4](https://tanstack.com/query/v4) - managing API status
+7. [React Router v6](https://reactrouter.com/en/main) - front-end router
+8. [Ant Design v5](https://ant.design/) - UI Library
 
-#### Front-end (Optional)
-
-1. [Zod](https://zod.dev/) - ⚡runtime⚡ type safe🔰
-2. [MSW](https://mswjs.io/) - mock API data
-3. [React Router v6](https://reactrouter.com/en/main) - front-end router
-
-#### Back-end
+#### 後端
 
 1. [usefulteam/jwt-auth](https://github.com/usefulteam/jwt-auth) - get JWT if a wordpress user is logged in
 
-## Install
+<br><br><br>
 
-1. Clone this repository into `/wp-content/plugins`.
-   ```sh
-   cd  {your-project}/wp-content/plugins
-   git clone https://github.com/j7-dev/boilerplate-react-SPA.wordpress-plugin.git
-   cd boilerplate-react-SPA.wordpress-plugin
-   ```
-2. Install dependencies:
+## 安裝方式
 
-   ⭐ You must have [Composer](https://getcomposer.org/) installed
-
-   ```sh
-   npm run init # This will run `npm install` & `composer install`
-   npm run dev
-   ```
-
-3. Change the settings of your project in `.env.development`
-
-   ```sh
-   VITE_BASE_URL='/'
-   # ↑ The relative URL your app will be rendered at
-
-   VITE_RENDER_ID='my-app'
-   # by default, the footer will render a <div id="my-app"></div> container at footer
-   # You can custom the render id
-
-   VITE_API_TIMEOUT='30000'
-   ```
-
-4. Activate the plugin from WordPress admin `/wp-admin`.
-
-   <img src="https://user-images.githubusercontent.com/9213776/226081766-6d3ce292-1be6-4a34-8a6b-6055670f0a74.png">
-
-5. Visit your site's homepage and see the rendered application on the footer 🚀🚀🚀
-
-   <img src="https://user-images.githubusercontent.com/9213776/226081865-8e23a778-8321-44d3-82f0-9f361530ad13.png">
-
-6. Click `Count`, `Get Post Example`, `Get Users Example` button to ensure the State and the WordPress API works
-
-   <img src="https://user-images.githubusercontent.com/9213776/226081923-c16cf62f-cd6e-4457-9150-8973b817a6e3.png">
-
-7. 🎉🎉🎉 Enjoy the dev 🎉🎉🎉
-
-## Build
-
-```shell
-npm run build
-```
-
-After you build the project will apply `.env.production` and enqueue the hashed assets in `js/dist` folder.
-
-the files in `js/dist` is EXACT the files of your plugin, you can only upload the `js/dist` if you don't want to share the `src` source code
-
-## Functions: Simple CRUD for WordPress Restful API
-
-path: `js\src\api\resources`
-
-### `createResource`
-
-#### - Properties:
-
-```typescript
-{
-  resource: string,
-  // ↑ WordPress RESTFUL API Endpoint like: posts, users, products
-  args?: {
-    [key: string]: any
-  },
-  // ↑ Check the WordPress RESTFUL API Endpoint args
-  config?: any
-  // ↑ This is Axios Config, see more info in https://axios-http.com/
-  // ex: change headers config for special use
-}
-```
-
-#### - Return:
-
-The created Resource id
-
-#### - Example:
-
-```javascript
-const createPost = await createResource({
-  resource: 'posts',
-  args: {
-    title: 'Post Created by API',
-    status: 'publish',
-  },
-})
-```
-
-### `getResource`
-
-#### - Properties:
-
-```typescript
-{
-  resource: string,
-  // ↑ WordPress RESTFUL API Endpoint like: posts, users, products
-  id: number,
-  args?: {
-    [key: string]: any
-  },
-  // ↑ Check the WordPress RESTFUL API Endpoint args (url params)
-}
-```
-
-#### - Return:
-
-WordPress Object
-
-#### - Example:
-
-```javascript
-// get the post with id = 200
-const getPost = await getResource({
-  resource: 'posts',
-  id: 200,
-})
-```
-
-### `getResources`
-
-#### - Properties:
-
-```typescript
-{
-  resource: string,
-  // ↑ WordPress RESTFUL API Endpoint like: posts, users, products
-  args?: {
-    [key: string]: any
-  },
-  // ↑ Check the WordPress RESTFUL API Endpoint args (url params)
-}
-```
-
-#### - Return:
-
-WordPress Object Array
-
-#### - Example:
-
-```javascript
-// get the all posts that author_id = 1
-const getPosts = await getResources({
-  resource: 'posts',
-  args: {
-    author: 1,
-  },
-})
-```
-
-### `updateResource`
-
-#### - Properties:
-
-```typescript
-{
-  resource: string,
-  // ↑ WordPress RESTFUL API Endpoint like: posts, users, products
-  id: number,
-  args?: {
-    [key: string]: any
-  },
-  // ↑ Check the WordPress RESTFUL API Endpoint args (url params)
-}
-```
-
-#### - Return:
-
-Update Status
-
-#### - Example:
-
-```javascript
-// update the title with post_id = 200
-const updatePost = await updateResource({
-  resource: 'posts',
-  id: 200,
-  args: {
-    title: 'Update Title by API',
-  },
-})
-```
-
-### `deleteResource`
-
-#### - Properties:
-
-```typescript
-{
-  resource: string,
-  // ↑ WordPress RESTFUL API Endpoint like: posts, users, products
-  id: number,
-}
-```
-
-#### - Return:
-
-Delete Status
-
-#### - Example:
-
-```javascript
-// delete the post with id = 200
-const deletePost = await deleteResource({
-  resource: 'posts',
-  id: 200,
-})
-```
-
-## Custom Hooks
-
-### `useOne`
-
-#### - Properties:
-
-```typescript
-{
-  resource: string
-  // WordPress RESTFUL API Endpoint like: posts, users, products
-  id: number
-  queryOptions?: {
-    // please visit React Query for more detail
-    staleTime?: number
-    cacheTime?: number
-    refetchOnWindowFocus?: boolean
-    refetchOnMount?: boolean
-    refetchOnReconnect?: boolean
-    refetchInterval?: number
-    retry?: boolean | number
-    retryDelay?: number
-    enabled?: boolean
-  }
-}
-```
-
-#### - Return:
-
-WordPress Object
-
-#### - Example:
-
-```javascript
-// get the post with id = 200
-const post = useOne({
-  resource: 'posts',
-  id: 200,
-})
-
-// get the user with id = 1
-const user = useOne({
-  resource: 'users',
-  id: 1,
-})
-```
-
-### `useMany`
-
-#### - Properties:
-
-```typescript
-{
-  resource: string
-  // WordPress RESTFUL API Endpoint like: posts, users, products
-  args?: Record<string, any>
-  // please visit WordPress RESTFUL API Handbook for more detail
-  queryOptions?: {
-    // please visit React Query for more detail
-    staleTime?: number
-    cacheTime?: number
-    refetchOnWindowFocus?: boolean
-    refetchOnMount?: boolean
-    refetchOnReconnect?: boolean
-    refetchInterval?: number
-    retry?: boolean | number
-    retryDelay?: number
-    enabled?: boolean
-  }
-}
-```
-
-#### - Return:
-
-WordPress Object Array
-
-#### - Example:
-
-```javascript
-// get all posts that author_id = 1
-const posts = useMany({
-  resource: 'posts',
-  args: {
-    author: 1,
-  },
-})
-```
-
----
-
-## Any Suggestion ?
-
-Welcome to open issue and start a discussion 🎉🎉🎉
-
-If this project is useful for you, please give me a github star ⭐
-
----
-
-## Reference
-
-1. Inspired by [Vite for WP](https://github.com/kucrut/vite-for-wp)
-2. API design Inspired by [Refine](https://refine.dev/)
-3. [WordPress REST API](https://developer.wordpress.org/rest-api/reference/)
-4. [Woocommerce REST API](https://woocommerce.github.io/woocommerce-rest-api-docs/?shell#introduction)
+上傳 zip，待補

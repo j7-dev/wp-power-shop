@@ -111,7 +111,7 @@ class Order
 
 		function get_sum_by_date($date_no, $args)
 		{
-			date_default_timezone_set('Asia/Taipei');
+			// date_default_timezone_set('Asia/Taipei');
 			unset($args['paginate']);
 			if ($date_no === -1) {
 				$sum_args = [
