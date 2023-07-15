@@ -2,7 +2,7 @@ import type { ColumnsType } from 'antd/es/table'
 import { TOrder, TOrderItem } from '@/pages/SalesStats/types'
 import { siteUrl, getOrderStatus } from '@/utils'
 import { LinkOutlined } from '@ant-design/icons'
-import { Tag } from 'antd'
+import { Tag, Tooltip } from 'antd'
 
 export const columns: ColumnsType<TOrder> = [
   {
@@ -20,7 +20,27 @@ export const columns: ColumnsType<TOrder> = [
       </a>
     ),
   },
-
+  {
+    title: <p className="m-0 text-center">顧客</p>,
+    dataIndex: 'customer',
+    key: 'customer',
+    align: 'center',
+    render: (customer: { id: number; display_name: string }) => {
+      const id = customer?.id || 0
+      const displayName = customer?.display_name || ''
+      return (
+        <a
+          target="_blank"
+          href={`${siteUrl}/wp-admin/user-edit.php?user_id=${id}`}
+          rel="noreferrer"
+        >
+          <Tooltip title={`顧客 id: ${id}`}>
+            {displayName} <LinkOutlined />
+          </Tooltip>
+        </a>
+      )
+    },
+  },
   {
     title: <p className="m-0 text-center">購買產品</p>,
     dataIndex: 'items',

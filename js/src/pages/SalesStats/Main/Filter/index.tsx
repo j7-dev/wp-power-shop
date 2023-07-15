@@ -45,10 +45,8 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
 
   const handleFilter = () => {
     const values = form.getFieldsValue()
-    console.log('⭐  Filter  values', values)
     setFilter(values)
   }
-  console.log('⭐  Filter  filter', filter)
 
   return (
     <Form form={form}>
@@ -87,13 +85,15 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
         </Col>
         <Form.Item name={['email']} noStyle initialValue={filter.email}>
           <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
-            <p className="my-0">搜尋特定顧客 email</p>
-            <Input placeholder="搜尋 email" disabled={isLoading} />
+            <p className="my-0">搜尋特定顧客 ID 或 E-mail</p>
+            <Input placeholder="搜尋 E-mail" disabled={isLoading} />
           </Col>
         </Form.Item>
+        <Form.Item name={['is_download']} hidden initialValue={0} />
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
           <p className="my-0">&nbsp;</p>
           <Button
+            htmlType="submit"
             className="w-full"
             type="primary"
             icon={<SearchOutlined />}

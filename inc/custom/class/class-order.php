@@ -38,6 +38,7 @@ class Order
 		$status = Functions::json_parse($status_stringfy, []);
 		$email = isset($_POST['email']) ? $_POST['email'] : '';
 		$date_created = isset($_POST['date_created']) ? $_POST['date_created'] : '';
+		$is_download = isset($_POST['is_download']) ? $_POST['is_download'] : 0;
 
 		$args = [
 			'type' => 'shop_order', // 'shop_order' | 'shop_order_refund'
@@ -60,7 +61,7 @@ class Order
 			unset($args['date_created']);
 		}
 
-		function formatOrders($order)
+		function format_orders($order)
 		{
 			$items = $order->get_items() ?? [];
 			$formatItems = [];
@@ -79,6 +80,14 @@ class Order
 			$status = $order->get_status();
 			$shipping = $order->get_shipping_total();
 			$shipping_method = $order->get_shipping_method();
+			$customer = $order->get_user();
+			if ($customer) {
+				$customer_id = $customer->ID;
+				$customer_display_name = $customer->display_name;
+			} else {
+				$customer_id = 0;
+				$customer_display_name = '';
+			}
 
 			return [
 				'items' => $formatItems,
@@ -87,16 +96,20 @@ class Order
 				'shipping' => $shipping,
 				'shipping_method' => $shipping_method,
 				'order_id' => $order->get_id(),
+				'customer' => [
+					'id' => $customer_id,
+					'display_name' => $customer_display_name,
+				],
 				'key' => $order->get_id(),
 			];
 		}
 
-		function sumOrder($a, $b)
+		function sum_order($a, $b)
 		{
 			return $a + $b->get_total();
 		}
 
-		function getSumByDate($date_no, $args)
+		function get_sum_by_date($date_no, $args)
 		{
 			date_default_timezone_set('Asia/Taipei');
 			unset($args['paginate']);
@@ -114,8 +127,12 @@ class Order
 
 			$the_orders = \wc_get_orders($sum_args);
 
-			$sum = array_reduce($the_orders, __NAMESPACE__ . '\\sumOrder', 0);
-			return $sum;
+			$sum = array_reduce($the_orders, __NAMESPACE__ . '\\sum_order', 0);
+			$order_count = count($the_orders);
+			return [
+				'sum' => $sum,
+				'order_qty' => $order_count,
+			];
 		}
 
 
@@ -138,12 +155,29 @@ class Order
 
 		$results = \wc_get_orders($args);
 		$orders = $results->orders ?? [];
+		$list = array_map(__NAMESPACE__ . '\\format_orders', $orders);
+
+		// 判斷是否為下載需求
+		// TODO
+		// if (!empty($is_download)) {
+
+		// 	$return = [
+		// 		'message'  => 'success download',
+		// 		'data'       => []
+		// 	];
+
+		// 	\wp_send_json($return);
+
+		// 	\wp_die();
+		// }
+
+
 		$total = $results->total ?? 0;
 		$max_num_pages = $results->max_num_pages ?? 1;
 
-		$sumTotal = getSumByDate(-1, $args);
-		$sumToday = getSumByDate(0, $args);
-		$sumWeek = getSumByDate(7, $args);
+		$sumTotal = get_sum_by_date(-1, $args);
+		$sumToday = get_sum_by_date(0, $args);
+		$sumWeek = get_sum_by_date(7, $args);
 		$order_statuses = \wc_get_order_statuses();
 		$orderStatuses = [];
 		$i = 0;
@@ -153,7 +187,7 @@ class Order
 		}
 
 
-		$list = array_map(__NAMESPACE__ . '\\formatOrders', $orders);
+
 
 		$return = array(
 			'message'  => 'success',

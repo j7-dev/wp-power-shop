@@ -10,6 +10,7 @@ type TProps = {
   email?: string
   rangePicker?: Dayjs[]
   status?: string[]
+  is_download?: 1 | 0
 }
 
 export function useAjaxGetOrders<T>(props?: TProps) {
@@ -23,6 +24,7 @@ export function useAjaxGetOrders<T>(props?: TProps) {
   const email = props?.email || ''
   const rangePicker = props?.rangePicker || undefined
   const status = props?.status || undefined
+  const is_download = props?.is_download || 0
   const mutation = useAjax()
   const { mutate } = mutation
 
@@ -44,6 +46,7 @@ export function useAjaxGetOrders<T>(props?: TProps) {
         status: JSON.stringify(status),
         email,
         date_created,
+        is_download,
       }
 
       mutate(payload, {
@@ -63,6 +66,7 @@ export function useAjaxGetOrders<T>(props?: TProps) {
     status,
     email,
     rangePicker,
+    is_download,
   ])
 
   return {

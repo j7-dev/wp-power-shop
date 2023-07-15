@@ -20,14 +20,19 @@ export type TOrder = {
   key: number
 }
 
+type TSum = {
+  sum: number
+  order_qty: number
+}
+
 export type TOrderData = {
   list: TOrder[]
   info: {
     total: number
     maxNumPages: number
-    sumTotal: number
-    sumToday: number
-    sumWeek: number
+    sumTotal: TSum
+    sumToday: TSum
+    sumWeek: TSum
     orderStatuses: {
       value: string
     }[]
@@ -39,9 +44,18 @@ export const defaultOrderData: TOrderData = {
   info: {
     total: 0,
     maxNumPages: 1,
-    sumTotal: 0,
-    sumToday: 0,
-    sumWeek: 0,
+    sumTotal: {
+      sum: 0,
+      order_qty: 0,
+    },
+    sumToday: {
+      sum: 0,
+      order_qty: 0,
+    },
+    sumWeek: {
+      sum: 0,
+      order_qty: 0,
+    },
     orderStatuses: [],
   },
 }
@@ -60,6 +74,7 @@ export type TFilter = {
   email?: string
   rangePicker?: Dayjs[]
   status?: string[]
+  is_download?: 1 | 0
 }
 
 export const defaultFilter: TFilter = {
@@ -68,4 +83,5 @@ export const defaultFilter: TFilter = {
     'wc-completed',
   ],
   email: '',
+  is_download: 0,
 }

@@ -10,7 +10,9 @@ import {
   filterAtom,
 } from '@/pages/SalesStats/atom'
 import { useSetAtom, useAtomValue } from 'jotai'
-import DownloadExcel from './DownloadExcel'
+
+// import DownloadExcel from './DownloadExcel'
+
 import Filter from './Filter'
 
 const Main = () => {
@@ -22,6 +24,8 @@ const Main = () => {
     post_id: postId,
   })
   const isLoading = mutation?.isLoading ?? false
+  const isError = mutation?.isError ?? false
+  const isSuccess = mutation?.isSuccess ?? false
   const setOrderData = useSetAtom(orderDataAtom)
 
   useEffect(() => {
@@ -33,9 +37,13 @@ const Main = () => {
 
   return (
     <div className="py-4">
-      <DashBoard />
+      <DashBoard isLoading={isLoading} />
       <Filter isLoading={isLoading} />
-      <DownloadExcel />
+      {/* <DownloadExcel
+        isLoading={isLoading}
+        isError={isError}
+        isSuccess={isSuccess}
+      /> */}
       <Table isLoading={isLoading} />
     </div>
   )
