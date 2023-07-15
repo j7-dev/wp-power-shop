@@ -36,8 +36,8 @@ class Order
 		$limit = isset($_POST['limit']) ? $_POST['limit'] : 10;
 		$status_stringfy = isset($_POST['status']) ? $_POST['status'] : '[]';
 		$status = Functions::json_parse($status_stringfy, []);
-
-
+		$email = isset($_POST['email']) ? $_POST['email'] : '';
+		$date_created = isset($_POST['date_created']) ? $_POST['date_created'] : '';
 
 		$args = [
 			'type' => 'shop_order', // 'shop_order' | 'shop_order_refund'
@@ -47,9 +47,18 @@ class Order
 			'meta_value' => $post_id,
 			'status' => $status,
 			'paginate' => true,
+			'customer' => $email,
+			'date_created' => $date_created,
 			// 'date_paid' => '2021-09-01...2021-09-30',
 			// 'date_completed' => '2021-09-01...2021-09-30',
 		];
+
+		if (empty($email)) {
+			unset($args['customer']);
+		}
+		if (empty($date_created)) {
+			unset($args['date_created']);
+		}
 
 		function formatOrders($order)
 		{

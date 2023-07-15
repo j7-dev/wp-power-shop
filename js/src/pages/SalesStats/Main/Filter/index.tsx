@@ -7,7 +7,7 @@ import { getOrderStatus } from '@/utils'
 
 const { RangePicker } = DatePicker
 
-const Filter = () => {
+const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
   const [form] = Form.useForm()
   const orderData = useAtomValue(orderDataAtom)
   const [
@@ -67,6 +67,7 @@ const Filter = () => {
                 '開始日期',
                 '結束日期',
               ]}
+              disabled={isLoading}
             />
           </Form.Item>
         </Col>
@@ -80,13 +81,14 @@ const Filter = () => {
               tagRender={tagRender}
               style={{ width: '100%' }}
               options={options}
+              loading={isLoading}
             />
           </Form.Item>
         </Col>
         <Form.Item name={['email']} noStyle initialValue={filter.email}>
           <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
             <p className="my-0">搜尋特定顧客 email</p>
-            <Input placeholder="搜尋 email" />
+            <Input placeholder="搜尋 email" disabled={isLoading} />
           </Col>
         </Form.Item>
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
@@ -96,6 +98,7 @@ const Filter = () => {
             type="primary"
             icon={<SearchOutlined />}
             onClick={handleFilter}
+            loading={isLoading}
           >
             搜尋
           </Button>

@@ -3,8 +3,10 @@ require_once '../index.php';
 require_once WP_CORE_PATH;
 require_once WC_CORE_PATH;
 
-define('ORDER_QTY', 100);
+define('ORDER_QTY', 30);
 define('FAST_SHOP_POST_ID', '4462');
+define('CUSTOMER_ID', 2);
+
 
 
 $order_status = ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed', 'wc-wmp-in-transit', 'wc-wmp-shipped', 'wc-checkout-draft', 'wc-ry-at-cvs', 'wc-ry-out-cvs'];
@@ -36,7 +38,7 @@ try {
 		for ($j = 0; $j < $item_qty; $j++) {
 			$order->add_product(wc_get_product(getRandomArray($product_ids)), mt_rand(1, 10));
 		}
-		$order->set_customer_id(1);
+		$order->set_customer_id(CUSTOMER_ID);
 		$order->calculate_totals();
 
 		// 設定訂單狀態

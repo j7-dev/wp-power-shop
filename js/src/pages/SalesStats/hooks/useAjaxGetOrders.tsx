@@ -21,39 +21,48 @@ export function useAjaxGetOrders<T>(props?: TProps) {
   const paged = props?.paged || 1
   const limit = props?.limit || 10
   const email = props?.email || ''
-  const rangePicker = props?.rangePicker || []
-  const status = props?.status || null
+  const rangePicker = props?.rangePicker || undefined
+  const status = props?.status || undefined
   const mutation = useAjax()
   const { mutate } = mutation
 
   useEffect(() => {
     if (status) {
-      mutate(
-        {
-          action: 'handle_get_orders',
-          nonce: ajaxNonce,
-          post_id,
-          paged,
-          limit,
-          status: JSON.stringify(status),
-        },
-        {
-          onSuccess: (res) => {
-            const fetchedData = res?.data?.data || ({} as T)
+      let date_created = ''
+      if (rangePicker) {
+        date_created = `${rangePicker[0].format(
+          'YYYY-MM-DD',
+        )}...${rangePicker[1].format('YYYY-MM-DD')}`
+      }
 
-            setOrderData(fetchedData)
-          },
-          onError: (error) => {
-            console.log(error)
-          },
+      const payload = {
+        action: 'handle_get_orders',
+        nonce: ajaxNonce,
+        post_id,
+        paged,
+        limit,
+        status: JSON.stringify(status),
+        email,
+        date_created,
+      }
+
+      mutate(payload, {
+        onSuccess: (res) => {
+          const fetchedData = res?.data?.data || ({} as T)
+          setOrderData(fetchedData)
         },
-      )
+        onError: (error) => {
+          console.log(error)
+        },
+      })
     }
   }, [
     post_id,
     paged,
     limit,
     status,
+    email,
+    rangePicker,
   ])
 
   return {

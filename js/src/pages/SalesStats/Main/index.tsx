@@ -34,7 +34,7 @@ const Main = () => {
   return (
     <div className="py-4">
       <DashBoard />
-      <Filter />
+      <Filter isLoading={isLoading} />
       <DownloadExcel />
       <Table isLoading={isLoading} />
     </div>
