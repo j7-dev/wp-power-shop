@@ -80,7 +80,7 @@ class Functions
 			'single' => true,
 		]);
 
-		register_post_type(Bootstrap::TEXT_DOMAIN, $args);
+		\register_post_type(Bootstrap::TEXT_DOMAIN, $args);
 	}
 	public static function add_metabox(array $args): void
 	{

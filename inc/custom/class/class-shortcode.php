@@ -18,18 +18,24 @@ class ShortCode
 	public function shortcode_callback()
 	{
 		// NOTE 每次進到頁面先清空購物車
-		\WC()->cart->empty_cart();
+		if (!is_admin()) {
+			try {
+				\WC()->cart->empty_cart();
+			} catch (\Throwable $th) {
+				//throw $th;
+				// do nothing
+			}
+		}
+
 
 		$html = '';
 		ob_start();
-		?>
-				<div id="fast_shop_products_app"></div>
-		<?php
+?>
+		<div id="fast_shop_products_app"></div>
+<?php
 		$html .= ob_get_clean();
 
 
 		return $html;
 	}
-
-
 }
