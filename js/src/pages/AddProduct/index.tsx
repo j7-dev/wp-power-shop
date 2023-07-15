@@ -98,7 +98,7 @@ const AddProduct = () => {
           type="info"
           showIcon
         />
-        {productsResult?.isLoading
+        {productsResult?.isLoading && productsResult?.isFetching
           ? [
               1,
               2,
