@@ -54,6 +54,10 @@ class Order
 			// 'date_completed' => '2021-09-01...2021-09-30',
 		];
 
+		if (count($status) === 0) {
+			unset($args['status']);
+		}
+
 		if (empty($email)) {
 			unset($args['customer']);
 		}
