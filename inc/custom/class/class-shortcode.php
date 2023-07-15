@@ -13,8 +13,6 @@ class ShortCode
 		\add_shortcode(Bootstrap::DB_DOMAIN . '_products', [$this, 'shortcode_callback']);
 	}
 
-
-
 	public function shortcode_callback()
 	{
 		// NOTE 每次進到頁面先清空購物車
