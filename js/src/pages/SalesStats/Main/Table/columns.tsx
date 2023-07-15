@@ -29,15 +29,16 @@ export const columns: ColumnsType<TOrder> = [
       const id = customer?.id || 0
       const displayName = customer?.display_name || ''
       return (
-        <a
-          target="_blank"
-          href={`${siteUrl}/wp-admin/user-edit.php?user_id=${id}`}
-          rel="noreferrer"
-        >
-          <Tooltip title={`顧客 id: ${id}`}>
+        <>
+          <a
+            target="_blank"
+            href={`${siteUrl}/wp-admin/user-edit.php?user_id=${id}`}
+            rel="noreferrer"
+          >
             {displayName} <LinkOutlined />
-          </Tooltip>
-        </a>
+          </a>
+          <sub className="ml-2">#{id}</sub>
+        </>
       )
     },
   },
