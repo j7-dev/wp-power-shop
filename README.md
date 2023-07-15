@@ -38,17 +38,21 @@
 
 ## 🐞 Bug 回報
 
-[BUG 回報規範](https://doc.clickup.com/9009088049/d/h/8cfqhhh-520/f1f334803b7a672/8cfqhhh-860)
+請參考 [BUG 回報規範](https://doc.clickup.com/9009088049/d/h/8cfqhhh-520/f1f334803b7a672/8cfqhhh-860)
 
 <br><br><br>
 
 ## 🗺️ 開發 RoadMap
 
-[ ] Excel 訂單下載
+<div style="padding-left:1rem">
 
-[ ] Coupon 支援
+<input type="checkbox"> Excel 訂單下載
 
-[ ] 多語系
+<input type="checkbox"> Coupon 支援
+
+<input type="checkbox"> 多語系
+
+</div>
 
 <br><br><br>
 
