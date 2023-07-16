@@ -5,16 +5,21 @@ import {
   TProductVariationAttribute,
   TProductAttributeTerm,
 } from '@/types/wcStoreApi'
-import { useSetAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import { selectedVariationIdAtom } from '@/pages/FastShopProducts/Item/Variable/atoms'
 import { getVariationIdByAttributes } from '@/utils/wcStoreApi'
 import { sortBy } from 'lodash-es'
 import { nanoid } from 'nanoid'
+import { CloseCircleFilled, CheckCircleFilled } from '@ant-design/icons'
 
 const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
   product,
 }) => {
-  const setSelectedVariationId = useSetAtom(selectedVariationIdAtom)
+  const [
+    selectedVariationId,
+    setSelectedVariationId,
+  ] = useAtom(selectedVariationIdAtom)
+  console.log('⭐  selectedVariationId', selectedVariationId)
 
   const attributes = product?.attributes ?? []
 
@@ -74,6 +79,18 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
           </div>
         )
       })}
+      {!selectedVariationId && (
+        <p className="m-0 text-gray-500 text-xs">
+          <CloseCircleFilled className="mr-2 text-red-500" />
+          請選擇商品屬性
+        </p>
+      )}
+      {selectedVariationId && (
+        <p className="m-0 text-gray-500 text-xs">
+          <CheckCircleFilled className="mr-2 text-green-500" />
+          已選擇商品屬性
+        </p>
+      )}
     </>
   )
 }

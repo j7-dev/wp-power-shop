@@ -43,7 +43,7 @@ const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({
   const nonOptions = [
     {
       value: 'none',
-      label: <>找不到運送方式</>,
+      label: <>請選擇運送方式</>,
     },
   ]
 

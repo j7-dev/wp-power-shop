@@ -54,6 +54,7 @@ const AddToCartButton: React.FC<{
         type="primary"
         onClick={handleClick}
         loading={isLoading}
+        disabled={!props?.variationId}
       >
         加入購物車
       </Button>
