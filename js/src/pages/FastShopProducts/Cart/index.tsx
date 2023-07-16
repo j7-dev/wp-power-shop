@@ -2,11 +2,11 @@ import { useEffect, useContext } from 'react'
 import { useOne, useAjax } from '@/hooks'
 import { useSetAtom } from 'jotai'
 import { storeApiNonceAtom } from '../atom'
-import { DeleteOutlined } from '@ant-design/icons'
+import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { ProductsContext } from '@/pages/FastShopProducts'
 import { TFSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
-import { Popconfirm, notification, Button, Empty } from 'antd'
+import { Popconfirm, notification, Button, Empty, Spin } from 'antd'
 import { ajaxNonce, checkoutUrl } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { LoadingText, LoadingCard } from '@/components/PureComponents'
@@ -31,7 +31,7 @@ const Cart = () => {
   const wcStoreApiNonce =
     cartResult?.data?.headers?.['x-wc-store-api-nonce'] || ''
   const cartData = (cartResult?.data?.data || {}) as TCart
-  const cartIsLoading = cartResult?.isLoading || false
+  const cartIsFetching = cartResult?.isFetching || false
   const total_items = cartData?.totals?.total_items || '0'
   const total_price = cartData?.totals?.total_price || '0'
 
@@ -110,7 +110,7 @@ const Cart = () => {
               <tr key={item.key}>
                 <td>
                   <div className="flex">
-                    {isLoading || cartIsLoading ? (
+                    {isLoading || cartIsFetching ? (
                       <div className="w-16 h-16 mr-2">
                         <LoadingCard ratio="aspect-square" />
                       </div>
@@ -126,14 +126,14 @@ const Cart = () => {
                         <LoadingText
                           width="w-[8rem]"
                           content={item?.name}
-                          isLoading={isLoading || cartIsLoading}
+                          isLoading={isLoading || cartIsFetching}
                         />
                       </h6>
                       <p className="my-0 text-xs">
                         <LoadingText
                           width="w-[12rem]"
                           content={variationText}
-                          isLoading={isLoading || cartIsLoading}
+                          isLoading={isLoading || cartIsFetching}
                         />
                       </p>
                     </div>
@@ -146,14 +146,14 @@ const Cart = () => {
                   <LoadingText
                     width="w-[4rem]"
                     content={`$ ${price.toLocaleString()}`}
-                    isLoading={isLoading || cartIsLoading}
+                    isLoading={isLoading || cartIsFetching}
                   />
                 </td>
                 <td>
                   <LoadingText
                     width="w-[4rem]"
                     content={`$ ${(price * quantity).toLocaleString()}`}
-                    isLoading={isLoading || cartIsLoading}
+                    isLoading={isLoading || cartIsFetching}
                   />
                 </td>
                 <td>
@@ -182,7 +182,7 @@ const Cart = () => {
           </th>
           <th></th>
         </tr>
-        <ShippingField cartData={cartData} isLoading={cartIsLoading} />
+        <ShippingField cartData={cartData} isLoading={cartIsFetching} />
         <tr>
           <th className="text-left pl-4">合計</th>
           <th></th>
@@ -201,7 +201,10 @@ const Cart = () => {
   )
 
   return (
-    <div>
+    <Spin
+      indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+      spinning={isLoading || cartIsFetching}
+    >
       {contextHolder}
       {main}
       <div className="text-right mb-8">
@@ -211,13 +214,13 @@ const Cart = () => {
             size="large"
             className="px-12"
             type="primary"
-            disabled={items.length === 0}
+            disabled={items.length === 0 || isLoading || cartIsFetching}
           >
             前往結帳
           </Button>
         </a>
       </div>
-    </div>
+    </Spin>
   )
 }
 
