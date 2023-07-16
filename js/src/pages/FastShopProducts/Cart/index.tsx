@@ -72,11 +72,11 @@ const Cart = () => {
           <table className="fs-cart-table">
             <thead>
               <tr>
-                <th>商品</th>
-                <th>數量</th>
-                <th>單價</th>
-                <th>小計</th>
-                <th></th>
+                <th className="w-[50%]">商品</th>
+                <th className="w-[12%]">數量</th>
+                <th className="w-[15%]">單價</th>
+                <th className="w-[15%]">小計</th>
+                <th className="w-[8%]"></th>
               </tr>
             </thead>
             <tbody>
