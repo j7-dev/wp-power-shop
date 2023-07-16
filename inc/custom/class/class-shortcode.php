@@ -15,7 +15,7 @@ class ShortCode
 
 	public function shortcode_callback()
 	{
-		// NOTE 每次進到頁面先清空購物車
+		// 每次進到頁面先清空購物車
 		if (!is_admin()) {
 			try {
 				\WC()->cart->empty_cart();
