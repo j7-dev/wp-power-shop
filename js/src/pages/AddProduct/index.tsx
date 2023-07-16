@@ -13,6 +13,7 @@ import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 // FIXME: 順序好像會有問題
 
 const { Paragraph } = Typography
+const saveBtn = document.getElementById('publish') as HTMLInputElement | null
 
 const AddProduct = () => {
   const setFSMeta = useSetAtom(FSMetaAtom)
@@ -62,16 +63,25 @@ const AddProduct = () => {
     if (!input) return null
     input.value = JSON.stringify(sortedAllFields)
     postForm?.prepend(input)
-    if (!postForm) return null
+    if (!postForm || !saveBtn) return null
+
+    if (saveBtn.value === 'Publish') {
+      const newOption = document.createElement('option')
+      newOption.value = 'publish'
+      newOption.textContent = 'Publish'
+      const select = document.getElementById(
+        'post_status',
+      ) as HTMLSelectElement | null
+      if (select) {
+        select.appendChild(newOption)
+      }
+      newOption.selected = true
+    }
 
     postForm.submit()
   }
 
   useEffect(() => {
-    const saveBtn = document.querySelector(
-      '#publishing-action input[type="submit"]',
-    )
-
     if (!!saveBtn) {
       saveBtn.addEventListener('click', handleSave)
     }
