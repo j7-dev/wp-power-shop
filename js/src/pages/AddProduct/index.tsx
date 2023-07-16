@@ -65,7 +65,11 @@ const AddProduct = () => {
     postForm?.prepend(input)
     if (!postForm || !saveBtn) return null
 
-    if (saveBtn.value === 'Publish') {
+    const hidden_post_status = document.getElementById(
+      'hidden_post_status',
+    ) as HTMLInputElement | null
+
+    if (hidden_post_status?.value === 'draft') {
       const newOption = document.createElement('option')
       newOption.value = 'publish'
       newOption.textContent = 'Publish'
@@ -110,7 +114,7 @@ const AddProduct = () => {
             <div className="flex">
               要在頁面使用這些商品，請使用
               <Paragraph className="mx-4 my-0" copyable>
-                [fast_shop_product]
+                [fast_shop_products]
               </Paragraph>{' '}
               這個 shortcode，在快速商店以外使用這個 shortcode 是沒有作用的
             </div>

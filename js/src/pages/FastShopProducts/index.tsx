@@ -8,6 +8,8 @@ import Item from './Item'
 import useCartModal from './hooks/useCartModal'
 import Cart from './Cart'
 import { LoadingCard } from '@/components/PureComponents'
+import { Empty, Result, Button } from 'antd'
+import { RedoOutlined } from '@ant-design/icons'
 
 export const ProductsContext = createContext({
   products: [] as TProduct[],
@@ -41,6 +43,33 @@ const FastShopProducts = () => {
 
   const { renderCartModal, showFSModal } = useCartModal()
 
+  if (product_ids.length === 0 && !productsResult.isLoading) {
+    return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="沒有資料" />
+  }
+
+  if (productsResult.isError) {
+    const handleRefresh = () => {
+      window.location.reload()
+    }
+
+    return (
+      <Result
+        status="404"
+        title="OOPS!"
+        subTitle="遭遇一些技術錯誤，請再試一次。"
+        extra={
+          <Button
+            type="primary"
+            icon={<RedoOutlined />}
+            onClick={handleRefresh}
+          >
+            再試一次
+          </Button>
+        }
+      />
+    )
+  }
+
   return (
     <div className="fast-shop-products">
       <ProductsContext.Provider
@@ -52,6 +81,7 @@ const FastShopProducts = () => {
       >
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
           {productsResult.isLoading &&
+            product_ids.length > 0 &&
             [
               1,
               2,
@@ -59,6 +89,7 @@ const FastShopProducts = () => {
               4,
             ].map((i) => <LoadingCard key={i} ratio="aspect-[260/385]" />)}
           {!productsResult.isLoading &&
+            product_ids.length > 0 &&
             products.map((product) => {
               return <Item key={product?.id} productId={product?.id} />
             })}
