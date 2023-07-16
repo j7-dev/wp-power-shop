@@ -12,6 +12,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { LoadingText, LoadingCard } from '@/components/PureComponents'
 import ShippingField from './ShippingField'
 import { BiMoneyWithdraw } from 'react-icons/bi'
+import UpdateCartInputNumber from './UpdateCartInputNumber'
 
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
@@ -104,11 +105,12 @@ const Cart = () => {
             const salesPrice = metaPrice?.salesPrice ?? 0
             const price = !!salesPrice ? salesPrice : regularPrice
             const quantity = item?.quantity ?? 1
+
             return (
               <tr key={item.key}>
                 <td>
                   <div className="flex">
-                    {isLoading ? (
+                    {isLoading || cartIsLoading ? (
                       <div className="w-16 h-16 mr-2">
                         <LoadingCard ratio="aspect-square" />
                       </div>
@@ -124,38 +126,34 @@ const Cart = () => {
                         <LoadingText
                           width="w-[8rem]"
                           content={item?.name}
-                          isLoading={isLoading}
+                          isLoading={isLoading || cartIsLoading}
                         />
                       </h6>
                       <p className="my-0 text-xs">
                         <LoadingText
                           width="w-[12rem]"
                           content={variationText}
-                          isLoading={isLoading}
+                          isLoading={isLoading || cartIsLoading}
                         />
                       </p>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <LoadingText
-                    width="w-[2rem]"
-                    content={quantity}
-                    isLoading={isLoading}
-                  />
+                  <UpdateCartInputNumber item={item} />
                 </td>
                 <td>
                   <LoadingText
                     width="w-[4rem]"
                     content={`$ ${price.toLocaleString()}`}
-                    isLoading={isLoading}
+                    isLoading={isLoading || cartIsLoading}
                   />
                 </td>
                 <td>
                   <LoadingText
                     width="w-[4rem]"
                     content={`$ ${(price * quantity).toLocaleString()}`}
-                    isLoading={isLoading}
+                    isLoading={isLoading || cartIsLoading}
                   />
                 </td>
                 <td>

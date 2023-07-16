@@ -81,16 +81,15 @@ const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({
         <span className="mr-2">運費</span>
         <Select
           className="min-w-[12rem]"
-          defaultValue={
-            options.length > 0 ? defaultOption : nonOptions[0].value
-          }
+          defaultValue={nonOptions[0].value}
+          value={options.length > 0 ? defaultOption : nonOptions[0].value}
           options={options.length > 0 ? options : nonOptions}
           onChange={handleChange}
           loading={isLoading}
           disabled={options.length === 0}
         />
         {options.length === 0 && (
-          <Tooltip title='請確認您的地址"國家"欄位有可用的運送方式'>
+          <Tooltip title='請確認您的地址"國家"欄位有可用的運送方式或者確認購物車有商品'>
             <InfoCircleFilled className="ml-2 text-orange-500" />
           </Tooltip>
         )}
