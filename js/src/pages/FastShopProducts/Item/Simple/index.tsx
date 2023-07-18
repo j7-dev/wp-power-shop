@@ -14,7 +14,13 @@ const Simple: React.FC<{
   const imageSrc = getProductImageSrc(product)
 
   return (
-    <div className="relative pb-12">
+    <div
+      className="relative pb-12 cursor-pointer"
+      onClick={showFSModal({
+        product,
+        FSMeta,
+      })}
+    >
       <div>
         <img src={imageSrc} className="w-full aspect-square" />
       </div>
