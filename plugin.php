@@ -6,7 +6,7 @@
  * Author: j7.dev
  * Author URI: https://github.com/j7-dev
  * License: GPLv2
- * Version: 1.0.13
+ * Version: 1.0.14
  */
 
 namespace J7\ViteReactWPPlugin\FastShop;

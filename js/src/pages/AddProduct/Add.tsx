@@ -67,7 +67,10 @@ const Add = () => {
     },
   })
 
-  const products: TProduct[] = productResult?.data?.data ?? []
+  const rawProducts: TProduct[] = productResult?.data?.data ?? []
+  const products = rawProducts.filter(
+    (product) => product.type === 'simple' || product.type === 'variable',
+  )
 
   const productItems = products.map((product) => {
     const disabled = addedProducts.some(

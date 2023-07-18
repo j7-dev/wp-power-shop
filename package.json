@@ -1,7 +1,7 @@
 {
   "name": "boilerplate-react-spa.wordpress-plugin",
   "private": true,
-  "version": "1.0.13",
+  "version": "1.0.14",
   "type": "module",
   "scripts": {
     "init": "npm install && composer install --no-interaction",
