@@ -17,6 +17,7 @@ import UpdateCartInputNumber from './UpdateCartInputNumber'
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
   const { fast_shop_meta } = useContext(ProductsContext)
+
   const { mutate, isLoading } = useAjax()
   const [
     api,
@@ -169,6 +170,8 @@ const Cart = () => {
               </tr>
             )
           })}
+      </tbody>
+      <tfoot>
         <tr>
           <th className="text-left pl-4">小計</th>
           <th></th>
@@ -196,7 +199,7 @@ const Cart = () => {
           </th>
           <th></th>
         </tr>
-      </tbody>
+      </tfoot>
     </table>
   )
 
@@ -205,20 +208,22 @@ const Cart = () => {
       indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
       spinning={isLoading || cartIsFetching}
     >
-      {contextHolder}
-      {main}
-      <div className="text-right mb-8">
-        <a href={checkoutUrl}>
-          <Button
-            icon={<BiMoneyWithdraw className="relative top-[2px]" />}
-            size="large"
-            className="px-12"
-            type="primary"
-            disabled={items.length === 0 || isLoading || cartIsFetching}
-          >
-            前往結帳
-          </Button>
-        </a>
+      <div className="w-full">
+        {contextHolder}
+        {main}
+        <div className="text-right mb-8">
+          <a href={checkoutUrl}>
+            <Button
+              icon={<BiMoneyWithdraw className="relative top-[2px]" />}
+              size="large"
+              className="px-12"
+              type="primary"
+              disabled={items.length === 0 || isLoading || cartIsFetching}
+            >
+              前往結帳
+            </Button>
+          </a>
+        </div>
       </div>
     </Spin>
   )

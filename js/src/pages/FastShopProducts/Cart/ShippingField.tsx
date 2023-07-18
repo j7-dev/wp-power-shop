@@ -94,9 +94,9 @@ const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({
           </Tooltip>
         )}
       </th>
-      <th className="text-right">
+      <th className="flex justify-end items-center">
         <LoadingText
-          width="w-[8rem]"
+          width="w-[4rem]"
           content={`$ ${parseInt(total_shipping, 10).toLocaleString()}`}
           isLoading={isLoading || updateIsLoading}
         />
