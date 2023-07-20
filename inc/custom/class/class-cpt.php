@@ -8,16 +8,33 @@ use J7\ViteReactWPPlugin\FastShop\Admin\Bootstrap;
 
 class CPT extends Functions
 {
+	const VAR = 'ps_report';
+
+
 	function __construct()
 	{
 		\add_action('init', [$this, 'init']);
 		\add_action('load-post.php',     [$this, 'init_metabox']);
 		\add_action('load-post-new.php', [$this, 'init_metabox']);
+
+		\add_filter('query_vars', [$this, 'add_query_for_report']);
+		\add_filter('template_include', [$this, 'load_report_template'], 99);
+	}
+
+	public function add_query_for_report($vars)
+	{
+		$vars[] = self::VAR;
+		return $vars;
 	}
 
 	public function init(): void
 	{
 		self::register_cpt(Bootstrap::LABEL);
+
+		// 新增 fast-shop/{slug}/report 網址規則
+		\add_rewrite_rule('^' . Bootstrap::TEXT_DOMAIN . '/([^/]+)/report/?$', 'index.php?slug=$matches[1]&' . self::VAR . '=1', 'top');
+
+		\flush_rewrite_rules();
 	}
 
 	/**
@@ -88,5 +105,20 @@ class CPT extends Functions
 
 		// Update the meta field.
 		\update_post_meta($post_id, Bootstrap::DB_DOMAIN . '_meta', $meta_data);
+	}
+
+	/**
+	 * 設定 fast-shop/{slug}/report 的 php template
+	 */
+	public function load_report_template($template)
+	{
+		$repor_template_path = Bootstrap::PLUGIN_DIR . 'inc\templates\report.php';
+
+		if (\get_query_var(self::VAR)) {
+			if (file_exists($repor_template_path)) {
+				return $repor_template_path;
+			}
+		}
+		return $template;
 	}
 }
