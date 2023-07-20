@@ -1,7 +1,9 @@
 export const baseUrl = import.meta.env.VITE_BASE_URL || '/'
-export const renderId = import.meta.env.VITE_RENDER_ID || 'my-app'
+export const renderId1 = import.meta.env.VITE_RENDER_ID_1 || 'my-app'
 export const renderId2 = import.meta.env.VITE_RENDER_ID_2 || 'my-app'
 export const renderId3 = import.meta.env.VITE_RENDER_ID_3 || 'my-app'
+export const renderId4 = import.meta.env.VITE_RENDER_ID_4 || 'my-app'
+
 export const apiUrl = window?.wpApiSettings?.root || '/wp-json'
 export const ajaxUrl = window?.appData?.ajaxUrl || '/wp-admin/admin-ajax.php'
 export const siteUrl = window?.appData?.siteUrl || '/'

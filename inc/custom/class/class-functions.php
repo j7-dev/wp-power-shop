@@ -100,7 +100,7 @@ class Functions
 	 */
 	public static function render_metabox($post, $metabox): void
 	{
-		echo "<div id='{$metabox['args']['id']}_app'></div>";
+		echo "<div id='{$metabox['args']['id']}'></div>";
 	}
 
 	/**

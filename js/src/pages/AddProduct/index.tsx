@@ -105,7 +105,7 @@ const AddProduct = () => {
   }, [productsResult?.isLoading])
 
   return (
-    <div className="">
+    <div className="p-4">
       {mutation?.isLoading && <LoadingWrap />}
       <Form className="pt-4" layout="vertical" form={form}>
         <Alert

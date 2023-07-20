@@ -29,7 +29,7 @@ class ShortCode
 		$html = '';
 		ob_start();
 ?>
-		<div id="fast_shop_products_app"></div>
+		<div id="<?= $_ENV['VITE_RENDER_ID_3'] ?>"></div>
 <?php
 		$html .= ob_get_clean();
 

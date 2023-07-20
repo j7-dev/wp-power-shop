@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import App2 from './App2'
 import App3 from './App3'
+import App4 from './App4'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { renderId, renderId2, renderId3 } from './utils'
-
+import { renderId1, renderId2, renderId3, renderId4 } from './utils'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
     },
   },
 })
-const id1 = document.getElementById(renderId)
+const id1 = document.getElementById(renderId1)
 
 if (!!id1) {
   ReactDOM.createRoot(id1).render(
@@ -48,6 +48,19 @@ if (!!id3) {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <App3 />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </React.StrictMode>,
+  )
+}
+
+const id4 = document.getElementById(renderId4)
+
+if (!!id4) {
+  ReactDOM.createRoot(id4).render(
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <App4 />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </React.StrictMode>,

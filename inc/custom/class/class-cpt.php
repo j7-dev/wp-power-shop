@@ -61,11 +61,11 @@ class CPT extends Functions
 	public function add_metaboxs(): void
 	{
 		self::add_metabox([
-			'id'       => 'added_products',
+			'id'       => $_ENV['VITE_RENDER_ID_1'],
 			'label' 	=> __('Added Products', Bootstrap::TEXT_DOMAIN),
 		]);
 		self::add_metabox([
-			'id'       => 'sales_stats',
+			'id'       => $_ENV['VITE_RENDER_ID_2'],
 			'label' 	=> __('Sales Stats', Bootstrap::TEXT_DOMAIN),
 		]);
 	}
@@ -94,7 +94,7 @@ class CPT extends Functions
 
 
 		// Check the user's permissions.
-		if ('fast-shop' !== $_POST['post_type']) return $post_id;
+		if (Bootstrap::TEXT_DOMAIN !== $_POST['post_type']) return $post_id;
 		if (!\current_user_can('edit_post', $post_id)) return $post_id;
 
 		/* OK, it's safe for us to save the data now. */
