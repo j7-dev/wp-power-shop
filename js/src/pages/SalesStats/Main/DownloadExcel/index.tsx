@@ -20,7 +20,6 @@ const DownloadExcel: React.FC<{
       is_download: 1,
     }))
   }
-  console.log('⭐  Filter  filter', filter)
 
   return (
     <>

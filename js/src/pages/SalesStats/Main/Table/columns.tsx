@@ -2,7 +2,7 @@ import type { ColumnsType } from 'antd/es/table'
 import { TOrder, TOrderItem } from '@/pages/SalesStats/types'
 import { siteUrl, getOrderStatus } from '@/utils'
 import { LinkOutlined } from '@ant-design/icons'
-import { Tag, Tooltip } from 'antd'
+import { Tag } from 'antd'
 
 export const columns: ColumnsType<TOrder> = [
   {

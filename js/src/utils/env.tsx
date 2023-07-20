@@ -11,5 +11,6 @@ export const checkoutUrl = window?.appData?.checkoutUrl || '/checkout'
 export const ajaxNonce = window?.appData?.ajaxNonce || ''
 export const currentUserId = window?.appData?.userId || '0'
 export const postId = window?.appData?.postId || '0'
+export const permalink = window?.appData?.permalink || '/'
 
 export const apiTimeout = import.meta.env.VITE_API_TIMEOUT || '30000'

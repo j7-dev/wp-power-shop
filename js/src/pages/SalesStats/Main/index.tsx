@@ -10,6 +10,7 @@ import {
   filterAtom,
 } from '@/pages/SalesStats/atom'
 import { useSetAtom, useAtomValue } from 'jotai'
+import ReportPassword from './ReportPassword'
 
 // import DownloadExcel from './DownloadExcel'
 
@@ -24,8 +25,10 @@ const Main = () => {
     post_id: postId,
   })
   const isLoading = mutation?.isLoading ?? false
-  const isError = mutation?.isError ?? false
-  const isSuccess = mutation?.isSuccess ?? false
+
+  // const isError = mutation?.isError ?? false
+  // const isSuccess = mutation?.isSuccess ?? false
+
   const setOrderData = useSetAtom(orderDataAtom)
 
   useEffect(() => {
@@ -44,6 +47,7 @@ const Main = () => {
         isError={isError}
         isSuccess={isSuccess}
       /> */}
+      <ReportPassword />
       <Table isLoading={isLoading} />
     </div>
   )

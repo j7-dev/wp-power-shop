@@ -19,6 +19,8 @@ class CPT extends Functions
 
 		\add_filter('query_vars', [$this, 'add_query_for_report']);
 		\add_filter('template_include', [$this, 'load_report_template'], 99);
+
+		\add_action('wp_insert_post', [$this, 'set_default_power_shop_meta'], 10, 3);
 	}
 
 	public function add_query_for_report($vars)
@@ -120,5 +122,22 @@ class CPT extends Functions
 			}
 		}
 		return $template;
+	}
+
+	/**
+	 * 設定預設的 report 密碼
+	 */
+	function set_default_power_shop_meta($post_id, $post, $update)
+	{
+		// Get the post object
+		$post = \get_post($post_id);
+
+
+		// Check if the post type is "fast-shop"
+		if (!$update && $post->post_type === Bootstrap::TEXT_DOMAIN) {
+			// Add default post_meta
+			$default_password = \wp_create_nonce(Bootstrap::DB_DOMAIN);
+			\add_post_meta($post_id, Bootstrap::DB_DOMAIN . '_report_password', $default_password, true);
+		}
 	}
 }
