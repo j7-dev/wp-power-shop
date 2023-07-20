@@ -51,10 +51,12 @@ class Ajax
 		\check_ajax_referer(Bootstrap::TEXT_DOMAIN, 'nonce');
 		$post_id = \sanitize_text_field($_POST['post_id'] ?? '');
 		$meta_key = \sanitize_text_field($_POST['meta_key'] ?? '');
+		$meta_value = \sanitize_text_field($_POST['meta_value'] ?? '');
+
 
 		if (!isset($post_id) || !isset($meta_key)) return;
 		$post_id = $post_id;
-		$update_result = \update_post_meta($post_id, $meta_key, true);
+		$update_result = \update_post_meta($post_id, $meta_key, $meta_value);
 
 		$return = array(
 			'message'  => 'success',

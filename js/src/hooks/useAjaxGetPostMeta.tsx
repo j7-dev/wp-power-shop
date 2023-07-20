@@ -5,23 +5,21 @@ import { ajaxNonce } from '@/utils'
 type TProps = {
   post_id: string
   meta_key: string
-  method?: 'get' | 'update'
   formatter?: (_meta: string) => string
 }
 
-export function useAjaxPostMeta<T>(props: TProps) {
+export function useAjaxGetPostMeta<T>(props: TProps) {
   const [
     meta,
     setMeta,
   ] = useState<T | undefined>(undefined)
   const mutation = useAjax()
   const { mutate } = mutation
-  const method = props.method || 'get'
 
   useEffect(() => {
     mutate(
       {
-        action: `handle_${method}_post_meta`,
+        action: 'handle_get_post_meta',
         nonce: ajaxNonce,
         post_id: props.post_id,
         meta_key: props.meta_key,
