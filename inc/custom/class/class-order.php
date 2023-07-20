@@ -30,15 +30,19 @@ class Order
 		// Security check
 		\check_ajax_referer(Bootstrap::TEXT_DOMAIN, 'nonce');
 
-		if (!isset($_POST['post_id'])) return;
-		$post_id = $_POST['post_id'];
-		$paged = isset($_POST['paged']) ? $_POST['paged'] : 1;
-		$limit = isset($_POST['limit']) ? $_POST['limit'] : 10;
-		$status_stringfy = isset($_POST['status']) ? $_POST['status'] : '[]';
+		$post_id = \sanitize_text_field($_POST['post_id'] ?? 0);
+
+		if (!empty($post_id)) return;
+		$paged = \sanitize_text_field($_POST['paged'] ?? 1);
+		$limit = \sanitize_text_field($_POST['limit'] ?? 10);
+		$status_stringfy = \sanitize_text_field($_POST['status'] ?? '[]');
+
 		$status = Functions::json_parse($status_stringfy, []);
-		$email = isset($_POST['email']) ? $_POST['email'] : '';
-		$date_created = isset($_POST['date_created']) ? $_POST['date_created'] : '';
-		$is_download = isset($_POST['is_download']) ? $_POST['is_download'] : 0;
+		$email = \sanitize_text_field($_POST['email'] ?? '');
+
+		$date_created = \sanitize_text_field($_POST['date_created'] ?? '');
+
+		$is_download = \sanitize_text_field($_POST['is_download'] ?? 0);
 
 		$args = [
 			'type' => 'shop_order', // 'shop_order' | 'shop_order_refund'

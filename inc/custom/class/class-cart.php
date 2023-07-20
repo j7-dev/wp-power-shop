@@ -50,12 +50,12 @@ class Cart
 		\check_ajax_referer(Bootstrap::TEXT_DOMAIN, 'nonce');
 
 		// global $woocommerce;
-		$post_id = isset($_POST['post_id']) ? $_POST['post_id'] : 0;
+		$post_id = \sanitize_text_field($_POST['post_id'] ?? 0);
 		if (empty($post_id)) return;
-		$product_id = $_POST['id'];
-		$quantity = $_POST['quantity'];
-		$variation_id = empty($_POST['variation_id']) ? 0 : $_POST['variation_id'];
-		$variation_stringfy = $_POST['variation'] ?? '[]';
+		$product_id = \sanitize_text_field($_POST['id'] ?? 0);
+		$quantity = \sanitize_text_field($_POST['quantity'] ?? 1);
+		$variation_id = \sanitize_text_field($_POST['variation_id'] ?? 0);
+		$variation_stringfy = \sanitize_text_field($_POST['variation'] ?? '[]');
 		$fast_shop_meta_string = \get_post_meta($post_id, Bootstrap::META_KEY, true) ?? '[]';
 
 		try {
@@ -133,9 +133,7 @@ class Cart
 		// Security check
 		\check_ajax_referer(Bootstrap::TEXT_DOMAIN, 'nonce');
 
-
-		$cart_item_key = $_POST['cart_item_key'] ?? '';
-
+		$cart_item_key = \sanitize_text_field($_POST['cart_item_key'] ?? '');
 
 		\WC()->cart->remove_cart_item($cart_item_key);
 

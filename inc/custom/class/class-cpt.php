@@ -93,10 +93,10 @@ class CPT extends Functions
 		 */
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return $post_id;
 
-
+		$post_type = \sanitize_text_field($_POST['post_type'] ?? '');
 
 		// Check the user's permissions.
-		if (Bootstrap::TEXT_DOMAIN !== $_POST['post_type']) return $post_id;
+		if (Bootstrap::TEXT_DOMAIN !== $post_type) return $post_id;
 		if (!\current_user_can('edit_post', $post_id)) return $post_id;
 
 		/* OK, it's safe for us to save the data now. */
