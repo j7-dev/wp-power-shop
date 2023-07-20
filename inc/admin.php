@@ -68,12 +68,16 @@ class Bootstrap
 		$checkout_page_url = function_exists('wc_get_cart_url') ?
 			\wc_get_checkout_url() : $woocommerce->cart->get_checkout_url();
 
+		$post_id = \get_the_ID();
+		$permalink = \get_permalink($post_id);
+
 		\wp_localize_script(self::TEXT_DOMAIN, 'appData', array(
 			'siteUrl' => \site_url(),
 			'ajaxUrl' => \admin_url('admin-ajax.php'),
 			'ajaxNonce'  => \wp_create_nonce(self::TEXT_DOMAIN),
 			'userId' => \wp_get_current_user()->data->ID,
-			'postId' => \get_the_ID(),
+			'postId' => $post_id,
+			'permalink' => $permalink,
 			'checkoutUrl' => $checkout_page_url,
 		));
 
