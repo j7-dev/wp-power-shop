@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { createContext } from 'react'
 import { postId } from '@/utils'
-import { useMany, useAjaxGetPostMeta } from '@/hooks'
+import { useMany, useAjaxPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcStoreApi'
 import Item from './Item'
@@ -19,7 +19,7 @@ export const ProductsContext = createContext({
 })
 
 const FastShopProducts = () => {
-  const mutation = useAjaxGetPostMeta<TFSMeta[]>({
+  const mutation = useAjaxPostMeta<TFSMeta[]>({
     post_id: postId,
     meta_key: 'fast_shop_meta',
     formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),

@@ -1,16 +1,28 @@
 import React from 'react'
 import { Modal, Input, Alert } from 'antd'
 import { KeyOutlined, LinkOutlined } from '@ant-design/icons'
-import { useModal } from '@/hooks'
-import { permalink } from '@/utils'
+import { useModal, useAjaxPostMeta } from '@/hooks'
+import { permalink, postId } from '@/utils'
 
 const ReportPassword = () => {
-  const { showModal, modalProps: deaultModalProps } = useModal()
+  const { showModal, modalProps: deaultModalProps, setIsModalOpen } = useModal()
+
+  const handleUpdate = () => {
+    setIsModalOpen(false)
+  }
+
   const modalProps = {
     ...deaultModalProps,
     title: '設定頁面報告密碼',
     centered: true,
+    onOk: handleUpdate,
   }
+
+  const mutation = useAjaxPostMeta<string>({
+    post_id: postId,
+    meta_key: 'fast_shop_report_password',
+  })
+  const reportPassword = mutation?.meta ?? ''
 
   return (
     <>
@@ -36,7 +48,7 @@ const ReportPassword = () => {
             <LinkOutlined className="ml-1" />
           </a>
         </div>
-        <Input />
+        <Input defaultValue={reportPassword} />
       </Modal>
     </>
   )

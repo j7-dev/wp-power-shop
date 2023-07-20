@@ -5,7 +5,7 @@ import AddedItem from './AddedItem'
 import { addedProductsAtom, FSMetaAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
 import { postId } from '@/utils'
-import { useMany, useAjaxGetPostMeta } from '@/hooks'
+import { useMany, useAjaxPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { sortBy } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
@@ -18,7 +18,7 @@ const saveBtn = document.getElementById('publish') as HTMLInputElement | null
 const AddProduct = () => {
   const setFSMeta = useSetAtom(FSMetaAtom)
 
-  const mutation = useAjaxGetPostMeta<TFSMeta[]>({
+  const mutation = useAjaxPostMeta<TFSMeta[]>({
     post_id: postId,
     meta_key: 'fast_shop_meta',
     formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
