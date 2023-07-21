@@ -5,6 +5,9 @@ release_zip='fast-shop-release.zip'
 folder_array=("inc" "js/dist")
 file_array=("plugin.php" "README.md" "LICENSE")
 
+# remove old release
+rm -rf ../$release_zip
+
 # 使用for循环遍历数组并执行指令
 for folder in "${folder_array[@]}"; do
 	rm -rf ../$release_folder/$folder
@@ -19,7 +22,6 @@ done
 
 
 # create zip
-cd ../$release_folder
-tar -czf ../$release_zip .
+# zip -r ../$release_zip ../$release_folder
 
 echo '✅ Release created'

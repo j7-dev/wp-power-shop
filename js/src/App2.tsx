@@ -5,7 +5,7 @@ import { StyleProvider } from '@ant-design/cssinjs'
 function App2() {
   return (
     <StyleProvider hashPriority="high">
-      <SalesStats />
+      <SalesStats isAdmin={true} />
     </StyleProvider>
   )
 }
