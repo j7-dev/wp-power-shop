@@ -1,13 +1,13 @@
 {
   "name": "boilerplate-react-spa.wordpress-plugin",
   "private": true,
-  "version": "1.0.25",
+  "version": "1.0.26",
   "type": "module",
   "scripts": {
     "init": "npm install && composer install --no-interaction",
     "dev": "vite",
     "prebuild": "echo 'todo: remove console'",
-    "build": "vite build",
+    "build": "vite build && sh release.sh",
     "preview": "vite preview",
     "format": "prettier-eslint --write \"js/src/**/*.tsx\"",
     "lint": "eslint . --ext .ts,.tsx",
