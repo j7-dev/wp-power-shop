@@ -15,12 +15,20 @@ use Kucrut\Vite;
 
 class Bootstrap
 {
-
-	const TEXT_DOMAIN = 'fast-shop';
-	const DB_DOMAIN = 'fast_shop';
-	const LABEL = 'Fast Shop';
 	const PLUGIN_DIR = __DIR__ . '/../';
-	const META_KEY = 'fast_shop_meta';
+
+	function __construct()
+	{
+		$_ENV['APP_NAME'];
+		$_ENV['KEBAB'] = str_replace(' ', '-', strtolower($_ENV['APP_NAME']));
+		$_ENV['SNAKE'] = str_replace(' ', '_', strtolower($_ENV['APP_NAME']));
+
+		new CPT();
+		new ShortCode();
+		new Cart();
+		new Order();
+		new Ajax();
+	}
 
 	public function init(): void
 	{
@@ -46,19 +54,19 @@ class Bootstrap
 		if (\is_admin()) {
 			// 後台網頁 screen id 必須符合才引入
 			$screen = \get_current_screen();
-			if (($screen->id !== 'fast-shop')) return;
+			if (($screen->id !== $_ENV['KEBAB'])) return;
 		} else {
-			// 前台網頁必須包含 fast-shop 字串 才引用
-			if (strpos($_SERVER['REQUEST_URI'], 'fast-shop') === false) return;
+			// 前台網頁必須包含 {$_ENV['KEBAB']} 字串 才引用
+			if (strpos($_SERVER['REQUEST_URI'], $_ENV['KEBAB']) === false) return;
 		}
 
 
-		// if (!\is_admin() && ($screen->id !== 'fast-shop')) return;
+		// if (!\is_admin() && ($screen->id !== $_ENV['SNAKE'])) return;
 		Vite\enqueue_asset(
 			dirname(__DIR__) . '/js/dist',
 			'js/src/main.tsx',
 			[
-				'handle' => self::TEXT_DOMAIN,
+				'handle' => $_ENV['KEBAB'],
 				'in-footer' => true,
 			]
 		);
@@ -71,17 +79,17 @@ class Bootstrap
 		$post_id = \get_the_ID();
 		$permalink = \get_permalink($post_id);
 
-		\wp_localize_script(self::TEXT_DOMAIN, 'appData', array(
+		\wp_localize_script($_ENV['KEBAB'], 'appData', array(
 			'siteUrl' => \site_url(),
 			'ajaxUrl' => \admin_url('admin-ajax.php'),
-			'ajaxNonce'  => \wp_create_nonce(self::TEXT_DOMAIN),
+			'ajaxNonce'  => \wp_create_nonce($_ENV['KEBAB']),
 			'userId' => \wp_get_current_user()->data->ID,
 			'postId' => $post_id,
 			'permalink' => $permalink,
 			'checkoutUrl' => $checkout_page_url,
 		));
 
-		\wp_localize_script(self::TEXT_DOMAIN, 'wpApiSettings', array(
+		\wp_localize_script($_ENV['KEBAB'], 'wpApiSettings', array(
 			'root' => \esc_url_raw(rest_url()),
 			'nonce' => \wp_create_nonce('wp_rest'),
 		));
@@ -89,12 +97,3 @@ class Bootstrap
 }
 
 require_once __DIR__ . '/custom/includes.php';
-
-
-
-
-new CPT();
-new ShortCode();
-new Cart();
-new Order();
-new Ajax();

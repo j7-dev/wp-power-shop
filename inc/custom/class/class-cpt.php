@@ -6,7 +6,7 @@ namespace J7\ViteReactWPPlugin\FastShop\Admin;
 
 use J7\ViteReactWPPlugin\FastShop\Admin\Bootstrap;
 
-class CPT extends Functions
+class CPT extends Bootstrap
 {
 	const VAR = 'ps_report';
 
@@ -31,10 +31,10 @@ class CPT extends Functions
 
 	public function init(): void
 	{
-		self::register_cpt(Bootstrap::LABEL);
+		Functions::register_cpt($_ENV['APP_NAME']);
 
-		// 新增 fast-shop/{slug}/report 網址規則
-		\add_rewrite_rule('^' . Bootstrap::TEXT_DOMAIN . '/([^/]+)/report/?$', 'index.php?post_type=fast-shop&name=$matches[1]&' . self::VAR . '=1', 'top');
+		// 新增 {$_ENV['KEBAB']}/{slug}/report 網址規則
+		\add_rewrite_rule('^' . $_ENV['KEBAB'] . '/([^/]+)/report/?$', 'index.php?post_type=' . $_ENV['KEBAB'] . '&name=$matches[1]&' . self::VAR . '=1', 'top');
 
 		\flush_rewrite_rules();
 	}
@@ -62,13 +62,13 @@ class CPT extends Functions
 	 */
 	public function add_metaboxs(): void
 	{
-		self::add_metabox([
+		Functions::add_metabox([
 			'id'       => $_ENV['VITE_RENDER_ID_1'],
-			'label' 	=> __('Added Products', Bootstrap::TEXT_DOMAIN),
+			'label' 	=> __('Added Products', $_ENV['KEBAB']),
 		]);
-		self::add_metabox([
+		Functions::add_metabox([
 			'id'       => $_ENV['VITE_RENDER_ID_2'],
-			'label' 	=> __('Sales Stats', Bootstrap::TEXT_DOMAIN),
+			'label' 	=> __('Sales Stats', $_ENV['KEBAB']),
 		]);
 	}
 
@@ -96,21 +96,21 @@ class CPT extends Functions
 		$post_type = \sanitize_text_field($_POST['post_type'] ?? '');
 
 		// Check the user's permissions.
-		if (Bootstrap::TEXT_DOMAIN !== $post_type) return $post_id;
+		if ($_ENV['KEBAB'] !== $post_type) return $post_id;
 		if (!\current_user_can('edit_post', $post_id)) return $post_id;
 
 		/* OK, it's safe for us to save the data now. */
 
 		// Sanitize the user input.
-		$meta_data = \sanitize_text_field($_POST[Bootstrap::DB_DOMAIN . '_meta']);
+		$meta_data = \sanitize_text_field($_POST[$_ENV['SNAKE'] . '_meta']);
 
 
 		// Update the meta field.
-		\update_post_meta($post_id, Bootstrap::DB_DOMAIN . '_meta', $meta_data);
+		\update_post_meta($post_id, $_ENV['SNAKE'] . '_meta', $meta_data);
 	}
 
 	/**
-	 * 設定 fast-shop/{slug}/report 的 php template
+	 * 設定 {$_ENV['KEBAB']}/{slug}/report 的 php template
 	 */
 	public function load_report_template($template)
 	{
@@ -133,12 +133,12 @@ class CPT extends Functions
 		$post = \get_post($post_id);
 
 
-		// Check if the post type is "fast-shop"
-		if (!$update && $post->post_type === Bootstrap::TEXT_DOMAIN) {
+		// Check if the post type is $_ENV['KEBAB']
+		if (!$update && $post->post_type === $_ENV['KEBAB']) {
 			// Add default post_meta
-			$default_password = \wp_create_nonce(Bootstrap::DB_DOMAIN);
+			$default_password = \wp_create_nonce($_ENV['KEBAB']);
 			$encrypted_password = base64_encode($default_password);
-			\add_post_meta($post_id, Bootstrap::DB_DOMAIN . '_report_password', $encrypted_password, true);
+			\add_post_meta($post_id, $_ENV['SNAKE'] . '_report_password', $encrypted_password, true);
 		}
 	}
 }

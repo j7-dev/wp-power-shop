@@ -10,7 +10,7 @@ class ShortCode
 {
 	function __construct()
 	{
-		\add_shortcode(Bootstrap::DB_DOMAIN . '_products', [$this, 'shortcode_callback']);
+		\add_shortcode($_ENV['SNAKE'] . '_products', [$this, 'shortcode_callback']);
 	}
 
 	public function shortcode_callback()

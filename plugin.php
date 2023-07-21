@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Plugin Name: Fast Shop 快速商店
- * Description: 快速商店是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
+ * Plugin Name: Power Shop | 讓你的商店充滿 Power
+ * Description: Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
  * Author: j7.dev
  * Author URI: https://github.com/j7-dev
  * License: GPLv2

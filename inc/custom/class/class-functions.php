@@ -12,41 +12,40 @@ class Functions
 	public static function register_cpt($label): void
 	{
 		$labels = [
-			'name'                     => \esc_html__($label, Bootstrap::TEXT_DOMAIN),
-			'singular_name'            => \esc_html__($label, Bootstrap::TEXT_DOMAIN),
-			'add_new'                  => \esc_html__('Add new', Bootstrap::TEXT_DOMAIN),
-			'add_new_item'             => \esc_html__('Add new item', Bootstrap::TEXT_DOMAIN),
-			'edit_item'                => \esc_html__('Edit', Bootstrap::TEXT_DOMAIN),
-			'new_item'                 => \esc_html__('New', Bootstrap::TEXT_DOMAIN),
-			'view_item'                => \esc_html__('View', Bootstrap::TEXT_DOMAIN),
-			'view_items'               => \esc_html__('View', Bootstrap::TEXT_DOMAIN),
-			'search_items'             => \esc_html__('Search ' . $label, Bootstrap::TEXT_DOMAIN),
-			'not_found'                => \esc_html__('Not Found', Bootstrap::TEXT_DOMAIN),
-			'not_found_in_trash'       => \esc_html__('Not found in trash', Bootstrap::TEXT_DOMAIN),
-			'parent_item_colon'        => \esc_html__('Parent item', Bootstrap::TEXT_DOMAIN),
-			'all_items'                => \esc_html__('All', Bootstrap::TEXT_DOMAIN),
-			'archives'                 => \esc_html__($label . ' archives', Bootstrap::TEXT_DOMAIN),
-			'attributes'               => \esc_html__($label . ' attributes', Bootstrap::TEXT_DOMAIN),
-			'insert_into_item'         => \esc_html__('Insert to this ' . $label, Bootstrap::TEXT_DOMAIN),
-			'uploaded_to_this_item'    => \esc_html__('Uploaded to this ' . $label, Bootstrap::TEXT_DOMAIN),
-			'featured_image'           => \esc_html__('Featured image', Bootstrap::TEXT_DOMAIN),
-			'set_featured_image'       => \esc_html__('Set featured image', Bootstrap::TEXT_DOMAIN),
-			'remove_featured_image'    => \esc_html__('Remove featured image', Bootstrap::TEXT_DOMAIN),
-			'use_featured_image'       => \esc_html__('Use featured image', Bootstrap::TEXT_DOMAIN),
-			'menu_name'                => \esc_html__($label, Bootstrap::TEXT_DOMAIN),
-			'filter_items_list'        => \esc_html__('Filter ' . $label . ' list', Bootstrap::TEXT_DOMAIN),
-			'filter_by_date'           => \esc_html__('Filter by date', Bootstrap::TEXT_DOMAIN),
-			'items_list_navigation'    => \esc_html__($label . ' list navigation', Bootstrap::TEXT_DOMAIN),
-			'items_list'               => \esc_html__($label . ' list', Bootstrap::TEXT_DOMAIN),
-			'item_published'           => \esc_html__($label . ' published', Bootstrap::TEXT_DOMAIN),
-			'item_published_privately' => \esc_html__($label . ' published privately', Bootstrap::TEXT_DOMAIN),
-			'item_reverted_to_draft'   => \esc_html__($label . ' reverted to draft', Bootstrap::TEXT_DOMAIN),
-			'item_scheduled'           => \esc_html__($label . ' scheduled', Bootstrap::TEXT_DOMAIN),
-			'item_updated'             => \esc_html__($label . ' updated', Bootstrap::TEXT_DOMAIN),
-			'text_domain'              => \esc_html__(Bootstrap::TEXT_DOMAIN, Bootstrap::TEXT_DOMAIN),
+			'name'                     => \esc_html__($label, $_ENV['KEBAB']),
+			'singular_name'            => \esc_html__($label, $_ENV['KEBAB']),
+			'add_new'                  => \esc_html__('Add new', $_ENV['KEBAB']),
+			'add_new_item'             => \esc_html__('Add new item', $_ENV['KEBAB']),
+			'edit_item'                => \esc_html__('Edit', $_ENV['KEBAB']),
+			'new_item'                 => \esc_html__('New', $_ENV['KEBAB']),
+			'view_item'                => \esc_html__('View', $_ENV['KEBAB']),
+			'view_items'               => \esc_html__('View', $_ENV['KEBAB']),
+			'search_items'             => \esc_html__('Search ' . $label, $_ENV['KEBAB']),
+			'not_found'                => \esc_html__('Not Found', $_ENV['KEBAB']),
+			'not_found_in_trash'       => \esc_html__('Not found in trash', $_ENV['KEBAB']),
+			'parent_item_colon'        => \esc_html__('Parent item', $_ENV['KEBAB']),
+			'all_items'                => \esc_html__('All', $_ENV['KEBAB']),
+			'archives'                 => \esc_html__($label . ' archives', $_ENV['KEBAB']),
+			'attributes'               => \esc_html__($label . ' attributes', $_ENV['KEBAB']),
+			'insert_into_item'         => \esc_html__('Insert to this ' . $label, $_ENV['KEBAB']),
+			'uploaded_to_this_item'    => \esc_html__('Uploaded to this ' . $label, $_ENV['KEBAB']),
+			'featured_image'           => \esc_html__('Featured image', $_ENV['KEBAB']),
+			'set_featured_image'       => \esc_html__('Set featured image', $_ENV['KEBAB']),
+			'remove_featured_image'    => \esc_html__('Remove featured image', $_ENV['KEBAB']),
+			'use_featured_image'       => \esc_html__('Use featured image', $_ENV['KEBAB']),
+			'menu_name'                => \esc_html__($label, $_ENV['KEBAB']),
+			'filter_items_list'        => \esc_html__('Filter ' . $label . ' list', $_ENV['KEBAB']),
+			'filter_by_date'           => \esc_html__('Filter by date', $_ENV['KEBAB']),
+			'items_list_navigation'    => \esc_html__($label . ' list navigation', $_ENV['KEBAB']),
+			'items_list'               => \esc_html__($label . ' list', $_ENV['KEBAB']),
+			'item_published'           => \esc_html__($label . ' published', $_ENV['KEBAB']),
+			'item_published_privately' => \esc_html__($label . ' published privately', $_ENV['KEBAB']),
+			'item_reverted_to_draft'   => \esc_html__($label . ' reverted to draft', $_ENV['KEBAB']),
+			'item_scheduled'           => \esc_html__($label . ' scheduled', $_ENV['KEBAB']),
+			'item_updated'             => \esc_html__($label . ' updated', $_ENV['KEBAB']),
 		];
 		$args = [
-			'label'               => \esc_html__($label, Bootstrap::TEXT_DOMAIN),
+			'label'               => \esc_html__($label, $_ENV['KEBAB']),
 			'labels'              => $labels,
 			'description'         => '',
 			'public'              => true,
@@ -74,21 +73,21 @@ class Functions
 			],
 		];
 
-		\register_meta('post', Bootstrap::DB_DOMAIN . '_meta', [
+		\register_meta('post', $_ENV['SNAKE'] . '_meta', [
 			'type' => 'string',
 			'show_in_rest' => true,
 			'single' => true,
 		]);
 
-		\register_post_type(Bootstrap::TEXT_DOMAIN, $args);
+		\register_post_type($_ENV['KEBAB'], $args);
 	}
 	public static function add_metabox(array $args): void
 	{
 		\add_meta_box(
 			$args['id'],
-			__($args['label'], Bootstrap::TEXT_DOMAIN),
+			__($args['label'], $_ENV['KEBAB']),
 			array(__CLASS__, 'render_metabox'),
-			Bootstrap::TEXT_DOMAIN,
+			$_ENV['KEBAB'],
 			'advanced',
 			'default',
 			array('id' => $args['id'])

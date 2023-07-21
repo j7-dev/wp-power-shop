@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace J7\ViteReactWPPlugin\FastShop\Admin;
 
 use J7\ViteReactWPPlugin\FastShop\Admin\Bootstrap;
-use J7\ViteReactWPPlugin\FastShop\Admin\Function;
+use J7\ViteReactWPPlugin\FastShop\Admin\Functions;
 
 
 class Order
@@ -29,7 +29,7 @@ class Order
 	{
 
 		// Security check
-		\check_ajax_referer(Bootstrap::TEXT_DOMAIN, 'nonce');
+		\check_ajax_referer($_ENV['KEBAB'], 'nonce');
 
 
 
@@ -53,7 +53,7 @@ class Order
 			'type' => 'shop_order', // 'shop_order' | 'shop_order_refund'
 			'limit' => $limit,
 			'paged' => $paged,
-			'meta_key' => 'fast_shop_post_id',
+			'meta_key' => $_ENV['SNAKE'] . '_post_id',
 			'meta_value' => $post_id,
 			'status' => $status,
 			'paginate' => true,
