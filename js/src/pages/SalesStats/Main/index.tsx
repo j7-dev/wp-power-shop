@@ -8,6 +8,7 @@ import {
   orderDataAtom,
   paginationAtom,
   filterAtom,
+  isAdminAtom,
 } from '@/pages/SalesStats/atom'
 import { useSetAtom, useAtomValue } from 'jotai'
 import ReportPassword from './ReportPassword'
@@ -19,11 +20,13 @@ import Filter from './Filter'
 const Main = () => {
   const pagination = useAtomValue(paginationAtom)
   const filter = useAtomValue(filterAtom)
+  const isAdmin = useAtomValue(isAdminAtom)
   const mutation = useAjaxGetOrders<TOrderData>({
     ...pagination,
     ...filter,
     post_id: postId,
   })
+
   const isLoading = mutation?.isLoading ?? false
 
   // const isError = mutation?.isError ?? false
@@ -47,7 +50,7 @@ const Main = () => {
         isError={isError}
         isSuccess={isSuccess}
       /> */}
-      <ReportPassword />
+      {isAdmin && <ReportPassword />}
       <Table isLoading={isLoading} />
     </div>
   )

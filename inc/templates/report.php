@@ -8,7 +8,7 @@
 	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
+<body <?php body_class(); ?> style="background-color:#fff;">
 
 	<div id="<?= $_ENV['VITE_RENDER_ID_4'] ?>"></div>
 

@@ -11,3 +11,4 @@ import {
 export const orderDataAtom = atom<TOrderData>(defaultOrderData)
 export const paginationAtom = atom<TPagination>(defaultPagination)
 export const filterAtom = atom<TFilter>(defaultFilter)
+export const isAdminAtom = atom<boolean>(false)

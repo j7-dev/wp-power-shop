@@ -1,10 +1,10 @@
-import type { ColumnsType } from 'antd/es/table'
+import type { ColumnType } from 'antd/es/table'
 import { TOrder, TOrderItem } from '@/pages/SalesStats/types'
 import { siteUrl, getOrderStatus } from '@/utils'
 import { LinkOutlined } from '@ant-design/icons'
 import { Tag } from 'antd'
 
-export const columns: ColumnsType<TOrder> = [
+export const columns: ColumnType<TOrder>[] = [
   {
     title: <p className="m-0 text-center">訂單編號</p>,
     dataIndex: 'order_id',

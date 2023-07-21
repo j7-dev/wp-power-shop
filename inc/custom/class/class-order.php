@@ -27,12 +27,15 @@ class Order
 
 	public function handle_get_orders_callback()
 	{
+
 		// Security check
 		\check_ajax_referer(Bootstrap::TEXT_DOMAIN, 'nonce');
 
+
+
 		$post_id = \sanitize_text_field($_POST['post_id'] ?? 0);
 
-		if (!empty($post_id)) return;
+		if (empty($post_id)) return;
 		$paged = \sanitize_text_field($_POST['paged'] ?? 1);
 		$limit = \sanitize_text_field($_POST['limit'] ?? 10);
 		$status_stringfy = \sanitize_text_field($_POST['status'] ?? '[]');
@@ -43,6 +46,8 @@ class Order
 		$date_created = \sanitize_text_field($_POST['date_created'] ?? '');
 
 		$is_download = \sanitize_text_field($_POST['is_download'] ?? 0);
+
+
 
 		$args = [
 			'type' => 'shop_order', // 'shop_order' | 'shop_order_refund'
@@ -68,6 +73,8 @@ class Order
 		if (empty($date_created)) {
 			unset($args['date_created']);
 		}
+
+
 
 		function format_orders($order)
 		{
@@ -132,6 +139,9 @@ class Order
 					'date_created' => date("Y-m-d", strtotime('-' . $date_no . ' day')) . '...' . date("Y-m-d"),
 				];
 			}
+
+
+
 
 			$the_orders = \wc_get_orders($sum_args);
 

@@ -1,11 +1,11 @@
 import '@/assets/scss/index.scss'
-import SalesStats from './pages/SalesStats'
+import Report from './pages/Report'
 import { StyleProvider } from '@ant-design/cssinjs'
 
 function App4() {
   return (
     <StyleProvider hashPriority="high">
-      <SalesStats />
+      <Report />
     </StyleProvider>
   )
 }

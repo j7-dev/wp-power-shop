@@ -34,7 +34,7 @@ class CPT extends Functions
 		self::register_cpt(Bootstrap::LABEL);
 
 		// 新增 fast-shop/{slug}/report 網址規則
-		\add_rewrite_rule('^' . Bootstrap::TEXT_DOMAIN . '/([^/]+)/report/?$', 'index.php?slug=$matches[1]&' . self::VAR . '=1', 'top');
+		\add_rewrite_rule('^' . Bootstrap::TEXT_DOMAIN . '/([^/]+)/report/?$', 'index.php?post_type=fast-shop&name=$matches[1]&' . self::VAR . '=1', 'top');
 
 		\flush_rewrite_rules();
 	}

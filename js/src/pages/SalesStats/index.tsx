@@ -1,7 +1,7 @@
 import React from 'react'
 import Main from './Main'
 
-const index = () => {
+const SalesStats = () => {
   return (
     <div className="p-4">
       <Main />
@@ -9,4 +9,4 @@ const index = () => {
   )
 }
 
-export default index
+export default SalesStats

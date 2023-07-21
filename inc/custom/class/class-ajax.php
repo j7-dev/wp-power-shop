@@ -29,7 +29,7 @@ class Ajax
 		$post_id = \sanitize_text_field($_POST['post_id'] ?? '');
 		$meta_key = \sanitize_text_field($_POST['meta_key'] ?? '');
 
-		if (!isset($post_id)) return;
+		if (empty($post_id)) return;
 		$post_id = $post_id;
 		$post_meta = empty($meta_key) ? \get_post_meta($post_id) : \get_post_meta($post_id, $meta_key, true);
 
@@ -54,7 +54,7 @@ class Ajax
 		$meta_value = \sanitize_text_field($_POST['meta_value'] ?? '');
 
 
-		if (!isset($post_id) || !isset($meta_key)) return;
+		if (empty($post_id) || empty($meta_key)) return;
 		$post_id = $post_id;
 		$update_result = \update_post_meta($post_id, $meta_key, $meta_value);
 

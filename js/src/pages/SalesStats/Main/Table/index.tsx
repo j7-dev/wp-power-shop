@@ -1,11 +1,19 @@
 import React from 'react'
 import { Table, Pagination, PaginationProps } from 'antd'
-import { orderDataAtom, paginationAtom } from '@/pages/SalesStats/atom'
+import {
+  orderDataAtom,
+  paginationAtom,
+  isAdminAtom,
+} from '@/pages/SalesStats/atom'
 import { useAtomValue, useAtom } from 'jotai'
-import { columns } from './columns'
+import { columns as defaultColumns } from './columns'
 
 const TableComponent: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
   const orderData = useAtomValue(orderDataAtom)
+  const isAdmin = useAtomValue(isAdminAtom)
+  const columns = isAdmin
+    ? defaultColumns
+    : defaultColumns.filter((column) => column.dataIndex !== 'customer')
   const [
     pagination,
     setPagination,

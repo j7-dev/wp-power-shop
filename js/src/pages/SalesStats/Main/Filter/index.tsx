@@ -1,6 +1,6 @@
 import { DatePicker, Select, Input, Button, Row, Col, Tag, Form } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
-import { orderDataAtom, filterAtom } from '@/pages/SalesStats/atom'
+import { orderDataAtom, filterAtom, isAdminAtom } from '@/pages/SalesStats/atom'
 import { useAtomValue, useAtom } from 'jotai'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
 import { getOrderStatus } from '@/utils'
@@ -10,6 +10,7 @@ const { RangePicker } = DatePicker
 const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
   const [form] = Form.useForm()
   const orderData = useAtomValue(orderDataAtom)
+  const isAdmin = useAtomValue(isAdminAtom)
   const [
     filter,
     setFilter,
@@ -83,17 +84,20 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
             />
           </Form.Item>
         </Col>
-        <Form.Item name={['email']} noStyle initialValue={filter.email}>
-          <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
-            <p className="my-0">搜尋特定顧客 ID 或 E-mail</p>
-            <Input
-              placeholder="搜尋顧客ID 或 E-mail"
-              disabled={isLoading}
-              allowClear
-              className="py-[1px]"
-            />
-          </Col>
-        </Form.Item>
+        {isAdmin && (
+          <Form.Item name={['email']} noStyle initialValue={filter.email}>
+            <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
+              <p className="my-0">搜尋特定顧客 ID 或 E-mail</p>
+              <Input
+                placeholder="搜尋顧客ID 或 E-mail"
+                disabled={isLoading}
+                allowClear
+                className="py-[1px]"
+              />
+            </Col>
+          </Form.Item>
+        )}
+
         <Form.Item name={['is_download']} hidden initialValue={0} />
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
           <p className="my-0">&nbsp;</p>
