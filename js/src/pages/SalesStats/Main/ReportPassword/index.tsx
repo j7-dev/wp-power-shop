@@ -1,47 +1,48 @@
-import { useState, useEffect } from 'react'
-import { Modal, Input, Alert, notification } from 'antd'
+import { useEffect } from 'react'
+import { Modal, Input, Alert, notification, Form } from 'antd'
 import { KeyOutlined, LinkOutlined } from '@ant-design/icons'
 import { useModal, useAjaxGetPostMeta, useAjax } from '@/hooks'
 import { permalink, postId, ajaxNonce } from '@/utils'
 
 const ReportPassword = () => {
+  const [form] = Form.useForm()
   const [
     api,
     contextHolder,
   ] = notification.useNotification()
-  const [
-    reportPassword,
-    setReportPassword,
-  ] = useState('')
+
   const { showModal, modalProps: deaultModalProps, setIsModalOpen } = useModal()
 
   const updateMutation = useAjax()
   const { mutate: updatePostMeta, isLoading: updateIsLoading } = updateMutation
 
   const handleUpdate = () => {
-    setIsModalOpen(false)
-    updatePostMeta(
-      {
-        action: 'handle_update_post_meta',
-        nonce: ajaxNonce,
-        post_id: postId,
-        meta_key: 'fast_shop_report_password',
-        meta_value: reportPassword,
-      },
-      {
-        onSuccess: () => {
-          api.success({
-            message: '頁面報告密碼更新成功',
-          })
+    form.validateFields().then((values) => {
+      const { password } = values
+      updatePostMeta(
+        {
+          action: 'handle_update_post_meta',
+          nonce: ajaxNonce,
+          post_id: postId,
+          meta_key: 'fast_shop_report_password',
+          meta_value: password,
         },
-        onError: (error) => {
-          console.log(error)
-          api.error({
-            message: '頁面報告密碼更新失敗，請再試一次',
-          })
+        {
+          onSuccess: () => {
+            api.success({
+              message: '頁面報告密碼更新成功',
+            })
+            setIsModalOpen(false)
+          },
+          onError: (error) => {
+            console.log(error)
+            api.error({
+              message: '頁面報告密碼更新失敗，請再試一次',
+            })
+          },
         },
-      },
-    )
+      )
+    })
   }
 
   const modalProps = {
@@ -62,12 +63,12 @@ const ReportPassword = () => {
 
   useEffect(() => {
     if (fetchedReportPassword) {
-      setReportPassword(fetchedReportPassword)
+      form.setFieldValue(['password'], fetchedReportPassword)
     }
   }, [fetchedReportPassword])
 
   return (
-    <>
+    <Form form={form}>
       {contextHolder}
       <div
         className="flex items-center my-2  cursor-pointer"
@@ -77,7 +78,6 @@ const ReportPassword = () => {
         設定頁面報告密碼
       </div>
       <Modal {...modalProps}>
-        <div></div>
         <Alert
           message="Power Shop 提供一個頁面報告，使用者可以直接輸入網址與密碼後，直接看到頁面報告"
           type="info"
@@ -91,14 +91,15 @@ const ReportPassword = () => {
             <LinkOutlined className="ml-1" />
           </a>
         </div>
-        <Input
-          value={reportPassword}
-          onChange={(e) => {
-            setReportPassword(e.target.value)
-          }}
-        />
+        <Form.Item
+          name={['password']}
+          rules={[{ required: true, message: '密碼不能為空' }]}
+          hasFeedback={true}
+        >
+          <Input placeholder="請輸入密碼" />
+        </Form.Item>
       </Modal>
-    </>
+    </Form>
   )
 }
 
