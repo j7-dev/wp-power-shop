@@ -114,7 +114,7 @@ class CPT extends Functions
 	 */
 	public function load_report_template($template)
 	{
-		$repor_template_path = Bootstrap::PLUGIN_DIR . 'inc\templates\report.php';
+		$repor_template_path = Bootstrap::PLUGIN_DIR . 'inc/templates/report.php';
 
 		if (\get_query_var(self::VAR)) {
 			if (file_exists($repor_template_path)) {
