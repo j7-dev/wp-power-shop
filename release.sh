@@ -3,7 +3,7 @@
 release_folder='fast-shop-release'
 release_zip='fast-shop-release.zip'
 folder_array=("inc" "js/dist")
-file_array=("plugin.php" "README.md" "LICENSE")
+file_array=("plugin.php" "README.md" "LICENSE" ".env.production")
 
 # remove old release
 rm -rf ../$release_zip
