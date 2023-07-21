@@ -137,7 +137,8 @@ class CPT extends Functions
 		if (!$update && $post->post_type === Bootstrap::TEXT_DOMAIN) {
 			// Add default post_meta
 			$default_password = \wp_create_nonce(Bootstrap::DB_DOMAIN);
-			\add_post_meta($post_id, Bootstrap::DB_DOMAIN . '_report_password', $default_password, true);
+			$encrypted_password = base64_encode($default_password);
+			\add_post_meta($post_id, Bootstrap::DB_DOMAIN . '_report_password', $encrypted_password, true);
 		}
 	}
 }

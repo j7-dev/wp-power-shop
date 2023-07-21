@@ -11,7 +11,8 @@ const Report = () => {
     post_id: postId,
     meta_key: 'fast_shop_report_password',
   })
-  const reportPassword = mutation?.meta ?? ''
+  const fetchedPassword = mutation?.meta ?? ''
+  const decryptedReportPassword = atob(fetchedPassword)
 
   const [
     showReport,
@@ -20,7 +21,7 @@ const Report = () => {
   const handleSubmit = () => {
     form.validateFields().then((values) => {
       const { password } = values
-      setShowReport(password === reportPassword)
+      setShowReport(password === decryptedReportPassword)
     })
   }
 
@@ -38,7 +39,10 @@ const Report = () => {
           name={['password']}
           rules={[
             { required: true, message: '請輸入密碼' },
-            { pattern: new RegExp(reportPassword), message: '密碼錯誤' },
+            {
+              pattern: new RegExp(decryptedReportPassword),
+              message: '密碼錯誤',
+            },
           ]}
           className="mb-8"
           hasFeedback={true}

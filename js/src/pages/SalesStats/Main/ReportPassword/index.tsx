@@ -19,13 +19,14 @@ const ReportPassword = () => {
   const handleUpdate = () => {
     form.validateFields().then((values) => {
       const { password } = values
+      const encryptedPassword = btoa(password)
       updatePostMeta(
         {
           action: 'handle_update_post_meta',
           nonce: ajaxNonce,
           post_id: postId,
           meta_key: 'fast_shop_report_password',
-          meta_value: password,
+          meta_value: encryptedPassword,
         },
         {
           onSuccess: () => {
@@ -62,8 +63,9 @@ const ReportPassword = () => {
   const fetchedReportPassword = mutation?.meta ?? ''
 
   useEffect(() => {
-    if (fetchedReportPassword) {
-      form.setFieldValue(['password'], fetchedReportPassword)
+    const decryptedReportPassword = atob(fetchedReportPassword)
+    if (decryptedReportPassword) {
+      form.setFieldValue(['password'], decryptedReportPassword)
     }
   }, [fetchedReportPassword])
 
