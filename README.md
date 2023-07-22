@@ -8,7 +8,7 @@
 
 ## 🎮 範例網站
 
-[測試商店](https://fs.yc-tech.co/power-shop/test/)
+[測試商店](https://fs.yc-tech.co/power-shop/j7/)
 
 管理員帳密請私訊作者索取
 
@@ -44,15 +44,13 @@
 
 ## 🗺️ 開發 RoadMap
 
-<div style="padding-left:1rem">
+🔲 Excel 訂單下載
 
-<input type="checkbox"> Excel 訂單下載
+🔲 Coupon 支援
 
-<input type="checkbox"> Coupon 支援
+🔲 多語系
 
-<input type="checkbox"> 多語系
-
-</div>
+🔲 商品可以拖曳順序
 
 <br><br><br>
 

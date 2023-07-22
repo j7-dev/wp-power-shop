@@ -4,8 +4,9 @@ require_once WP_CORE_PATH;
 require_once WC_CORE_PATH;
 
 define('ORDER_QTY', 30);
-define('SHOP_POST_ID', '4462');
-define('CUSTOMER_ID', 2);
+define('SHOP_POST_ID', '4929');
+define('CUSTOMER_ID', 1);
+
 
 
 

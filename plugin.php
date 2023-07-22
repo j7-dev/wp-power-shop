@@ -6,7 +6,7 @@
  * Author: j7.dev
  * Author URI: https://github.com/j7-dev
  * License: GPLv2
- * Version: 1.1.1
+ * Version: 1.1.2
  */
 
 namespace J7\ViteReactWPPlugin\PowerShop;
@@ -17,7 +17,7 @@ require_once __DIR__ . '/inc/admin.php';
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createImmutable(__DIR__, '.env.production');
-$dotenv->load();
+$dotenv->safeLoad();
 
 $instance = new Admin\Bootstrap();
 $instance->init();
