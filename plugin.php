@@ -6,7 +6,16 @@
  * Author: j7.dev
  * Author URI: https://github.com/j7-dev
  * License: GPLv2
- * Version: 1.1.5
+ * Version: 1.1.6
+ * Requires PHP: 8.1
+ */
+
+
+/**
+ * Tags: woocommerce, shop, order
+ * Requires at least: 4.6
+ * Tested up to: 4.8
+ * Stable tag: 4.3
  */
 
 namespace J7\ViteReactWPPlugin\PowerShop;
