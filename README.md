@@ -70,9 +70,11 @@
 #### 後端
 
 1. [usefulteam/jwt-auth](https://github.com/usefulteam/jwt-auth) - get JWT if a wordpress user is logged in
+2. [lodash-php/lodash-php](https://github.com/lodash-php/lodash-php) - easy to use utility functions for PHP
+3. [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) - loads environment variables from `.env`
 
 <br><br><br>
 
 ## ⬆️ 安裝方式
 
-上傳 zip，待補
+請至 release 下載安裝檔案，之後如同一般 WordPress 套件安裝即可

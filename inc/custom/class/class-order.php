@@ -23,6 +23,9 @@ class Order
 			\add_action('wp_ajax_' . $action, [$this,  $action . '_callback']);
 			\add_action('wp_ajax_nopriv_' . $action, [$this, $action . '_callback']);
 		}
+
+		\add_filter('manage_edit-shop_order_columns', [$this, 'custom_shop_order_column'], 20);
+		\add_action('manage_shop_order_posts_custom_column', [$this, 'custom_orders_list_column_content'], 20, 2);
 	}
 
 	public function handle_get_orders_callback()
@@ -225,5 +228,41 @@ class Order
 		\wp_send_json($return);
 
 		\wp_die();
+	}
+
+	public function custom_shop_order_column($columns)
+	{
+		$reordered_columns = [];
+
+		// Inserting columns to a specific location
+		foreach ($columns as $key => $column) {
+			$reordered_columns[$key] = $column;
+			if ($key ==  'order_number') {
+				// Inserting after "Status" column
+				$reordered_columns[$_ENV['SNAKE'] . '_post_id'] = \__('Linked Power Shop', $_ENV['KEBAB']);
+			}
+		}
+		return $reordered_columns;
+	}
+
+	public function custom_orders_list_column_content($column, $post_id)
+	{
+		switch ($column) {
+			case $_ENV['SNAKE'] . '_post_id':
+				$shop_id = \get_post_meta($post_id, $_ENV['SNAKE'] . '_post_id', true);
+				if (!empty($shop_id)) {
+					$title = \get_the_title($shop_id);
+					$url = \add_query_arg(
+						[
+							'post' => $shop_id,
+							'action' => 'edit',
+						],
+						\admin_url('post.php')
+					);
+					echo '<a href="' . $url . '" target="_blank">' . $title . '</a>';
+				}
+
+				break;
+		}
 	}
 }

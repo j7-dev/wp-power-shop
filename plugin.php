@@ -6,7 +6,7 @@
  * Author: j7.dev
  * Author URI: https://github.com/j7-dev
  * License: GPLv2
- * Version: 1.1.4
+ * Version: 1.1.5
  */
 
 namespace J7\ViteReactWPPlugin\PowerShop;
