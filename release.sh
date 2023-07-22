@@ -1,7 +1,7 @@
 #!/bin/bash
 
-release_folder='fast-shop-release'
-release_zip='fast-shop-release.zip'
+release_folder='power-shop-release'
+release_zip='power-shop-release.zip'
 folder_array=("inc" "js/dist")
 file_array=("plugin.php" "README.md" "LICENSE" ".env.production")
 

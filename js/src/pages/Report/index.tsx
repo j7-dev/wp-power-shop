@@ -2,14 +2,14 @@ import { useState } from 'react'
 import { Input, Button, Form } from 'antd'
 import { KeyOutlined } from '@ant-design/icons'
 import { useAjaxGetPostMeta } from '@/hooks'
-import { postId } from '@/utils'
+import { postId, snake } from '@/utils'
 import SalesStats from '@/pages/SalesStats'
 
 const Report = () => {
   const [form] = Form.useForm()
   const mutation = useAjaxGetPostMeta<string>({
     post_id: postId,
-    meta_key: 'fast_shop_report_password',
+    meta_key: `${snake}_report_password`,
   })
   const fetchedPassword = mutation?.meta ?? ''
   const decryptedReportPassword = atob(fetchedPassword)

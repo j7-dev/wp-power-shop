@@ -1,5 +1,15 @@
 <?php
 
+require_once __DIR__ . '../../vendor/autoload.php';
+
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable(__DIR__, '.env.production');
+$dotenv->load();
+
+$_ENV['KEBAB'] = str_replace(' ', '-', strtolower($_ENV['APP_NAME']));
+$_ENV['SNAKE'] = str_replace(' ', '_', strtolower($_ENV['APP_NAME']));
+
 define('WP_CORE_PATH', 'C:\Users\user\Local Sites\wpdev\app\public\wp-load.php');
 define('WC_CORE_PATH', 'C:\Users\user\Local Sites\wpdev\app\public\wp-content\plugins\woocommerce\woocommerce.php');
 

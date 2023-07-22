@@ -7,8 +7,8 @@ import { ProductsContext } from '../..'
 const Variable: React.FC<{
   product: TProduct
 }> = ({ product }) => {
-  const { fast_shop_meta, showFSModal } = useContext(ProductsContext)
-  const FSMeta = fast_shop_meta.find((m) => m.productId === product.id)
+  const { shop_meta, showFSModal } = useContext(ProductsContext)
+  const FSMeta = shop_meta.find((m) => m.productId === product.id)
 
   const name = product?.name ?? '未知商品'
   const imageSrc = getProductImageSrc(product)

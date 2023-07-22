@@ -29,7 +29,7 @@
   },
   "extra": {
     "mozart": {
-      "dep_namespace": "J7\\FastShop\\",
+      "dep_namespace": "J7\\PowerShop\\",
       "dep_directory": "/vendor",
       "classmap_directory": "/inc/",
       "classmap_prefix": "J7_",

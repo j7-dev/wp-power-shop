@@ -1,5 +1,5 @@
 {
-  "name": "boilerplate-react-spa.wordpress-plugin",
+  "name": "@J7/PowerShop.wp-plugin",
   "private": true,
   "version": "1.0.27",
   "type": "module",

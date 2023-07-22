@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace J7\ViteReactWPPlugin\FastShop\Admin;
+namespace J7\ViteReactWPPlugin\PowerShop\Admin;
 
 use Kucrut\Vite;
 
@@ -61,7 +61,7 @@ class Bootstrap
 		}
 
 
-		// if (!\is_admin() && ($screen->id !== $_ENV['SNAKE'])) return;
+		// if (!\is_admin() && ($screen->id !== $_ENV['KEBAB'])) return;
 		Vite\enqueue_asset(
 			dirname(__DIR__) . '/js/dist',
 			'js/src/main.tsx',

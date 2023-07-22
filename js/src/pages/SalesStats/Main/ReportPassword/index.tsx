@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Modal, Input, Alert, notification, Form } from 'antd'
 import { KeyOutlined, LinkOutlined } from '@ant-design/icons'
 import { useModal, useAjaxGetPostMeta, useAjax } from '@/hooks'
-import { permalink, postId, ajaxNonce } from '@/utils'
+import { permalink, postId, ajaxNonce, snake } from '@/utils'
 
 const ReportPassword = () => {
   const [form] = Form.useForm()
@@ -25,7 +25,7 @@ const ReportPassword = () => {
           action: 'handle_update_post_meta',
           nonce: ajaxNonce,
           post_id: postId,
-          meta_key: 'fast_shop_report_password',
+          meta_key: `${snake}_report_password`,
           meta_value: encryptedPassword,
         },
         {
@@ -58,7 +58,7 @@ const ReportPassword = () => {
 
   const mutation = useAjaxGetPostMeta<string>({
     post_id: postId,
-    meta_key: 'fast_shop_report_password',
+    meta_key: `${snake}_report_password`,
   })
   const fetchedReportPassword = mutation?.meta ?? ''
 

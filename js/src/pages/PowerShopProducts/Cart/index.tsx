@@ -3,7 +3,7 @@ import { useOne, useAjax } from '@/hooks'
 import { useSetAtom } from 'jotai'
 import { storeApiNonceAtom } from '../atom'
 import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
-import { ProductsContext } from '@/pages/FastShopProducts'
+import { ProductsContext } from '@/pages/PowerShopProducts'
 import { TFSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
 import { Popconfirm, notification, Button, Empty, Spin } from 'antd'
@@ -16,7 +16,7 @@ import UpdateCartInputNumber from './UpdateCartInputNumber'
 
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
-  const { fast_shop_meta } = useContext(ProductsContext)
+  const { shop_meta } = useContext(ProductsContext)
 
   const { mutate, isLoading } = useAjax()
   const [
@@ -100,7 +100,7 @@ const Cart = () => {
             const metaPrice = getMetaPrice({
               productId: id,
               isVariable,
-              fast_shop_meta,
+              shop_meta,
             })
             const regularPrice = metaPrice?.regularPrice ?? 0
             const salesPrice = metaPrice?.salesPrice ?? 0
@@ -232,15 +232,15 @@ const Cart = () => {
 function getMetaPrice({
   productId,
   isVariable,
-  fast_shop_meta,
+  shop_meta,
 }: {
   productId: number
   isVariable: boolean
-  fast_shop_meta: TFSMeta[]
+  shop_meta: TFSMeta[]
 }) {
-  if (!isVariable) return fast_shop_meta.find((m) => m.productId === productId)
+  if (!isVariable) return shop_meta.find((m) => m.productId === productId)
 
-  const metaWithVariations = fast_shop_meta.filter(
+  const metaWithVariations = shop_meta.filter(
     (m) => (m?.variations || [])?.length > 0,
   )
   const allVariations = metaWithVariations.map((m) => m.variations).flat()

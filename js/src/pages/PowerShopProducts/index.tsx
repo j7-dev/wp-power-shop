@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { createContext } from 'react'
-import { postId } from '@/utils'
+import { postId, snake, kebab } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcStoreApi'
@@ -13,20 +13,20 @@ import { RedoOutlined } from '@ant-design/icons'
 
 export const ProductsContext = createContext({
   products: [] as TProduct[],
-  fast_shop_meta: [] as TFSMeta[],
+  shop_meta: [] as TFSMeta[],
   showFSModal:
     (_props: { product: TProduct; FSMeta: TFSMeta | undefined }) => () => {},
 })
 
-const FastShopProducts = () => {
+const PowerShopProducts = () => {
   const mutation = useAjaxGetPostMeta<TFSMeta[]>({
     post_id: postId,
-    meta_key: 'fast_shop_meta',
+    meta_key: `${snake}_meta`,
     formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
   })
-  const fast_shop_meta = mutation?.meta ?? []
+  const shop_meta = mutation?.meta ?? []
 
-  const product_ids = fast_shop_meta?.map((meta) => meta.productId) ?? []
+  const product_ids = shop_meta?.map((meta) => meta.productId) ?? []
 
   const productsResult = useMany({
     resource: 'products',
@@ -71,11 +71,11 @@ const FastShopProducts = () => {
   }
 
   return (
-    <div className="fast-shop-products">
+    <div className={`${kebab}-products`}>
       <ProductsContext.Provider
         value={{
           products,
-          fast_shop_meta,
+          shop_meta,
           showFSModal,
         }}
       >
@@ -104,4 +104,4 @@ const FastShopProducts = () => {
   )
 }
 
-export default FastShopProducts
+export default PowerShopProducts

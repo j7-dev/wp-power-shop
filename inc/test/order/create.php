@@ -4,7 +4,7 @@ require_once WP_CORE_PATH;
 require_once WC_CORE_PATH;
 
 define('ORDER_QTY', 30);
-define('FAST_SHOP_POST_ID', '4462');
+define('SHOP_POST_ID', '4462');
 define('CUSTOMER_ID', 2);
 
 
@@ -48,7 +48,7 @@ try {
 		$order->set_date_created(new WC_DateTime(getRandomTime()));
 
 		// 更新 meta
-		$order->update_meta_data('fast_shop_post_id', FAST_SHOP_POST_ID);
+		$order->update_meta_data($_ENV['SNAKE'] . '_post_id', SHOP_POST_ID);
 
 		// 保存訂單變更
 		$order->save();

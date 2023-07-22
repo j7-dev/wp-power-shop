@@ -4,7 +4,7 @@ import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom, FSMetaAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
-import { postId } from '@/utils'
+import { postId, snake } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { sortBy } from 'lodash-es'
@@ -20,23 +20,21 @@ const AddProduct = () => {
 
   const mutation = useAjaxGetPostMeta<TFSMeta[]>({
     post_id: postId,
-    meta_key: 'fast_shop_meta',
+    meta_key: `${snake}_meta`,
     formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
   })
-  const fast_shop_meta = mutation?.meta ?? []
+  const shop_meta = mutation?.meta ?? []
 
-  const fast_shop_meta_product_ids = fast_shop_meta.map(
-    (item) => item.productId,
-  )
+  const shop_meta_product_ids = shop_meta.map((item) => item.productId)
 
   const productsResult = useMany({
     resource: 'products',
     dataProvider: 'wc',
     args: {
-      include: fast_shop_meta_product_ids,
+      include: shop_meta_product_ids,
     },
     queryOptions: {
-      enabled: fast_shop_meta_product_ids.length > 0,
+      enabled: shop_meta_product_ids.length > 0,
     },
   })
 
@@ -100,7 +98,7 @@ const AddProduct = () => {
     if (!productsResult?.isLoading) {
       const products = productsResult?.data?.data || []
       setAddedProducts(products)
-      setFSMeta(fast_shop_meta)
+      setFSMeta(shop_meta)
     }
   }, [productsResult?.isLoading])
 
@@ -114,7 +112,7 @@ const AddProduct = () => {
             <div className="flex">
               要在頁面使用這些商品，請使用
               <Paragraph className="mx-4 my-0" copyable>
-                [fast_shop_products]
+                {`[${snake}_products]`}
               </Paragraph>{' '}
               這個 shortcode，在快速商店以外使用這個 shortcode 是沒有作用的
             </div>
@@ -133,7 +131,7 @@ const AddProduct = () => {
             ))}
 
         <Add />
-        <input ref={ref} type="hidden" name="fast_shop_meta" value="" />
+        <input ref={ref} type="hidden" name={`${snake}_meta`} value="" />
       </Form>
     </div>
   )

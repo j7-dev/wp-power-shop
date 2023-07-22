@@ -9,7 +9,7 @@ import PlusMinusInput from '@/components/PlusMinusInput'
 import AddToCartButton from '@/components/AddToCartButton'
 import { usePlusMinusInput } from '@/hooks'
 import { useAtomValue } from 'jotai'
-import { selectedVariationIdAtom } from '@/pages/FastShopProducts/Item/Variable/atoms'
+import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/Item/Variable/atoms'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
 
 const VariableModal: FC<{

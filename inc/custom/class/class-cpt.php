@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace J7\ViteReactWPPlugin\FastShop\Admin;
+namespace J7\ViteReactWPPlugin\PowerShop\Admin;
 
-use J7\ViteReactWPPlugin\FastShop\Admin\Bootstrap;
+use J7\ViteReactWPPlugin\PowerShop\Admin\Bootstrap;
 
 class CPT extends Bootstrap
 {

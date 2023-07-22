@@ -9,7 +9,7 @@
  * Version: 1.1.1
  */
 
-namespace J7\ViteReactWPPlugin\FastShop;
+namespace J7\ViteReactWPPlugin\PowerShop;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/inc/admin.php';

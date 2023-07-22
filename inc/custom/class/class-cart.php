@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace J7\ViteReactWPPlugin\FastShop\Admin;
+namespace J7\ViteReactWPPlugin\PowerShop\Admin;
 
-use J7\ViteReactWPPlugin\FastShop\Admin\Bootstrap;
+use J7\ViteReactWPPlugin\PowerShop\Admin\Bootstrap;
 use function _\find;
 
 class Cart
@@ -34,11 +34,11 @@ class Cart
 	{
 
 		foreach ($cart_object->get_cart_contents() as $key => $item) {
-			if (!empty($item['fs_sales_price'])) {
-				$item['data']->set_price($item['fs_sales_price']);
+			if (!empty($item[$_ENV['SNAKE'] . '_sales_price'])) {
+				$item['data']->set_price($item[$_ENV['SNAKE'] . '_sales_price']);
 			}
-			if (!empty($item['fs_regular_price'])  && empty($item['fs_sales_price'])) {
-				$item['data']->set_price($item['fs_regular_price']);
+			if (!empty($item[$_ENV['SNAKE'] . '_regular_price'])  && empty($item[$_ENV['SNAKE'] . '_sales_price'])) {
+				$item['data']->set_price($item[$_ENV['SNAKE'] . '_regular_price']);
 			}
 		}
 	}
@@ -56,7 +56,7 @@ class Cart
 		$quantity = \sanitize_text_field($_POST['quantity'] ?? 1);
 		$variation_id = \sanitize_text_field($_POST['variation_id'] ?? 0);
 		$variation_stringfy = \sanitize_text_field($_POST['variation'] ?? '[]');
-		$fast_shop_meta_string = \get_post_meta($post_id, $_ENV['SNAKE'] . '_meta', true) ?? '[]';
+		$shop_meta_string = \get_post_meta($post_id, $_ENV['SNAKE'] . '_meta', true) ?? '[]';
 
 		try {
 			$variation_obj_arr = json_decode(str_replace('\\', '', $variation_stringfy));
@@ -65,13 +65,13 @@ class Cart
 				$variation[$variation_obj->name] = $variation_obj->value;
 			}
 
-			$fast_shop_meta = (json_decode($fast_shop_meta_string, true));
+			$shop_meta = (json_decode($shop_meta_string, true));
 		} catch (\Throwable $th) {
 			$variation = [];
-			$fast_shop_meta = [];
+			$shop_meta = [];
 		}
 
-		$the_product_meta = find($fast_shop_meta, ['productId' => $product_id]) ?? [];
+		$the_product_meta = find($shop_meta, ['productId' => $product_id]) ?? [];
 
 		/**
 		 * @throws Exception Plugins can throw an exception to prevent adding to cart.
@@ -88,8 +88,8 @@ class Cart
 		if (empty($variation_id)) {
 			// 加入購物車 簡單商品
 			\WC()->cart->add_to_cart($product_id, $quantity, 0, [], [
-				'fs_regular_price' => $the_product_meta['regularPrice'],
-				'fs_sales_price' => $the_product_meta['salesPrice'],
+				$_ENV['SNAKE'] . '_regular_price' => $the_product_meta['regularPrice'],
+				$_ENV['SNAKE'] . '_sales_price' => $the_product_meta['salesPrice'],
 				$_ENV['SNAKE'] . '_post_id' => $post_id,
 			]);
 		} else {
@@ -97,8 +97,8 @@ class Cart
 			$the_variations_meta = $the_product_meta['variations'] ?? [];
 			$the_variation_meta = find($the_variations_meta, ['variationId' => $variation_id]) ?? [];
 			\WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation, [
-				'fs_regular_price' => $the_variation_meta['regularPrice'],
-				'fs_sales_price' => $the_variation_meta['salesPrice'],
+				$_ENV['SNAKE'] . '_regular_price' => $the_variation_meta['regularPrice'],
+				$_ENV['SNAKE'] . '_sales_price' => $the_variation_meta['salesPrice'],
 				$_ENV['SNAKE'] . '_post_id' => $post_id,
 			]);
 		}
@@ -115,7 +115,7 @@ class Cart
 				'variation' => $variation,
 				'variable' => $_POST,
 				'empty' => empty($variation_id),
-				'fast_shop_meta' => $fast_shop_meta,
+				'shop_meta' => $shop_meta,
 				'the_product_meta' => $the_product_meta,
 				'the_variation_meta' => $the_variation_meta,
 				'totals' => $totals,
