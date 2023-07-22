@@ -21,7 +21,7 @@ for file in "${file_array[@]}"; do
 done
 
 # rename folder
-mv ../$release_folder ../$release_folder-v$full_version
+# mv ../$release_folder ../$release_folder-v$full_version
 
 # create zip
 # zip -r ../$release_zip ../$release_folder
