@@ -23,7 +23,7 @@ const ToggleContent: React.FC<{ content: string }> = ({ content }) => {
       {isExpand && (
         <div className="text-center w-full py-4">
           <Button type="primary" className="px-12" onClick={handleCollapsed}>
-            縮闔全部
+            收合全部
           </Button>
         </div>
       )}

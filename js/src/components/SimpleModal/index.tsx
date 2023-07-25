@@ -68,7 +68,6 @@ const SimpleModal: FC<{
 					)} */}
           <div>{price}</div>
 
-          {/* TODO: 展開註解 */}
           <div className="my-4 h-[14rem] overflow-y-auto">
             <ToggleContent content={description} />
           </div>
