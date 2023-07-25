@@ -7,6 +7,7 @@ import Price from '@/components/Price'
 import Gallery from '@/components/Gallery'
 import PlusMinusInput from '@/components/PlusMinusInput'
 import AddToCartButton from '@/components/AddToCartButton'
+import ToggleContent from '@/components/ToggleContent'
 import { usePlusMinusInput } from '@/hooks'
 
 const SimpleModal: FC<{
@@ -22,7 +23,7 @@ const SimpleModal: FC<{
   }
   const productId = product?.id ?? 0
   const name = product?.name ?? '未知商品'
-  const description = renderHTML(product?.description ?? '')
+  const description = product?.description ?? ''
   const images = product?.images ?? []
   const price_html = renderHTML(product?.price_html ?? '')
 
@@ -68,7 +69,9 @@ const SimpleModal: FC<{
           <div>{price}</div>
 
           {/* TODO: 展開註解 */}
-          <div className="my-4 h-[14rem] overflow-y-auto">{description}</div>
+          <div className="my-4 h-[14rem] overflow-y-auto">
+            <ToggleContent content={description} />
+          </div>
 
           <p className="mb-0 mt-4">數量</p>
           <PlusMinusInput {...plusMinusInputProps} />
