@@ -1,7 +1,6 @@
 import { TProduct } from '@/types/wcRestApi'
 import { FormInstance } from 'antd'
 import { TFSMeta } from '@/types'
-import { sortBy } from 'lodash-es'
 
 export const formateMeta = (addedProducts: TProduct[]) => {
   const meta = addedProducts.map((product) => ({

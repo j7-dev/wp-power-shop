@@ -12,8 +12,6 @@ import { isEqual as _isEqual, sortBy } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 import SaveButton from './SaveButton'
 
-// FIXME: 順序好像會有問題
-
 const { Paragraph } = Typography
 const tinyMCESaveBtn = document.getElementById(
   'publish',

@@ -10,6 +10,7 @@ import Cart from './Cart'
 import { LoadingCard } from '@/components/PureComponents'
 import { Empty, Result, Button } from 'antd'
 import { RedoOutlined } from '@ant-design/icons'
+import { sortBy } from 'lodash-es'
 
 export const ProductsContext = createContext({
   products: [] as TProduct[],
@@ -39,7 +40,14 @@ const PowerShopProducts = () => {
     },
   })
 
-  const products = (productsResult?.data?.data ?? []) as TProduct[]
+  const rawProducts = (productsResult?.data?.data ?? []) as TProduct[]
+
+  //排序
+
+  const sortOrder = shop_meta.map((m) => m.productId)
+  const products = sortBy(rawProducts, (p) => {
+    return sortOrder.indexOf(p.id)
+  })
 
   const { renderCartModal, showFSModal } = useCartModal()
 
