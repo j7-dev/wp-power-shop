@@ -11,6 +11,7 @@ import { getVariationIdByAttributes } from '@/utils/wcStoreApi'
 import { sortBy } from 'lodash-es'
 import { nanoid } from 'nanoid'
 import { CloseCircleFilled, CheckCircleFilled } from '@ant-design/icons'
+import { Button } from 'antd'
 
 const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
   product,
@@ -64,7 +65,9 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
           <div key={nanoid()} className="mb-4">
             <p className="mb-0">{attribute?.name}</p>
             <div className="flex flex-wrap">
-              {terms.map((term) => (
+              {/* 舊的樣式
+
+							{terms.map((term) => (
                 <div
                   key={term?.slug}
                   className={`fs-product-attribute-option ${
@@ -74,6 +77,21 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
                 >
                   <div>{term?.name}</div>
                 </div>
+              ))} */}
+              {terms.map((term) => (
+                <>
+                  <Button
+                    key={term?.slug}
+                    type={`${
+                      selectedTerm?.value === term?.slug ? 'primary' : 'default'
+                    }`}
+                    onClick={handleClick(attribute, term)}
+                    size="small"
+                    className="mr-1 mb-1"
+                  >
+                    <span className="text-xs">{term?.name}</span>
+                  </Button>
+                </>
               ))}
             </div>
           </div>
