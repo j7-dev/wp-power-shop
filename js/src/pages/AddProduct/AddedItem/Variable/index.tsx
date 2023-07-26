@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   CloseCircleFilled,
   ArrowsAltOutlined,
@@ -19,7 +19,7 @@ const Variable: React.FC<{
   const [
     isExpended,
     setIsExpended,
-  ] = useState(false)
+  ] = useState(true)
   const [
     addedProducts,
     setAddedProducts,
@@ -32,8 +32,6 @@ const Variable: React.FC<{
   const imageSrc = getProductImageSrc(product)
   const categories = product?.categories ?? []
   const variations = product?.variations ?? []
-
-  const form = Form.useFormInstance()
 
   const productVariationsResult = useMany({
     resource: `products/${id}/variations`,
@@ -50,17 +48,6 @@ const Variable: React.FC<{
     const newAddedProducts = addedProducts.filter((item) => item.id !== id)
     setAddedProducts(newAddedProducts)
   }
-
-  useEffect(() => {
-    form.setFieldsValue({
-      [index]: {
-        productId: id,
-      },
-    })
-  }, [
-    id,
-    index,
-  ])
 
   return (
     <>
@@ -129,6 +116,7 @@ const Variable: React.FC<{
             key={variation?.id}
             variation={variation}
             parentIndex={index}
+            parentId={id}
             index={i}
             matchProduct={matchProduct}
           />

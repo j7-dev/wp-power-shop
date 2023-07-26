@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Form, Alert, Typography } from 'antd'
+import { Form, Alert, Typography, notification } from 'antd'
 import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom, FSMetaAtom } from './atoms'
@@ -112,10 +112,27 @@ const AddProduct = () => {
     }
   }, [productsResult?.isLoading])
 
+  const handleFormChange = () => {
+    notification.config({
+      maxCount: 1,
+    })
+    notification.warning({
+      key: 'saveNotification',
+      message: '偵測到變更，記得儲存！',
+      duration: null,
+      placement: 'bottomRight',
+    })
+  }
+
   return (
     <div className="p-4">
       {mutation?.isLoading && <LoadingWrap />}
-      <Form className="pt-4" layout="vertical" form={form}>
+      <Form
+        className="pt-4"
+        layout="vertical"
+        form={form}
+        onValuesChange={handleFormChange}
+      >
         <div className="text-right mb-4">
           <SaveButton />
         </div>

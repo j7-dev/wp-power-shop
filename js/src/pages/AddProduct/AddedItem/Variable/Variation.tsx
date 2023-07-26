@@ -8,9 +8,10 @@ import { TFSMeta } from '@/types'
 const Variation: React.FC<{
   variation: TProductVariation
   parentIndex: number
+  parentId: number
   index: number
   matchProduct: TFSMeta | undefined
-}> = ({ variation, parentIndex, index, matchProduct }) => {
+}> = ({ variation, parentIndex, parentId, index, matchProduct }) => {
   const id = variation?.id ?? 0
   const matchVariation = !!matchProduct
     ? (matchProduct?.variations ?? [])?.find((v) => v.variationId === id)
@@ -34,6 +35,7 @@ const Variation: React.FC<{
   useEffect(() => {
     form.setFieldsValue({
       [parentIndex]: {
+        productId: parentId,
         variations: {
           [index]: {
             variationId: id,
