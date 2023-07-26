@@ -43,7 +43,11 @@ const Variation: React.FC<{
         },
       },
     })
-  }, [id])
+  }, [
+    id,
+    parentIndex,
+    index,
+  ])
 
   return (
     <>

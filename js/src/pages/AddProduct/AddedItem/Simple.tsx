@@ -42,7 +42,10 @@ const Simple: React.FC<{
         salesPrice,
       },
     })
-  }, [id])
+  }, [
+    id,
+    index,
+  ])
 
   return (
     <>

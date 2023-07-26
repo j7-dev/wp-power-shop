@@ -20,7 +20,6 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
     selectedVariationId,
     setSelectedVariationId,
   ] = useAtom(selectedVariationIdAtom)
-  console.log('⭐  selectedVariationId', selectedVariationId)
 
   const attributes = product?.attributes ?? []
 

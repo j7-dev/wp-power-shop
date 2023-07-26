@@ -7,7 +7,8 @@ import { useAtom, useSetAtom } from 'jotai'
 import { postId, snake, formatShopMeta } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
-import { isEqual as _isEqual } from 'lodash-es'
+import { TProduct } from '@/types/wcRestApi'
+import { isEqual as _isEqual, sortBy } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 import SaveButton from './SaveButton'
 
@@ -57,7 +58,6 @@ const AddProduct = () => {
 
     const sortedAllFields = formatShopMeta({
       form,
-      addedProducts,
     })
     const input = ref.current
     if (!input) return null
@@ -82,7 +82,7 @@ const AddProduct = () => {
       newOption.selected = true
     }
 
-    // postForm.submit()
+    postForm.submit()
   }
 
   useEffect(() => {
@@ -98,8 +98,16 @@ const AddProduct = () => {
 
   useEffect(() => {
     if (!productsResult?.isLoading) {
-      const products = productsResult?.data?.data || []
-      setAddedProducts(products)
+      const products = (productsResult?.data?.data || []) as TProduct[]
+
+      // NOTE 排序
+
+      const sortOrder = shop_meta.map((m) => m.productId)
+      const sortedProducts = sortBy(products, (p) => {
+        return sortOrder.indexOf(p.id)
+      })
+
+      setAddedProducts(sortedProducts)
       setFSMeta(shop_meta)
     }
   }, [productsResult?.isLoading])
@@ -131,9 +139,9 @@ const AddProduct = () => {
               2,
               3,
             ].map((i) => <LoadingCard ratio="h-[8rem]" key={i} />)
-          : addedProducts.map((product, i) => (
-              <AddedItem key={product?.id} product={product} index={i} />
-            ))}
+          : addedProducts.map((product, i) => {
+              return <AddedItem key={product?.id} product={product} index={i} />
+            })}
 
         <Add />
         <input ref={ref} type="hidden" name={`${snake}_meta`} value="" />

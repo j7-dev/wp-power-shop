@@ -25,20 +25,9 @@ export const getProductTypeLabel = (type: string) => {
   }
 }
 
-export const formatShopMeta = ({
-  form,
-  addedProducts,
-}: {
-  form: FormInstance<any>
-  addedProducts: TProduct[]
-}) => {
+export const formatShopMeta = ({ form }: { form: FormInstance<any> }) => {
   const allFields_obj = form.getFieldsValue()
   const allFields = Object.values(allFields_obj) as TFSMeta[]
-  const sortOrder = addedProducts.map((product) => product.id)
-  const sortedAllFields = sortBy(allFields, (field) => {
-    return sortOrder.indexOf(field.productId)
-  })
-  console.log('⭐ allFields_obj', allFields_obj)
 
-  return sortedAllFields
+  return allFields
 }

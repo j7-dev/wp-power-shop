@@ -13,7 +13,7 @@ const renderItem = (product: TProduct) => {
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <img className="w-8 h-8 object-cover mr-4 rounded-md" src={imageSrc} />
-        {product?.name ?? '未知產品'}
+        {renderHTML(product?.name ?? '未知產品')}
       </div>
 
       <div>{renderHTML(product?.price_html)}</div>
@@ -52,6 +52,7 @@ const Add = () => {
 
   const handleChangeProductCat = (value: number) => {
     setSelectedCatId(value)
+    setSelectedProductId(undefined)
   }
 
   const productResult = useMany({
@@ -137,6 +138,7 @@ const Add = () => {
           allowClear
           size="large"
           showSearch
+          value={selectedProductId}
           placeholder="選擇產品"
           optionFilterProp="children"
           options={productItems}

@@ -57,7 +57,10 @@ const Variable: React.FC<{
         productId: id,
       },
     })
-  }, [id])
+  }, [
+    id,
+    index,
+  ])
 
   return (
     <>

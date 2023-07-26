@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Popover, Tooltip, Button, Form, notification } from 'antd'
 import { ExclamationCircleFilled, SaveFilled } from '@ant-design/icons'
-import { isEqual as _isEqual, sortBy } from 'lodash-es'
+import { isEqual as _isEqual } from 'lodash-es'
 import { useAtomValue } from 'jotai'
 import { addedProductsAtom, FSMetaAtom } from './atoms'
 import { TFSMeta } from '@/types'
 import { useUpdate } from '@/hooks'
-import { kebab, postId, snake } from '@/utils'
+import { kebab, postId, snake, formatShopMeta } from '@/utils'
 
 const SaveButton = () => {
   const form = Form.useFormInstance()
@@ -42,16 +42,11 @@ const SaveButton = () => {
   })
 
   const handleSave = () => {
-    const allFields_obj = form.getFieldsValue()
-    const allFields = Object.values(allFields_obj) as TFSMeta[]
-    const sortOrder = addedProducts.map((product) => product.id)
-    const sortedAllFields = sortBy(allFields, (field) => {
-      return sortOrder.indexOf(field.productId)
-    })
+    const allFields = formatShopMeta({ form })
 
     mutate({
       meta: {
-        [`${snake}_meta`]: JSON.stringify(sortedAllFields),
+        [`${snake}_meta`]: JSON.stringify(allFields),
       },
     })
   }
@@ -63,6 +58,7 @@ const SaveButton = () => {
     console.log('⭐  useEffect  checkIsEqual', checkIsEqual, {
       allFields,
       FSMeta,
+      addedProducts,
     })
     setIsEqual(checkIsEqual)
   }, [addedProducts.length])
