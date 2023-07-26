@@ -71,6 +71,7 @@ const Add = () => {
   const products = rawProducts.filter(
     (product) => product.type === 'simple' || product.type === 'variable',
   )
+  console.log('⭐  Add  products', products)
 
   const productItems = products.map((product) => {
     const disabled = addedProducts.some(
@@ -119,7 +120,7 @@ const Add = () => {
           optionFilterProp="children"
           optionLabelProp="label"
           filterOption={(input, option) =>
-            (option?.label ?? '').includes(input)
+            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
           }
           filterSort={(optionA, optionB) =>
             (optionA?.label ?? '')
@@ -141,6 +142,14 @@ const Add = () => {
           options={productItems}
           optionLabelProp="label"
           onChange={handleChangeProduct}
+          filterOption={(input, option) => {
+            const id = option?.value ?? 0
+            const theProduct = products.find((product) => product.id === id)
+
+            return (theProduct?.name ?? '')
+              .toLowerCase()
+              .includes(input.toLowerCase())
+          }}
         />
         <Button
           disabled={btnDisabled}
