@@ -82,7 +82,7 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
       {!selectedVariationId && (
         <p className="m-0 text-gray-500 text-xs">
           <CloseCircleFilled className="mr-2 text-red-500" />
-          請選擇商品屬性
+          未選擇商品屬性
         </p>
       )}
       {selectedVariationId && (
