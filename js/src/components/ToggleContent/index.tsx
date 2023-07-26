@@ -18,7 +18,7 @@ const ToggleContent: React.FC<{ content: string }> = ({ content }) => {
   }
 
   return (
-    <div className={`${isExpand ? '' : 'h-40 overflow-hidden'} relative`}>
+    <div className={`${isExpand ? '' : 'h-full overflow-hidden'} relative`}>
       {html}
       {isExpand && (
         <div className="text-center w-full py-4">
