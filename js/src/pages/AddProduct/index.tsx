@@ -7,13 +7,16 @@ import { useAtom, useSetAtom } from 'jotai'
 import { postId, snake } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
-import { sortBy } from 'lodash-es'
+import { sortBy, isEqual as _isEqual } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
+import SaveButton from './SaveButton'
 
 // FIXME: 順序好像會有問題
 
 const { Paragraph } = Typography
-const saveBtn = document.getElementById('publish') as HTMLInputElement | null
+const tinyMCESaveBtn = document.getElementById(
+  'publish',
+) as HTMLInputElement | null
 
 const AddProduct = () => {
   const setFSMeta = useSetAtom(FSMetaAtom)
@@ -46,7 +49,7 @@ const AddProduct = () => {
   const [form] = Form.useForm()
   const ref = useRef<HTMLInputElement>(null)
 
-  const handleSave = (e: Event) => {
+  const handleTinyMCESave = (e: Event) => {
     e.preventDefault()
     e.stopPropagation()
 
@@ -61,7 +64,7 @@ const AddProduct = () => {
     if (!input) return null
     input.value = JSON.stringify(sortedAllFields)
     postForm?.prepend(input)
-    if (!postForm || !saveBtn) return null
+    if (!postForm || !tinyMCESaveBtn) return null
 
     const hidden_post_status = document.getElementById(
       'hidden_post_status',
@@ -84,12 +87,12 @@ const AddProduct = () => {
   }
 
   useEffect(() => {
-    if (!!saveBtn) {
-      saveBtn.addEventListener('click', handleSave)
+    if (!!tinyMCESaveBtn) {
+      tinyMCESaveBtn.addEventListener('click', handleTinyMCESave)
     }
     return () => {
-      if (!!saveBtn) {
-        saveBtn.removeEventListener('click', handleSave)
+      if (!!tinyMCESaveBtn) {
+        tinyMCESaveBtn.removeEventListener('click', handleTinyMCESave)
       }
     }
   }, [])
@@ -106,6 +109,9 @@ const AddProduct = () => {
     <div className="p-4">
       {mutation?.isLoading && <LoadingWrap />}
       <Form className="pt-4" layout="vertical" form={form}>
+        <div className="text-right mb-4">
+          <SaveButton />
+        </div>
         <Alert
           className="mb-4"
           message={

@@ -79,6 +79,7 @@ const Simple: React.FC<{
                   'productId',
                 ]}
                 hidden
+                initialValue={id}
               >
                 <InputNumber className="w-full" />
               </Form.Item>
