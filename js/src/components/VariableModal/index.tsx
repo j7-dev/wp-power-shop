@@ -11,6 +11,7 @@ import { usePlusMinusInput } from '@/hooks'
 import { useAtomValue } from 'jotai'
 import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/Item/Variable/atoms'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
+import ToggleContent from '@/components/ToggleContent'
 
 const VariableModal: FC<{
   product: TProduct
@@ -39,7 +40,7 @@ const VariableModal: FC<{
     : null
 
   const name = renderHTML(product?.name ?? '未知商品')
-  const description = renderHTML(product?.description ?? '')
+  const description = product?.description ?? ''
   const images = product?.images ?? []
 
   const price_html = renderHTML(product?.price_html ?? '')
@@ -87,8 +88,9 @@ const VariableModal: FC<{
 					)} */}
           <div>{price}</div>
 
-          {/* TODO: 展開註解 */}
-          <div className="my-4">{description}</div>
+          <div className="my-4 h-[14rem] overflow-y-auto">
+            <ToggleContent content={description} />
+          </div>
           <ProductVariationsSelect product={product} />
 
           <p className="mb-0 mt-4">數量</p>
