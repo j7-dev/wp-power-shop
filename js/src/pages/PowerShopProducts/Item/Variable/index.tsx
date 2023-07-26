@@ -10,7 +10,7 @@ const Variable: React.FC<{
   const { shop_meta, showFSModal } = useContext(ProductsContext)
   const FSMeta = shop_meta.find((m) => m.productId === product.id)
 
-  const name = product?.name ?? '未知商品'
+  const name = renderHTML(product?.name ?? '未知商品')
   const imageSrc = getProductImageSrc(product)
   const price_html = renderHTML(product?.price_html ?? '')
 

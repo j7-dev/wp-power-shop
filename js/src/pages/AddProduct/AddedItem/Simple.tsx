@@ -1,7 +1,7 @@
 import { CloseCircleFilled } from '@ant-design/icons'
 import { Space, Tag, Form, InputNumber } from 'antd'
 import { TProduct } from '@/types/wcRestApi'
-import { getProductImageSrc, getProductTypeLabel } from '@/utils'
+import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
 import { addedProductsAtom, FSMetaAtom } from '../atoms'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { toNumber } from 'lodash-es'
@@ -15,7 +15,7 @@ const Simple: React.FC<{
   const FSMeta = useAtomValue(FSMetaAtom)
   const id = product?.id ?? 0
   const matchProduct = FSMeta.find((item) => item.productId === id)
-  const name = product?.name ?? '未知商品'
+  const name = renderHTML(product?.name ?? '未知商品')
   const imageSrc = getProductImageSrc(product)
   const salesPrice = !!matchProduct
     ? toNumber(matchProduct?.salesPrice)

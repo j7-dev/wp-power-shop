@@ -38,7 +38,7 @@ const VariableModal: FC<{
       )
     : null
 
-  const name = product?.name ?? '未知商品'
+  const name = renderHTML(product?.name ?? '未知商品')
   const description = renderHTML(product?.description ?? '')
   const images = product?.images ?? []
 

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { TProduct } from '@/types/wcStoreApi'
-import { getProductImageSrc } from '@/utils'
+import { getProductImageSrc, renderHTML } from '@/utils'
 import { Button } from 'antd'
 import { ProductsContext } from '../..'
 import Price from '@/components/Price'
@@ -10,7 +10,7 @@ const Simple: React.FC<{
 }> = ({ product }) => {
   const { shop_meta, showFSModal } = useContext(ProductsContext)
   const FSMeta = shop_meta.find((m) => m.productId === product.id)
-  const name = product?.name ?? '未知商品'
+  const name = renderHTML(product?.name ?? '未知商品')
   const imageSrc = getProductImageSrc(product)
 
   return (

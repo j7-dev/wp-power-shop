@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons'
 import { Space, Tag, Form, Input } from 'antd'
 import { TProduct, TProductVariation } from '@/types/wcRestApi'
-import { getProductImageSrc, getProductTypeLabel } from '@/utils'
+import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
 import { addedProductsAtom, FSMetaAtom } from '../../atoms'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { useMany } from '@/hooks'
@@ -24,7 +24,7 @@ const Variable: React.FC<{
   const FSMeta = useAtomValue(FSMetaAtom)
   const id = product?.id ?? 0
   const matchProduct = FSMeta.find((item) => item.productId === id)
-  const name = product?.name ?? '未知商品'
+  const name = renderHTML(product?.name ?? '未知商品')
   const type = product?.type ?? ''
   const imageSrc = getProductImageSrc(product)
   const categories = product?.categories ?? []

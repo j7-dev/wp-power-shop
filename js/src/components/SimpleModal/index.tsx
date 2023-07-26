@@ -22,7 +22,7 @@ const SimpleModal: FC<{
     footer: null,
   }
   const productId = product?.id ?? 0
-  const name = product?.name ?? '未知商品'
+  const name = renderHTML(product?.name ?? '未知商品')
   const description = product?.description ?? ''
   const images = product?.images ?? []
   const price_html = renderHTML(product?.price_html ?? '')
