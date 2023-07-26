@@ -35,6 +35,7 @@ const SaveButton = () => {
           message: '儲存成功',
         })
         setIsEqual(true)
+        notification.destroy('saveNotification')
       },
       onError: (error) => {
         console.log('Error', error)
@@ -76,6 +77,8 @@ const SaveButton = () => {
         duration: null,
         placement: 'bottomRight',
       })
+    } else {
+      notification.destroy('saveNotification')
     }
   }, [isEqual])
 
