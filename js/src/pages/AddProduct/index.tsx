@@ -4,10 +4,10 @@ import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom, FSMetaAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
-import { postId, snake } from '@/utils'
+import { postId, snake, formatShopMeta } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
-import { sortBy, isEqual as _isEqual } from 'lodash-es'
+import { isEqual as _isEqual } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 import SaveButton from './SaveButton'
 
@@ -54,11 +54,10 @@ const AddProduct = () => {
     e.stopPropagation()
 
     const postForm = document.getElementById('post') as HTMLFormElement | null
-    const allFields_obj = form.getFieldsValue()
-    const allFields = Object.values(allFields_obj) as TFSMeta[]
-    const sortOrder = addedProducts.map((product) => product.id)
-    const sortedAllFields = sortBy(allFields, (field) => {
-      return sortOrder.indexOf(field.productId)
+
+    const sortedAllFields = formatShopMeta({
+      form,
+      addedProducts,
     })
     const input = ref.current
     if (!input) return null
@@ -83,7 +82,7 @@ const AddProduct = () => {
       newOption.selected = true
     }
 
-    postForm.submit()
+    // postForm.submit()
   }
 
   useEffect(() => {

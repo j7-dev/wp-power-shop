@@ -8,7 +8,7 @@ import { Space, Tag, Form, Input } from 'antd'
 import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
 import { addedProductsAtom, FSMetaAtom } from '../../atoms'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useMany } from '@/hooks'
 import Variation from './Variation'
 
@@ -20,7 +20,10 @@ const Variable: React.FC<{
     isExpended,
     setIsExpended,
   ] = useState(false)
-  const setAddedProducts = useSetAtom(addedProductsAtom)
+  const [
+    addedProducts,
+    setAddedProducts,
+  ] = useAtom(addedProductsAtom)
   const FSMeta = useAtomValue(FSMetaAtom)
   const id = product?.id ?? 0
   const matchProduct = FSMeta.find((item) => item.productId === id)
@@ -44,7 +47,8 @@ const Variable: React.FC<{
     productVariationsResult?.data?.data ?? []
 
   const handleRemoveProduct = () => {
-    setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
+    const newAddedProducts = addedProducts.filter((item) => item.id !== id)
+    setAddedProducts(newAddedProducts)
   }
 
   useEffect(() => {

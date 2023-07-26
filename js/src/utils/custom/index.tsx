@@ -1,4 +1,7 @@
 import { TProduct } from '@/types/wcRestApi'
+import { FormInstance } from 'antd'
+import { TFSMeta } from '@/types'
+import { sortBy } from 'lodash-es'
 
 export const formateMeta = (addedProducts: TProduct[]) => {
   const meta = addedProducts.map((product) => ({
@@ -20,4 +23,22 @@ export const getProductTypeLabel = (type: string) => {
     default:
       return '未知類型'
   }
+}
+
+export const formatShopMeta = ({
+  form,
+  addedProducts,
+}: {
+  form: FormInstance<any>
+  addedProducts: TProduct[]
+}) => {
+  const allFields_obj = form.getFieldsValue()
+  const allFields = Object.values(allFields_obj) as TFSMeta[]
+  const sortOrder = addedProducts.map((product) => product.id)
+  const sortedAllFields = sortBy(allFields, (field) => {
+    return sortOrder.indexOf(field.productId)
+  })
+  console.log('⭐ allFields_obj', allFields_obj)
+
+  return sortedAllFields
 }

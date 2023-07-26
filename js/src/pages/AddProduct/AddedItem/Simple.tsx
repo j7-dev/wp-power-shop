@@ -3,7 +3,7 @@ import { Space, Tag, Form, InputNumber } from 'antd'
 import { TProduct } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
 import { addedProductsAtom, FSMetaAtom } from '../atoms'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useAtom } from 'jotai'
 import { toNumber } from 'lodash-es'
 import { useEffect } from 'react'
 
@@ -11,7 +11,10 @@ const Simple: React.FC<{
   product: TProduct
   index: number
 }> = ({ product, index }) => {
-  const setAddedProducts = useSetAtom(addedProductsAtom)
+  const [
+    addedProducts,
+    setAddedProducts,
+  ] = useAtom(addedProductsAtom)
   const FSMeta = useAtomValue(FSMetaAtom)
   const id = product?.id ?? 0
   const matchProduct = FSMeta.find((item) => item.productId === id)
@@ -27,7 +30,8 @@ const Simple: React.FC<{
   const type = product?.type ?? ''
   const form = Form.useFormInstance()
   const handleRemoveProduct = () => {
-    setAddedProducts((prev) => prev.filter((item) => item?.id !== id))
+    const newAddedProducts = addedProducts.filter((item) => item.id !== id)
+    setAddedProducts(newAddedProducts)
   }
 
   useEffect(() => {

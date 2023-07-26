@@ -26,6 +26,7 @@ const Add = () => {
     addedProducts,
     setAddedProducts,
   ] = useAtom(addedProductsAtom)
+
   const [
     selectedCatId,
     setSelectedCatId,
@@ -71,7 +72,6 @@ const Add = () => {
   const products = rawProducts.filter(
     (product) => product.type === 'simple' || product.type === 'variable',
   )
-  console.log('⭐  Add  products', products)
 
   const productItems = products.map((product) => {
     const disabled = addedProducts.some(
