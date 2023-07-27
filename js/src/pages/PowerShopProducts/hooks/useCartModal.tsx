@@ -15,7 +15,9 @@ const useCartModal = () => {
     productFSMeta,
     setProductFSMeta,
   ] = useState<TCartModalProps | undefined>(undefined)
-  const utils = useModal()
+  const utils = useModal({
+    className: 'lg:w-1/2 max-w-[960px]',
+  })
   const {
     modalProps: defaultModalProps,
     showModal: defaultShowModal,

@@ -48,15 +48,17 @@ const SimpleModal: FC<{
           <Gallery images={images} />
         </Col>
         <Col span={24} lg={{ span: 14 }}>
-          <h2 className="text-xl mb-4">{name}</h2>
-          {/* <div
+          <div className="flex flex-col relative h-full">
+            <div>
+              <h2 className="text-xl mb-4">{name}</h2>
+              {/* <div
 						className="pl-2 mb-2 ml-1"
 						style={{ borderLeft: '4px solid #999' }}
 					>
 						<p className="mb-0 text-sm">全店，海外 $ 5,500 免運費</p>
 						<p className="mb-0 text-sm">全店，全館滿 $ 1,200 免運</p>
 					</div> */}
-          {/* {!!meta?.salesPrice ? (
+              {/* {!!meta?.salesPrice ? (
 						<>
 							<p className="m-0">
 								<del>{regularPrice}</del>
@@ -66,21 +68,24 @@ const SimpleModal: FC<{
 					) : (
 						<div>{price_html}</div>
 					)} */}
-          <div>{price}</div>
+              <div>{price}</div>
+            </div>
+            <div className="my-4 h-[14rem] overflow-y-auto">
+              <ToggleContent content={description} />
+            </div>
 
-          <div className="my-4 h-[14rem] overflow-y-auto">
-            <ToggleContent content={description} />
+            <div className="">
+              <p className="mb-0 mt-4">數量</p>
+              <PlusMinusInput {...plusMinusInputProps} />
+              <AddToCartButton
+                productId={productId}
+                quantity={qty}
+                variation={undefined}
+                variationId={undefined}
+                setIsModalOpen={setIsModalOpen}
+              />
+            </div>
           </div>
-
-          <p className="mb-0 mt-4">數量</p>
-          <PlusMinusInput {...plusMinusInputProps} />
-          <AddToCartButton
-            productId={productId}
-            quantity={qty}
-            variation={undefined}
-            variationId={undefined}
-            setIsModalOpen={setIsModalOpen}
-          />
         </Col>
       </Row>
     </Modal>
