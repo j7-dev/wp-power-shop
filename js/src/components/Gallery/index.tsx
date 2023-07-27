@@ -27,21 +27,21 @@ const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
     }
   }, [selectedImageId])
 
-	useEffect(() => {
-		if(images.length > 0){
-		setSelected(images[0].id)
-	}
-	}, [images])
+  useEffect(() => {
+    if (images.length > 0) {
+      setSelected(images[0].id)
+    }
+  }, [images])
 
   return (
     <>
       <img className="aspect-square w-full object-cover" src={mainSrc} />
       {images.length > 1 && (
-        <div className="mt-2 w-full overflow-auto h-16 flex flex-nowrap">
+        <div className="mt-2 w-full grid grid-cols-4 gap-2">
           {images.map((image) => (
             <img
               key={image.id}
-              className={`aspect-square w-16 mr-2 cursor-pointer object-cover  ${
+              className={`aspect-square cursor-pointer object-cover  ${
                 image.id === selected && 'border-2 border-blue-500 border-solid'
               }`}
               onClick={handleClick(image.id)}
