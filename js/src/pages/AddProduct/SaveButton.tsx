@@ -1,14 +1,9 @@
-import { useEffect, useState } from 'react'
 import { Tooltip, Button, Form, notification } from 'antd'
 import { SaveFilled } from '@ant-design/icons'
-import { isEqual as _isEqual } from 'lodash-es'
-import { useAtomValue } from 'jotai'
-import { addedProductsAtom, FSMetaAtom } from './atoms'
-import { TFSMeta } from '@/types'
+import { useSetAtom } from 'jotai'
+import { isChangeAtom } from './atoms'
 import { useUpdate } from '@/hooks'
 import { kebab, postId, snake, formatShopMeta } from '@/utils'
-
-let countRender = 1
 
 const SaveButton = () => {
   const form = Form.useFormInstance()
@@ -18,12 +13,7 @@ const SaveButton = () => {
   ] = notification.useNotification({
     maxCount: 1,
   })
-  const [
-    isEqual,
-    setIsEqual,
-  ] = useState(true)
-  const addedProducts = useAtomValue(addedProductsAtom)
-  const FSMeta = useAtomValue(FSMetaAtom)
+  const setIsChange = useSetAtom(isChangeAtom)
 
   const { mutate, isLoading } = useUpdate({
     resource: kebab,
@@ -34,7 +24,7 @@ const SaveButton = () => {
         api.success({
           message: '儲存成功',
         })
-        setIsEqual(true)
+        setIsChange(false)
         notification.destroy('saveNotification')
       },
       onError: (error) => {
@@ -55,32 +45,6 @@ const SaveButton = () => {
       },
     })
   }
-
-  useEffect(() => {
-    if (countRender > 2) {
-      const allFields_obj = form.getFieldsValue()
-      const allFields = Object.values(allFields_obj) as TFSMeta[]
-      const checkIsEqual = _isEqual(FSMeta, allFields)
-      setIsEqual(checkIsEqual)
-    }
-    countRender++
-  }, [addedProducts.length])
-
-  useEffect(() => {
-    if (!isEqual) {
-      notification.config({
-        maxCount: 1,
-      })
-      notification.warning({
-        key: 'saveNotification',
-        message: '偵測到變更，記得儲存！',
-        duration: null,
-        placement: 'bottomRight',
-      })
-    } else {
-      notification.destroy('saveNotification')
-    }
-  }, [isEqual])
 
   return (
     <>

@@ -1,16 +1,19 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import { Form, Alert, Typography, notification } from 'antd'
 import Add from './Add'
 import AddedItem from './AddedItem'
-import { addedProductsAtom, FSMetaAtom } from './atoms'
+import { addedProductsAtom, FSMetaAtom, isChangeAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
 import { postId, snake, formatShopMeta } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcRestApi'
-import { isEqual as _isEqual, sortBy } from 'lodash-es'
+import { sortBy } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 import SaveButton from './SaveButton'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import update from 'immutability-helper'
 
 const { Paragraph } = Typography
 const tinyMCESaveBtn = document.getElementById(
@@ -18,6 +21,10 @@ const tinyMCESaveBtn = document.getElementById(
 ) as HTMLInputElement | null
 
 const AddProduct = () => {
+  const [
+    isChange,
+    setIsChange,
+  ] = useAtom(isChangeAtom)
   const setFSMeta = useSetAtom(FSMetaAtom)
 
   const mutation = useAjaxGetPostMeta<TFSMeta[]>({
@@ -111,16 +118,53 @@ const AddProduct = () => {
   }, [productsResult?.isLoading])
 
   const handleFormChange = () => {
-    notification.config({
-      maxCount: 1,
-    })
-    notification.warning({
-      key: 'saveNotification',
-      message: '偵測到變更，記得儲存！',
-      duration: null,
-      placement: 'bottomRight',
-    })
+    setIsChange(true)
   }
+
+  useEffect(() => {
+    if (isChange) {
+      notification.config({
+        maxCount: 1,
+      })
+      notification.warning({
+        key: 'saveNotification',
+        message: '偵測到變更，記得儲存！',
+        duration: null,
+        placement: 'bottomRight',
+      })
+    } else {
+      notification.destroy('saveNotification')
+    }
+  }, [isChange])
+
+  const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
+    setAddedProducts((pre: TProduct[]) =>
+      update(pre, {
+        $splice: [
+          [
+            dragIndex,
+            1,
+          ],
+          [
+            hoverIndex,
+            0,
+            pre[dragIndex] as TProduct,
+          ],
+        ],
+      }),
+    )
+  }, [])
+
+  const renderItem = useCallback((product: TProduct, index: number) => {
+    return (
+      <AddedItem
+        key={product.id}
+        index={index}
+        product={product}
+        moveCard={moveCard}
+      />
+    )
+  }, [])
 
   return (
     <div className="p-4">
@@ -148,15 +192,15 @@ const AddProduct = () => {
           type="info"
           showIcon
         />
-        {productsResult?.isLoading && productsResult?.isFetching
-          ? [
-              1,
-              2,
-              3,
-            ].map((i) => <LoadingCard ratio="h-[8rem]" key={i} />)
-          : addedProducts.map((product, i) => {
-              return <AddedItem key={product?.id} product={product} index={i} />
-            })}
+        <DndProvider backend={HTML5Backend}>
+          {productsResult?.isLoading && productsResult?.isFetching
+            ? [
+                1,
+                2,
+                3,
+              ].map((i) => <LoadingCard ratio="h-[8rem]" key={i} />)
+            : addedProducts.map((product, i) => renderItem(product, i))}
+        </DndProvider>
 
         <Add />
         <input ref={ref} type="hidden" name={`${snake}_meta`} value="" />

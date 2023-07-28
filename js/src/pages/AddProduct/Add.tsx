@@ -3,8 +3,8 @@ import { Select, Button } from 'antd'
 import { useMany } from '@/hooks'
 import { TProduct, TProductCat } from '@/types/wcRestApi'
 import { renderHTML, getProductImageSrc } from '@/utils'
-import { addedProductsAtom } from './atoms'
-import { useAtom } from 'jotai'
+import { addedProductsAtom, isChangeAtom } from './atoms'
+import { useAtom, useSetAtom } from 'jotai'
 
 const renderItem = (product: TProduct) => {
   const imageSrc = getProductImageSrc(product)
@@ -22,6 +22,7 @@ const renderItem = (product: TProduct) => {
 }
 
 const Add = () => {
+  const setIsChange = useSetAtom(isChangeAtom)
   const [
     addedProducts,
     setAddedProducts,
@@ -98,6 +99,7 @@ const Add = () => {
         ...addedProducts,
         selectedProduct,
       ])
+      setIsChange(true)
     }
   }
 

@@ -1,20 +1,16 @@
-import { CloseCircleFilled } from '@ant-design/icons'
 import { Space, Tag, Form, InputNumber } from 'antd'
 import { TProduct } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
-import { addedProductsAtom, FSMetaAtom } from '../atoms'
-import { useAtomValue, useAtom } from 'jotai'
+import { FSMetaAtom } from '../atoms'
+import { useAtomValue } from 'jotai'
 import { toNumber } from 'lodash-es'
 import { useEffect } from 'react'
+import RemoveIcon from './RemoveIcon'
 
 const Simple: React.FC<{
   product: TProduct
   index: number
 }> = ({ product, index }) => {
-  const [
-    addedProducts,
-    setAddedProducts,
-  ] = useAtom(addedProductsAtom)
   const FSMeta = useAtomValue(FSMetaAtom)
   const id = product?.id ?? 0
   const matchProduct = FSMeta.find((item) => item.productId === id)
@@ -29,10 +25,6 @@ const Simple: React.FC<{
   const categories = product?.categories ?? []
   const type = product?.type ?? ''
   const form = Form.useFormInstance()
-  const handleRemoveProduct = () => {
-    const newAddedProducts = addedProducts.filter((item) => item.id !== id)
-    setAddedProducts(newAddedProducts)
-  }
 
   useEffect(() => {
     form.setFieldsValue({
@@ -117,10 +109,7 @@ const Simple: React.FC<{
         </div>
 
         <div className="flex items-center">
-          <CloseCircleFilled
-            className="text-red-500 text-2xl cursor-pointer"
-            onClick={handleRemoveProduct}
-          />
+          <RemoveIcon productId={id} />
         </div>
       </div>
       <hr className="mb-8" />

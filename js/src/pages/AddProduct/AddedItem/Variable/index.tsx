@@ -1,16 +1,13 @@
 import { useState } from 'react'
-import {
-  CloseCircleFilled,
-  ArrowsAltOutlined,
-  ShrinkOutlined,
-} from '@ant-design/icons'
+import { ArrowsAltOutlined, ShrinkOutlined } from '@ant-design/icons'
 import { Space, Tag, Form, Input } from 'antd'
 import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
-import { addedProductsAtom, FSMetaAtom } from '../../atoms'
-import { useAtom, useAtomValue } from 'jotai'
+import { FSMetaAtom } from '../../atoms'
+import { useAtomValue } from 'jotai'
 import { useMany } from '@/hooks'
 import Variation from './Variation'
+import RemoveIcon from '../RemoveIcon'
 
 const Variable: React.FC<{
   product: TProduct
@@ -19,11 +16,7 @@ const Variable: React.FC<{
   const [
     isExpended,
     setIsExpended,
-  ] = useState(true)
-  const [
-    addedProducts,
-    setAddedProducts,
-  ] = useAtom(addedProductsAtom)
+  ] = useState(false)
   const FSMeta = useAtomValue(FSMetaAtom)
   const id = product?.id ?? 0
   const matchProduct = FSMeta.find((item) => item.productId === id)
@@ -43,11 +36,6 @@ const Variable: React.FC<{
 
   const productVariations: TProductVariation[] =
     productVariationsResult?.data?.data ?? []
-
-  const handleRemoveProduct = () => {
-    const newAddedProducts = addedProducts.filter((item) => item.id !== id)
-    setAddedProducts(newAddedProducts)
-  }
 
   return (
     <>
@@ -93,10 +81,7 @@ const Variable: React.FC<{
         </div>
 
         <div className="flex items-center">
-          <CloseCircleFilled
-            className="text-red-500 text-2xl cursor-pointer"
-            onClick={handleRemoveProduct}
-          />
+          <RemoveIcon productId={id} />
         </div>
       </div>
       <Form.Item
@@ -123,7 +108,7 @@ const Variable: React.FC<{
         ))}
       </div>
 
-      <hr className="mb-8" />
+      <hr className="mt-4 mb-8" />
     </>
   )
 }
