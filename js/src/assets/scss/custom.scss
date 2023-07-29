@@ -6,143 +6,171 @@
 // 	}
 // }
 $mobile_width: 576px;
+$pad_width: 810px;
 
-.power-shop-products {
-	table.fs-cart-table {
-		border: none;
-
-		tr {
-			border: none;
-			th {
-				background-color: #fff;
-			}
-		}
-		th {
-			padding-top: 0.5rem;
-			padding-bottom: 0.5rem;
+#power_shop_products_app {
+	.power-shop-products {
+		table.fs-cart-table {
 			border: none;
 
-			font-size: 1rem;
-			font-weight: 600;
-			text-align: center;
-			color: #333;
-			&:nth-child(4) {
-				text-align: right;
-			}
-		}
-		td {
-			padding-top: 0.5rem;
-			padding-bottom: 0.5rem;
-			border: none;
-			background-color: #fff;
-			font-size: 1rem;
-			font-weight: 400;
-			text-align: center;
-			color: #333;
-
-			&:nth-child(4) {
-				text-align: right;
-			}
-		}
-
-		thead {
 			tr {
+				border: none;
 				th {
-					background-color: #eee;
-				}
-			}
-			@media (max-width: $mobile_width) {
-				display: none;
-			}
-		}
-		tbody {
-			@media (max-width: $mobile_width) {
-				display: block;
-				background: #fff;
-			}
-			tr {
-				@media (max-width: $mobile_width) {
-					width: 100%;
-					display: grid;
-					grid-template-columns: 2rem 1fr 1fr;
-					grid-template-rows: auto auto auto;
-					grid-gap: 0rem 0.5rem;
-					grid-template-areas:
-						"delete product product"
-						"delete qty unit_price"
-						"delete total_price total_price";
-					border-bottom: 1px solid #ddd;
-					padding: 1rem 0.5rem;
+					background-color: #fff;
 				}
 			}
 			th {
-				@media (max-width: $mobile_width) {
-					display: block;
+				padding-top: 0.5rem;
+				padding-bottom: 0.5rem;
+				border: none;
+
+				font-size: 1rem;
+				font-weight: 600;
+				text-align: center;
+				color: #333;
+				&:nth-child(4) {
+					text-align: right;
 				}
 			}
 			td {
+				padding-top: 0.5rem;
+				padding-bottom: 0.5rem;
+				border: none;
+				background-color: #fff;
+				font-size: 1rem;
+				font-weight: 400;
+				text-align: center;
+				color: #333;
+
+				&:nth-child(4) {
+					text-align: right;
+				}
+			}
+
+			thead {
+				tr {
+					th {
+						background-color: #eee;
+					}
+				}
+				@media (max-width: $mobile_width) {
+					display: none;
+				}
+			}
+			tbody {
 				@media (max-width: $mobile_width) {
 					display: block;
-					&:nth-child(1) {
-						// 商品
-						grid-area: product;
-					}
-					&:nth-child(2) {
-						// 數量
-						grid-area: qty;
-						align-self: center;
-					}
-					&:nth-child(3) {
-						// 單價
-						grid-area: unit_price;
-						align-self: center;
-						justify-self: end;
-						text-align: right;
-						position: relative;
+					background: #fff;
+				}
+				tr {
+					@media (max-width: $mobile_width) {
 						width: 100%;
-						&::before {
-							content: "×";
-							position: absolute;
-							left: 0;
+						display: grid;
+						grid-template-columns: 2rem 1fr 1fr;
+						grid-template-rows: auto auto auto;
+						grid-gap: 0rem 0.5rem;
+						grid-template-areas:
+							"delete product product"
+							"delete qty unit_price"
+							"delete total_price total_price";
+						border-bottom: 1px solid #ddd;
+						padding: 1rem 0.5rem;
+					}
+				}
+				th {
+					@media (max-width: $mobile_width) {
+						display: block;
+					}
+				}
+				td {
+					@media (max-width: $mobile_width) {
+						display: block;
+						&:nth-child(1) {
+							// 商品
+							grid-area: product;
+						}
+						&:nth-child(2) {
+							// 數量
+							grid-area: qty;
+							align-self: center;
+						}
+						&:nth-child(3) {
+							// 單價
+							grid-area: unit_price;
+							align-self: center;
+							justify-self: end;
+							text-align: right;
+							position: relative;
+							width: 100%;
+							&::before {
+								content: "×";
+								position: absolute;
+								left: 0;
+							}
+						}
+						&:nth-child(4) {
+							// 總價
+							grid-area: total_price;
+							justify-self: end;
+							font-weight: 700;
+						}
+						&:nth-child(5) {
+							// 刪除按鈕
+							grid-area: delete;
+							justify-self: center;
+							align-self: center;
 						}
 					}
-					&:nth-child(4) {
-						// 總價
-						grid-area: total_price;
-						justify-self: end;
-						font-weight: 700;
-					}
-					&:nth-child(5) {
-						// 刪除按鈕
-						grid-area: delete;
-						justify-self: center;
-						align-self: center;
-					}
 				}
 			}
-		}
-		tfoot {
-			tr {
-				@media (max-width: $mobile_width) {
-					display: flex;
-					justify-content: space-between;
-				}
-			}
-			th {
-				@media (max-width: $mobile_width) {
-					&:last-child {
-						display: none;
+			tfoot {
+				tr {
+					@media (max-width: $mobile_width) {
+						display: flex;
+						justify-content: space-between;
 					}
+				}
+				th {
+					@media (max-width: $mobile_width) {
+						&:last-child {
+							display: none;
+						}
+					}
+				}
+				@media (max-width: $mobile_width) {
+					display: block;
+					background-color: #fff;
+					padding: 1rem 0.5rem;
 				}
 			}
 			@media (max-width: $mobile_width) {
 				display: block;
-				background-color: #fff;
-				padding: 1rem 0.5rem;
 			}
 		}
-		@media (max-width: $mobile_width) {
-			display: block;
+	}
+	.CountdownDigit {
+		.ps-countdown-digit {
+			font-size: 5rem;
+			@media (max-width: $pad_width) {
+				font-size: 2rem;
+			}
+			width: 100%; //1.2em
+			height: 1.8em;
+			background: #eaeef2;
+			background-image: linear-gradient(180deg, #eaeef2 10%, #ffffff 100%);
+			border-radius: 0.25em;
+			box-shadow:
+				0 20px 30px -10px rgba(76, 99, 119, 0.1),
+				inset 0 -1px 0 0 rgba(76, 99, 119, 0.3),
+				inset 0 1px 0 0 #fff;
+			color: #4c6377;
+			display: flex;
+			font-family: "Roboto", sans-serif;
+			font-weight: 900;
+			margin: 0 0.05em;
+			position: relative;
+			justify-content: center;
+			align-items: center;
 		}
 	}
 }

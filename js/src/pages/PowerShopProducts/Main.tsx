@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { createContext } from 'react'
+import { FC, createContext } from 'react'
 import { postId, snake, kebab } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
@@ -11,6 +11,7 @@ import { LoadingCard } from '@/components/PureComponents'
 import { Empty, Result, Button } from 'antd'
 import { RedoOutlined } from '@ant-design/icons'
 import { sortBy } from 'lodash-es'
+import Countdown from '@/components/Countdown'
 
 export const ProductsContext = createContext({
   products: [] as TProduct[],
@@ -19,7 +20,7 @@ export const ProductsContext = createContext({
     (_props: { product: TProduct; FSMeta: TFSMeta | undefined }) => () => {},
 })
 
-const Main = () => {
+const Main: FC<{ endTime?: number }> = ({ endTime }) => {
   const mutation = useAjaxGetPostMeta<TFSMeta[]>({
     post_id: postId,
     meta_key: `${snake}_meta`,
@@ -80,6 +81,9 @@ const Main = () => {
 
   return (
     <div className={`${kebab}-products`}>
+      {!!endTime && (
+        <Countdown toTime={endTime} title="把握最後機會🎉優惠即將到期🎉🎉🎉" />
+      )}
       <ProductsContext.Provider
         value={{
           products,

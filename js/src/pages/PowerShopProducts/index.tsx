@@ -1,34 +1,38 @@
 import Main from './Main'
-import ShopClose from './ShopClose'
+import ShopClosed from './ShopClosed'
+import ShopComing from './ShopComing'
+
 import { LoadingSimple } from '@/components/PureComponents'
 import { useAjaxGetPostMeta } from '@/hooks'
 import { postId, snake } from '@/utils'
 import { TSettings, defaultSettings } from '@/types'
 import dayjs from 'dayjs'
 
-const isActivate = ({
+const getStatus = ({
   startTime,
   endTime,
 }: {
   startTime: number | undefined
   endTime: number | undefined
-}) => {
+}): 'published' | 'coming' | 'closed' => {
   const now = dayjs().valueOf()
 
-  if (!startTime && !endTime) return true
+  if (!startTime && !endTime) return 'published'
 
   if (!startTime && endTime) {
-    return now < endTime
+    return now < endTime ? 'published' : 'closed'
   }
 
   if (startTime && !endTime) {
-    return now > startTime
+    return now > startTime ? 'published' : 'coming'
   }
 
   if (startTime && endTime) {
-    return now > startTime && now < endTime
+    if (now < startTime) return 'coming'
+    if (now > endTime) return 'closed'
+    if (now > startTime && now < endTime) return 'published'
   }
-  return true
+  return 'published'
 }
 
 const PowerShopProducts = () => {
@@ -42,13 +46,15 @@ const PowerShopProducts = () => {
 
   const startTime = settings?.startTime
   const endTime = settings?.endTime
-  const shopIsActivate = isActivate({ startTime, endTime })
+  const shopStatus = getStatus({ startTime, endTime })
 
-  if (isLoading) {
-    return <LoadingSimple />
-  }
+  if (isLoading) return <LoadingSimple />
 
-  return shopIsActivate ? <Main /> : <ShopClose />
+  if (shopStatus === 'published') return <Main endTime={endTime} />
+  if (shopStatus === 'coming') return <ShopComing startTime={startTime} />
+  if (shopStatus === 'closed') return <ShopClosed endTime={endTime} />
+
+  return <Main />
 }
 
 export default PowerShopProducts
