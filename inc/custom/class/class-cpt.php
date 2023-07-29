@@ -31,7 +31,7 @@ class CPT extends Bootstrap
 
 	public function init(): void
 	{
-		Functions::register_cpt($_ENV['APP_NAME']);
+		Functions::register_cpt($_ENV['APP_NAME'], ['meta', 'settings']);
 
 		// 新增 {$_ENV['KEBAB']}/{slug}/report 網址規則
 		\add_rewrite_rule('^' . $_ENV['KEBAB'] . '/([^/]+)/report/?$', 'index.php?post_type=' . $_ENV['KEBAB'] . '&name=$matches[1]&' . self::VAR . '=1', 'top');

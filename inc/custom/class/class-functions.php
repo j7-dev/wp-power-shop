@@ -9,8 +9,19 @@ use J7\ViteReactWPPlugin\PowerShop\Admin\Bootstrap;
 
 class Functions
 {
-	public static function register_cpt($label): void
+	/**
+	 * Register CPT
+	 *
+	 * @param string $label - the name of CPT
+	 * @param array $meta_keys - the meta keys of CPT ex ['meta', 'settings']
+	 * @return void
+	 */
+	public static function register_cpt($label, $meta_keys = []): void
 	{
+
+		$kebab = str_replace(' ', '-', strtolower($label));
+		$snake = str_replace(' ', '_', strtolower($label));
+
 		$labels = [
 			'name'                     => \esc_html__($label, $_ENV['KEBAB']),
 			'singular_name'            => \esc_html__($label, $_ENV['KEBAB']),
@@ -73,13 +84,20 @@ class Functions
 			],
 		];
 
-		\register_meta('post', $_ENV['SNAKE'] . '_meta', [
-			'type' => 'string',
-			'show_in_rest' => true,
-			'single' => true,
-		]);
 
-		\register_post_type($_ENV['KEBAB'], $args);
+
+
+		foreach ($meta_keys as $meta_key) {
+			\register_meta('post', $snake . '_' . $meta_key, [
+				'type' => 'string',
+				'show_in_rest' => true,
+				'single' => true,
+			]);
+		}
+
+
+
+		\register_post_type($kebab, $args);
 	}
 	public static function add_metabox(array $args): void
 	{
