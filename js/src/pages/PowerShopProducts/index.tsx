@@ -10,20 +10,25 @@ const isActivate = ({
   startTime,
   endTime,
 }: {
-  startTime: number
-  endTime: number
+  startTime: number | undefined
+  endTime: number | undefined
 }) => {
   const now = dayjs().valueOf()
 
-  if (!startTime) {
+  if (!startTime && !endTime) return true
+
+  if (!startTime && endTime) {
     return now < endTime
   }
 
-  if (!endTime) {
-    return now > endTime
+  if (startTime && !endTime) {
+    return now > startTime
   }
 
-  return now > startTime && now < endTime
+  if (startTime && endTime) {
+    return now > startTime && now < endTime
+  }
+  return true
 }
 
 const PowerShopProducts = () => {
