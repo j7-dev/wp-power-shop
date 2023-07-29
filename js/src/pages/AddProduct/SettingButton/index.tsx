@@ -1,5 +1,5 @@
 import { Button, Modal, DatePicker, Form, notification, ModalProps } from 'antd'
-import { SettingFilled } from '@ant-design/icons'
+import { SettingFilled, SwapRightOutlined } from '@ant-design/icons'
 import { useModal, useUpdate } from '@/hooks'
 import type { RangePickerProps } from 'antd/es/date-picker'
 import { kebab, postId, snake } from '@/utils'
@@ -40,8 +40,8 @@ const SettingButton = () => {
   const handleSave = () => {
     const values = form.getFieldsValue()
     const { startTime, endTime } = values
-    values.startTime = startTime ? dayjs(startTime).valueOf() : ''
-    values.endTime = endTime ? dayjs(endTime).valueOf() : ''
+    values.startTime = startTime ? dayjs(startTime).valueOf() : 0
+    values.endTime = endTime ? dayjs(endTime).valueOf() : 0
 
     mutate({
       meta: {
@@ -66,22 +66,28 @@ const SettingButton = () => {
       <Modal {...settingModalProps}>
         <Form form={form} layout="vertical">
           <p>設定開站時間</p>
-          <div className="flex">
-            <Form.Item name={['startTime']} label="開始" className="mr-8">
+          <div
+            className="flex my-8 rounded-md w-fit"
+            style={{ border: '1px solid #999' }}
+          >
+            <Form.Item name={['startTime']} noStyle className="m-0">
               <DatePicker
                 showTime={{
                   format: 'HH:mm',
                 }}
                 format="YYYY-MM-DD HH:mm"
                 placeholder="選擇時間"
+                bordered={false}
               />
             </Form.Item>
-            <Form.Item name={['endTime']} label="結束">
+            <SwapRightOutlined className="mx-4" />
+            <Form.Item name={['endTime']} noStyle className="m-0">
               <DatePicker
                 disabledDate={disabledDate}
                 showTime={{ format: 'HH:mm' }}
                 format="YYYY-MM-DD HH:mm"
                 placeholder="選擇時間"
+                bordered={false}
               />
             </Form.Item>
           </div>
