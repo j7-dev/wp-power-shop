@@ -13,6 +13,10 @@ const UpdateCartInputNumber: React.FC<{ item: any }> = ({ item }) => {
     quantity,
     setQuantity,
   ] = useState(1)
+  const [
+    enabled,
+    setEnabled,
+  ] = useState(false)
   const queryClient = useQueryClient()
   const [
     api,
@@ -30,12 +34,14 @@ const UpdateCartInputNumber: React.FC<{ item: any }> = ({ item }) => {
         // })
 
         queryClient.invalidateQueries({ queryKey: ['get_cart'] })
+        setEnabled(false)
       },
       onError: (error) => {
         console.log('Error', error)
         api.error({
           message: '修改購物車失敗',
         })
+        setEnabled(false)
       },
     },
     config: {
@@ -47,10 +53,12 @@ const UpdateCartInputNumber: React.FC<{ item: any }> = ({ item }) => {
 
   const handleDecrement = () => {
     setQuantity(quantity - 1)
+    setEnabled(true)
   }
 
   const handleIncrement = () => {
     setQuantity(quantity + 1)
+    setEnabled(true)
   }
 
   const handleChange = (v: number | null) => {
@@ -68,15 +76,20 @@ const UpdateCartInputNumber: React.FC<{ item: any }> = ({ item }) => {
   }, [item?.quantity])
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      mutate({
-        key,
-        quantity,
-      })
-    }, DELAY)
+    if (enabled) {
+      const timer = setTimeout(() => {
+        mutate({
+          key,
+          quantity,
+        })
+      }, DELAY)
 
-    return () => clearTimeout(timer)
-  }, [quantity])
+      return () => clearTimeout(timer)
+    }
+  }, [
+    quantity,
+    enabled,
+  ])
 
   return (
     <>
