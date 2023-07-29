@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import Simple from './Simple'
 import Variable from './Variable'
-import { ProductsContext } from '..'
+import { ProductsContext } from '@/pages/PowerShopProducts/Main'
 
 const Item: React.FC<{ productId: number }> = ({ productId }) => {
   const { products } = useContext(ProductsContext)

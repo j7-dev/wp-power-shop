@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { TProduct } from '@/types/wcStoreApi'
 import { getProductImageSrc, renderHTML } from '@/utils'
 import { Button } from 'antd'
-import { ProductsContext } from '../..'
+import { ProductsContext } from '@/pages/PowerShopProducts/Main'
 import Price from '@/components/Price'
 
 const Simple: React.FC<{
