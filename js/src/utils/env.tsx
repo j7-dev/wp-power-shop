@@ -17,3 +17,4 @@ export const postId = window?.appData?.postId || '0'
 export const permalink = window?.appData?.permalink || '/'
 
 export const apiTimeout = import.meta.env.VITE_API_TIMEOUT || '30000'
+export const defaultImage = `${siteUrl}/wp-content/power-shop-release/js/dist/defaultImage.jpg`

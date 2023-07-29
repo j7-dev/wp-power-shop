@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Form, InputNumber, Tooltip, Input } from 'antd'
 import { TProductVariation, TSimpleAttribute } from '@/types/wcRestApi'
-import defaultImage from '@/assets/images/defaultImage.jpg'
+import { defaultImage } from '@/utils'
 import { nanoid } from 'nanoid'
 import { TFSMeta } from '@/types'
 
