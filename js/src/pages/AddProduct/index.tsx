@@ -14,6 +14,7 @@ import SaveButton from './SaveButton'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper'
+import SettingButton from './SettingButton'
 
 const { Paragraph } = Typography
 const tinyMCESaveBtn = document.getElementById(
@@ -175,7 +176,8 @@ const AddProduct = () => {
         form={form}
         onValuesChange={handleFormChange}
       >
-        <div className="text-right mb-4">
+        <div className="flex justify-between mb-4">
+          <SettingButton />
           <SaveButton />
         </div>
         <Alert

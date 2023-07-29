@@ -7,12 +7,6 @@ import { kebab, postId, snake, formatShopMeta } from '@/utils'
 
 const SaveButton = () => {
   const form = Form.useFormInstance()
-  const [
-    api,
-    contextHolder,
-  ] = notification.useNotification({
-    maxCount: 1,
-  })
   const setIsChange = useSetAtom(isChangeAtom)
 
   const { mutate, isLoading } = useUpdate({
@@ -21,7 +15,7 @@ const SaveButton = () => {
     pathParams: [postId],
     mutationOptions: {
       onSuccess: () => {
-        api.success({
+        notification.success({
           message: '儲存成功',
         })
         setIsChange(false)
@@ -29,7 +23,7 @@ const SaveButton = () => {
       },
       onError: (error) => {
         console.log('Error', error)
-        api.error({
+        notification.error({
           message: '儲存失敗',
         })
       },
@@ -48,7 +42,6 @@ const SaveButton = () => {
 
   return (
     <>
-      {contextHolder}
       <Tooltip title="按此儲存按鈕才會儲存商品資料">
         <Button
           type="primary"

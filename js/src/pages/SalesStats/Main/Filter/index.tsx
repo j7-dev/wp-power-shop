@@ -98,7 +98,6 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
           </Form.Item>
         )}
 
-        <Form.Item name={['is_download']} hidden initialValue={0} />
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
           <p className="my-0">&nbsp;</p>
           <Button

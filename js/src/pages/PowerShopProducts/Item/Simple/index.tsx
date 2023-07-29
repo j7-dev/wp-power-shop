@@ -24,7 +24,7 @@ const Simple: React.FC<{
       <div>
         <img src={imageSrc} className="w-full aspect-square" />
       </div>
-      <p className="m-0">{name}</p>
+      <div className="m-0">{name}</div>
       <Price
         salePrice={FSMeta?.salesPrice ?? 0}
         regularPrice={FSMeta?.regularPrice ?? 0}

@@ -50,7 +50,7 @@ const SimpleModal: FC<{
         <Col span={24} lg={{ span: 14 }}>
           <div className="flex flex-col relative h-full">
             <div>
-              <h2 className="text-xl mb-4">{name}</h2>
+              <div className="text-xl mb-4">{name}</div>
               {/* <div
 						className="pl-2 mb-2 ml-1"
 						style={{ borderLeft: '4px solid #999' }}

@@ -70,7 +70,8 @@ const Simple: React.FC<{
                 </Tag>
               ))}
             </Space>
-            <h6 className="text-[1rem] mt-2 mb-0">{name}</h6>
+
+            <div className="text-[1rem] mt-2 mb-0">{name}</div>
             <div className="flex">
               <Form.Item
                 name={[

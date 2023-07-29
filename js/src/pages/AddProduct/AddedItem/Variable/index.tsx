@@ -62,7 +62,7 @@ const Variable: React.FC<{
                 </Tag>
               ))}
             </Space>
-            <h6 className="text-[1rem] mt-2 mb-0">{name}</h6>
+            <div className="text-[1rem] mt-2 mb-0">{name}</div>
             <div className="flex">
               <span
                 className="underline text-blue-500 cursor-pointer mt-2 mb-4"

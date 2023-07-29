@@ -68,7 +68,7 @@ const VariableModal: FC<{
           <Gallery images={images} />
         </Col>
         <Col span={24} lg={{ span: 14 }}>
-          <h2 className="text-xl mb-4">{name}</h2>
+          <div className="mb-4 text-xl">{name}</div>
           {/* <div
 						className="pl-2 mb-2 ml-1"
 						style={{ borderLeft: '4px solid #999' }}

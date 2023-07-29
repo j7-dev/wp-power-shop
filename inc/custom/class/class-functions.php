@@ -16,7 +16,7 @@ class Functions
 	 * @param array $meta_keys - the meta keys of CPT ex ['meta', 'settings']
 	 * @return void
 	 */
-	public static function register_cpt($label, $meta_keys = []): void
+	public static function register_cpt($label): void
 	{
 
 		$kebab = str_replace(' ', '-', strtolower($label));
@@ -83,18 +83,6 @@ class Functions
 				'with_front' => true,
 			],
 		];
-
-
-
-
-		foreach ($meta_keys as $meta_key) {
-			\register_meta('post', $snake . '_' . $meta_key, [
-				'type' => 'string',
-				'show_in_rest' => true,
-				'single' => true,
-			]);
-		}
-
 
 
 		\register_post_type($kebab, $args);

@@ -22,7 +22,7 @@ const Variable: React.FC<{
       <div>
         <img src={imageSrc} className="w-full aspect-square" />
       </div>
-      <p className="m-0">{name}</p>
+      <div className="m-0">{name}</div>
       <div>{price_html}</div>
       <Button
         onClick={showFSModal({ product, FSMeta })}

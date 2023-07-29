@@ -19,7 +19,8 @@ export const useModal = (props?: ModalProps) => {
     setIsModalOpen(false)
   }
 
-  const modalProps = {
+  const modalProps: ModalProps = {
+    centered: true,
     open: isModalOpen,
     onOk: handleOk,
     onCancel: handleCancel,

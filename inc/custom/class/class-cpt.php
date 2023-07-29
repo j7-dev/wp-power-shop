@@ -9,11 +9,14 @@ use J7\ViteReactWPPlugin\PowerShop\Admin\Bootstrap;
 class CPT extends Bootstrap
 {
 	const VAR = 'ps_report';
+	const POST_META = ['meta', 'settings'];
 
 
 	function __construct()
 	{
 		\add_action('init', [$this, 'init']);
+		\add_action('rest_api_init', [$this, 'add_post_meta']);
+
 		\add_action('load-post.php',     [$this, 'init_metabox']);
 		\add_action('load-post-new.php', [$this, 'init_metabox']);
 
@@ -31,12 +34,23 @@ class CPT extends Bootstrap
 
 	public function init(): void
 	{
-		Functions::register_cpt($_ENV['APP_NAME'], ['meta', 'settings']);
+		Functions::register_cpt($_ENV['APP_NAME']);
 
 		// 新增 {$_ENV['KEBAB']}/{slug}/report 網址規則
 		\add_rewrite_rule('^' . $_ENV['KEBAB'] . '/([^/]+)/report/?$', 'index.php?post_type=' . $_ENV['KEBAB'] . '&name=$matches[1]&' . self::VAR . '=1', 'top');
 
 		\flush_rewrite_rules();
+	}
+
+	public function add_post_meta(): void
+	{
+		foreach (self::POST_META as $meta_key) {
+			\register_meta('post', $_ENV['SNAKE'] . '_' . $meta_key, [
+				'type' => 'string',
+				'show_in_rest' => true,
+				'single' => true,
+			]);
+		}
 	}
 
 	/**
@@ -125,7 +139,7 @@ class CPT extends Bootstrap
 	}
 
 	/**
-	 * 設定預設的 report 密碼
+	 * 設定預設的 post meta data
 	 */
 	function set_default_power_shop_meta($post_id, $post, $update)
 	{
@@ -133,11 +147,12 @@ class CPT extends Bootstrap
 		$post = \get_post($post_id);
 
 
-		// Check if the post type is $_ENV['KEBAB']
+		// 剛創建時，且 post type === $_ENV['KEBAB']
 		if (!$update && $post->post_type === $_ENV['KEBAB']) {
 			// Add default post_meta
 			$default_password = \wp_create_nonce($_ENV['KEBAB']);
 			$encrypted_password = base64_encode($default_password);
+
 			\add_post_meta($post_id, $_ENV['SNAKE'] . '_report_password', $encrypted_password, true);
 		}
 	}
