@@ -44,8 +44,8 @@ const SettingButton = () => {
   const handleSave = () => {
     const values = form.getFieldsValue()
     const { startTime, endTime } = values
-    values.startTime = startTime ? dayjs(startTime).valueOf() : 0
-    values.endTime = endTime ? dayjs(endTime).valueOf() : 0
+    values.startTime = startTime ? dayjs(startTime).valueOf() : null
+    values.endTime = endTime ? dayjs(endTime).valueOf() : null
 
     mutate({
       meta: {
