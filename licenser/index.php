@@ -107,7 +107,7 @@ class PowerShopPro
 	}
 	public function inactive_menu()
 	{
-		add_menu_page("PowerShopPro", "Power Shop Pro", 'activate_plugins', $this->slug,  [$this, "license_form"], " dashicons-star-filled ");
+		add_submenu_page('edit.php?post_type=power-shop', "PowerShopPro License", "License Info", "activate_plugins",  $this->slug . "_license", [$this, "license_form"]);
 	}
 	function action_activate_license()
 	{
@@ -218,13 +218,8 @@ class PowerShopPro
 				<?php
 				}
 				?>
-				<p><?php esc_html_e("Enter your license key here, to activate the product, and get full feature updates and premium support.", "power-shop-pro"); ?></p>
-				<ol>
-					<li><?php esc_html_e("Write your licnese key details", "power-shop-pro"); ?></li>
-					<li><?php esc_html_e("How buyer will get this license key?", "power-shop-pro"); ?></li>
-					<li><?php esc_html_e("Describe other info about licensing if required", "power-shop-pro"); ?></li>
-					<li>. ...</li>
-				</ol>
+				<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="https://cloud.luke.cafe/product/power-shop/">站長路可網站</a>購買
+					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:cloud@luke.cafe" target="_blank">cloud@luke.cafe</a></p>
 				<div class="el-license-field">
 					<label for="el_license_key"><?php echo esc_html("License code", "power-shop-pro"); ?></label>
 					<input type="text" class="regular-text code" name="el_license_key" size="50" placeholder="xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx" required="required">
