@@ -20,10 +20,11 @@
 
 namespace J7\ViteReactWPPlugin\PowerShop;
 
+
+
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/inc/admin.php';
 require_once __DIR__ . '/licenser/index.php';
-
 
 use Dotenv\Dotenv;
 

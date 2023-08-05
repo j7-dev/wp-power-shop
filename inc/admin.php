@@ -15,8 +15,6 @@ use Kucrut\Vite;
 
 class Bootstrap
 {
-	const PLUGIN_DIR = __DIR__ . '/../';
-
 	function __construct()
 	{
 		$_ENV['APP_NAME'];
@@ -78,6 +76,7 @@ class Bootstrap
 
 		$post_id = \get_the_ID();
 		$permalink = \get_permalink($post_id);
+		$elLicenseCode = \get_option('PowerShopPro_lic_Key', '');
 
 		\wp_localize_script($_ENV['KEBAB'], 'appData', array(
 			'siteUrl' => \site_url(),
@@ -87,12 +86,32 @@ class Bootstrap
 			'postId' => $post_id,
 			'permalink' => $permalink,
 			'checkoutUrl' => $checkout_page_url,
+			'elLicenseCode' => $elLicenseCode,
 		));
 
 		\wp_localize_script($_ENV['KEBAB'], 'wpApiSettings', array(
 			'root' => \esc_url_raw(rest_url()),
 			'nonce' => \wp_create_nonce('wp_rest'),
 		));
+	}
+
+	public static function get_plugin_dir(): string
+	{
+		$plugin_dir = \wp_normalize_path(\plugin_dir_path(__FILE__ . '../'));
+		return $plugin_dir;
+	}
+
+	public static function get_plugin_url(): string
+	{
+		$plugin_url = \plugin_dir_url(self::get_plugin_dir());
+		return $plugin_url;
+	}
+
+	public static function get_plugin_ver(): string
+	{
+		$plugin_data = \get_plugin_data(self::get_plugin_dir());
+		$plugin_ver = $plugin_data['Version'];
+		return $plugin_ver;
 	}
 }
 
