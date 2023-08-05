@@ -6,7 +6,7 @@
  * Author: j7.dev
  * Author URI: https://github.com/j7-dev
  * License: GPLv2
- * Version: 1.4.0
+ * Version: 1.4.1
  * Requires PHP: 8.1
  */
 
@@ -22,6 +22,8 @@ namespace J7\ViteReactWPPlugin\PowerShop;
 
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/inc/admin.php';
+require_once __DIR__ . '/license_manage/index.php';
+
 
 use Dotenv\Dotenv;
 
