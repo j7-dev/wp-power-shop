@@ -10,10 +10,19 @@ class CPT extends Bootstrap
 {
 	const VAR = 'ps_report';
 	const POST_META = ['meta', 'settings'];
+	const CPT_LABEL = 'Power Shop';
+	const CPT_SLUG = 'power-shop';
+	const MAX_POSTS = 1;
+
+	private $count_publish = 0;
+	private $is_exceed_limit = false;
+
+
 
 
 	function __construct()
 	{
+
 		\add_action('init', [$this, 'init']);
 		\add_action('rest_api_init', [$this, 'add_post_meta']);
 
@@ -21,9 +30,14 @@ class CPT extends Bootstrap
 		\add_action('load-post-new.php', [$this, 'init_metabox']);
 
 		\add_filter('query_vars', [$this, 'add_query_for_report']);
-		\add_filter('template_include', [$this, 'load_report_template'], 99);
+		\add_filter('template_include', [$this, 'load_report_template'], 999);
 
 		\add_action('wp_insert_post', [$this, 'set_default_power_shop_meta'], 10, 3);
+
+		// 限制只能發佈一篇文章
+		\add_action('publish_' . self::CPT_SLUG, [$this, 'post_published_limit'], 999, 3);
+		\add_filter('post_row_actions', [$this, 'remove_row_actions'], 999, 2);
+		\add_filter("bulk_actions-edit-" . self::CPT_SLUG, [$this, 'remove_bulk_actions'], 999, 1);
 	}
 
 	public function add_query_for_report($vars)
@@ -34,12 +48,30 @@ class CPT extends Bootstrap
 
 	public function init(): void
 	{
-		Functions::register_cpt($_ENV['APP_NAME']);
+		Functions::register_cpt(self::CPT_LABEL);
 
 		// 新增 {$_ENV['KEBAB']}/{slug}/report 網址規則
-		\add_rewrite_rule('^' . $_ENV['KEBAB'] . '/([^/]+)/report/?$', 'index.php?post_type=' . $_ENV['KEBAB'] . '&name=$matches[1]&' . self::VAR . '=1', 'top');
+		\add_rewrite_rule('^' . self::CPT_SLUG . '/([^/]+)/report/?$', 'index.php?post_type=' . self::CPT_SLUG . '&name=$matches[1]&' . self::VAR . '=1', 'top');
 
 		\flush_rewrite_rules();
+
+		$info = \Power_Shop_Pro_Base::get_register_info();
+		if ($info->is_valid) return;
+
+		$count_posts = \wp_count_posts(self::CPT_SLUG);
+		$this->count_publish = $count_posts->publish;
+
+		if ($this->count_publish > self::MAX_POSTS) {
+			$this->is_exceed_limit = true;
+		}
+
+		\add_action('admin_head', [$this, 'limit_admin_head'], 999, 1);
+		\add_action('admin_notices', [$this, 'limit_admin_notices'], 999);
+
+		if ($this->count_publish >= self::MAX_POSTS) {
+			\add_action('admin_enqueue_scripts', [$this, 'limit_css_and_js'], 999);
+			\add_action('admin_footer', [$this, 'limit_admin_footer'], 999, 1);
+		}
 	}
 
 	public function add_post_meta(): void
@@ -110,7 +142,7 @@ class CPT extends Bootstrap
 		$post_type = \sanitize_text_field($_POST['post_type'] ?? '');
 
 		// Check the user's permissions.
-		if ($_ENV['KEBAB'] !== $post_type) return $post_id;
+		if (self::CPT_SLUG !== $post_type) return $post_id;
 		if (!\current_user_can('edit_post', $post_id)) return $post_id;
 
 		/* OK, it's safe for us to save the data now. */
@@ -128,7 +160,7 @@ class CPT extends Bootstrap
 	 */
 	public function load_report_template($template)
 	{
-		$repor_template_path = Bootstrap::PLUGIN_DIR . 'inc/templates/report.php';
+		$repor_template_path = Bootstrap::get_plugin_dir() . 'inc/templates/report.php';
 
 		if (\get_query_var(self::VAR)) {
 			if (file_exists($repor_template_path)) {
@@ -141,19 +173,124 @@ class CPT extends Bootstrap
 	/**
 	 * 設定預設的 post meta data
 	 */
-	function set_default_power_shop_meta($post_id, $post, $update)
+	public function set_default_power_shop_meta($post_id, $post, $update)
 	{
 		// Get the post object
 		$post = \get_post($post_id);
 
 
 		// 剛創建時，且 post type === $_ENV['KEBAB']
-		if (!$update && $post->post_type === $_ENV['KEBAB']) {
+		if (!$update && $post->post_type === self::CPT_SLUG) {
 			// Add default post_meta
 			$default_password = \wp_create_nonce($_ENV['KEBAB']);
 			$encrypted_password = base64_encode($default_password);
 
 			\add_post_meta($post_id, $_ENV['SNAKE'] . '_report_password', $encrypted_password, true);
 		}
+	}
+
+	public function post_published_limit($post_id, $post, $old_status)
+	{
+		$shop_ids = \get_posts(array(
+			'post_type' => self::CPT_SLUG,
+			'post_status' => 'publish',
+			'fields' => 'ids',
+			'posts_per_page' => -1,
+		));
+
+		if ($this->is_exceed_limit) {
+			$post = array('post_status' => 'draft');
+			\wp_update_post($post);
+		}
+	}
+
+	public function remove_row_actions($actions, $post)
+	{
+		if (self::CPT_SLUG === $post->post_type) {
+			unset($actions['inline hide-if-no-js']);
+			return $actions;
+		}
+		return $actions;
+	}
+
+	public function remove_bulk_actions($actions)
+	{
+		unset($actions['edit']);
+		return $actions;
+	}
+
+	public function limit_admin_head()
+	{
+		$screen = \get_current_screen();
+		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
+
+		$shop_ids = \get_posts(array(
+			'post_type' => self::CPT_SLUG,
+			'post_status' => 'publish',
+			'fields' => 'ids',
+			'posts_per_page' => -1,
+		));
+
+		if ($this->is_exceed_limit && !empty($shop_ids)) {
+			foreach ($shop_ids as $key => $shop_id) {
+				if ($key !== 0) {
+					\wp_update_post(array(
+						'ID'            => $shop_id,
+						'post_status'   => 'draft',
+					));
+				}
+			}
+		}
+	}
+
+	public function limit_admin_footer()
+	{
+		$screen = \get_current_screen();
+		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
+
+		echo $this->render_dialog();
+	}
+
+	public function limit_admin_notices()
+	{
+		$screen = \get_current_screen();
+		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
+?>
+		<div class="notice notice-info is-dismissible">
+			<div class="e-notice__content">
+				<h3>購買授權，新增更多 Power Shop!</h3>
+
+				<p>免費版 Power Shop，僅能發布一個商店，購買授權，以新增更多 Power Shop</p>
+
+				<p>請輸入授權碼以開通進階功能，購買授權請到 <a href="https://cloud.luke.cafe/product/power-shop/">站長路可網站</a> 購買
+					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 cloud@luke.cafe</p>
+
+				<div class="e-notice__actions">
+					<a href="" target="_blank" class="button button-primary button-large">購買授權</a>
+				</div>
+			</div>
+		</div>
+	<?
+
+
+	}
+
+	public function limit_css_and_js()
+	{
+		\wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/js/main.js', array('jquery', 'jquery-ui-dialog'), Bootstrap::get_plugin_ver(), true);
+	}
+
+	private function render_dialog()
+	{
+		$html = '';
+		ob_start();
+	?>
+		<div id="<?= self::CPT_SLUG ?>-dialog" title="前往購買授權">
+			<p>請輸入授權碼以開通進階功能，購買授權請到<a href="https://cloud.luke.cafe/product/power-shop/">站長路可網站</a>購買
+				有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 cloud@luke.cafe</p>
+		</div>
+<?php
+		$html .= ob_get_clean();
+		return $html;
 	}
 }
