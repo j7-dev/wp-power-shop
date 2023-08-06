@@ -5,7 +5,7 @@
   $(document).ready(function () {
     const createShopNodeSelectors = [
       '.post-type-power-shop .page-title-action',
-      ".post-type-power-shop #menu-posts-power-shop a[href*='post_type=power-shop']",
+      "#menu-posts-power-shop a[href^='post-new.php?post_type=power-shop']",
     ]
     const createShopNodeSelectorsString = createShopNodeSelectors.join(', ')
     const dialog = $('#power-shop-dialog')

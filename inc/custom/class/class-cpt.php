@@ -260,9 +260,6 @@ class CPT extends Bootstrap
 	public function limit_admin_footer()
 	{
 		if ($this->count_publish >= self::MAX_POSTS) {
-			$screen = \get_current_screen();
-			if ('edit-' . self::CPT_SLUG !== $screen->id) return;
-
 			echo self::render_dialog();
 		}
 	}
