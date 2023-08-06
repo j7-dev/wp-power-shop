@@ -12,6 +12,7 @@ use Kucrut\Vite;
  * [ ] - 使用COUPON
  */
 
+require_once __DIR__ . '/custom/includes.php';
 
 class Bootstrap
 {
@@ -114,5 +115,3 @@ class Bootstrap
 		return $plugin_ver;
 	}
 }
-
-require_once __DIR__ . '/custom/includes.php';

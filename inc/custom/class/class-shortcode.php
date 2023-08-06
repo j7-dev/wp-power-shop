@@ -25,14 +25,7 @@ class ShortCode
 			}
 		}
 
-
-		$html = '';
-		ob_start();
-?>
-		<div id="<?= $_ENV['VITE_RENDER_ID_3'] ?>"></div>
-<?php
-		$html .= ob_get_clean();
-
+		$html = '<div id="' . $_ENV['VITE_RENDER_ID_3'] . '"></div>';
 
 		return $html;
 	}

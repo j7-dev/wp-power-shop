@@ -22,7 +22,6 @@
         buttons: [
           {
             text: '前往購買',
-            icon: 'ui-icon-heart',
             click() {
               window.open(BUY_LINK, '_blank')
             },
