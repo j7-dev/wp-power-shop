@@ -56,7 +56,7 @@ class CPT extends Bootstrap
 		\flush_rewrite_rules();
 
 		$info = \Power_Shop_Pro_Base::get_register_info();
-		if ($info->is_valid) return;
+		if (@$info->is_valid) return;
 
 		$count_posts = \wp_count_posts(self::CPT_SLUG);
 		$this->count_publish = $count_posts->publish;
@@ -67,11 +67,8 @@ class CPT extends Bootstrap
 
 		\add_action('admin_head', [$this, 'limit_admin_head'], 999, 1);
 		\add_action('admin_notices', [$this, 'limit_admin_notices'], 999);
-
-		if ($this->count_publish >= self::MAX_POSTS) {
-			\add_action('admin_enqueue_scripts', [$this, 'limit_css_and_js'], 999);
-			\add_action('admin_footer', [$this, 'limit_admin_footer'], 999, 1);
-		}
+		\add_action('admin_enqueue_scripts', [$this, 'limit_css_and_js'], 999);
+		\add_action('admin_footer', [$this, 'limit_admin_footer'], 999, 1);
 	}
 
 	public function add_post_meta(): void
@@ -191,13 +188,6 @@ class CPT extends Bootstrap
 
 	public function post_published_limit($post_id, $post, $old_status)
 	{
-		$shop_ids = \get_posts(array(
-			'post_type' => self::CPT_SLUG,
-			'post_status' => 'publish',
-			'fields' => 'ids',
-			'posts_per_page' => -1,
-		));
-
 		if ($this->is_exceed_limit) {
 			$post = array('post_status' => 'draft');
 			\wp_update_post($post);
@@ -245,16 +235,21 @@ class CPT extends Bootstrap
 
 	public function limit_admin_footer()
 	{
-		$screen = \get_current_screen();
-		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
+		if ($this->count_publish >= self::MAX_POSTS) {
+			$screen = \get_current_screen();
+			if ('edit-' . self::CPT_SLUG !== $screen->id) return;
 
-		echo $this->render_dialog();
+			echo $this->render_dialog();
+		}
 	}
 
 	public function limit_admin_notices()
 	{
 		$screen = \get_current_screen();
 		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
+
+		$html = '';
+		ob_start();
 ?>
 		<div class="notice notice-info is-dismissible">
 			<div class="e-notice__content">
@@ -271,13 +266,15 @@ class CPT extends Bootstrap
 			</div>
 		</div>
 	<?
-
-
+		$html .= ob_get_clean();
+		echo $html;
 	}
 
 	public function limit_css_and_js()
 	{
-		\wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/js/main.js', array('jquery', 'jquery-ui-dialog'), Bootstrap::get_plugin_ver(), true);
+		if ($this->count_publish >= self::MAX_POSTS) {
+			\wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/js/main.js', array('jquery', 'jquery-ui-dialog'), Bootstrap::get_plugin_ver(), true);
+		}
 	}
 
 	private function render_dialog()
