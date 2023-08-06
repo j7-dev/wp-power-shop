@@ -3,16 +3,17 @@
 ;(function ($) {
   const BUY_LINK = 'https://www.google.com'
   $(document).ready(function () {
-    const selectors = [
+    const createShopNodeSelectors = [
       '.post-type-power-shop .page-title-action',
       ".post-type-power-shop #menu-posts-power-shop a[href*='post_type=power-shop']",
     ]
+    const createShopNodeSelectorsString = createShopNodeSelectors.join(', ')
+    const dialog = $('#power-shop-dialog')
 
-    const selectorString = selectors.join(', ')
     init()
 
     function init() {
-      $('#power-shop-dialog').dialog({
+      dialog.dialog({
         modal: true,
         autoOpen: false,
         draggable: false,
@@ -31,10 +32,10 @@
 
       // add event listener to the selector
 
-      $(selectorString).click(function (e) {
+      $(createShopNodeSelectorsString).click(function (e) {
         e.preventDefault()
         e.stopPropagation()
-        $('#power-shop-dialog').dialog('open')
+        dialog.dialog('open')
       })
     }
   })
