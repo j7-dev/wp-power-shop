@@ -96,11 +96,11 @@ class PowerShopPro
 	}
 	public function active_admin_menu()
 	{
-		add_submenu_page('edit.php?post_type=power-shop', "PowerShopPro License", "License Info", "activate_plugins",  $this->slug . "_license", [$this, "activated"]);
+		add_submenu_page('edit.php?post_type=power-shop', "PowerShopPro License", "License Info", "activate_plugins",  $this->slug . "-license", [$this, "activated"]);
 	}
 	public function inactive_menu()
 	{
-		add_submenu_page('edit.php?post_type=power-shop', "PowerShopPro License", "License Info", "activate_plugins",  $this->slug . "_license", [$this, "license_form"]);
+		add_submenu_page('edit.php?post_type=power-shop', "PowerShopPro License", "License Info", "activate_plugins",  $this->slug . "-license", [$this, "license_form"]);
 	}
 	function action_activate_license()
 	{
@@ -110,7 +110,7 @@ class PowerShopPro
 		update_option("PowerShopPro_lic_Key", $license_key) || add_option("PowerShopPro_lic_Key", $license_key);
 		update_option("PowerShopPro_lic_email", $license_email) || add_option("PowerShopPro_lic_email", $license_email);
 		update_option('_site_transient_update_plugins', '');
-		wp_safe_redirect(admin_url('admin.php?page=' . $this->slug));
+		wp_safe_redirect(admin_url('edit.php?post_type=power-shop&page=power-shop-pro-license'));
 	}
 	function action_deactivate_license()
 	{
@@ -122,7 +122,7 @@ class PowerShopPro
 			update_option($lic_key_name, "") || add_option($lic_key_name, "");
 			update_option('_site_transient_update_plugins', '');
 		}
-		wp_safe_redirect(admin_url('admin.php?page=' . $this->slug));
+		wp_safe_redirect(admin_url('edit.php?post_type=power-shop&page=power-shop-pro-license'));
 	}
 	function activated()
 	{

@@ -2,39 +2,54 @@
 /* eslint-disable no-undef */
 ;(function ($) {
   const BUY_LINK = 'https://www.google.com'
+  const SUPPORT_EMAIL = 'cloud@luke.cafe'
+  const LICENSE_LINK = 'https://www.google.com'
+
   $(document).ready(function () {
     const createShopNodeSelectors = [
       '.post-type-power-shop .page-title-action',
       "#menu-posts-power-shop a[href^='post-new.php?post_type=power-shop']",
     ]
     const createShopNodeSelectorsString = createShopNodeSelectors.join(', ')
-    const dialog = $('#power-shop-dialog')
 
     init()
 
     function init() {
-      dialog.dialog({
-        modal: true,
-        autoOpen: false,
-        draggable: false,
-        hide: 300,
-        show: 300,
-        buttons: [
-          {
-            text: '前往購買',
-            click() {
-              window.open(BUY_LINK, '_blank')
-            },
-          },
-        ],
-      })
-
       // add event listener to the selector
 
       $(createShopNodeSelectorsString).click(function (e) {
         e.preventDefault()
         e.stopPropagation()
-        dialog.dialog('open')
+
+        const content = `<p>請輸入授權碼以開通進階功能，購買授權請到 <a target="_blank" href="${BUY_LINK}">站長路可網站</a> 購買
+				有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a target="_blank" href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a> </p>`
+
+        $.confirm({
+          title: '前往購買授權',
+          content,
+          type: 'blue',
+          closeIcon: true,
+          buttons: {
+            cancel: {
+              text: '忍痛拒絕',
+              btnClass: 'btn-default',
+            },
+            input: {
+              text: '輸入授權碼',
+              btnClass: 'btn-default',
+              action() {
+                window.open(LICENSE_LINK, '_blank')
+              },
+            },
+            buy: {
+              text: '前往購買',
+              btnClass: 'btn-blue',
+              action() {
+                window.open(BUY_LINK, '_blank')
+              },
+            },
+          },
+        })
       })
     }
   })

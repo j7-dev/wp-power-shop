@@ -14,6 +14,9 @@ class CPT extends Bootstrap
 	const CPT_SLUG = 'power-shop';
 	const MAX_POSTS = 1;
 	const BUY_LINK = 'https://cloud.luke.cafe/product/power-shop/';
+	const SUPPORT_EMAIL = 'cloud@luke.cafe';
+	const COLOR = '#72aee6';
+
 
 	private $count_publish = 0;
 	private $is_exceed_limit = false;
@@ -41,23 +44,8 @@ class CPT extends Bootstrap
 		\add_filter("bulk_actions-edit-" . self::CPT_SLUG, [$this, 'remove_bulk_actions'], 999, 1);
 
 		\add_action('admin_enqueue_scripts', [$this, 'limit_css_and_js'], 999);
-		\add_action('admin_footer', [$this, 'limit_admin_footer'], 999, 1);
 		\add_action('admin_head', [$this, 'limit_admin_head'], 999, 1);
 		\add_action('admin_notices', [$this, 'limit_admin_notices'], 999);
-	}
-
-
-	public static function render_dialog()
-	{
-		$slug = self::CPT_SLUG;
-		$buy_link = self::BUY_LINK;
-		$html = <<<EOD
-		<div id="$slug-dialog" title="前往購買授權">
-			<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="$buy_link">站長路可網站</a>購買
-				有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 cloud@luke.cafe</p>
-		</div>
-		EOD;
-		return $html;
 	}
 
 	public function add_query_for_report($vars)
@@ -251,16 +239,10 @@ class CPT extends Bootstrap
 	public function limit_css_and_js()
 	{
 		if ($this->count_publish >= self::MAX_POSTS) {
-			\wp_enqueue_style('jquery-ui', Bootstrap::get_plugin_url() . 'inc/assets/css/jquery-ui.min.css');
-			\wp_enqueue_script('jquery-ui-dialog');
-			\wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/js/main.js', array('jquery', 'jquery-ui-dialog'), Bootstrap::get_plugin_ver(), true);
-		}
-	}
-
-	public function limit_admin_footer()
-	{
-		if ($this->count_publish >= self::MAX_POSTS) {
-			echo self::render_dialog();
+			\wp_enqueue_style(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/css/main.css');
+			\wp_enqueue_style('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.css');
+			\wp_enqueue_script('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.js', array('jquery'), '3.3.4', true);
+			\wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/js/main.js', array('jquery-confirm'), Bootstrap::get_plugin_ver(), true);
 		}
 	}
 
@@ -270,19 +252,21 @@ class CPT extends Bootstrap
 		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
 
 		$buy_link = self::BUY_LINK;
+		$support_email = self::SUPPORT_EMAIL;
+		$color = self::COLOR;
 
 		$html = <<<EOD
-		<div class="notice notice-info is-dismissible">
+		<div class="notice notice-info is-dismissible" style="border-left-color:$color;">
 			<div class="e-notice__content">
-				<h3>購買授權，新增更多 Power Shop!</h3>
+				<h3>升級PowerShop，讓你的商店更有POWER!</h3>
 
-				<p>免費版 Power Shop，僅能發布一個商店，購買授權，以新增更多 Power Shop</p>
+				<p>您現在使用的是免費版的PowerShop外掛，僅能發佈一個商店。升級付費版，即可解鎖完整功能</p>
 
-				<p>請輸入授權碼以開通進階功能，購買授權請到 <a target="_blank" href="$buy_link">站長路可網站</a> 購買
-					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 cloud@luke.cafe</p>
+				<p>有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a target="_blank" href="mailto:$support_email">$support_email</a>
 
-				<div class="e-notice__actions">
-					<a href="$buy_link" target="_blank" class="button button-primary button-large">購買授權</a>
+				<div style="display: flex;">
+					<a href="$buy_link" target="_blank" class="button button-primary button-large" style="margin-right: 0.5rem;background-color: $color;border-color:$color;">購買授權</a>
+					<a href="$buy_link" target="_blank" class="button button-large" style="border-color:$color;color:$color;">輸入授權碼</a>
 				</div>
 			</div>
 		</div>
