@@ -1,9 +1,9 @@
 /* eslint-disable quotes */
 /* eslint-disable no-undef */
 ;(function ($) {
-  const BUY_LINK = 'https://www.google.com'
-  const SUPPORT_EMAIL = 'cloud@luke.cafe'
-  const LICENSE_LINK = 'https://www.google.com'
+  const BUY_LINK = powerShopData?.buyLink || '/'
+  const SUPPORT_EMAIL = powerShopData?.supportEmail || 'cloud@luke.cafe'
+  const LICENSE_LINK = powerShopData?.licenseLink || '/'
 
   $(document).ready(function () {
     const createShopNodeSelectors = [

@@ -1,11 +1,4 @@
 <?php
-/*
-Plugin Name: Power Shop Pro
-Plugin URI:
-Description: simple description
-Version: 1.0.0.0
-*/
-
 require_once "class-power-shop-pro-base.php";
 class PowerShopPro
 {
@@ -103,7 +96,6 @@ class PowerShopPro
 	}
 	public function active_admin_menu()
 	{
-
 		add_submenu_page('edit.php?post_type=power-shop', "PowerShopPro License", "License Info", "activate_plugins",  $this->slug . "-license", [$this, "activated"]);
 	}
 	public function inactive_menu()

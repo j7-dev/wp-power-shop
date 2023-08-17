@@ -14,6 +14,7 @@ class CPT extends Bootstrap
 	const CPT_SLUG = 'power-shop';
 	const MAX_POSTS = 1;
 	const BUY_LINK = 'https://cloud.luke.cafe/product/power-shop/';
+	const LICENSE_LINK = 'edit.php?post_type=power-shop&page=power-shop-pro-license';
 	const SUPPORT_EMAIL = 'cloud@luke.cafe';
 	const COLOR = '#72aee6';
 
@@ -243,6 +244,11 @@ class CPT extends Bootstrap
 			\wp_enqueue_style('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.css');
 			\wp_enqueue_script('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.js', array('jquery'), '3.3.4', true);
 			\wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/js/main.js', array('jquery-confirm'), Bootstrap::get_plugin_ver(), true);
+			wp_localize_script(self::CPT_SLUG, 'powerShopData', [
+				'buyLink' => self::BUY_LINK,
+				'licenseLink' => \admin_url(self::LICENSE_LINK),
+				'supportEmail' => self::SUPPORT_EMAIL,
+			]);
 		}
 	}
 
@@ -252,6 +258,7 @@ class CPT extends Bootstrap
 		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
 
 		$buy_link = self::BUY_LINK;
+		$license_link = \admin_url(self::LICENSE_LINK);
 		$support_email = self::SUPPORT_EMAIL;
 		$color = self::COLOR;
 
@@ -266,7 +273,7 @@ class CPT extends Bootstrap
 
 				<div style="display: flex;">
 					<a href="$buy_link" target="_blank" class="button button-primary button-large" style="margin-right: 0.5rem;background-color: $color;border-color:$color;">購買授權</a>
-					<a href="$buy_link" target="_blank" class="button button-large" style="border-color:$color;color:$color;">輸入授權碼</a>
+					<a href="$license_link" class="button button-large" style="border-color:$color;color:$color;">輸入授權碼</a>
 				</div>
 			</div>
 		</div>
