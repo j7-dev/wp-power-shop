@@ -76,7 +76,6 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
             <Select
               mode="multiple"
               allowClear
-              showArrow
               tagRender={tagRender}
               style={{ width: '100%' }}
               options={options}

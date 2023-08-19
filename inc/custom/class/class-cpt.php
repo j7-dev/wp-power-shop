@@ -271,7 +271,7 @@ class CPT extends Bootstrap
 
 				<p>有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a target="_blank" href="mailto:$support_email">$support_email</a>
 
-				<div style="display: flex;">
+				<div style="display: flex;margin-bottom:1rem;">
 					<a href="$buy_link" target="_blank" class="button button-primary button-large" style="margin-right: 0.5rem;background-color: $color;border-color:$color;">購買授權</a>
 					<a href="$license_link" class="button button-large" style="border-color:$color;color:$color;">輸入授權碼</a>
 				</div>
