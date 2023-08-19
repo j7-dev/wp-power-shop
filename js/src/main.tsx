@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
-import App2 from './App2'
-import App3 from './App3'
-import App4 from './App4'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { renderId1, renderId2, renderId3, renderId4 } from './utils'
+
+const App = lazy(() => import('./App'))
+const App2 = lazy(() => import('./App2'))
+const App3 = lazy(() => import('./App3'))
+const App4 = lazy(() => import('./App4'))
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
