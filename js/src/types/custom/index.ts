@@ -8,8 +8,8 @@ export type TFSMeta = {
   productId: number
   type: string
   variations?: TFSVariation[]
-  regularPrice?: number
-  salesPrice?: number
+  regularPrice?: number | string
+  salesPrice?: number | string
 }
 
 export const defaultFSMeta: TFSMeta = {

@@ -46,6 +46,7 @@ const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
               }`}
               onClick={handleClick(image.id)}
               src={image.src}
+              style={{ width: '-webkit-fill-available' }}
             />
           ))}
         </div>
