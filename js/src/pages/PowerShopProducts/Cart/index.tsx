@@ -7,12 +7,13 @@ import { ProductsContext } from '@/pages/PowerShopProducts/Main'
 import { TFSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
 import { Popconfirm, notification, Button, Empty, Spin } from 'antd'
-import { ajaxNonce, checkoutUrl } from '@/utils'
+import { ajaxNonce, checkoutUrl, renderHTML } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { LoadingText, LoadingCard } from '@/components/PureComponents'
 import ShippingField from './ShippingField'
 import { BiMoneyWithdraw } from 'react-icons/bi'
 import UpdateCartInputNumber from './UpdateCartInputNumber'
+import { toNumber } from 'lodash-es'
 
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
@@ -123,10 +124,10 @@ const Cart = () => {
                     )}
 
                     <div className="text-left">
-                      <h6 className="font-normal text-lg mb-2">
+                      <h6 className="font-normal text-lg mb-2 mt-0">
                         <LoadingText
                           width="w-[8rem]"
-                          content={item?.name}
+                          content={renderHTML(item?.name)}
                           isLoading={isLoading || cartIsFetching}
                         />
                       </h6>
@@ -153,7 +154,9 @@ const Cart = () => {
                 <td>
                   <LoadingText
                     width="w-[4rem]"
-                    content={`$ ${(price * quantity).toLocaleString()}`}
+                    content={`$ ${(
+                      toNumber(price) * quantity
+                    ).toLocaleString()}`}
                     isLoading={isLoading || cartIsFetching}
                   />
                 </td>

@@ -2,7 +2,7 @@ export const LoadingText: React.FC<{
   height?: string
   width?: string
   isLoading?: boolean
-  content?: string
+  content?: React.ReactNode
   className?: string
 }> = ({
   height = 'h-[1rem]',
