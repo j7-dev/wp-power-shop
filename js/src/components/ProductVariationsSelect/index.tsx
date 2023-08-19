@@ -78,19 +78,17 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
                 </div>
               ))} */}
               {terms.map((term) => (
-                <>
-                  <Button
-                    key={term?.slug}
-                    type={`${
-                      selectedTerm?.value === term?.slug ? 'primary' : 'default'
-                    }`}
-                    onClick={handleClick(attribute, term)}
-                    size="small"
-                    className="mr-1 mb-1"
-                  >
-                    <span className="text-xs">{term?.name}</span>
-                  </Button>
-                </>
+                <Button
+                  key={term?.slug}
+                  type={`${
+                    selectedTerm?.value === term?.slug ? 'primary' : 'default'
+                  }`}
+                  onClick={handleClick(attribute, term)}
+                  size="small"
+                  className="mr-1 mb-1"
+                >
+                  <span className="text-xs">{term?.name}</span>
+                </Button>
               ))}
             </div>
           </div>

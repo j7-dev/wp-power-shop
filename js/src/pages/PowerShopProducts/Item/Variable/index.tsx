@@ -3,6 +3,8 @@ import { TProduct } from '@/types/wcStoreApi'
 import { getProductImageSrc, renderHTML } from '@/utils'
 import { Button } from 'antd'
 import { ProductsContext } from '@/pages/PowerShopProducts/Main'
+import { TFSMeta } from '@/types'
+import { toNumber } from 'lodash-es'
 
 const Variable: React.FC<{
   product: TProduct
@@ -12,7 +14,7 @@ const Variable: React.FC<{
 
   const name = renderHTML(product?.name ?? '未知商品')
   const imageSrc = getProductImageSrc(product)
-  const price_html = renderHTML(product?.price_html ?? '')
+  const priceRange = getPriceRage(FSMeta)
 
   return (
     <div
@@ -23,7 +25,7 @@ const Variable: React.FC<{
         <img src={imageSrc} className="w-full aspect-square" />
       </div>
       <div className="m-0">{name}</div>
-      <div>{price_html}</div>
+      <div>{priceRange}</div>
       <Button
         onClick={showFSModal({ product, FSMeta })}
         type="primary"
@@ -33,6 +35,24 @@ const Variable: React.FC<{
       </Button>
     </div>
   )
+}
+
+function getPriceRage(FSMeta?: TFSMeta) {
+  if (!FSMeta) return ''
+  const variations = FSMeta?.variations ?? []
+
+  const priceArray = variations
+    .map((v) => [
+      toNumber(v.regularPrice),
+      toNumber(v.salesPrice),
+    ])
+    .flat()
+    .filter((v) => v !== 0)
+
+  const min = Math.min(...priceArray)
+  const max = Math.max(...priceArray)
+
+  return `$${min} – $${max}`
 }
 
 export default Variable
