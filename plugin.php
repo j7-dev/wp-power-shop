@@ -1,21 +1,18 @@
 <?php
 
 /**
- * Plugin Name: Power Shop 讓你的商店充滿 Power
- * Description: Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
- * Author: j7.dev
- * Author URI: https://github.com/j7-dev
- * License: GPLv2
- * Version:   2.0.19
- * Requires PHP: 8.1
- */
-
-
-/**
- * Tags: woocommerce, shop, order
- * Requires at least: 4.6
- * Tested up to: 4.8
- * Stable tag: 4.3
+ * Plugin Name:       Power Shop | 讓你的商店充滿 Power
+ * Plugin URI:        https://example.com/
+ * Description:       Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
+ * Version:           2.0.20
+ * Requires at least: 5.7
+ * Requires PHP:      8.1
+ * Author:            j7.dev
+ * Author URI:        https://github.com/j7-dev
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       power-shop
+ * Domain Path:       /languages
  */
 
 namespace J7\ViteReactWPPlugin\PowerShop;
@@ -33,3 +30,8 @@ $dotenv->safeLoad();
 
 $instance = new Admin\Bootstrap();
 $instance->init();
+
+// Tags: woocommerce, shop, order
+// Requires at least: 4.6
+// Tested up to: 4.8
+// Stable tag: 4.3

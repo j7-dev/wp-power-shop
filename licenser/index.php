@@ -1,11 +1,4 @@
 <?php
-/*
-Plugin Name: Power Shop Pro
-Plugin URI:
-Description: simple description
-Version: 1.0.0.0
-*/
-
 require_once "class-power-shop-pro-base.php";
 class PowerShopPro
 {
