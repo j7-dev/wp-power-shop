@@ -22,12 +22,8 @@ class CPT extends Bootstrap
 	private $count_publish = 0;
 	private $is_exceed_limit = false;
 
-
-
-
 	function __construct()
 	{
-
 		\add_action('init', [$this, 'init']);
 		\add_action('rest_api_init', [$this, 'add_post_meta']);
 
@@ -281,3 +277,5 @@ EOD;
 		echo $html;
 	}
 }
+
+new CPT();

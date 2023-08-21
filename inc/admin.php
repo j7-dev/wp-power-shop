@@ -14,6 +14,7 @@ use Kucrut\Vite;
 
 require_once __DIR__ . '/custom/includes.php';
 
+
 class Bootstrap
 {
 	function __construct()
@@ -21,12 +22,6 @@ class Bootstrap
 		$_ENV['APP_NAME'];
 		$_ENV['KEBAB'] = str_replace(' ', '-', strtolower($_ENV['APP_NAME']));
 		$_ENV['SNAKE'] = str_replace(' ', '_', strtolower($_ENV['APP_NAME']));
-
-		new CPT();
-		new ShortCode();
-		new Cart();
-		new Order();
-		new Ajax();
 	}
 
 	public function init(): void
@@ -98,19 +93,19 @@ class Bootstrap
 
 	public static function get_plugin_dir(): string
 	{
-		$plugin_dir = \wp_normalize_path(\plugin_dir_path(__FILE__ . '../'));
+		$plugin_dir = \wp_normalize_path(\plugin_dir_path(__DIR__ . '../'));
 		return $plugin_dir;
 	}
 
 	public static function get_plugin_url(): string
 	{
-		$plugin_url = \plugin_dir_url(self::get_plugin_dir());
+		$plugin_url = \plugin_dir_url(self::get_plugin_dir() . 'plugin.php');
 		return $plugin_url;
 	}
 
 	public static function get_plugin_ver(): string
 	{
-		$plugin_data = \get_plugin_data(self::get_plugin_dir());
+		$plugin_data = \get_plugin_data(self::get_plugin_dir() . 'plugin.php');
 		$plugin_ver = $plugin_data['Version'];
 		return $plugin_ver;
 	}

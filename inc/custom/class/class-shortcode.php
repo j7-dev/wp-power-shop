@@ -30,3 +30,5 @@ class ShortCode
 		return $html;
 	}
 }
+
+new ShortCode();
