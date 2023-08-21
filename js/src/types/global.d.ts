@@ -11,6 +11,7 @@ declare global {
     postId: string
     permalink: string
     checkoutUrl: string
+    elLicenseCode: string
   }
 }
 

@@ -179,3 +179,5 @@ class Cart
 		}
 	}
 }
+
+new Cart();
