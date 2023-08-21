@@ -206,7 +206,7 @@ const Cart = () => {
     </table>
   )
 
-  return (
+  return items.length === 0 ? null : (
     <Spin
       indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
       spinning={isLoading || cartIsFetching}
