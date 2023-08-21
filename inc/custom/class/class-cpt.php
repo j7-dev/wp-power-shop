@@ -13,7 +13,7 @@ class CPT extends Bootstrap
 	const CPT_LABEL = 'Power Shop';
 	const CPT_SLUG = 'power-shop';
 	const MAX_POSTS = 1;
-	const BUY_LINK = 'https://cloud.luke.cafe/product/power-shop/';
+	const BUY_LINK = 'https://luke.cafe/plugins/power-shop/';
 	const LICENSE_LINK = 'edit.php?post_type=power-shop&page=power-shop-pro-license';
 	const SUPPORT_EMAIL = 'cloud@luke.cafe';
 	const COLOR = '#72aee6';

@@ -17,8 +17,8 @@
   "require": {
     "kucrut/vite-for-wp": "^0.5.2",
     "usefulteam/jwt-auth": "^2.1",
-    "lodash-php/lodash-php": "^0.0.7",
-    "vlucas/phpdotenv": "^5.5"
+    "vlucas/phpdotenv": "^5.5",
+    "lodash-php/lodash-php": "^0.0.7"
   },
   "require-dev": {
     "wp-coding-standards/wpcs": "^2.3",
