@@ -13,9 +13,7 @@ class CPT extends Bootstrap
 	const CPT_LABEL = 'Power Shop';
 	const CPT_SLUG = 'power-shop';
 	const MAX_POSTS = 1;
-	const BUY_LINK = 'https://luke.cafe/plugins/power-shop/';
 	const LICENSE_LINK = 'edit.php?post_type=power-shop&page=power-shop-pro-license';
-	const SUPPORT_EMAIL = 'cloud@luke.cafe';
 	const COLOR = '#72aee6';
 
 
@@ -241,9 +239,9 @@ class CPT extends Bootstrap
 			\wp_enqueue_script('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.js', array('jquery'), '3.3.4', true);
 			\wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/js/main.js', array('jquery-confirm'), Bootstrap::get_plugin_ver(), true);
 			wp_localize_script(self::CPT_SLUG, 'powerShopData', [
-				'buyLink' => self::BUY_LINK,
+				'buyLink' => $_ENV['BUY_LICENSE_LINK'],
 				'licenseLink' => \admin_url(self::LICENSE_LINK),
-				'supportEmail' => self::SUPPORT_EMAIL,
+				'supportEmail' => $_ENV['SUPPORT_EMAIL'],
 			]);
 		}
 	}
@@ -253,9 +251,9 @@ class CPT extends Bootstrap
 		$screen = \get_current_screen();
 		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
 
-		$buy_link = self::BUY_LINK;
+		$buy_link = $_ENV['BUY_LICENSE_LINK'];
 		$license_link = \admin_url(self::LICENSE_LINK);
-		$support_email = self::SUPPORT_EMAIL;
+		$support_email = $_ENV['SUPPORT_EMAIL'];
 		$color = self::COLOR;
 
 		$html = <<<EOD

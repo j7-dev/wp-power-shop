@@ -211,9 +211,10 @@ class PowerShopPro
 					</div>
 				<?php
 				}
+
 				?>
-				<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="https://cloud.luke.cafe/product/power-shop/">站長路可網站</a>購買
-					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:cloud@luke.cafe" target="_blank">cloud@luke.cafe</a></p>
+				<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="<?= $_ENV['BUY_LICENSE_LINK']; ?>">站長路可網站</a>購買
+					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:<?= $_ENV['SUPPORT_EMAIL']; ?>" target="_blank"><?= $_ENV['SUPPORT_EMAIL']; ?></a></p>
 				<div class="el-license-field">
 					<label for="el_license_key"><?php echo esc_html("License code", "power-shop-pro"); ?></label>
 					<input type="text" class="regular-text code" name="el_license_key" size="50" placeholder="xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx" required="required">
