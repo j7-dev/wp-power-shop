@@ -13,7 +13,7 @@ export const LoadingText: React.FC<{
 }) => {
   return isLoading ? (
     <div
-      className={`${height} ${width} bg-slate-500 animate-pulse rounded-sm relative inline-block top-[2px] ${className}`}
+      className={`${height} ${width}  bg-slate-300 animate-pulse rounded-sm relative inline-block top-[2px] ${className}`}
     ></div>
   ) : (
     content

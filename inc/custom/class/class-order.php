@@ -265,3 +265,5 @@ class Order
 		}
 	}
 }
+
+new Order();

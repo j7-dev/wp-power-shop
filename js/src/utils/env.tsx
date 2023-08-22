@@ -18,3 +18,6 @@ export const permalink = window?.appData?.permalink || '/'
 
 export const apiTimeout = import.meta.env.VITE_API_TIMEOUT || '30000'
 export const defaultImage = `${siteUrl}/wp-content/power-shop-release/js/dist/defaultImage.jpg`
+
+export const elApiKey = 'F9B52619-A5AC9B31-F7E931B1-526AD47D'
+export const elLicenseCode = window?.appData?.elLicenseCode || ''

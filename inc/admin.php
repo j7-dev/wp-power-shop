@@ -13,21 +13,14 @@ use Kucrut\Vite;
  */
 
 
+
 class Bootstrap
 {
-	const PLUGIN_DIR = __DIR__ . '/../';
-
 	function __construct()
 	{
 		$_ENV['APP_NAME'];
 		$_ENV['KEBAB'] = str_replace(' ', '-', strtolower($_ENV['APP_NAME']));
 		$_ENV['SNAKE'] = str_replace(' ', '_', strtolower($_ENV['APP_NAME']));
-
-		new CPT();
-		new ShortCode();
-		new Cart();
-		new Order();
-		new Ajax();
 	}
 
 	public function init(): void
@@ -78,6 +71,7 @@ class Bootstrap
 
 		$post_id = \get_the_ID();
 		$permalink = \get_permalink($post_id);
+		$elLicenseCode = \get_option('PowerShopPro_lic_Key', '');
 
 		\wp_localize_script($_ENV['KEBAB'], 'appData', array(
 			'siteUrl' => \site_url(),
@@ -87,6 +81,7 @@ class Bootstrap
 			'postId' => $post_id,
 			'permalink' => $permalink,
 			'checkoutUrl' => $checkout_page_url,
+			'elLicenseCode' => $elLicenseCode,
 		));
 
 		\wp_localize_script($_ENV['KEBAB'], 'wpApiSettings', array(
@@ -94,6 +89,23 @@ class Bootstrap
 			'nonce' => \wp_create_nonce('wp_rest'),
 		));
 	}
-}
 
-require_once __DIR__ . '/custom/includes.php';
+	public static function get_plugin_dir(): string
+	{
+		$plugin_dir = \wp_normalize_path(\plugin_dir_path(__DIR__ . '../'));
+		return $plugin_dir;
+	}
+
+	public static function get_plugin_url(): string
+	{
+		$plugin_url = \plugin_dir_url(self::get_plugin_dir() . 'plugin.php');
+		return $plugin_url;
+	}
+
+	public static function get_plugin_ver(): string
+	{
+		$plugin_data = \get_plugin_data(self::get_plugin_dir() . 'plugin.php');
+		$plugin_ver = $plugin_data['Version'];
+		return $plugin_ver;
+	}
+}
