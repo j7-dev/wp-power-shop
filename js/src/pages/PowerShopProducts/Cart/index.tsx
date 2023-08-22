@@ -1,9 +1,8 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { useOne, useAjax } from '@/hooks'
-import { useSetAtom } from 'jotai'
-import { storeApiNonceAtom } from '../atom'
+import { useSetAtom, useAtomValue } from 'jotai'
+import { storeApiNonceAtom, shopMetaAtom } from '../atom'
 import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
-import { ProductsContext } from '@/pages/PowerShopProducts/Main'
 import { TFSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
 import { Popconfirm, notification, Button, Empty, Spin } from 'antd'
@@ -17,7 +16,7 @@ import { toNumber } from 'lodash-es'
 
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
-  const { shop_meta } = useContext(ProductsContext)
+  const shop_meta = useAtomValue(shopMetaAtom)
 
   const { mutate, isLoading } = useAjax()
   const [

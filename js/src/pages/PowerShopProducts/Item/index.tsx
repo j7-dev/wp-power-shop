@@ -1,10 +1,10 @@
-import { useContext } from 'react'
 import Simple from './Simple'
 import Variable from './Variable'
-import { ProductsContext } from '@/pages/PowerShopProducts/Main'
+import { productsAtom } from '../atom'
+import { useAtomValue } from 'jotai'
 
 const Item: React.FC<{ productId: number }> = ({ productId }) => {
-  const { products } = useContext(ProductsContext)
+  const products = useAtomValue(productsAtom)
   const product = products.find((p) => p.id === productId)
   const type = product?.type ?? ''
 

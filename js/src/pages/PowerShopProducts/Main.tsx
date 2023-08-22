@@ -1,24 +1,23 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { FC, createContext } from 'react'
+import { FC, useEffect } from 'react'
 import { postId, snake, kebab } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcStoreApi'
-import Item from './Item'
-import useCartModal from './hooks/useCartModal'
 import Cart from './Cart'
-import { LoadingCard } from '@/components/PureComponents'
 import { Empty, Result, Button } from 'antd'
 import { RedoOutlined } from '@ant-design/icons'
 import { sortBy } from 'lodash-es'
 import Countdown from '@/components/Countdown'
-
-export const ProductsContext = createContext({
-  products: [] as TProduct[],
-  shop_meta: [] as TFSMeta[],
-  showFSModal:
-    (_props: { product: TProduct; FSMeta: TFSMeta | undefined }) => () => {},
-})
+import {
+  productsAtom,
+  shopMetaAtom,
+  isProductModalOpenAtom,
+  modalProductIdAtom,
+} from './atom'
+import { useSetAtom, useAtom } from 'jotai'
+import SimpleModal from '@/components/SimpleModal'
+import VariableModal from '@/components/VariableModal'
 
 const Main: FC<{ endTime?: number }> = ({ endTime }) => {
   const mutation = useAjaxGetPostMeta<TFSMeta[]>({
@@ -27,6 +26,14 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
     formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
   })
   const shop_meta = mutation?.meta ?? []
+
+  const setShopMeta = useSetAtom(shopMetaAtom)
+
+  useEffect(() => {
+    if (shop_meta.length > 0) {
+      setShopMeta(shop_meta)
+    }
+  }, [shop_meta.length])
 
   const product_ids = shop_meta?.map((meta) => meta.productId) ?? []
 
@@ -43,14 +50,19 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
 
   const rawProducts = (productsResult?.data?.data ?? []) as TProduct[]
 
-  //排序
+  const setProducts = useSetAtom(productsAtom)
 
-  const sortOrder = shop_meta.map((m) => m.productId)
-  const products = sortBy(rawProducts, (p) => {
-    return sortOrder.indexOf(p.id)
-  })
+  useEffect(() => {
+    //排序
 
-  const { renderCartModal, showFSModal } = useCartModal()
+    if (rawProducts.length > 0) {
+      const sortOrder = shop_meta.map((m) => m.productId)
+      const products = sortBy(rawProducts, (p) => {
+        return sortOrder.indexOf(p.id)
+      })
+      setProducts(products)
+    }
+  }, [rawProducts.length])
 
   if (product_ids.length === 0 && !productsResult.isLoading) {
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="沒有資料" />
@@ -79,39 +91,44 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
     )
   }
 
+  const setIsProductModalOpen = useSetAtom(isProductModalOpenAtom)
+  const [
+    modalProductId,
+    setModalProductId,
+  ] = useAtom(modalProductIdAtom)
+  const modalProduct = rawProducts.find((p) => p.id === modalProductId)
+  console.log('⭐  modalProduct', modalProduct)
+
+  useEffect(() => {
+    // add even listener
+
+    const els = document.querySelectorAll('div[data-ps-product-id]')
+    els.forEach((el) => {
+      const productId = parseInt(
+        el.getAttribute('data-ps-product-id') ?? '0',
+        10,
+      )
+      el.addEventListener('click', (e) => {
+        setIsProductModalOpen(true)
+        setModalProductId(productId)
+      })
+    })
+  }, [])
+
   return (
     <div className={`${kebab}-products`}>
       {!!endTime && (
         <Countdown toTime={endTime} title="把握最後機會🎉優惠即將到期🎉🎉🎉" />
       )}
-      <ProductsContext.Provider
-        value={{
-          products,
-          shop_meta,
-          showFSModal,
-        }}
-      >
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-          {productsResult.isLoading &&
-            product_ids.length > 0 &&
-            [
-              1,
-              2,
-              3,
-              4,
-            ].map((i) => <LoadingCard key={i} ratio="aspect-[260/385]" />)}
-          {!productsResult.isLoading &&
-            product_ids.length > 0 &&
-            products.map((product) => {
-              return <Item key={product?.id} productId={product?.id} />
-            })}
-        </div>
-
-        {renderCartModal()}
-        <div className="mt-20">
-          <Cart />
-        </div>
-      </ProductsContext.Provider>
+      {modalProduct?.type === 'simple' && (
+        <SimpleModal product={modalProduct} />
+      )}
+      {modalProduct?.type === 'variable' && (
+        <VariableModal product={modalProduct} />
+      )}
+      <div className="mt-20">
+        <Cart />
+      </div>
     </div>
   )
 }

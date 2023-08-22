@@ -3,11 +3,12 @@ import { Button, notification } from 'antd'
 import { useAjax } from '@/hooks'
 import { ajaxNonce, postId } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
+import { isProductModalOpenAtom } from '@/pages/PowerShopProducts/atom'
+import { useSetAtom } from 'jotai'
 
 const AddToCartButton: React.FC<{
   productId: number
   quantity: number
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   variation?: any[]
   variationId?: number | null
 }> = (props) => {
@@ -17,6 +18,8 @@ const AddToCartButton: React.FC<{
     api,
     contextHolder,
   ] = notification.useNotification()
+
+  const setIsProductModalOpen = useSetAtom(isProductModalOpenAtom)
 
   const handleClick = () => {
     mutate(
@@ -31,7 +34,7 @@ const AddToCartButton: React.FC<{
       },
       {
         onSuccess: () => {
-          props.setIsModalOpen(false)
+          setIsProductModalOpen(false)
           api.success({
             message: '加入購物車成功',
           })

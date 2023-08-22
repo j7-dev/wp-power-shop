@@ -19,7 +19,7 @@ $title = get_the_title($product_id);
 
 
 ?>
-<div class="relative pb-12 cursor-pointer">
+<div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 cursor-pointer">
 	<div>
 		<img src="<?= $img_src[0] ?>" class="w-full aspect-square" alt="<?= $title ?>">
 	</div>

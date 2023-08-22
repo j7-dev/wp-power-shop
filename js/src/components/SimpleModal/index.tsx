@@ -1,7 +1,6 @@
 import { FC, useEffect } from 'react'
 import { TProduct } from '@/types/wcStoreApi'
 import { Modal, ModalProps, Col, Row } from 'antd'
-import { TFSMeta } from '@/types'
 import { renderHTML } from '@/utils'
 import Price from '@/components/Price'
 import Gallery from '@/components/Gallery'
@@ -9,19 +8,27 @@ import PlusMinusInput from '@/components/PlusMinusInput'
 import AddToCartButton from '@/components/AddToCartButton'
 import ToggleContent from '@/components/ToggleContent'
 import { usePlusMinusInput } from '@/hooks'
+import {
+  shopMetaAtom,
+  isProductModalOpenAtom,
+} from '@/pages/PowerShopProducts/atom'
+import { useAtomValue, useAtom } from 'jotai'
 
-const SimpleModal: FC<{
-  product: TProduct
-  modalProps: ModalProps
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
-  FSMeta: TFSMeta | null
-}> = ({ product, modalProps: defaultModalProps, setIsModalOpen, FSMeta }) => {
+const SimpleModal: FC<{ product: TProduct }> = ({ product }) => {
+  const productId = product?.id ?? 0
+  const shop_meta = useAtomValue(shopMetaAtom)
+  const FSMeta = shop_meta.find((meta) => meta.productId === productId)
+  const [
+    isProductModalOpen,
+    setIsProductModalOpen,
+  ] = useAtom(isProductModalOpenAtom)
   const modalProps: ModalProps = {
     centered: true,
-    ...defaultModalProps,
     footer: null,
+    className: 'lg:w-1/2 lg:max-w-[960px]',
+    open: isProductModalOpen,
+    onCancel: () => setIsProductModalOpen(false),
   }
-  const productId = product?.id ?? 0
   const name = renderHTML(product?.name ?? '未知商品')
   const description = product?.description ?? ''
   const images = product?.images ?? []
@@ -29,11 +36,12 @@ const SimpleModal: FC<{
 
   const plusMinusInputProps = usePlusMinusInput()
   const { value: qty, setValue: setQty } = plusMinusInputProps
+
   useEffect(() => {
-    if (defaultModalProps.open) {
+    if (isProductModalOpen) {
       setQty(1)
     }
-  }, [defaultModalProps.open])
+  }, [isProductModalOpen])
 
   const price = !!FSMeta ? (
     <Price salePrice={FSMeta?.salesPrice} regularPrice={FSMeta?.regularPrice} />
@@ -82,7 +90,6 @@ const SimpleModal: FC<{
                 quantity={qty}
                 variation={undefined}
                 variationId={undefined}
-                setIsModalOpen={setIsModalOpen}
               />
             </div>
           </div>

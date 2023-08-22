@@ -1,15 +1,17 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { TProduct } from '@/types/wcStoreApi'
 import { getProductImageSrc, renderHTML } from '@/utils'
 import { Button } from 'antd'
-import { ProductsContext } from '@/pages/PowerShopProducts/Main'
 import { TFSMeta } from '@/types'
 import { toNumber } from 'lodash-es'
+import { shopMetaAtom, showFSModalAtom } from '../../atom'
+import { useAtomValue } from 'jotai'
 
 const Variable: React.FC<{
   product: TProduct
 }> = ({ product }) => {
-  const { shop_meta, showFSModal } = useContext(ProductsContext)
+  const shop_meta = useAtomValue(shopMetaAtom)
+  const showFSModal = useAtomValue(showFSModalAtom)
   const FSMeta = shop_meta.find((m) => m.productId === product.id)
 
   const name = renderHTML(product?.name ?? '未知商品')
