@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace J7\ViteReactWPPlugin\PowerShop\Admin;
 
-use J7\ViteReactWPPlugin\PowerShop\Admin\Bootstrap;
-
 class ShortCode
 {
 	function __construct()
