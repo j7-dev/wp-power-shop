@@ -108,11 +108,11 @@ class Functions
 	/**
 	 * JSON Parse
 	 */
-	public static function json_parse($stringfy, $default = [])
+	public static function json_parse($stringfy, $default = [], $associative = null)
 	{
 		$out_put = '';
 		try {
-			$out_put = json_decode(str_replace('\\', '', $stringfy));
+			$out_put = json_decode(str_replace('\\', '', $stringfy), $associative);
 		} catch (\Throwable $th) {
 			$out_put = $default;
 		} finally {

@@ -10,9 +10,12 @@ const renderItem = (product: TProduct) => {
   const imageSrc = getProductImageSrc(product)
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center">
-        <img className="w-8 h-8 object-cover mr-4 rounded-md" src={imageSrc} />
+    <div className="flex items-start justify-between">
+      <div className="flex items-start">
+        <img
+          className="w-8 h-8 object-cover mt-1 mr-4 rounded-md"
+          src={imageSrc}
+        />
         {renderHTML(product?.name ?? '未知產品')}
       </div>
 

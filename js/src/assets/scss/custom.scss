@@ -8,6 +8,8 @@
 $mobile_width: 576px;
 $pad_width: 810px;
 
+@import "./php.scss";
+
 #power_shop_products_app {
 	table.fs-cart-table {
 		border: none;
