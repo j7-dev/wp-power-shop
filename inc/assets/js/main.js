@@ -9,6 +9,7 @@
     const createShopNodeSelectors = [
       '.post-type-power-shop .page-title-action',
       "#menu-posts-power-shop a[href^='post-new.php?post_type=power-shop']",
+      '#wp-admin-bar-new-power-shop a',
     ]
     const createShopNodeSelectorsString = createShopNodeSelectors.join(', ')
 
