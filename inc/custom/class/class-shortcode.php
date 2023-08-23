@@ -28,12 +28,6 @@ class ShortCode
 		$meta_string = \get_post_meta($post->ID, $_ENV['SNAKE'] . '_meta', true);
 		$shop_meta = Functions::json_parse($meta_string, [], true);
 
-		echo '<pre>';
-		var_dump($shop_meta);
-		echo '</pre>';
-
-
-
 		$html = '';
 		ob_start();
 ?>

@@ -14,7 +14,7 @@ import {
 } from '@/pages/PowerShopProducts/atom'
 import { useAtomValue, useAtom } from 'jotai'
 
-const SimpleModal: FC<{ product: TProduct }> = ({ product }) => {
+const SimpleModal: FC<{ product: TProduct | undefined }> = ({ product }) => {
   const productId = product?.id ?? 0
   const shop_meta = useAtomValue(shopMetaAtom)
   const FSMeta = shop_meta.find((meta) => meta.productId === productId)

@@ -53,7 +53,7 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
   const setProducts = useSetAtom(productsAtom)
 
   useEffect(() => {
-    //排序
+    // 商品排序與後臺一致
 
     if (rawProducts.length > 0) {
       const sortOrder = shop_meta.map((m) => m.productId)
@@ -97,21 +97,32 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
     setModalProductId,
   ] = useAtom(modalProductIdAtom)
   const modalProduct = rawProducts.find((p) => p.id === modalProductId)
-  console.log('⭐  modalProduct', modalProduct)
+
+  // addEventListener
+
+  const els = document.querySelectorAll('div[data-ps-product-id]')
+  const handleModalOpen = (id: number) => (e: Event) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsProductModalOpen(true)
+    setModalProductId(id)
+  }
 
   useEffect(() => {
-    // add even listener
-
-    const els = document.querySelectorAll('div[data-ps-product-id]')
     els.forEach((el) => {
       const productId = parseInt(
         el.getAttribute('data-ps-product-id') ?? '0',
         10,
       )
-      el.addEventListener('click', (e) => {
-        setIsProductModalOpen(true)
-        setModalProductId(productId)
-      })
+      if (productId) {
+        el.addEventListener('click', handleModalOpen(productId))
+
+        // removeEventListener
+
+        return () => {
+          el.removeEventListener('click', handleModalOpen(productId))
+        }
+      }
     })
   }, [])
 
