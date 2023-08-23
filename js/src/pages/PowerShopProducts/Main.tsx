@@ -100,7 +100,7 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
 
   // addEventListener
 
-  const els = document.querySelectorAll('div[data-ps-product-id]')
+  const els = document.querySelectorAll('div[data-ps-product-id]') ?? []
   const handleModalOpen = (id: number) => (e: Event) => {
     e.preventDefault()
     e.stopPropagation()
