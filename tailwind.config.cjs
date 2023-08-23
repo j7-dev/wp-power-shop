@@ -5,7 +5,12 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
-  content: ['./js/src/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    './js/src/**/*.{js,ts,jsx,tsx}',
+    './inc/custom/class/class-shortcode.php',
+    './inc/templates/single-product/simple.php',
+    './inc/templates/single-product/variable.php',
+  ],
   theme: {
     extend: {
       colors: {
@@ -21,22 +26,4 @@ module.exports = {
     },
   },
   plugins: [],
-  safelist: [
-    'relative',
-    'pb-12',
-    'cursor-pointer',
-    'w-full',
-    'aspect-square',
-    'mt-2',
-    'mb-0',
-    'mt-1',
-    'text-red-500',
-    'absolute',
-    'bottom-0',
-    'grid',
-    'grid-cols-2',
-    'md:grid-cols-3',
-    'xl:grid-cols-4',
-    'gap-8',
-  ],
 }
