@@ -210,7 +210,7 @@ const Cart = () => {
       indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
       spinning={isLoading || cartIsFetching}
     >
-      <div className="w-full">
+      <div className="w-full mt-20">
         {contextHolder}
         {main}
         <div className="text-right mb-8">

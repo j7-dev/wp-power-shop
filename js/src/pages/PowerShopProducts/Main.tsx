@@ -137,9 +137,7 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
       {modalProduct?.type === 'variable' && (
         <VariableModal product={modalProduct} />
       )}
-      <div className="mt-20">
-        <Cart />
-      </div>
+      <Cart />
     </div>
   )
 }
