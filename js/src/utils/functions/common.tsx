@@ -48,3 +48,7 @@ export const getCurrencyString = ({
   if (typeof price === 'string') return `${symbol} ${price}`
   return `${symbol} ${price.toString()}`
 }
+
+export const getPrice = (cartPrice: number, currency_minor_unit = 0) => {
+  return cartPrice / Math.pow(10, currency_minor_unit)
+}

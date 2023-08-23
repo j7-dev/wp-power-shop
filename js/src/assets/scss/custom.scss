@@ -5,7 +5,7 @@
 // 		display: none !important;
 // 	}
 // }
-$mobile_width: 576px;
+$pad_width: 576px;
 $pad_width: 810px;
 
 @import "./php.scss";
@@ -13,10 +13,27 @@ $pad_width: 810px;
 #power_shop_products_app {
 	table.fs-cart-table {
 		border: none;
+		width: 100%;
+		table-layout: fixed;
 		tr {
 			border: none;
 			th {
 				background-color: #fff;
+			}
+			th[data-key="product"] {
+				width: 47%;
+			}
+			th[data-key="qty"] {
+				width: 15%;
+			}
+			th[data-key="unit_price"] {
+				width: 15%;
+			}
+			th[data-key="total"] {
+				width: 15%;
+			}
+			th[data-key="action"] {
+				width: 8%;
 			}
 		}
 		th {
@@ -54,17 +71,17 @@ $pad_width: 810px;
 					background-color: #eee;
 				}
 			}
-			@media (max-width: $mobile_width) {
+			@media (max-width: $pad_width) {
 				display: none;
 			}
 		}
 		tbody {
-			@media (max-width: $mobile_width) {
+			@media (max-width: $pad_width) {
 				display: block;
 				background: #fff;
 			}
 			tr {
-				@media (max-width: $mobile_width) {
+				@media (max-width: $pad_width) {
 					width: 100%;
 					display: grid;
 					grid-template-columns: 2rem 1fr 1fr;
@@ -79,12 +96,12 @@ $pad_width: 810px;
 				}
 			}
 			th {
-				@media (max-width: $mobile_width) {
+				@media (max-width: $pad_width) {
 					display: block;
 				}
 			}
 			td {
-				@media (max-width: $mobile_width) {
+				@media (max-width: $pad_width) {
 					display: block;
 					&:nth-child(1) {
 						// 商品
@@ -126,25 +143,25 @@ $pad_width: 810px;
 		}
 		tfoot {
 			tr {
-				@media (max-width: $mobile_width) {
+				@media (max-width: $pad_width) {
 					display: flex;
 					justify-content: space-between;
 				}
 			}
 			th {
-				@media (max-width: $mobile_width) {
+				@media (max-width: $pad_width) {
 					&:last-child {
 						display: none;
 					}
 				}
 			}
-			@media (max-width: $mobile_width) {
+			@media (max-width: $pad_width) {
 				display: block;
 				background-color: #fff;
 				padding: 1rem 0.5rem;
 			}
 		}
-		@media (max-width: $mobile_width) {
+		@media (max-width: $pad_width) {
 			display: block;
 		}
 	}
@@ -214,4 +231,12 @@ $pad_width: 810px;
 			}
 		}
 	}
+}
+
+div[data-ps-product-id] {
+	cursor: pointer;
+}
+
+.ps-not-ready {
+	cursor: wait !important;
 }

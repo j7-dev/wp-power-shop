@@ -1,8 +1,7 @@
+import { useEffect } from 'react'
 import Main from './Main'
 import ShopClosed from './ShopClosed'
 import ShopComing from './ShopComing'
-
-import { LoadingSimple } from '@/components/PureComponents'
 import { useAjaxGetPostMeta } from '@/hooks'
 import { postId, snake } from '@/utils'
 import { TSettings, defaultSettings } from '@/types'
@@ -43,12 +42,22 @@ const PowerShopProducts = () => {
   })
   const { isLoading } = mutation
   const settings = mutation?.meta ?? defaultSettings
-
   const startTime = settings?.startTime
   const endTime = settings?.endTime
   const shopStatus = getStatus({ startTime, endTime })
 
-  if (isLoading) return <LoadingSimple />
+  useEffect(() => {
+    const els = document.querySelectorAll('div[data-ps-product-id]') ?? []
+    if (isLoading) {
+      els.forEach((el) => {
+        el.classList.add('ps-not-ready')
+      })
+    } else {
+      els.forEach((el) => {
+        el.classList.remove('ps-not-ready')
+      })
+    }
+  }, [isLoading])
 
   if (shopStatus === 'published') return <Main endTime={endTime} />
   if (shopStatus === 'coming') return <ShopComing startTime={startTime} />

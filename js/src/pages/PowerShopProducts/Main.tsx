@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { FC, useEffect } from 'react'
+import { FC, useEffect, lazy } from 'react'
 import { postId, snake, kebab } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcStoreApi'
-import Cart from './Cart'
 import { Empty, Result, Button } from 'antd'
 import { RedoOutlined } from '@ant-design/icons'
 import { sortBy } from 'lodash-es'
@@ -14,10 +13,11 @@ import {
   shopMetaAtom,
   isProductModalOpenAtom,
   modalProductIdAtom,
-} from './atom'
-import { useSetAtom, useAtom } from 'jotai'
-import SimpleModal from '@/components/SimpleModal'
-import VariableModal from '@/components/VariableModal'
+  showCartAtom,
+} from '@/pages/PowerShopProducts/atom'
+import { useSetAtom, useAtom, useAtomValue } from 'jotai'
+import ProductModal from '@/pages/PowerShopProducts/ProductModal'
+import Cart from '@/pages/PowerShopProducts/Cart'
 
 const Main: FC<{ endTime?: number }> = ({ endTime }) => {
   const mutation = useAjaxGetPostMeta<TFSMeta[]>({
@@ -26,6 +26,7 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
     formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
   })
   const shop_meta = mutation?.meta ?? []
+  const showCart = useAtomValue(showCartAtom)
 
   const setShopMeta = useSetAtom(shopMetaAtom)
 
@@ -131,13 +132,8 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
       {!!endTime && (
         <Countdown toTime={endTime} title="把握最後機會🎉優惠即將到期🎉🎉🎉" />
       )}
-      {modalProduct?.type === 'simple' && (
-        <SimpleModal product={modalProduct} />
-      )}
-      {modalProduct?.type === 'variable' && (
-        <VariableModal product={modalProduct} />
-      )}
-      <Cart />
+      {modalProduct && <ProductModal product={modalProduct} />}
+      {showCart && <Cart />}
     </div>
   )
 }

@@ -7,7 +7,7 @@
 
 $img_id = $product->get_image_id();
 $img_src = wp_get_attachment_image_src($img_id, [450, 450]) ?? [];
-$title = get_the_title($product_id);
+$name = $product->get_name();
 
 [
 	'productId' => $product_id,
@@ -30,10 +30,10 @@ $min = min($filtered_price_arr);
 ?>
 <div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 cursor-pointer">
 	<div>
-		<img src="<?= $img_src[0] ?>" class="w-full aspect-square" alt="<?= $title ?>">
+		<img src="<?= $img_src[0] ?>" class="w-full aspect-square" alt="<?= $name ?>">
 	</div>
 	<div class="mt-2">
-		<?= $title ?>
+		<?= $name ?>
 	</div>
 	<div>
 		<?php if (empty($min) || empty($max)) : ?>

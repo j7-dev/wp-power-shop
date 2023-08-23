@@ -6,7 +6,7 @@ import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { TFSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
 import { Popconfirm, notification, Button, Empty, Spin } from 'antd'
-import { ajaxNonce, checkoutUrl, renderHTML } from '@/utils'
+import { ajaxNonce, checkoutUrl, renderHTML, getPrice } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { LoadingText, LoadingCard } from '@/components/PureComponents'
 import ShippingField from './ShippingField'
@@ -33,8 +33,11 @@ const Cart = () => {
     cartResult?.data?.headers?.['x-wc-store-api-nonce'] || ''
   const cartData = (cartResult?.data?.data || {}) as TCart
   const cartIsFetching = cartResult?.isFetching || false
-  const total_items = cartData?.totals?.total_items || '0'
-  const total_price = cartData?.totals?.total_price || '0'
+  const currency_minor_unit = cartData?.totals?.currency_minor_unit || 0
+  const raw_total_items = parseInt(cartData?.totals?.total_items || '0', 10)
+  const total_items = getPrice(raw_total_items, currency_minor_unit)
+  const raw_total_price = parseInt(cartData?.totals?.total_price || '0', 10)
+  const total_price = getPrice(raw_total_price, currency_minor_unit)
 
   const items = cartData?.items || []
 
@@ -70,11 +73,11 @@ const Cart = () => {
     <table className="fs-cart-table">
       <thead>
         <tr>
-          <th className="w-[47%]">商品</th>
-          <th className="w-[15%]">數量</th>
-          <th className="w-[15%]">單價</th>
-          <th className="w-[15%]">小計</th>
-          <th className="w-[8%]"></th>
+          <th data-key="product">商品</th>
+          <th data-key="qty">數量</th>
+          <th data-key="unit_price">單價</th>
+          <th data-key="total">小計</th>
+          <th data-key="action"></th>
         </tr>
       </thead>
       <tbody>
@@ -130,13 +133,13 @@ const Cart = () => {
                           isLoading={isLoading || cartIsFetching}
                         />
                       </h6>
-                      <p className="my-0 text-xs">
+                      <div className="my-0 text-xs">
                         <LoadingText
                           width="w-[12rem]"
                           content={variationText}
                           isLoading={isLoading || cartIsFetching}
                         />
-                      </p>
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -181,7 +184,7 @@ const Cart = () => {
           <th>
             <LoadingText
               width="w-[4rem]"
-              content={`$ ${parseInt(total_items, 10).toLocaleString()}`}
+              content={`$ ${total_items.toLocaleString()}`}
               isLoading={isLoading}
             />
           </th>
@@ -195,7 +198,7 @@ const Cart = () => {
           <th>
             <LoadingText
               width="w-[4rem]"
-              content={`$ ${parseInt(total_price, 10).toLocaleString()}`}
+              content={`$ ${total_price.toLocaleString()}`}
               isLoading={isLoading}
             />
           </th>

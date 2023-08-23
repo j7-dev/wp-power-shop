@@ -6,7 +6,7 @@ import {
   TProductAttributeTerm,
 } from '@/types/wcStoreApi'
 import { useAtom } from 'jotai'
-import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/Item/Variable/atoms'
+import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/atom'
 import { getVariationIdByAttributes } from '@/utils/wcStoreApi'
 import { sortBy } from 'lodash-es'
 import { nanoid } from 'nanoid'

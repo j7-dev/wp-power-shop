@@ -7,15 +7,24 @@ import { useAtomValue } from 'jotai'
 import { storeApiNonceAtom } from '../atom'
 import { useQueryClient } from '@tanstack/react-query'
 import { InfoCircleFilled } from '@ant-design/icons'
+import { getPrice } from '@/utils'
 
-const renderItem = (shipping_rate: TShippingRates) => {
+const renderItem = (
+  shipping_rate: TShippingRates,
+  currency_minor_unit: number,
+) => {
+  const price = getPrice(
+    parseInt(shipping_rate?.price ?? '0', 10),
+    currency_minor_unit,
+  )
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         {shipping_rate?.name ?? '未知運送方式'}
       </div>
 
-      <div>{`$ ${shipping_rate?.price}`}</div>
+      <div>{`$ ${price}`}</div>
     </div>
   )
 }
@@ -25,18 +34,23 @@ const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({
   isLoading,
 }) => {
   const shipments = cartData?.shipping_rates ?? []
+  const currency_minor_unit = cartData?.totals?.currency_minor_unit || 0
   const package_id = shipments?.[0]?.package_id ?? 0
 
   // const shipmentName = shipments?.[0]?.name ?? ''
 
   const shipping_rates = shipments?.[0]?.shipping_rates ?? []
-  const total_shipping = cartData?.totals?.total_shipping || '0'
+  const raw_total_shipping = parseInt(
+    cartData?.totals?.total_shipping || '0',
+    10,
+  )
+  const total_shipping = getPrice(raw_total_shipping, currency_minor_unit)
   const storeApiNonce = useAtomValue(storeApiNonceAtom)
   const queryClient = useQueryClient()
   const options = shipping_rates.map((shipping_rate) => {
     return {
       value: shipping_rate?.rate_id ?? '',
-      label: renderItem(shipping_rate),
+      label: renderItem(shipping_rate, currency_minor_unit),
     }
   })
 
