@@ -62,7 +62,7 @@ class Functions
 			'publicly_queryable'  => true,
 			'show_ui'             => true,
 			'show_in_nav_menus'   => false,
-			'show_in_admin_bar'   => false,
+			'show_in_admin_bar'   => true,
 			'show_in_rest'        => true,
 			'query_var'           => false,
 			'can_export'          => true,
