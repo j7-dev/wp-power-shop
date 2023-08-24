@@ -88,6 +88,15 @@ class Bootstrap
 			'root' => \esc_url_raw(rest_url()),
 			'nonce' => \wp_create_nonce('wp_rest'),
 		));
+
+		// 获取目录中的所有文件
+		$files = glob(self::get_plugin_dir() . '/js/dist/assets/*.css');
+
+		// 遍历文件并使用wp_enqueue_style加载它们
+		foreach ($files as $file) {
+			$file_url = self::get_plugin_url() . '/js/dist/assets/' . basename($file);
+			\wp_enqueue_style(basename($file, '.css'), $file_url);
+		}
 	}
 
 	public static function get_plugin_dir(): string
