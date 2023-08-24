@@ -6,6 +6,7 @@ import { useAjaxGetPostMeta } from '@/hooks'
 import { postId, snake } from '@/utils'
 import { TSettings, defaultSettings } from '@/types'
 import dayjs from 'dayjs'
+import { message } from 'antd'
 
 const getStatus = ({
   startTime,
@@ -49,10 +50,26 @@ const PowerShopProducts = () => {
   useEffect(() => {
     const els = document.querySelectorAll('div[data-ps-product-id]') ?? []
     if (isLoading) {
+      message.open({
+        key: 'jsLoaded',
+        type: 'loading',
+        content: ' 商品載入中 ...',
+        duration: 0,
+      })
+
       els.forEach((el) => {
         el.classList.add('ps-not-ready')
       })
     } else {
+      message.open({
+        key: 'jsLoaded',
+        type: 'success',
+        content: ' 商品載入完成',
+        duration: 2,
+      })
+
+      // message.destroy('jsLoaded')
+
       els.forEach((el) => {
         el.classList.remove('ps-not-ready')
       })

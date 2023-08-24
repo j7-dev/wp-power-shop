@@ -232,6 +232,9 @@ $pad_width: 810px;
 		}
 	}
 }
+.ant-message {
+	z-index: 999999 !important;
+}
 
 div[data-ps-product-id] {
 	cursor: pointer;
