@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import Main from './Main'
 import ShopClosed from './ShopClosed'
 import ShopComing from './ShopComing'
@@ -6,7 +5,6 @@ import { useAjaxGetPostMeta } from '@/hooks'
 import { postId, snake } from '@/utils'
 import { TSettings, defaultSettings } from '@/types'
 import dayjs from 'dayjs'
-import { message } from 'antd'
 
 const getStatus = ({
   startTime,
@@ -47,47 +45,19 @@ const PowerShopProducts = () => {
   const endTime = settings?.endTime
   const shopStatus = getStatus({ startTime, endTime })
 
-  useEffect(() => {
-    const els = document.querySelectorAll('div[data-ps-product-id]') ?? []
-    if (isLoading) {
-      message.open({
-        key: 'jsLoaded',
-        type: 'loading',
-        content: ' 商品載入中 ...',
-        duration: 0,
-      })
-
-      els.forEach((el) => {
-        el.classList.add('ps-not-ready')
-      })
-    } else if (isSuccess) {
-      message.open({
-        key: 'jsLoaded',
-        type: 'success',
-        content: ' 商品載入完成',
-        duration: 2,
-      })
-
-      // message.destroy('jsLoaded')
-
-      els.forEach((el) => {
-        el.classList.remove('ps-not-ready')
-      })
-    } else if (isError) {
-      message.open({
-        key: 'jsLoaded',
-        type: 'error',
-        content: ' 商品載入失敗，請重新刷新頁面再試一次',
-        duration: 0,
-      })
-    }
-  }, [isLoading])
-
-  if (shopStatus === 'published') return <Main endTime={endTime} />
+  if (shopStatus === 'published')
+    return (
+      <Main
+        endTime={endTime}
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        isError={isError}
+      />
+    )
   if (shopStatus === 'coming') return <ShopComing startTime={startTime} />
   if (shopStatus === 'closed') return <ShopClosed endTime={endTime} />
 
-  return <Main />
+  return <Main isLoading={isLoading} isSuccess={isSuccess} isError={isError} />
 }
 
 export default PowerShopProducts

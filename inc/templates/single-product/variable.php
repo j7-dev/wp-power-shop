@@ -28,7 +28,7 @@ $min = min($filtered_price_arr);
 
 
 ?>
-<div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 cursor-pointer">
+<div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 ps-not-ready">
 	<div>
 		<img src="<?= $img_src[0] ?>" class="w-full aspect-square" alt="<?= $name ?>">
 	</div>

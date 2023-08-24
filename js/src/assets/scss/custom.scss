@@ -238,8 +238,10 @@ $pad_width: 810px;
 
 div[data-ps-product-id] {
 	cursor: pointer;
+	transition: all 1s ease;
 }
 
 .ps-not-ready {
 	cursor: wait !important;
+	filter: grayscale(1);
 }

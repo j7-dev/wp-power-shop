@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { FC, useEffect, lazy } from 'react'
+import { FC, useEffect } from 'react'
 import { postId, snake, kebab } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcStoreApi'
-import { Empty, Result, Button } from 'antd'
+import { Empty, Result, Button, message } from 'antd'
 import { RedoOutlined } from '@ant-design/icons'
 import { sortBy } from 'lodash-es'
 import Countdown from '@/components/Countdown'
@@ -19,7 +19,12 @@ import { useSetAtom, useAtom, useAtomValue } from 'jotai'
 import ProductModal from '@/pages/PowerShopProducts/ProductModal'
 import Cart from '@/pages/PowerShopProducts/Cart'
 
-const Main: FC<{ endTime?: number }> = ({ endTime }) => {
+const Main: FC<{
+  isLoading: boolean
+  isSuccess: boolean
+  isError: boolean
+  endTime?: number
+}> = ({ isLoading, isSuccess, isError, endTime }) => {
   const mutation = useAjaxGetPostMeta<TFSMeta[]>({
     post_id: postId,
     meta_key: `${snake}_meta`,
@@ -110,22 +115,52 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
   }
 
   useEffect(() => {
-    els.forEach((el) => {
-      const productId = parseInt(
-        el.getAttribute('data-ps-product-id') ?? '0',
-        10,
-      )
-      if (productId) {
-        el.addEventListener('click', handleModalOpen(productId))
+    if (isLoading) {
+      // 因為PHP已經有class了，所以這邊不用加
+      // els.forEach((el) => {
+      // 	el.classList.add('ps-not-ready')
+      // })
 
-        // removeEventListener
+      message.open({
+        key: 'jsLoaded',
+        type: 'loading',
+        content: ' 商品載入中 ...',
+        duration: 0,
+      })
+    } else if (isSuccess) {
+      els.forEach((el) => {
+        el.classList.remove('ps-not-ready')
 
-        return () => {
-          el.removeEventListener('click', handleModalOpen(productId))
+        const productId = parseInt(
+          el.getAttribute('data-ps-product-id') ?? '0',
+          10,
+        )
+        if (productId) {
+          el.addEventListener('click', handleModalOpen(productId))
+
+          // removeEventListener
+
+          return () => {
+            el.removeEventListener('click', handleModalOpen(productId))
+          }
         }
-      }
-    })
-  }, [])
+      })
+
+      message.open({
+        key: 'jsLoaded',
+        type: 'success',
+        content: ' 商品載入完成',
+        duration: 2,
+      })
+    } else if (isError) {
+      message.open({
+        key: 'jsLoaded',
+        type: 'error',
+        content: ' 商品載入失敗，請重新刷新頁面再試一次',
+        duration: 0,
+      })
+    }
+  }, [isLoading])
 
   return (
     <div className={`${kebab}-products`}>
