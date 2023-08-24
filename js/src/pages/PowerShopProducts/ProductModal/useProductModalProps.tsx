@@ -7,7 +7,7 @@ import {
 import { useAtomValue, useAtom } from 'jotai'
 import { TProduct } from '@/types/wcStoreApi'
 import Price from '@/components/Price'
-import { renderHTML } from '@/utils'
+import { renderHTML, formatYoutubeLinkToIframe } from '@/utils'
 import { usePlusMinusInput } from '@/hooks'
 import { ModalProps } from 'antd'
 
@@ -30,7 +30,7 @@ const useProductModalProps = (product: TProduct) => {
   }
 
   const name = renderHTML(product?.name ?? '未知商品')
-  const description = product?.description ?? ''
+  const description = formatYoutubeLinkToIframe(product?.description ?? '')
   const images = product?.images ?? []
   const price_html = renderHTML(product?.price_html ?? '')
 

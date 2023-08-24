@@ -52,3 +52,36 @@ export const getCurrencyString = ({
 export const getPrice = (cartPrice: number, currency_minor_unit = 0) => {
   return cartPrice / Math.pow(10, currency_minor_unit)
 }
+
+export const formatYoutubeLinkToIframe = (rawContent: string) => {
+  let content = rawContent
+  const youtubeRegex = /https:\/\/www\.youtube\.com\/watch\?v=([A-Za-z0-9_-]+)/g
+  const youtubeLinks = content.match(youtubeRegex)
+
+  if (youtubeLinks) {
+    // 遍历找到的链接
+
+    for (let i = 0; i < youtubeLinks.length; i++) {
+      const videoLink = youtubeLinks[i]
+
+      // 创建嵌入式iframe
+
+      const iframe = document.createElement('iframe')
+      const styles = {
+        width: '100%',
+        border: 'none',
+        aspectRatio: '16/9',
+      }
+      iframe.src =
+        'https://www.youtube.com/embed/' +
+        videoLink.substr(videoLink.lastIndexOf('=') + 1)
+      Object.assign(iframe.style, styles)
+
+      // 替换原始的链接
+
+      content = content.replace(youtubeLinks[i], iframe.outerHTML)
+    }
+  }
+
+  return content
+}
