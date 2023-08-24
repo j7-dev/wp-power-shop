@@ -120,13 +120,6 @@ const Main: FC<{
       // els.forEach((el) => {
       // 	el.classList.add('ps-not-ready')
       // })
-
-      message.open({
-        key: 'jsLoaded',
-        type: 'loading',
-        content: ' 商品載入中 ...',
-        duration: 0,
-      })
     } else if (isSuccess) {
       els.forEach((el) => {
         el.classList.remove('ps-not-ready')
@@ -144,13 +137,6 @@ const Main: FC<{
             el.removeEventListener('click', handleModalOpen(productId))
           }
         }
-      })
-
-      message.open({
-        key: 'jsLoaded',
-        type: 'success',
-        content: ' 商品載入完成',
-        duration: 2,
       })
     } else if (isError) {
       message.open({
