@@ -133,7 +133,9 @@ const Main: FC<{ endTime?: number }> = ({ endTime }) => {
         <Countdown toTime={endTime} title="把握最後機會🎉優惠即將到期🎉🎉🎉" />
       )}
       {modalProduct && <ProductModal product={modalProduct} />}
-      {showCart && <Cart />}
+      <div className={showCart ? 'block' : 'hidden'}>
+        <Cart />
+      </div>
     </div>
   )
 }
