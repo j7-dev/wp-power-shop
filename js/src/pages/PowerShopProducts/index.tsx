@@ -41,7 +41,7 @@ const PowerShopProducts = () => {
     meta_key: `${snake}_settings`,
     formatter: (post_meta: string) => JSON.parse(post_meta || '{}'),
   })
-  const { isLoading } = mutation
+  const { isLoading, isSuccess, isError } = mutation
   const settings = mutation?.meta ?? defaultSettings
   const startTime = settings?.startTime
   const endTime = settings?.endTime
@@ -60,7 +60,7 @@ const PowerShopProducts = () => {
       els.forEach((el) => {
         el.classList.add('ps-not-ready')
       })
-    } else {
+    } else if (isSuccess) {
       message.open({
         key: 'jsLoaded',
         type: 'success',
@@ -72,6 +72,13 @@ const PowerShopProducts = () => {
 
       els.forEach((el) => {
         el.classList.remove('ps-not-ready')
+      })
+    } else if (isError) {
+      message.open({
+        key: 'jsLoaded',
+        type: 'error',
+        content: ' 商品載入失敗，請重新刷新頁面再試一次',
+        duration: 0,
       })
     }
   }, [isLoading])
