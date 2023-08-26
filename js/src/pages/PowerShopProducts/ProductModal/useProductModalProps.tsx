@@ -5,13 +5,14 @@ import {
   selectedVariationIdAtom,
 } from '@/pages/PowerShopProducts/atom'
 import { useAtomValue, useAtom } from 'jotai'
-import { TProduct } from '@/types/wcRestApi'
+import { TFormattedProduct } from '@/types'
 import Price from '@/components/Price'
 import { renderHTML, formatYoutubeLinkToIframe } from '@/utils'
 import { usePlusMinusInput } from '@/hooks'
 import { ModalProps } from 'antd'
+import { TSimpleAttribute } from '@/types/wcRestApi'
 
-const useProductModalProps = (product: TProduct) => {
+const useProductModalProps = (product: TFormattedProduct) => {
   const productId = product?.id ?? 0
 
   const shop_meta = useAtomValue(shopMetaAtom)
@@ -45,10 +46,15 @@ const useProductModalProps = (product: TProduct) => {
 
   const selectedVariationId = useAtomValue(selectedVariationIdAtom)
 
-  const variations = product?.variations ?? []
+  const variation_objs = product?.variation_objs ?? []
 
-  const selectedAttributes =
-    variations.find((v) => v.id === selectedVariationId)?.attributes ?? []
+  const selectedVariationAttributes = (variation_objs.find(
+    (v) => v.id === selectedVariationId,
+  )?.attributes ?? []) as TSimpleAttribute[]
+  const selectedAttributes = selectedVariationAttributes.map((a) => ({
+    name: a?.name ?? '',
+    value: a?.option ?? '',
+  }))
 
   const matchVariationMeta = !!FSMeta
     ? (FSMeta?.variations ?? []).find(

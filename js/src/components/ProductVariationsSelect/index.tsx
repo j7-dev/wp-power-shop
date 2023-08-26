@@ -1,19 +1,15 @@
 import React, { useState } from 'react'
-import {
-  TProductAttribute,
-  TProductVariationAttribute,
-  TProductAttributeTerm,
-} from '@/types/wcStoreApi'
-import { TProduct, TAttribute, TSimpleAttribute } from '@/types/wcRestApi'
+import { TProductVariationAttribute } from '@/types/wcStoreApi'
+import { TAttribute, TSimpleAttribute } from '@/types/wcRestApi'
+import { TFormattedProduct } from '@/types'
 import { useAtom } from 'jotai'
 import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/atom'
-import { getVariationIdByAttributes } from '@/utils/wcStoreApi'
 import { sortBy } from 'lodash-es'
 import { nanoid } from 'nanoid'
 import { CloseCircleFilled, CheckCircleFilled } from '@ant-design/icons'
 import { Button } from 'antd'
 
-const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
+const ProductVariationsSelect: React.FC<{ product: TFormattedProduct }> = ({
   product,
 }) => {
   const [
@@ -21,38 +17,53 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
     setSelectedVariationId,
   ] = useAtom(selectedVariationIdAtom)
 
-  const attributes = product?.attributes ?? []
-
   const [
     selected,
     setSelected,
   ] = useState<TProductVariationAttribute[]>([])
 
-  console.log('product', product)
+  const variation_objs = product?.variation_objs ?? []
+  const attributes = (product?.attributes ?? []) as TAttribute[]
+
+  console.log('selectedVariationId', selectedVariationId)
 
   const handleClick = (attribute: TAttribute, option: string) => () => {
     const order = attributes.map((a) => a.name)
     const attributeName = attribute?.name ?? ''
 
-    // const otherSelectedAttribute = selected.filter(
-    //   (item) => item.name !== attributeName,
-    // )
-    // const itemToBeAdded = {
-    //   name: attributeName,
-    //   value: option ?? '',
-    // }
-    // const newSelected = [
-    //   ...otherSelectedAttribute,
-    //   itemToBeAdded,
-    // ]
-    // const sortedNewSelected = sortBy(newSelected, (item) => {
-    //   const index = order.indexOf(item.name)
-    //   return index !== -1 ? index : Infinity
-    // })
+    const otherSelectedAttribute = selected.filter(
+      (item) => item.name !== attributeName,
+    )
+    const itemToBeAdded = {
+      name: attributeName,
+      value: option ?? '',
+    }
+    const newSelected = [
+      ...otherSelectedAttribute,
+      itemToBeAdded,
+    ]
+    const sortedNewSelected = sortBy(newSelected, (item) => {
+      const index = order.indexOf(item.name)
+      return index !== -1 ? index : Infinity
+    })
 
-    // setSelected(sortedNewSelected)
+    setSelected(sortedNewSelected)
+
+    // use this instead if use wcStoreApi
     // const variationId = getVariationIdByAttributes(product, sortedNewSelected)
-    // setSelectedVariationId(variationId)
+
+    const theVariation = variation_objs.find((v) => {
+      const theAttributes = (v?.attributes ?? []) as TSimpleAttribute[]
+      return theAttributes.every((a) => {
+        const theAttribute = sortedNewSelected.find((s) => s.name === a.name)
+        return theAttribute?.value === a.option
+      })
+    })
+    if (theVariation) {
+      setSelectedVariationId(theVariation.id)
+    } else {
+      setSelectedVariationId(null)
+    }
   }
 
   return (
@@ -82,7 +93,9 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
               {options.map((option) => (
                 <Button
                   key={option}
-                  type={`${selectedOption === option ? 'primary' : 'default'}`}
+                  type={`${
+                    selectedOption.value === option ? 'primary' : 'default'
+                  }`}
                   onClick={handleClick(attribute, option)}
                   size="small"
                   className="mr-1 mb-1"

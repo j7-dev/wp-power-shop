@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { TProduct } from '@/types/wcRestApi'
+import { TFormattedProduct } from '@/types'
 import { Modal, Col, Row } from 'antd'
 import Gallery from '@/components/Gallery'
 import PlusMinusInput from '@/components/PlusMinusInput'
@@ -8,7 +8,7 @@ import ToggleContent from '@/components/ToggleContent'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
 import useProductModalProps from './useProductModalProps'
 
-const ProductModal: FC<{ product: TProduct }> = ({ product }) => {
+const ProductModal: FC<{ product: TFormattedProduct }> = ({ product }) => {
   const productId = product?.id ?? 0
   const {
     modalProps,
