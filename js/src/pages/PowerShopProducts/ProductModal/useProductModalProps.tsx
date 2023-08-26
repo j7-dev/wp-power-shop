@@ -5,7 +5,7 @@ import {
   selectedVariationIdAtom,
 } from '@/pages/PowerShopProducts/atom'
 import { useAtomValue, useAtom } from 'jotai'
-import { TProduct } from '@/types/wcStoreApi'
+import { TProduct } from '@/types/wcRestApi'
 import Price from '@/components/Price'
 import { renderHTML, formatYoutubeLinkToIframe } from '@/utils'
 import { usePlusMinusInput } from '@/hooks'

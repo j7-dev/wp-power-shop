@@ -1,9 +1,8 @@
 import { atom } from 'jotai'
-import { TProduct } from '@/types/wcStoreApi'
-import { TFSMeta } from '@/types'
+import { TFSMeta, TFormattedProduct } from '@/types'
 
 export const storeApiNonceAtom = atom<string>('')
-export const productsAtom = atom<TProduct[]>([])
+export const productsAtom = atom<TFormattedProduct[]>([])
 export const shopMetaAtom = atom<TFSMeta[]>([])
 export const isProductModalOpenAtom = atom<boolean>(false)
 export const modalProductIdAtom = atom<number>(0)

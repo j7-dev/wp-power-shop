@@ -91,7 +91,7 @@ export type TProductVariation = TProductBase & {
 export type TMeta = {
   id: number
   key: string
-  value: any
+  value: string
 }
 
 export type TAttribute = {

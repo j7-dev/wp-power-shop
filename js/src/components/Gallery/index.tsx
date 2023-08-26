@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { TImage } from '@/types/wcStoreApi'
+import { TImage } from '@/types'
 
 const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
   images,
@@ -41,7 +41,7 @@ const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
           {images.map((image) => (
             <img
               key={image.id}
-              className={`aspect-square cursor-pointer object-cover  ${
+              className={`aspect-square cursor-pointer object-cover w-full ${
                 image.id === selected && 'border-2 border-blue-500 border-solid'
               }`}
               onClick={handleClick(image.id)}

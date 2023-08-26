@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import {
-  TProduct,
   TProductAttribute,
   TProductVariationAttribute,
   TProductAttributeTerm,
 } from '@/types/wcStoreApi'
+import { TProduct, TAttribute, TSimpleAttribute } from '@/types/wcRestApi'
 import { useAtom } from 'jotai'
 import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/atom'
 import { getVariationIdByAttributes } from '@/utils/wcStoreApi'
@@ -28,36 +28,38 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
     setSelected,
   ] = useState<TProductVariationAttribute[]>([])
 
-  const handleClick =
-    (attribute: TProductAttribute, term: TProductAttributeTerm) => () => {
-      const order = attributes.map((a) => a.name)
-      const attributeName = attribute?.name ?? ''
-      const otherSelectedAttribute = selected.filter(
-        (item) => item.name !== attributeName,
-      )
-      const itemToBeAdded = {
-        name: attributeName,
-        value: term?.slug ?? '',
-      }
-      const newSelected = [
-        ...otherSelectedAttribute,
-        itemToBeAdded,
-      ]
-      const sortedNewSelected = sortBy(newSelected, (item) => {
-        const index = order.indexOf(item.name)
-        return index !== -1 ? index : Infinity
-      })
+  console.log('product', product)
 
-      setSelected(sortedNewSelected)
-      const variationId = getVariationIdByAttributes(product, sortedNewSelected)
-      setSelectedVariationId(variationId)
-    }
+  const handleClick = (attribute: TAttribute, option: string) => () => {
+    const order = attributes.map((a) => a.name)
+    const attributeName = attribute?.name ?? ''
+
+    // const otherSelectedAttribute = selected.filter(
+    //   (item) => item.name !== attributeName,
+    // )
+    // const itemToBeAdded = {
+    //   name: attributeName,
+    //   value: option ?? '',
+    // }
+    // const newSelected = [
+    //   ...otherSelectedAttribute,
+    //   itemToBeAdded,
+    // ]
+    // const sortedNewSelected = sortBy(newSelected, (item) => {
+    //   const index = order.indexOf(item.name)
+    //   return index !== -1 ? index : Infinity
+    // })
+
+    // setSelected(sortedNewSelected)
+    // const variationId = getVariationIdByAttributes(product, sortedNewSelected)
+    // setSelectedVariationId(variationId)
+  }
 
   return (
     <>
       {attributes.map((attribute) => {
-        const terms = attribute?.terms ?? []
-        const selectedTerm = selected.find(
+        const options = attribute?.options ?? []
+        const selectedOption = selected.find(
           (item) => item.name === attribute?.name,
         ) ?? { name: '', value: '' }
         return (
@@ -77,17 +79,15 @@ const ProductVariationsSelect: React.FC<{ product: TProduct }> = ({
                   <div>{term?.name}</div>
                 </div>
               ))} */}
-              {terms.map((term) => (
+              {options.map((option) => (
                 <Button
-                  key={term?.slug}
-                  type={`${
-                    selectedTerm?.value === term?.slug ? 'primary' : 'default'
-                  }`}
-                  onClick={handleClick(attribute, term)}
+                  key={option}
+                  type={`${selectedOption === option ? 'primary' : 'default'}`}
+                  onClick={handleClick(attribute, option)}
                   size="small"
                   className="mr-1 mb-1"
                 >
-                  <span className="text-xs">{term?.name}</span>
+                  <span className="text-xs">{option}</span>
                 </Button>
               ))}
             </div>

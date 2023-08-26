@@ -3,7 +3,7 @@ import { FC, useEffect } from 'react'
 import { postId, snake, kebab } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
-import { TProduct } from '@/types/wcStoreApi'
+import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { Empty, Result, Button, message } from 'antd'
 import { RedoOutlined } from '@ant-design/icons'
 import { sortBy } from 'lodash-es'
@@ -18,6 +18,8 @@ import {
 import { useSetAtom, useAtom, useAtomValue } from 'jotai'
 import ProductModal from '@/pages/PowerShopProducts/ProductModal'
 import Cart from '@/pages/PowerShopProducts/Cart'
+import { useQueries } from '@tanstack/react-query'
+import { getResource } from '@/api'
 
 const Main: FC<{
   isLoading: boolean
@@ -45,7 +47,7 @@ const Main: FC<{
 
   const productsResult = useMany({
     resource: 'products',
-    dataProvider: 'wc-store',
+    dataProvider: 'wc',
     args: {
       include: product_ids,
     },
@@ -56,19 +58,72 @@ const Main: FC<{
 
   const rawProducts = (productsResult?.data?.data ?? []) as TProduct[]
 
-  const setProducts = useSetAtom(productsAtom)
+  const variableProductIds = rawProducts
+    .filter((p) => p.type === 'variable')
+    .map((p) => p.id)
+
+  const variationsResults =
+    useQueries({
+      queries: variableProductIds.map((vId) => {
+        return {
+          queryKey: [
+            'variations',
+            vId,
+          ],
+          queryFn: () =>
+            getResource({
+              resource: 'products',
+              dataProvider: 'wc',
+              pathParams: [
+                vId.toString(),
+                'variations',
+              ],
+              args: {
+                per_page: 100,
+              },
+            }),
+        }
+      }),
+    }) ?? []
+
+  const variations = variationsResults
+    .map((r) => r.data?.data ?? 0)
+    .flat() as TProductVariation[]
+
+  const [
+    products,
+    setProducts,
+  ] = useAtom(productsAtom)
 
   useEffect(() => {
     // 商品排序與後臺一致
 
     if (rawProducts.length > 0) {
       const sortOrder = shop_meta.map((m) => m.productId)
-      const products = sortBy(rawProducts, (p) => {
+      const sortedProducts = sortBy(rawProducts, (p) => {
         return sortOrder.indexOf(p.id)
       })
-      setProducts(products)
+      const variationFormattedProducts = sortedProducts.map((p) => {
+        const theVariations = [...p.variations]
+        const variation_objs = theVariations
+          .map((vId) => {
+            const theVariation = variations.find(
+              (variation) => variation.id === vId,
+            )
+            return theVariation
+          })
+          .filter((v) => !!v) as TProductVariation[]
+        return {
+          ...p,
+          variation_objs,
+        }
+      })
+      setProducts(variationFormattedProducts)
     }
-  }, [rawProducts.length])
+  }, [
+    rawProducts.length,
+    variations.length,
+  ])
 
   if (product_ids.length === 0 && !productsResult.isLoading) {
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="沒有資料" />
@@ -102,7 +157,7 @@ const Main: FC<{
     modalProductId,
     setModalProductId,
   ] = useAtom(modalProductIdAtom)
-  const modalProduct = rawProducts.find((p) => p.id === modalProductId)
+  const modalProduct = products.find((p) => p.id === modalProductId)
 
   // addEventListener
 

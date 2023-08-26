@@ -1,3 +1,5 @@
+import { TProduct, TProductVariation } from '@/types/wcRestApi'
+
 export type TFSVariation = {
   variationId: number
   regularPrice: number
@@ -28,4 +30,8 @@ export type TSettings = {
 export const defaultSettings = {
   startTime: 0,
   endTime: 0,
+}
+
+export type TFormattedProduct = TProduct & {
+  variation_objs: TProductVariation[]
 }

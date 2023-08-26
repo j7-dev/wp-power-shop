@@ -111,7 +111,7 @@ const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({
       <th className="text-right">
         <LoadingText
           width="w-[4rem]"
-          content={`$ ${parseInt(total_shipping, 10).toLocaleString()}`}
+          content={`$ ${total_shipping.toLocaleString()}`}
           isLoading={isLoading || updateIsLoading}
         />
       </th>

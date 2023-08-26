@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { TProduct } from '@/types/wcStoreApi'
+import { TProduct } from '@/types/wcRestApi'
 import { Modal, Col, Row } from 'antd'
 import Gallery from '@/components/Gallery'
 import PlusMinusInput from '@/components/PlusMinusInput'
