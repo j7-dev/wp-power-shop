@@ -4,10 +4,11 @@
 [
 	'product' => $product,
 	'meta' => $meta,
+	'default_image_src' => $default_image_src,
 ] = $args;
 
 $img_id = $product->get_image_id();
-$img_src = wp_get_attachment_image_src($img_id, [450, 450]) ?? [];
+$img_src = wp_get_attachment_image_src($img_id, [450, 450]) ?: [$default_image_src];
 $name = $product->get_name();
 
 [
@@ -20,7 +21,7 @@ $name = $product->get_name();
 ?>
 <div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 ps-not-ready">
 	<div>
-		<img src="<?= $img_src[0] ?>" class="w-full aspect-square" alt="<?= $name ?>">
+		<img src="<?= $img_src[0] ?>" class="w-full aspect-square object-cover" alt="<?= $name ?>">
 	</div>
 	<div class="mt-2">
 		<?= $name ?>

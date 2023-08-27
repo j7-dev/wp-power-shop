@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { TImage } from '@/types'
+import defaultImage from '@/assets/images/defaultImage.jpg'
 
 const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
   images,
   selectedImageId,
 }) => {
-  if (images.length === 0) return null
+  if (images.length === 0) {
+    return (
+      <img className="aspect-square w-full object-cover" src={defaultImage} />
+    )
+  }
   const isInclude = images.some((i) => i.id === selectedImageId)
 
   const [
@@ -18,6 +23,7 @@ const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
   }
 
   const mainSrc = images.find((image) => image.id === selected)?.src ?? ''
+  console.log('⭐  mainSrc', mainSrc)
 
   useEffect(() => {
     if (!!selectedImageId && isInclude) {

@@ -37,23 +37,27 @@ class ShortCode
 					$product_id = $meta['productId'];
 					$product = \wc_get_product($product_id);
 					$product_type = $product->get_type();
+					$default_image_src = Bootstrap::get_plugin_url() . '/js/src/assets/images/defaultImage.jpg';
 					switch ($product_type) {
 						case 'variable':
 							\load_template(Bootstrap::get_plugin_dir() . '/inc/templates/single-product/variable.php', false, [
 								'product' => $product,
 								'meta' => $meta,
+								'default_image_src' => $default_image_src,
 							]);
 							break;
 						case 'simple':
 							\load_template(Bootstrap::get_plugin_dir() . '/inc/templates/single-product/simple.php', false, [
 								'product' => $product,
 								'meta' => $meta,
+								'default_image_src' => $default_image_src,
 							]);
 							break;
 						default:
 							\load_template(Bootstrap::get_plugin_dir() . '/inc/templates/single-product/simple.php', false, [
 								'product' => $product,
 								'meta' => $meta,
+								'default_image_src' => $default_image_src,
 							]);
 							break;
 					}
