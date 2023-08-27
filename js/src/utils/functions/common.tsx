@@ -56,9 +56,11 @@ export const getPrice = (cartPrice: number, currency_minor_unit = 0) => {
 export const formatYoutubeLinkToIframe = (rawContent: string) => {
   let content = rawContent
   const youtubeRegex = /https:\/\/www\.youtube\.com\/watch\?v=([A-Za-z0-9_-]+)/g
+  const fullYoutubeRegex = /https:\/\/www\.youtube\.com\/watch\?v=(.+)/g
   const youtubeLinks = content.match(youtubeRegex)
+  const fullYoutubeLinks = content.match(fullYoutubeRegex)
 
-  if (youtubeLinks) {
+  if (youtubeLinks && fullYoutubeLinks) {
     // 遍历找到的链接
 
     for (let i = 0; i < youtubeLinks.length; i++) {
@@ -79,7 +81,7 @@ export const formatYoutubeLinkToIframe = (rawContent: string) => {
 
       // 替换原始的链接
 
-      content = content.replace(youtubeLinks[i], iframe.outerHTML)
+      content = content.replace(fullYoutubeLinks[i], iframe.outerHTML)
     }
   }
 

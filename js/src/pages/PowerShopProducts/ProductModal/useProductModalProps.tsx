@@ -4,13 +4,14 @@ import {
   isProductModalOpenAtom,
   selectedVariationIdAtom,
 } from '@/pages/PowerShopProducts/atom'
-import { useAtomValue, useAtom } from 'jotai'
+import { useAtomValue, useAtom, useSetAtom } from 'jotai'
 import { TFormattedProduct } from '@/types'
 import Price from '@/components/Price'
 import { renderHTML, formatYoutubeLinkToIframe } from '@/utils'
 import { usePlusMinusInput } from '@/hooks'
 import { ModalProps } from 'antd'
 import { TSimpleAttribute } from '@/types/wcRestApi'
+import { isExpandAtom } from '@/pages/PowerShopProducts/ProductModal/atom'
 
 const useProductModalProps = (product: TFormattedProduct) => {
   const productId = product?.id ?? 0
@@ -37,10 +38,14 @@ const useProductModalProps = (product: TFormattedProduct) => {
 
   const plusMinusInputProps = usePlusMinusInput()
   const { value: qty, setValue: setQty } = plusMinusInputProps
+  const setIsExpand = useSetAtom(isExpandAtom)
 
   useEffect(() => {
+    // 開關重設數量 & 將內容收闔
+
     if (isProductModalOpen) {
       setQty(1)
+      setIsExpand(false)
     }
   }, [isProductModalOpen])
 

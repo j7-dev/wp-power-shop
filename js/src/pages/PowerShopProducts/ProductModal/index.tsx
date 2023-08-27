@@ -4,9 +4,15 @@ import { Modal, Col, Row } from 'antd'
 import Gallery from '@/components/Gallery'
 import PlusMinusInput from '@/components/PlusMinusInput'
 import AddToCartButton from '@/components/AddToCartButton'
-import ToggleContent from '@/components/ToggleContent'
+import ToggleContent from '@/pages/PowerShopProducts/ProductModal/ToggleContent'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
-import useProductModalProps from './useProductModalProps'
+import useProductModalProps from '@/pages/PowerShopProducts/ProductModal/useProductModalProps'
+import { ShrinkOutlined, ArrowsAltOutlined } from '@ant-design/icons'
+import { useAtom, useAtomValue } from 'jotai'
+import {
+  isExpandAtom,
+  showReadMoreAtom,
+} from '@/pages/PowerShopProducts/ProductModal/atom'
 
 const ProductModal: FC<{ product: TFormattedProduct }> = ({ product }) => {
   const productId = product?.id ?? 0
@@ -22,6 +28,16 @@ const ProductModal: FC<{ product: TFormattedProduct }> = ({ product }) => {
     selectedVariationId,
   } = useProductModalProps(product)
 
+  const [
+    isExpand,
+    setIsExpand,
+  ] = useAtom(isExpandAtom)
+  const showReadMore = useAtomValue(showReadMoreAtom)
+
+  const handleExpand = () => {
+    setIsExpand(!isExpand)
+  }
+
   return (
     <Modal {...modalProps}>
       <Row gutter={24} className="max-h-[75vh] overflow-y-auto">
@@ -29,7 +45,7 @@ const ProductModal: FC<{ product: TFormattedProduct }> = ({ product }) => {
           <Gallery images={images} />
         </Col>
         <Col span={24} lg={{ span: 14 }}>
-          <div className="flex flex-col relative h-full">
+          <div className="flex flex-col">
             <div>
               <div className="text-xl mb-4">{name}</div>
               {/* <div
@@ -51,7 +67,7 @@ const ProductModal: FC<{ product: TFormattedProduct }> = ({ product }) => {
 					)} */}
               <div>{price}</div>
             </div>
-            <div className="my-4 h-[14rem] overflow-y-auto">
+            <div className="my-4">
               <ToggleContent content={description} />
             </div>
 
@@ -76,6 +92,27 @@ const ProductModal: FC<{ product: TFormattedProduct }> = ({ product }) => {
           </div>
         </Col>
       </Row>
+      {showReadMore && (
+        <div
+          className="absolute bottom-24 -right-8 bg-white w-8 flex items-center py-3 cursor-pointer rounded-r-lg"
+          style={{
+            writingMode: 'vertical-rl',
+          }}
+          onClick={handleExpand}
+        >
+          {isExpand ? (
+            <>
+              <ShrinkOutlined className="mb-2" />
+              收合全部內容
+            </>
+          ) : (
+            <>
+              <ArrowsAltOutlined className="mb-2" />
+              展開全部內容
+            </>
+          )}
+        </div>
+      )}
     </Modal>
   )
 }
