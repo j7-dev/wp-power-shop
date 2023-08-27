@@ -25,8 +25,6 @@ const ProductVariationsSelect: React.FC<{ product: TFormattedProduct }> = ({
   const variation_objs = product?.variation_objs ?? []
   const attributes = (product?.attributes ?? []) as TAttribute[]
 
-  console.log('selectedVariationId', selectedVariationId)
-
   const handleClick = (attribute: TAttribute, option: string) => () => {
     const order = attributes.map((a) => a.name)
     const attributeName = attribute?.name ?? ''

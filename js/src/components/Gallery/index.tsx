@@ -23,7 +23,6 @@ const Gallery: React.FC<{ images: TImage[]; selectedImageId?: number }> = ({
   }
 
   const mainSrc = images.find((image) => image.id === selected)?.src ?? ''
-  console.log('⭐  mainSrc', mainSrc)
 
   useEffect(() => {
     if (!!selectedImageId && isInclude) {

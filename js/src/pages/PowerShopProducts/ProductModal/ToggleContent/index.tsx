@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { renderHTML } from '@/utils'
-import { Button } from 'antd'
 import { useAtom } from 'jotai'
 import {
   isExpandAtom,
@@ -24,7 +23,7 @@ const ToggleContent: React.FC<{ content: string }> = ({ content }) => {
     const timeOut = setTimeout(() => {
       if (divRef) {
         const divHeight = divRef.current?.clientHeight || 0
-        if (divHeight > 300) {
+        if (divHeight > 299) {
           setShowReadMore(true)
         } else {
           setShowReadMore(false)
@@ -47,7 +46,7 @@ const ToggleContent: React.FC<{ content: string }> = ({ content }) => {
   return (
     <>
       <div ref={divRef} className="h-full overflow-hidden relative">
-        <div className={`${isExpand ? 'h-full' : 'h-[18rem]'}`}>{html}</div>
+        <div className={`${isExpand ? 'h-full' : 'max-h-[300px]'}`}>{html}</div>
         {!isExpand && showReadMore && (
           <div
             onClick={handleExpand}
