@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { TProductVariationAttribute } from '@/types/wcStoreApi'
+import React, { useEffect } from 'react'
 import { TAjaxProduct } from '@/types/custom'
 import { useAtom, useAtomValue } from 'jotai'
-import { selectedVariationIdAtom, isProductModalOpenAtom } from '@/pages/PowerShopProducts/atom'
+import { selectedVariationIdAtom, isProductModalOpenAtom, selectedAttributesAtom } from '@/pages/PowerShopProducts/atom'
 import { sortBy, toArray } from 'lodash-es'
 import { CloseCircleFilled, CheckCircleFilled } from '@ant-design/icons'
 import { Button } from 'antd'
@@ -14,9 +13,9 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
   ] = useAtom(selectedVariationIdAtom)
 
   const [
-    selected,
-    setSelected,
-  ] = useState<TProductVariationAttribute[]>([])
+    selectedAttributes,
+    setSelectedAttributes,
+  ] = useAtom(selectedAttributesAtom)
 
   const isProductModalOpen = useAtomValue(isProductModalOpenAtom)
 
@@ -24,7 +23,7 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
   const formattedAttributes = product?.variation_attributes ?? {}
 
   const handleClick = (attributeName: string, option: string) => () => {
-    const otherSelectedAttribute = selected.filter((item) => item.name !== attributeName)
+    const otherSelectedAttribute = selectedAttributes.filter((item) => item.name !== attributeName)
     const itemToBeAdded = {
       name: attributeName,
       value: option ?? '',
@@ -39,7 +38,7 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
       return index !== -1 ? index : Infinity
     })
 
-    setSelected(sortedNewSelected)
+    setSelectedAttributes(sortedNewSelected)
 
     // use this instead if use wcStoreApi
     // const variationId = getVariationIdByAttributes(product, sortedNewSelected)
@@ -48,9 +47,11 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
       const theAttributes = v?.attributes
       return Object.keys(theAttributes).every((a) => {
         const theSelectedAttribute = sortedNewSelected.find((s) => `attribute_${s.name.toLowerCase()}` === a)
+
         return theSelectedAttribute?.value === theAttributes[a]
       })
     })
+
     if (theVariation) {
       setSelectedVariationId(theVariation.variation_id)
     } else {
@@ -60,7 +61,7 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
 
   useEffect(() => {
     if (isProductModalOpen) {
-      setSelected([])
+      setSelectedAttributes([])
       setSelectedVariationId(null)
     }
   }, [isProductModalOpen])
@@ -69,7 +70,7 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
     <>
       {Object.keys(formattedAttributes).map((attributeName) => {
         const options = toArray(formattedAttributes[attributeName])
-        const selectedOption = selected.find((item) => item.name === attributeName) ?? { name: '', value: '' }
+        const selectedOption = selectedAttributes.find((item) => item.name === attributeName) ?? { name: '', value: '' }
         return (
           <div key={attributeName} className="mb-4">
             <p className="mb-0">{attributeName}</p>

@@ -1,5 +1,3 @@
-import { TProduct, TProductVariation } from '@/types/wcRestApi'
-
 export type TFSVariation = {
   variationId: number
   regularPrice: number
@@ -32,13 +30,11 @@ export const defaultSettings = {
   endTime: 0,
 }
 
-export type TFormattedProduct = TProduct & {
-  variation_objs: TProductVariation[]
-}
-
 // Ajax Product
 
 export type TAjaxProductVariation = {
+  regularPrice?: number | string
+  salesPrice?: number | string
   attributes: {
     [key: string]: string
   }
@@ -92,8 +88,8 @@ export type TAjaxProductVariation = {
 
 export type TAjaxProduct = {
   id: number
-  regularPrice: number
-  salesPrice: number
+  regularPrice?: number | string
+  salesPrice?: number | string
   type: string
   name: string
   description: string

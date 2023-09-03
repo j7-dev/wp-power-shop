@@ -3,17 +3,12 @@ import { Button, notification } from 'antd'
 import { useAjax } from '@/hooks'
 import { ajaxNonce, postId } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
-import {
-  isProductModalOpenAtom,
-  showCartAtom,
-} from '@/pages/PowerShopProducts/atom'
-import { useSetAtom } from 'jotai'
+import { isProductModalOpenAtom, showCartAtom, selectedVariationIdAtom, selectedAttributesAtom } from '@/pages/PowerShopProducts/atom'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 const AddToCartButton: React.FC<{
   productId: number
   quantity: number
-  variation?: any[]
-  variationId?: number | null
 }> = (props) => {
   const queryClient = useQueryClient()
   const { mutate, isLoading } = useAjax()
@@ -21,6 +16,9 @@ const AddToCartButton: React.FC<{
     api,
     contextHolder,
   ] = notification.useNotification()
+
+  const selectedVariationId = useAtomValue(selectedVariationIdAtom)
+  const selectedAttributes = useAtomValue(selectedAttributesAtom)
 
   const setIsProductModalOpen = useSetAtom(isProductModalOpenAtom)
   const setShowCart = useSetAtom(showCartAtom)
@@ -34,8 +32,8 @@ const AddToCartButton: React.FC<{
         post_id: postId,
         id: props.productId,
         quantity: props.quantity,
-        variation: JSON.stringify(props?.variation ?? []),
-        variation_id: props?.variationId ?? '',
+        variation: JSON.stringify(selectedAttributes ?? []),
+        variation_id: selectedVariationId ?? '',
       },
       {
         onSuccess: () => {
@@ -54,16 +52,11 @@ const AddToCartButton: React.FC<{
       },
     )
   }
+
   return (
     <>
       {contextHolder}
-      <Button
-        className="w-full mt-4"
-        type="primary"
-        onClick={handleClick}
-        loading={isLoading}
-        disabled={!props?.variationId && !!props?.variation}
-      >
+      <Button className="w-full mt-4" type="primary" onClick={handleClick} loading={isLoading} disabled={!selectedVariationId}>
         加入購物車
       </Button>
     </>

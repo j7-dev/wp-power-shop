@@ -28,14 +28,16 @@ const Variable: React.FC<{
 
   const productVariationsResult = useMany({
     resource: `products/${id}/variations`,
+    args: {
+      per_page: 100,
+    },
     dataProvider: 'wc',
     queryOptions: {
       enabled: variations.length > 0,
     },
   })
 
-  const productVariations: TProductVariation[] =
-    productVariationsResult?.data?.data ?? []
+  const productVariations: TProductVariation[] = productVariationsResult?.data?.data ?? []
 
   return (
     <>
@@ -43,9 +45,7 @@ const Variable: React.FC<{
         <div className="flex flex-1 mr-4">
           <div className="mr-4">
             <img className="h-16 w-16 rounded-xl object-cover" src={imageSrc} />
-            <p className="m-0 text-xs text-gray-400">
-              {getProductTypeLabel(type)}
-            </p>
+            <p className="m-0 text-xs text-gray-400">{getProductTypeLabel(type)}</p>
             <p className="m-0 text-xs text-gray-400">ID: #{id}</p>
           </div>
           <div className="flex-1">
@@ -54,8 +54,7 @@ const Variable: React.FC<{
                 0,
                 8,
               ]}
-              wrap
-            >
+              wrap>
               {categories.map((cat) => (
                 <Tag key={cat?.id} color="#2db7f5">
                   {cat?.name}
@@ -64,15 +63,8 @@ const Variable: React.FC<{
             </Space>
             <div className="text-[1rem] mt-2 mb-0">{name}</div>
             <div className="flex">
-              <span
-                className="underline text-blue-500 cursor-pointer mt-2 mb-4"
-                onClick={() => setIsExpended(!isExpended)}
-              >
-                {isExpended ? (
-                  <ShrinkOutlined className="mr-1" />
-                ) : (
-                  <ArrowsAltOutlined className="mr-1" />
-                )}
+              <span className="underline text-blue-500 cursor-pointer mt-2 mb-4" onClick={() => setIsExpended(!isExpended)}>
+                {isExpended ? <ShrinkOutlined className="mr-1" /> : <ArrowsAltOutlined className="mr-1" />}
 
                 {isExpended ? '收起' : '展開'}
               </span>
@@ -90,21 +82,13 @@ const Variable: React.FC<{
           'productId',
         ]}
         initialValue={id}
-        hidden
-      >
+        hidden>
         <Input />
       </Form.Item>
 
       <div className={`pl-20 pr-8 ${isExpended ? 'block' : 'hidden'}`}>
         {productVariations.map((variation, i) => (
-          <Variation
-            key={variation?.id}
-            variation={variation}
-            parentIndex={index}
-            parentId={id}
-            index={i}
-            matchProduct={matchProduct}
-          />
+          <Variation key={variation?.id} variation={variation} parentIndex={index} parentId={id} index={i} matchProduct={matchProduct} />
         ))}
       </div>
 

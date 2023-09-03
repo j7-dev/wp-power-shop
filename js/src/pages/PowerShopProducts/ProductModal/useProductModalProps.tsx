@@ -38,6 +38,7 @@ const useProductModalProps = (product: TAjaxProduct) => {
   }, [isProductModalOpen])
 
   const selectedVariationId = useAtomValue(selectedVariationIdAtom)
+  console.log('⭐  useProductModalProps  selectedVariationId', selectedVariationId)
 
   const productType = product?.type ?? 'simple'
 
@@ -46,7 +47,10 @@ const useProductModalProps = (product: TAjaxProduct) => {
       case 'simple':
         return <Price salePrice={product?.salesPrice} regularPrice={product?.regularPrice} />
       case 'variable':
-        return '找不到價格'
+        const productVariations = product?.variations ?? []
+        const theVariation = productVariations.find((v) => v.variation_id === selectedVariationId)
+
+        return <Price salePrice={theVariation?.salesPrice} regularPrice={theVariation?.regularPrice} />
       default:
         return '找不到價格'
     }

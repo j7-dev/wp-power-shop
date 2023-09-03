@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace J7\ViteReactWPPlugin\PowerShop\Admin;
 
+use function _\find;
+
 class Functions
 {
 	/**
@@ -142,9 +144,6 @@ class Functions
 			// format data
 			$product_data = [];
 			$product_data['id'] = $meta['productId'];
-			$product_data['regularPrice'] = $meta['regularPrice'];
-			$product_data['salesPrice'] = $meta['salesPrice'];
-
 			$product_data['type'] = $product->get_type();
 			$product_data['name'] = $product->get_name();
 			$product_data['description'] = $product->get_description();
@@ -152,9 +151,22 @@ class Functions
 
 			$product_data['shortDescription'] = $product->get_short_description();
 			$product_data['sku'] = $product->get_sku();
+			if ('simple' === $product->get_type()) {
+				$product_data['regularPrice'] = $meta['regularPrice'];
+				$product_data['salesPrice'] = $meta['salesPrice'];
+			}
 			if ('variable' === $product->get_type()) {
-				$product_data['variations'] = $product->get_available_variations();
+				$variation_meta = $meta['variations'];
+				$product_data['variations'] = [];
 				$product_data['variation_attributes'] = $product->get_variation_attributes();
+
+				foreach ($product->get_available_variations() as $key => $variation) {
+					$variation_id = $variation['variation_id'];
+					$theMeta = find($variation_meta, ['variationId' => $variation_id]);
+					$product_data['variations'][$key] = $variation;
+					$product_data['variations'][$key]['regularPrice'] = $theMeta['regularPrice'];
+					$product_data['variations'][$key]['salesPrice'] = $theMeta['salesPrice'];
+				}
 			}
 
 			return $product_data;
@@ -164,6 +176,7 @@ class Functions
 
 		$products_info = [
 			'products' => $products,
+			'meta' => $shop_meta,
 		];
 
 		return $products_info;

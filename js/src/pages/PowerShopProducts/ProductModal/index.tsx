@@ -13,8 +13,7 @@ import { isExpandAtom, showReadMoreAtom } from '@/pages/PowerShopProducts/Produc
 
 const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
   const productId = product?.id ?? 0
-  const { modalProps, images, name, price, description, plusMinusInputProps, qty, selectedVariationId } = useProductModalProps(product)
-  console.log('⭐  selectedVariationId', selectedVariationId)
+  const { modalProps, images, name, price, description, plusMinusInputProps, qty } = useProductModalProps(product)
 
   const [
     isExpand,
@@ -64,7 +63,7 @@ const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
             <div className="">
               <p className="mb-0 mt-4">數量</p>
               <PlusMinusInput {...plusMinusInputProps} />
-              <AddToCartButton productId={productId} quantity={qty} variation={product?.type === 'variable' ? undefined : undefined} variationId={product?.type === 'variable' ? selectedVariationId : undefined} />
+              <AddToCartButton productId={productId} quantity={qty} />
             </div>
           </div>
         </Col>
