@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { TProductVariationAttribute } from '@/types/wcStoreApi'
 import { TAjaxProduct } from '@/types/custom'
 import { useAtom, useAtomValue } from 'jotai'
-import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/atom'
+import { selectedVariationIdAtom, isProductModalOpenAtom } from '@/pages/PowerShopProducts/atom'
 import { sortBy, toArray } from 'lodash-es'
 import { CloseCircleFilled, CheckCircleFilled } from '@ant-design/icons'
 import { Button } from 'antd'
-import { isProductModalOpenAtom } from '@/pages/PowerShopProducts/atom'
 
 const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product }) => {
   const [
