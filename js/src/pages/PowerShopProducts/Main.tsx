@@ -28,7 +28,6 @@ const Main: FC<{
     setModalProductId,
   ] = useAtom(modalProductIdAtom)
   const modalProduct = products.find((p) => p.id === modalProductId)
-  console.log('⭐  modalProduct', modalProduct)
 
   // addEventListener
 
