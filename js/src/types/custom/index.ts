@@ -101,4 +101,7 @@ export type TAjaxProduct = {
   shortDescription: string
   sku: string
   variations?: TAjaxProductVariation[]
+  variation_attributes?: {
+    [key: string]: string[]
+  }
 }

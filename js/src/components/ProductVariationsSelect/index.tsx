@@ -3,7 +3,7 @@ import { TProductVariationAttribute } from '@/types/wcStoreApi'
 import { TAjaxProduct } from '@/types/custom'
 import { useAtom } from 'jotai'
 import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/atom'
-import { sortBy } from 'lodash-es'
+import { sortBy, toArray } from 'lodash-es'
 import { CloseCircleFilled, CheckCircleFilled } from '@ant-design/icons'
 import { Button } from 'antd'
 
@@ -19,27 +19,7 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
   ] = useState<TProductVariationAttribute[]>([])
 
   const variations = product?.variations ?? []
-  const allAttributes = variations.map((v) => v?.attributes ?? [])
-  const formattedAttributes = allAttributes.reduce(
-    (
-      acc: {
-        [key: string]: string[]
-      },
-      item,
-    ) => {
-      for (const key in item) {
-        if (key in acc) {
-          if (!acc[key].includes(item[key])) {
-            acc[key].push(item[key])
-          }
-        } else {
-          acc[key] = [item[key]]
-        }
-      }
-      return acc
-    },
-    {},
-  )
+  const formattedAttributes = product?.variation_attributes ?? {}
 
   const handleClick = (attributeName: string, option: string) => () => {
     const otherSelectedAttribute = selected.filter((item) => item.name !== attributeName)
@@ -65,8 +45,8 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
     const theVariation = variations.find((v) => {
       const theAttributes = v?.attributes
       return Object.keys(theAttributes).every((a) => {
-        const theAttribute = sortedNewSelected.find((s) => s.name === a)
-        return theAttribute?.value === theAttributes[a]
+        const theSelectedAttribute = sortedNewSelected.find((s) => `attribute_${s.name.toLowerCase()}` === a)
+        return theSelectedAttribute?.value === theAttributes[a]
       })
     })
     if (theVariation) {
@@ -79,7 +59,7 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
   return (
     <>
       {Object.keys(formattedAttributes).map((attributeName) => {
-        const options = formattedAttributes[attributeName]
+        const options = toArray(formattedAttributes[attributeName])
         const selectedOption = selected.find((item) => item.name === attributeName) ?? { name: '', value: '' }
         return (
           <div key={attributeName} className="mb-4">
