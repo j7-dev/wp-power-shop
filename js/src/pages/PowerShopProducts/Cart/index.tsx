@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useOne, useAjax } from '@/hooks'
-import { useSetAtom, useAtomValue } from 'jotai'
-import { storeApiNonceAtom, shopMetaAtom } from '../atom'
+import { useSetAtom } from 'jotai'
+import { storeApiNonceAtom } from '../atom'
 import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
 import { TFSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
@@ -16,7 +16,7 @@ import { toNumber } from 'lodash-es'
 
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
-  const shop_meta = useAtomValue(shopMetaAtom)
+  const shop_meta = (window?.appData?.products_info?.meta ?? []) as TFSMeta[]
 
   const { mutate, isLoading } = useAjax()
   const [

@@ -63,7 +63,7 @@ const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
             <div className="">
               <p className="mb-0 mt-4">數量</p>
               <PlusMinusInput {...plusMinusInputProps} />
-              <AddToCartButton productId={productId} quantity={qty} />
+              <AddToCartButton productId={productId} quantity={qty} productType={product?.type} />
             </div>
           </div>
         </Col>

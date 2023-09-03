@@ -9,6 +9,7 @@ import { useSetAtom, useAtomValue } from 'jotai'
 const AddToCartButton: React.FC<{
   productId: number
   quantity: number
+  productType: string
 }> = (props) => {
   const queryClient = useQueryClient()
   const { mutate, isLoading } = useAjax()
@@ -56,7 +57,7 @@ const AddToCartButton: React.FC<{
   return (
     <>
       {contextHolder}
-      <Button className="w-full mt-4" type="primary" onClick={handleClick} loading={isLoading} disabled={!selectedVariationId}>
+      <Button className="w-full mt-4" type="primary" onClick={handleClick} loading={isLoading} disabled={!selectedVariationId && props?.productType === 'variable'}>
         加入購物車
       </Button>
     </>
