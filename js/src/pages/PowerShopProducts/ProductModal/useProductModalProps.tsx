@@ -38,7 +38,6 @@ const useProductModalProps = (product: TAjaxProduct) => {
   }, [isProductModalOpen])
 
   const selectedVariationId = useAtomValue(selectedVariationIdAtom)
-  console.log('⭐  useProductModalProps  selectedVariationId', selectedVariationId)
 
   const productType = product?.type ?? 'simple'
 

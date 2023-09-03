@@ -70,7 +70,7 @@ const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
       </Row>
       {showReadMore && (
         <div
-          className="absolute bottom-24 -right-8 bg-white w-8 flex items-center py-3 cursor-pointer rounded-r-lg"
+          className="absolute bottom-24 right-0 md:-right-8 bg-white w-8 flex items-center py-3 cursor-pointer shadow md:shadow-none opacity-50 md:opacity-100 rounded-l-lg md:rounded-l-none md:rounded-r-lg"
           style={{
             writingMode: 'vertical-rl',
           }}
