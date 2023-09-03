@@ -7,8 +7,6 @@ namespace J7\ViteReactWPPlugin\PowerShop\Admin;
 use Kucrut\Vite;
 
 /**
- * [x] - 每次到快速商店就清除購物車，可以避免跨商店結帳
- * [x] - 選擇運費
  * [ ] - 使用COUPON
  */
 
@@ -72,6 +70,7 @@ class Bootstrap
 		$post_id = \get_the_ID();
 		$permalink = \get_permalink($post_id);
 		$elLicenseCode = \get_option('PowerShopPro_lic_Key', '');
+		$products_info = Functions::get_products_info($post_id);
 
 		\wp_localize_script($_ENV['KEBAB'], 'appData', array(
 			'siteUrl' => \site_url(),
@@ -82,6 +81,7 @@ class Bootstrap
 			'permalink' => $permalink,
 			'checkoutUrl' => $checkout_page_url,
 			'elLicenseCode' => $elLicenseCode,
+			'products_info' => $products_info,
 		));
 
 		\wp_localize_script($_ENV['KEBAB'], 'wpApiSettings', array(

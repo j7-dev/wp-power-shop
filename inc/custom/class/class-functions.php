@@ -119,4 +119,53 @@ class Functions
 			return $out_put;
 		}
 	}
+
+	public static function get_products_info(int $post_id)
+	{
+		$shop_meta_string = \get_post_meta($post_id, $_ENV['SNAKE'] . '_meta', true) ?? '[]';
+
+		try {
+			$shop_meta = (json_decode($shop_meta_string, true));
+		} catch (\Throwable $th) {
+			$shop_meta = [];
+		}
+
+		function get_product_data($meta)
+		{
+			$product = \wc_get_product($meta['productId']);
+			$feature_image_id = $product->get_image_id();
+			$attachment_ids = [$feature_image_id, ...$product->get_gallery_image_ids()];
+			$images = [];
+			foreach ($attachment_ids as $attachment_id) {
+				$images[] = \wp_get_attachment_url($attachment_id);
+			}
+			// format data
+			$product_data = [];
+			$product_data['id'] = $meta['productId'];
+			$product_data['regularPrice'] = $meta['regularPrice'];
+			$product_data['salesPrice'] = $meta['salesPrice'];
+
+			$product_data['type'] = $product->get_type();
+			$product_data['name'] = $product->get_name();
+			$product_data['description'] = $product->get_description();
+			$product_data['images'] = $images;
+
+			$product_data['shortDescription'] = $product->get_short_description();
+			$product_data['sku'] = $product->get_sku();
+			if ('variable' === $product->get_type()) {
+				$product_data['variations'] = $product->get_available_variations();
+				$product_data['variation_attributes'] = $product->get_variation_attributes();
+			}
+
+			return $product_data;
+		}
+
+		$products = array_map(__NAMESPACE__ . "\get_product_data", $shop_meta);
+
+		$products_info = [
+			'products' => $products,
+		];
+
+		return $products_info;
+	}
 }

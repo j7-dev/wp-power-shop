@@ -1,10 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import { renderHTML } from '@/utils'
 import { useAtom } from 'jotai'
-import {
-  isExpandAtom,
-  showReadMoreAtom,
-} from '@/pages/PowerShopProducts/ProductModal/atom'
+import { isExpandAtom, showReadMoreAtom } from '@/pages/PowerShopProducts/ProductModal/atom'
 
 const ToggleContent: React.FC<{ content: string }> = ({ content }) => {
   const [
@@ -47,12 +44,7 @@ const ToggleContent: React.FC<{ content: string }> = ({ content }) => {
     <>
       <div ref={divRef} className="h-full overflow-hidden relative">
         <div className={`${isExpand ? 'h-full' : 'max-h-[300px]'}`}>{html}</div>
-        {!isExpand && showReadMore && (
-          <div
-            onClick={handleExpand}
-            className="absolute bottom-0 text-center w-full pb-4 pt-12 bg-gradient-to-t from-white to-white/0 cursor-pointer"
-          ></div>
-        )}
+        {!isExpand && showReadMore && <div onClick={handleExpand} className="absolute bottom-0 text-center w-full pb-4 pt-12 bg-gradient-to-t from-white to-white/0 cursor-pointer"></div>}
       </div>
     </>
   )

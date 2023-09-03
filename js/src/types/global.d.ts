@@ -1,3 +1,5 @@
+import { TAjaxProduct } from '@/types/custom'
+
 declare global {
   var wpApiSettings: {
     root: string
@@ -12,6 +14,9 @@ declare global {
     permalink: string
     checkoutUrl: string
     elLicenseCode: string
+    products_info: {
+      products: TAjaxProduct[]
+    }
   }
 }
 

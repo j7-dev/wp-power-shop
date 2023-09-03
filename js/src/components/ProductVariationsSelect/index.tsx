@@ -1,17 +1,13 @@
 import React, { useState } from 'react'
 import { TProductVariationAttribute } from '@/types/wcStoreApi'
-import { TAttribute, TSimpleAttribute } from '@/types/wcRestApi'
-import { TFormattedProduct } from '@/types'
+import { TAjaxProduct } from '@/types/custom'
 import { useAtom } from 'jotai'
 import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/atom'
 import { sortBy } from 'lodash-es'
-import { nanoid } from 'nanoid'
 import { CloseCircleFilled, CheckCircleFilled } from '@ant-design/icons'
 import { Button } from 'antd'
 
-const ProductVariationsSelect: React.FC<{ product: TFormattedProduct }> = ({
-  product,
-}) => {
+const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product }) => {
   const [
     selectedVariationId,
     setSelectedVariationId,
@@ -22,16 +18,31 @@ const ProductVariationsSelect: React.FC<{ product: TFormattedProduct }> = ({
     setSelected,
   ] = useState<TProductVariationAttribute[]>([])
 
-  const variation_objs = product?.variation_objs ?? []
-  const attributes = (product?.attributes ?? []) as TAttribute[]
+  const variations = product?.variations ?? []
+  const allAttributes = variations.map((v) => v?.attributes ?? [])
+  const formattedAttributes = allAttributes.reduce(
+    (
+      acc: {
+        [key: string]: string[]
+      },
+      item,
+    ) => {
+      for (const key in item) {
+        if (key in acc) {
+          if (!acc[key].includes(item[key])) {
+            acc[key].push(item[key])
+          }
+        } else {
+          acc[key] = [item[key]]
+        }
+      }
+      return acc
+    },
+    {},
+  )
 
-  const handleClick = (attribute: TAttribute, option: string) => () => {
-    const order = attributes.map((a) => a.name)
-    const attributeName = attribute?.name ?? ''
-
-    const otherSelectedAttribute = selected.filter(
-      (item) => item.name !== attributeName,
-    )
+  const handleClick = (attributeName: string, option: string) => () => {
+    const otherSelectedAttribute = selected.filter((item) => item.name !== attributeName)
     const itemToBeAdded = {
       name: attributeName,
       value: option ?? '',
@@ -40,6 +51,7 @@ const ProductVariationsSelect: React.FC<{ product: TFormattedProduct }> = ({
       ...otherSelectedAttribute,
       itemToBeAdded,
     ]
+    const order = Object.keys(formattedAttributes).map((a) => a)
     const sortedNewSelected = sortBy(newSelected, (item) => {
       const index = order.indexOf(item.name)
       return index !== -1 ? index : Infinity
@@ -50,15 +62,15 @@ const ProductVariationsSelect: React.FC<{ product: TFormattedProduct }> = ({
     // use this instead if use wcStoreApi
     // const variationId = getVariationIdByAttributes(product, sortedNewSelected)
 
-    const theVariation = variation_objs.find((v) => {
-      const theAttributes = (v?.attributes ?? []) as TSimpleAttribute[]
-      return theAttributes.every((a) => {
-        const theAttribute = sortedNewSelected.find((s) => s.name === a.name)
-        return theAttribute?.value === a.option
+    const theVariation = variations.find((v) => {
+      const theAttributes = v?.attributes
+      return Object.keys(theAttributes).every((a) => {
+        const theAttribute = sortedNewSelected.find((s) => s.name === a)
+        return theAttribute?.value === theAttributes[a]
       })
     })
     if (theVariation) {
-      setSelectedVariationId(theVariation.id)
+      setSelectedVariationId(theVariation.variation_id)
     } else {
       setSelectedVariationId(null)
     }
@@ -66,38 +78,15 @@ const ProductVariationsSelect: React.FC<{ product: TFormattedProduct }> = ({
 
   return (
     <>
-      {attributes.map((attribute) => {
-        const options = attribute?.options ?? []
-        const selectedOption = selected.find(
-          (item) => item.name === attribute?.name,
-        ) ?? { name: '', value: '' }
+      {Object.keys(formattedAttributes).map((attributeName) => {
+        const options = formattedAttributes[attributeName]
+        const selectedOption = selected.find((item) => item.name === attributeName) ?? { name: '', value: '' }
         return (
-          <div key={nanoid()} className="mb-4">
-            <p className="mb-0">{attribute?.name}</p>
+          <div key={attributeName} className="mb-4">
+            <p className="mb-0">{attributeName}</p>
             <div className="flex flex-wrap">
-              {/* 舊的樣式
-
-							{terms.map((term) => (
-                <div
-                  key={term?.slug}
-                  className={`fs-product-attribute-option ${
-                    selectedTerm?.value === term?.slug ? 'active' : ''
-                  }`}
-                  onClick={handleClick(attribute, term)}
-                >
-                  <div>{term?.name}</div>
-                </div>
-              ))} */}
               {options.map((option) => (
-                <Button
-                  key={option}
-                  type={`${
-                    selectedOption.value === option ? 'primary' : 'default'
-                  }`}
-                  onClick={handleClick(attribute, option)}
-                  size="small"
-                  className="mr-1 mb-1"
-                >
+                <Button key={option} type={`${selectedOption.value === option ? 'primary' : 'default'}`} onClick={handleClick(attributeName, option)} size="small" className="mr-1 mb-1">
                   <span className="text-xs">{option}</span>
                 </Button>
               ))}
@@ -105,6 +94,7 @@ const ProductVariationsSelect: React.FC<{ product: TFormattedProduct }> = ({
           </div>
         )
       })}
+
       {!selectedVariationId && (
         <p className="m-0 text-gray-500 text-xs">
           <CloseCircleFilled className="mr-2 text-red-500" />

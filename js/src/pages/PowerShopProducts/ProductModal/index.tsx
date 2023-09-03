@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { TFormattedProduct } from '@/types'
+import { TAjaxProduct } from '@/types/custom'
 import { Modal, Col, Row } from 'antd'
 import Gallery from '@/components/Gallery'
 import PlusMinusInput from '@/components/PlusMinusInput'
@@ -9,24 +9,11 @@ import ProductVariationsSelect from '@/components/ProductVariationsSelect'
 import useProductModalProps from '@/pages/PowerShopProducts/ProductModal/useProductModalProps'
 import { ShrinkOutlined, ArrowsAltOutlined } from '@ant-design/icons'
 import { useAtom, useAtomValue } from 'jotai'
-import {
-  isExpandAtom,
-  showReadMoreAtom,
-} from '@/pages/PowerShopProducts/ProductModal/atom'
+import { isExpandAtom, showReadMoreAtom } from '@/pages/PowerShopProducts/ProductModal/atom'
 
-const ProductModal: FC<{ product: TFormattedProduct }> = ({ product }) => {
+const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
   const productId = product?.id ?? 0
-  const {
-    modalProps,
-    images,
-    name,
-    price,
-    description,
-    plusMinusInputProps,
-    qty,
-    selectedAttributes,
-    selectedVariationId,
-  } = useProductModalProps(product)
+  const { modalProps, images, name, price, description, plusMinusInputProps, qty, selectedVariationId } = useProductModalProps(product)
 
   const [
     isExpand,
@@ -71,23 +58,12 @@ const ProductModal: FC<{ product: TFormattedProduct }> = ({ product }) => {
               <ToggleContent content={description} />
             </div>
 
-            {product?.type === 'variable' && !!product && (
-              <ProductVariationsSelect product={product} />
-            )}
+            {product?.type === 'variable' && !!product && <ProductVariationsSelect product={product} />}
 
             <div className="">
               <p className="mb-0 mt-4">數量</p>
               <PlusMinusInput {...plusMinusInputProps} />
-              <AddToCartButton
-                productId={productId}
-                quantity={qty}
-                variation={
-                  product?.type === 'variable' ? selectedAttributes : undefined
-                }
-                variationId={
-                  product?.type === 'variable' ? selectedVariationId : undefined
-                }
-              />
+              <AddToCartButton productId={productId} quantity={qty} variation={product?.type === 'variable' ? undefined : undefined} variationId={product?.type === 'variable' ? selectedVariationId : undefined} />
             </div>
           </div>
         </Col>
@@ -98,8 +74,7 @@ const ProductModal: FC<{ product: TFormattedProduct }> = ({ product }) => {
           style={{
             writingMode: 'vertical-rl',
           }}
-          onClick={handleExpand}
-        >
+          onClick={handleExpand}>
           {isExpand ? (
             <>
               <ShrinkOutlined className="mb-2" />
