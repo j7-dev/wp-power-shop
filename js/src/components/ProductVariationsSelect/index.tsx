@@ -73,11 +73,11 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
         const selectedOption = selectedAttributes.find((item) => item.name === attributeName) ?? { name: '', value: '' }
         return (
           <div key={attributeName} className="mb-4">
-            <p className="mb-0">{attributeName}</p>
+            <p className="mb-0">{attributeName === 'pa_color' ? '顏色' : attributeName}</p>
             <div className="flex flex-wrap">
               {options.map((option) => (
                 <Button key={option} type={`${selectedOption.value === option ? 'primary' : 'default'}`} onClick={handleClick(attributeName, option)} size="small" className="mr-1 mb-1">
-                  <span className="text-xs">{option}</span>
+                  <span className="text-xs">{decodeURIComponent(option)}</span>
                 </Button>
               ))}
             </div>

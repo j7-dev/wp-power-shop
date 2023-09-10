@@ -18,9 +18,14 @@ $name = $product->get_name();
 
 $price_arr = [];
 foreach ($variations as $variation) {
-	$price_arr[] = (int) $variation['regularPrice'];
-	$price_arr[] = (int) $variation['salesPrice'];
+	if(empty((int) $variation['salesPrice'])){
+		$price_arr[] = (int) $variation['regularPrice'];
+	}else{
+		$price_arr[] = (int) $variation['salesPrice'];
+	}
 }
+
+
 $filtered_price_arr = array_filter($price_arr, function ($price) {
 	return !empty($price);
 });
