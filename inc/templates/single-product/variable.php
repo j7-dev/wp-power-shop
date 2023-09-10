@@ -43,8 +43,8 @@ $min = min($filtered_price_arr);
 		<?= $name ?>
 	</div>
 	<div>
-		<?php if (empty($min) || empty($max)) : ?>
-			NT$ <?= empty($min) ? $max : $min ?>
+		<?php if ($max === $min) : ?>
+			NT$ <?= $max ?>
 		<?php else : ?>
 			NT$ <?= $min ?> – NT$ <?= $max ?>
 		<?php endif; ?>
