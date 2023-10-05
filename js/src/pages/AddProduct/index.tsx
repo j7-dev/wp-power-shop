@@ -17,10 +17,16 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper'
 import SettingButton from './SettingButton'
 import { SaveFilled } from '@ant-design/icons'
+import useSave from './SaveButton/useSave'
 
 const { Paragraph } = Typography
 const tinyMCESaveBtn = document.getElementById('publish') as HTMLInputElement | null
-const blockEditorSaveBtn = document.querySelector('.editor-post-publish-button') as HTMLInputElement | null
+
+// 因為發布與更新的 按鈕不同
+
+const blockEditorSaveBtn = document.querySelector('[class*="editor-post-publish-button"]') as HTMLInputElement | null
+const metaId = window?.appData?.metaIds?.power_shop_meta
+const fieldNode = document.getElementById(`meta-${metaId}-value`) as HTMLInputElement | null
 
 const AddProduct = () => {
   const [
@@ -60,8 +66,6 @@ const AddProduct = () => {
   const handleSetCustomFieldValue = async () => {
     // Form 改變時，寫入自訂欄位
 
-    const metaId = window?.appData?.metaIds?.power_shop_meta
-    const fieldNode = document.getElementById(`meta-${metaId}-value`) as HTMLInputElement | null
     if (fieldNode) {
       const sortedAllFields = await formatShopMeta({
         form,
@@ -69,6 +73,32 @@ const AddProduct = () => {
       fieldNode.value = JSON.stringify(sortedAllFields)
     }
   }
+
+  const { handleSave: save } = useSave(form)
+
+  const handleSave = async (e: Event) => {
+    notification.destroy('saveNotification')
+
+    // if (preventDefault) {
+    //   e.preventDefault()
+    //   e.stopPropagation()
+    // }
+
+    if (!fieldNode) {
+      await save()
+    }
+  }
+
+  useEffect(() => {
+    if (!!blockEditorSaveBtn) {
+      blockEditorSaveBtn.addEventListener('click', handleSave)
+    }
+    return () => {
+      if (!!blockEditorSaveBtn) {
+        blockEditorSaveBtn.removeEventListener('click', handleSave)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (!productsResult?.isFetching && !mutation?.isLoading) {
