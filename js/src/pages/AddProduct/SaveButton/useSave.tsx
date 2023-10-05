@@ -28,8 +28,8 @@ const useSave = (form: FormInstance) => {
     },
   })
 
-  const handleSave = () => {
-    const allFields = formatShopMeta({ form })
+  const handleSave = async () => {
+    const allFields = await formatShopMeta({ form })
 
     mutate({
       meta: {

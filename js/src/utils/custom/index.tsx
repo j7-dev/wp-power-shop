@@ -24,9 +24,14 @@ export const getProductTypeLabel = (type: string) => {
   }
 }
 
-export const formatShopMeta = ({ form }: { form: FormInstance<any> }) => {
-  const allFields_obj = form.getFieldsValue()
-  const allFields = Object.values(allFields_obj) as TFSMeta[]
+export const formatShopMeta = async ({ form }: { form: FormInstance<any> }) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const allFields_obj = form.getFieldsValue()
+      const allFields = Object.values(allFields_obj) as TFSMeta[]
+      resolve(allFields)
+    }, 1000)
 
-  return allFields
+    // 時間太短會抓不到可變商品產生的欄位
+  })
 }

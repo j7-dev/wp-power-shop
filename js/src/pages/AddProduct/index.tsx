@@ -5,7 +5,7 @@ import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom, FSMetaAtom, isChangeAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
-import { postId, snake, formatShopMeta, isUsingBlockEditor } from '@/utils'
+import { postId, snake, formatShopMeta } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcRestApi'
@@ -57,76 +57,53 @@ const AddProduct = () => {
   const [form] = Form.useForm()
   const ref = useRef<HTMLInputElement>(null)
 
-  const handleTinyMCESave = (e: Event) => {
-    // 按下傳統編輯器的儲存按鈕的 callback
+  // const handleTinyMCESave = (e: Event) => {
+  //   // 按下傳統編輯器的儲存按鈕的 callback
 
-    e.preventDefault()
-    e.stopPropagation()
+  //   e.preventDefault()
+  //   e.stopPropagation()
 
-    const postForm = document.getElementById('post') as HTMLFormElement | null
+  //   const postForm = document.getElementById('post') as HTMLFormElement | null
 
-    const sortedAllFields = formatShopMeta({
-      form,
-    })
-    const input = ref.current
-    if (!input) return null
-    input.value = JSON.stringify(sortedAllFields)
-    postForm?.prepend(input)
-    if (!postForm || !tinyMCESaveBtn) return null
+  //   const sortedAllFields = formatShopMeta({
+  //     form,
+  //   })
+  //   const input = ref.current
+  //   if (!input) return null
+  //   input.value = JSON.stringify(sortedAllFields)
+  //   postForm?.prepend(input)
+  //   if (!postForm || !tinyMCESaveBtn) return null
 
-    const hidden_post_status = document.getElementById('hidden_post_status') as HTMLInputElement | null
+  //   const hidden_post_status = document.getElementById('hidden_post_status') as HTMLInputElement | null
 
-    // 原本發布後，TINYMCE狀態還是會一直停在草稿，所以要改成發布
+  //   // 原本發布後，TINYMCE狀態還是會一直停在草稿，所以要改成發布
 
-    if (hidden_post_status?.value === 'draft') {
-      const newOption = document.createElement('option')
-      newOption.value = 'publish'
-      newOption.textContent = 'Publish'
-      const select = document.getElementById('post_status') as HTMLSelectElement | null
-      if (select) {
-        select.appendChild(newOption)
-      }
-      newOption.selected = true
-    }
+  //   if (hidden_post_status?.value === 'draft') {
+  //     const newOption = document.createElement('option')
+  //     newOption.value = 'publish'
+  //     newOption.textContent = 'Publish'
+  //     const select = document.getElementById('post_status') as HTMLSelectElement | null
+  //     if (select) {
+  //       select.appendChild(newOption)
+  //     }
+  //     newOption.selected = true
+  //   }
 
-    postForm.submit()
-  }
+  //   postForm.submit()
+  // }
 
-  const handleBlockEditorSave = () => {
+  const handleSetCustomFieldValue = async () => {
     // Form 改變時，寫入自訂欄位
 
-    if (isUsingBlockEditor) {
-      const fields = [
-        'power_shop_meta',
-        'power_shop_report_password',
-        'power_shop_settings',
-      ]
-      const metaIds = window?.appData?.metaIds
-      if (metaIds) {
-        fields.forEach((field) => {
-          const mid = metaIds[field as keyof typeof metaIds]
-          const fieldNode = document.getElementById(`meta-${mid}-value`) as HTMLInputElement | null
-          if (field === 'power_shop_meta' && fieldNode) {
-            const sortedAllFields = formatShopMeta({
-              form,
-            })
-            fieldNode.value = JSON.stringify(sortedAllFields)
-          }
-        })
-      }
+    const metaId = window?.appData?.metaIds?.power_shop_meta
+    const fieldNode = document.getElementById(`meta-${metaId}-value`) as HTMLInputElement | null
+    if (fieldNode) {
+      const sortedAllFields = await formatShopMeta({
+        form,
+      })
+      fieldNode.value = JSON.stringify(sortedAllFields)
     }
   }
-
-  useEffect(() => {
-    if (!!tinyMCESaveBtn) {
-      tinyMCESaveBtn.addEventListener('click', handleTinyMCESave)
-    }
-    return () => {
-      if (!!tinyMCESaveBtn) {
-        tinyMCESaveBtn.removeEventListener('click', handleTinyMCESave)
-      }
-    }
-  }, [isUsingBlockEditor])
 
   useEffect(() => {
     if (!productsResult?.isFetching && !mutation?.isLoading) {
@@ -159,7 +136,7 @@ const AddProduct = () => {
 
   const handleFormChange = () => {
     setIsChange(true)
-    handleBlockEditorSave()
+    handleSetCustomFieldValue()
   }
 
   useEffect(() => {
@@ -179,7 +156,7 @@ const AddProduct = () => {
   }, [isChange])
 
   useEffect(() => {
-    handleBlockEditorSave()
+    handleSetCustomFieldValue()
   }, [addedProducts.length])
 
   const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {

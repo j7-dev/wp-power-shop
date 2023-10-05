@@ -13,8 +13,6 @@ declare global {
     postId: string
     metaIds: {
       power_shop_meta: string | null
-      power_shop_report_password: string | null
-      power_shop_settings: string | null
     }
     permalink: string
     checkoutUrl: string

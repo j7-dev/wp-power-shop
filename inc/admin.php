@@ -74,6 +74,7 @@ class Bootstrap
 
 
 		// 找出指定的 meta_id by meta_key
+		// _report_password & _settings 欄位都是用 Modal儲存，不用往自訂欄位塞值
 		global $wpdb;
 		$power_shop_meta_meta_id = $wpdb->get_var(
 			$wpdb->prepare(
@@ -82,20 +83,7 @@ class Bootstrap
 				$_ENV['SNAKE'] . '_meta'
 			)
 		);
-		$power_shop_report_password_meta_id = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT meta_id FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s",
-				$post_id,
-				$_ENV['SNAKE'] . '_report_password'
-			)
-		);
-		$power_shop_settings_meta_id = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT meta_id FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s",
-				$post_id,
-				$_ENV['SNAKE'] . '_settings'
-			)
-		);
+
 
 
 		\wp_localize_script($_ENV['KEBAB'], 'appData', array(
@@ -106,8 +94,6 @@ class Bootstrap
 			'postId' => $post_id,
 			'metaIds' => [
 				'power_shop_meta' => $power_shop_meta_meta_id,
-				'power_shop_report_password' => $power_shop_report_password_meta_id,
-				'power_shop_settings' => $power_shop_settings_meta_id,
 			],
 			'permalink' => $permalink,
 			'checkoutUrl' => $checkout_page_url,
