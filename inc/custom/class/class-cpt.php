@@ -86,7 +86,6 @@ class CPT extends Bootstrap
 	public function init_metabox(): void
 	{
 		\add_action('add_meta_boxes', [$this, 'add_metaboxs']);
-		// \add_action('save_post',      [$this, 'save_metabox'], 10, 2);
 		\add_filter('rewrite_rules_array', [$this, 'custom_post_type_rewrite_rules']);
 	}
 
@@ -114,41 +113,7 @@ class CPT extends Bootstrap
 	}
 
 
-	public function save_metabox($post_id, $post)
-	{
 
-		/*
-		 * We need to verify this came from the our screen and with proper authorization,
-		 * because save_post can be triggered at other times.
-		 */
-
-		// Check if our nonce is set.
-		if (!isset($_POST['_wpnonce'])) 	return $post_id;
-
-		$nonce = $_POST['_wpnonce'];
-
-
-		/*
-		 * If this is an autosave, our form has not been submitted,
-		 * so we don't want to do anything.
-		 */
-		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return $post_id;
-
-		$post_type = \sanitize_text_field($_POST['post_type'] ?? '');
-
-		// Check the user's permissions.
-		if (self::CPT_SLUG !== $post_type) return $post_id;
-		if (!\current_user_can('edit_post', $post_id)) return $post_id;
-
-		/* OK, it's safe for us to save the data now. */
-
-		// Sanitize the user input.
-		$meta_data = \sanitize_text_field($_POST[$_ENV['SNAKE'] . '_meta']);
-
-
-		// Update the meta field.
-		\update_post_meta($post_id, $_ENV['SNAKE'] . '_meta', $meta_data);
-	}
 
 	/**
 	 * 設定 {$_ENV['KEBAB']}/{slug}/report 的 php template
@@ -181,6 +146,7 @@ class CPT extends Bootstrap
 			$encrypted_password = base64_encode($default_password);
 
 			\add_post_meta($post_id, $_ENV['SNAKE'] . '_report_password', $encrypted_password, true);
+			\add_post_meta($post_id, $_ENV['SNAKE'] . '_meta', '[]', true);
 		}
 	}
 
