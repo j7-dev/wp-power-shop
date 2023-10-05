@@ -86,7 +86,7 @@ class CPT extends Bootstrap
 	public function init_metabox(): void
 	{
 		\add_action('add_meta_boxes', [$this, 'add_metaboxs']);
-		\add_action('save_post',      [$this, 'save_metabox'], 10, 2);
+		// \add_action('save_post',      [$this, 'save_metabox'], 10, 2);
 		\add_filter('rewrite_rules_array', [$this, 'custom_post_type_rewrite_rules']);
 	}
 

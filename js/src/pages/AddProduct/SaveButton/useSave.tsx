@@ -1,11 +1,10 @@
-import { Tooltip, Button, Form, notification, ButtonProps } from 'antd'
+import { FormInstance, notification } from 'antd'
 import { useSetAtom } from 'jotai'
-import { isChangeAtom } from './atoms'
+import { isChangeAtom } from '../atoms'
 import { useUpdate } from '@/hooks'
 import { kebab, postId, snake, formatShopMeta } from '@/utils'
 
-const SaveButton: React.FC<ButtonProps> = (props) => {
-  const form = Form.useFormInstance()
+const useSave = (form: FormInstance) => {
   const setIsChange = useSetAtom(isChangeAtom)
 
   const { mutate, isLoading } = useUpdate({
@@ -39,15 +38,10 @@ const SaveButton: React.FC<ButtonProps> = (props) => {
     })
   }
 
-  return (
-    <>
-      <Tooltip title="按此儲存按鈕才會儲存商品資料">
-        <Button {...props} onClick={handleSave} loading={isLoading}>
-          儲存
-        </Button>
-      </Tooltip>
-    </>
-  )
+  return {
+    handleSave,
+    isLoading,
+  }
 }
 
-export default SaveButton
+export default useSave

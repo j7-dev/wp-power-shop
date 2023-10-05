@@ -1,7 +1,7 @@
 {
   "name": "@J7/PowerShop.wp-plugin",
   "private": true,
-  "version": "2.4.7",
+  "version": "2.4.8",
   "type": "module",
   "scripts": {
     "init": "npm install && composer install --no-interaction",

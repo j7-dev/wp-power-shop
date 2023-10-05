@@ -5,7 +5,7 @@ import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom, FSMetaAtom, isChangeAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
-import { postId, snake, formatShopMeta } from '@/utils'
+import { postId, snake, formatShopMeta, isUsingBlockEditor } from '@/utils'
 import { useMany, useAjaxGetPostMeta } from '@/hooks'
 import { TFSMeta } from '@/types'
 import { TProduct } from '@/types/wcRestApi'
@@ -20,6 +20,7 @@ import { SaveFilled } from '@ant-design/icons'
 
 const { Paragraph } = Typography
 const tinyMCESaveBtn = document.getElementById('publish') as HTMLInputElement | null
+const blockEditorSaveBtn = document.querySelector('.editor-post-publish-button') as HTMLInputElement | null
 
 const AddProduct = () => {
   const [
@@ -52,7 +53,6 @@ const AddProduct = () => {
     addedProducts,
     setAddedProducts,
   ] = useAtom(addedProductsAtom)
-  console.log('⭐  addedProducts:', addedProducts)
 
   const [form] = Form.useForm()
   const ref = useRef<HTMLInputElement>(null)
@@ -68,7 +68,6 @@ const AddProduct = () => {
     const sortedAllFields = formatShopMeta({
       form,
     })
-    console.log('⭐  sortedAllFields:', sortedAllFields)
     const input = ref.current
     if (!input) return null
     input.value = JSON.stringify(sortedAllFields)
@@ -93,6 +92,31 @@ const AddProduct = () => {
     postForm.submit()
   }
 
+  const handleBlockEditorSave = () => {
+    // Form 改變時，寫入自訂欄位
+
+    if (isUsingBlockEditor) {
+      const fields = [
+        'power_shop_meta',
+        'power_shop_report_password',
+        'power_shop_settings',
+      ]
+      const metaIds = window?.appData?.metaIds
+      if (metaIds) {
+        fields.forEach((field) => {
+          const mid = metaIds[field as keyof typeof metaIds]
+          const fieldNode = document.getElementById(`meta-${mid}-value`) as HTMLInputElement | null
+          if (field === 'power_shop_meta' && fieldNode) {
+            const sortedAllFields = formatShopMeta({
+              form,
+            })
+            fieldNode.value = JSON.stringify(sortedAllFields)
+          }
+        })
+      }
+    }
+  }
+
   useEffect(() => {
     if (!!tinyMCESaveBtn) {
       tinyMCESaveBtn.addEventListener('click', handleTinyMCESave)
@@ -102,7 +126,7 @@ const AddProduct = () => {
         tinyMCESaveBtn.removeEventListener('click', handleTinyMCESave)
       }
     }
-  }, [])
+  }, [isUsingBlockEditor])
 
   useEffect(() => {
     if (!productsResult?.isFetching && !mutation?.isLoading) {
@@ -121,10 +145,12 @@ const AddProduct = () => {
       // 載入完成後，啟用儲存按鈕
 
       if (tinyMCESaveBtn) tinyMCESaveBtn.disabled = false
+      if (blockEditorSaveBtn) blockEditorSaveBtn.disabled = false
     } else {
       // 載入完成前，禁用儲存按鈕
 
       if (tinyMCESaveBtn) tinyMCESaveBtn.disabled = true
+      if (blockEditorSaveBtn) blockEditorSaveBtn.disabled = true
     }
   }, [
     mutation?.isLoading,
@@ -133,6 +159,7 @@ const AddProduct = () => {
 
   const handleFormChange = () => {
     setIsChange(true)
+    handleBlockEditorSave()
   }
 
   useEffect(() => {
@@ -150,6 +177,10 @@ const AddProduct = () => {
       notification.destroy('saveNotification')
     }
   }, [isChange])
+
+  useEffect(() => {
+    handleBlockEditorSave()
+  }, [addedProducts.length])
 
   const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
     setAddedProducts((pre: TProduct[]) =>

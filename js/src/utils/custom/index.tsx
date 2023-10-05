@@ -26,7 +26,6 @@ export const getProductTypeLabel = (type: string) => {
 
 export const formatShopMeta = ({ form }: { form: FormInstance<any> }) => {
   const allFields_obj = form.getFieldsValue()
-  console.log('⭐  allFields_obj:', allFields_obj)
   const allFields = Object.values(allFields_obj) as TFSMeta[]
 
   return allFields

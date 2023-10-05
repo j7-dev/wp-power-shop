@@ -104,7 +104,7 @@ class Bootstrap
 			'ajaxNonce'  => \wp_create_nonce($_ENV['KEBAB']),
 			'userId' => \wp_get_current_user()->data->ID,
 			'postId' => $post_id,
-			'metaId' => [
+			'metaIds' => [
 				'power_shop_meta' => $power_shop_meta_meta_id,
 				'power_shop_report_password' => $power_shop_report_password_meta_id,
 				'power_shop_settings' => $power_shop_settings_meta_id,

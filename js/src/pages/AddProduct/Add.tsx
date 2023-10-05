@@ -12,10 +12,7 @@ const renderItem = (product: TProduct) => {
   return (
     <div className="flex items-start justify-between">
       <div className="flex items-start">
-        <img
-          className="w-8 h-8 object-cover mt-1 mr-4 rounded-md"
-          src={imageSrc}
-        />
+        <img className="w-8 h-8 object-cover mt-1 mr-4 rounded-md" src={imageSrc} />
         {renderHTML(product?.name ?? '未知產品')}
       </div>
 
@@ -74,14 +71,10 @@ const Add = () => {
   })
 
   const rawProducts: TProduct[] = productResult?.data?.data ?? []
-  const products = rawProducts.filter(
-    (product) => product.type === 'simple' || product.type === 'variable',
-  )
+  const products = rawProducts.filter((product) => product.type === 'simple' || product.type === 'variable')
 
   const productItems = products.map((product) => {
-    const disabled = addedProducts.some(
-      (addedProduct) => addedProduct?.id === product.id,
-    )
+    const disabled = addedProducts.some((addedProduct) => addedProduct?.id === product.id)
     return {
       value: product.id,
       label: renderItem(product),
@@ -94,9 +87,7 @@ const Add = () => {
   }
 
   const handleAddProduct = () => {
-    const selectedProduct = products.find(
-      (product) => product.id === selectedProductId,
-    )
+    const selectedProduct = products.find((product) => product.id === selectedProductId)
     if (!!selectedProduct) {
       setAddedProducts([
         ...addedProducts,
@@ -106,9 +97,7 @@ const Add = () => {
     }
   }
 
-  const btnDisabled =
-    !selectedProductId ||
-    addedProducts.some((addedProduct) => addedProduct?.id === selectedProductId)
+  const btnDisabled = !selectedProductId || addedProducts.some((addedProduct) => addedProduct?.id === selectedProductId)
 
   return (
     <div className="mb-8">
@@ -125,14 +114,8 @@ const Add = () => {
           placeholder="選擇商品分類"
           optionFilterProp="children"
           optionLabelProp="label"
-          filterOption={(input, option) =>
-            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-          }
-          filterSort={(optionA, optionB) =>
-            (optionA?.label ?? '')
-              .toLowerCase()
-              .localeCompare((optionB?.label ?? '').toLowerCase())
-          }
+          filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+          filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())}
           options={productCatItems}
           onChange={handleChangeProductCat}
         />
@@ -153,18 +136,10 @@ const Add = () => {
             const id = option?.value ?? 0
             const theProduct = products.find((product) => product.id === id)
 
-            return (theProduct?.name ?? '')
-              .toLowerCase()
-              .includes(input.toLowerCase())
+            return (theProduct?.name ?? '').toLowerCase().includes(input.toLowerCase())
           }}
         />
-        <Button
-          disabled={btnDisabled}
-          size="large"
-          type="primary"
-          className="mx-0"
-          onClick={handleAddProduct}
-        >
+        <Button disabled={btnDisabled} size="large" type="primary" className="mx-0" onClick={handleAddProduct}>
           新增
         </Button>
       </div>
