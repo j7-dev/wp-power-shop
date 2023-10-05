@@ -57,41 +57,6 @@ const AddProduct = () => {
   const [form] = Form.useForm()
   const ref = useRef<HTMLInputElement>(null)
 
-  // const handleTinyMCESave = (e: Event) => {
-  //   // 按下傳統編輯器的儲存按鈕的 callback
-
-  //   e.preventDefault()
-  //   e.stopPropagation()
-
-  //   const postForm = document.getElementById('post') as HTMLFormElement | null
-
-  //   const sortedAllFields = formatShopMeta({
-  //     form,
-  //   })
-  //   const input = ref.current
-  //   if (!input) return null
-  //   input.value = JSON.stringify(sortedAllFields)
-  //   postForm?.prepend(input)
-  //   if (!postForm || !tinyMCESaveBtn) return null
-
-  //   const hidden_post_status = document.getElementById('hidden_post_status') as HTMLInputElement | null
-
-  //   // 原本發布後，TINYMCE狀態還是會一直停在草稿，所以要改成發布
-
-  //   if (hidden_post_status?.value === 'draft') {
-  //     const newOption = document.createElement('option')
-  //     newOption.value = 'publish'
-  //     newOption.textContent = 'Publish'
-  //     const select = document.getElementById('post_status') as HTMLSelectElement | null
-  //     if (select) {
-  //       select.appendChild(newOption)
-  //     }
-  //     newOption.selected = true
-  //   }
-
-  //   postForm.submit()
-  // }
-
   const handleSetCustomFieldValue = async () => {
     // Form 改變時，寫入自訂欄位
 
