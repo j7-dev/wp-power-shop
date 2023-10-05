@@ -72,12 +72,43 @@ class Bootstrap
 		$elLicenseCode = \get_option('PowerShopPro_lic_Key', '');
 		$products_info = Functions::get_products_info($post_id);
 
+
+		// 找出指定的 meta_id by meta_key
+		global $wpdb;
+		$power_shop_meta_meta_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT meta_id FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s",
+				$post_id,
+				$_ENV['SNAKE'] . '_meta'
+			)
+		);
+		$power_shop_report_password_meta_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT meta_id FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s",
+				$post_id,
+				$_ENV['SNAKE'] . '_report_password'
+			)
+		);
+		$power_shop_settings_meta_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT meta_id FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s",
+				$post_id,
+				$_ENV['SNAKE'] . '_settings'
+			)
+		);
+
+
 		\wp_localize_script($_ENV['KEBAB'], 'appData', array(
 			'siteUrl' => \site_url(),
 			'ajaxUrl' => \admin_url('admin-ajax.php'),
 			'ajaxNonce'  => \wp_create_nonce($_ENV['KEBAB']),
 			'userId' => \wp_get_current_user()->data->ID,
 			'postId' => $post_id,
+			'metaId' => [
+				'power_shop_meta' => $power_shop_meta_meta_id,
+				'power_shop_report_password' => $power_shop_report_password_meta_id,
+				'power_shop_settings' => $power_shop_settings_meta_id,
+			],
 			'permalink' => $permalink,
 			'checkoutUrl' => $checkout_page_url,
 			'elLicenseCode' => $elLicenseCode,
