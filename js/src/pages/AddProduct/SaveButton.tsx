@@ -1,11 +1,10 @@
-import { Tooltip, Button, Form, notification } from 'antd'
-import { SaveFilled } from '@ant-design/icons'
+import { Tooltip, Button, Form, notification, ButtonProps } from 'antd'
 import { useSetAtom } from 'jotai'
 import { isChangeAtom } from './atoms'
 import { useUpdate } from '@/hooks'
 import { kebab, postId, snake, formatShopMeta } from '@/utils'
 
-const SaveButton = () => {
+const SaveButton: React.FC<ButtonProps> = (props) => {
   const form = Form.useFormInstance()
   const setIsChange = useSetAtom(isChangeAtom)
 
@@ -43,13 +42,7 @@ const SaveButton = () => {
   return (
     <>
       <Tooltip title="按此儲存按鈕才會儲存商品資料">
-        <Button
-          type="primary"
-          className="px-8"
-          icon={<SaveFilled />}
-          onClick={handleSave}
-          loading={isLoading}
-        >
+        <Button {...props} onClick={handleSave} loading={isLoading}>
           儲存
         </Button>
       </Tooltip>

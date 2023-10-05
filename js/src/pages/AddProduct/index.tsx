@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 import { useEffect, useRef, useCallback } from 'react'
 import { Form, Alert, Typography, notification } from 'antd'
 import Add from './Add'
@@ -15,11 +16,10 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper'
 import SettingButton from './SettingButton'
+import { SaveFilled } from '@ant-design/icons'
 
 const { Paragraph } = Typography
-const tinyMCESaveBtn = document.getElementById(
-  'publish',
-) as HTMLInputElement | null
+const tinyMCESaveBtn = document.getElementById('publish') as HTMLInputElement | null
 
 const AddProduct = () => {
   const [
@@ -52,11 +52,14 @@ const AddProduct = () => {
     addedProducts,
     setAddedProducts,
   ] = useAtom(addedProductsAtom)
+  console.log('⭐  addedProducts:', addedProducts)
 
   const [form] = Form.useForm()
   const ref = useRef<HTMLInputElement>(null)
 
   const handleTinyMCESave = (e: Event) => {
+    // 按下傳統編輯器的儲存按鈕的 callback
+
     e.preventDefault()
     e.stopPropagation()
 
@@ -65,23 +68,22 @@ const AddProduct = () => {
     const sortedAllFields = formatShopMeta({
       form,
     })
+    console.log('⭐  sortedAllFields:', sortedAllFields)
     const input = ref.current
     if (!input) return null
     input.value = JSON.stringify(sortedAllFields)
     postForm?.prepend(input)
     if (!postForm || !tinyMCESaveBtn) return null
 
-    const hidden_post_status = document.getElementById(
-      'hidden_post_status',
-    ) as HTMLInputElement | null
+    const hidden_post_status = document.getElementById('hidden_post_status') as HTMLInputElement | null
+
+    // 原本發布後，TINYMCE狀態還是會一直停在草稿，所以要改成發布
 
     if (hidden_post_status?.value === 'draft') {
       const newOption = document.createElement('option')
       newOption.value = 'publish'
       newOption.textContent = 'Publish'
-      const select = document.getElementById(
-        'post_status',
-      ) as HTMLSelectElement | null
+      const select = document.getElementById('post_status') as HTMLSelectElement | null
       if (select) {
         select.appendChild(newOption)
       }
@@ -103,10 +105,10 @@ const AddProduct = () => {
   }, [])
 
   useEffect(() => {
-    if (!productsResult?.isLoading) {
+    if (!productsResult?.isFetching && !mutation?.isLoading) {
       const products = (productsResult?.data?.data || []) as TProduct[]
 
-      // NOTE 排序
+      // 排序
 
       const sortOrder = shop_meta.map((m) => m.productId)
       const sortedProducts = sortBy(products, (p) => {
@@ -115,8 +117,19 @@ const AddProduct = () => {
 
       setAddedProducts(sortedProducts)
       setFSMeta(shop_meta)
+
+      // 載入完成後，啟用儲存按鈕
+
+      if (tinyMCESaveBtn) tinyMCESaveBtn.disabled = false
+    } else {
+      // 載入完成前，禁用儲存按鈕
+
+      if (tinyMCESaveBtn) tinyMCESaveBtn.disabled = true
     }
-  }, [productsResult?.isLoading])
+  }, [
+    mutation?.isLoading,
+    productsResult?.isFetching,
+  ])
 
   const handleFormChange = () => {
     setIsChange(true)
@@ -157,28 +170,16 @@ const AddProduct = () => {
   }, [])
 
   const renderItem = useCallback((product: TProduct, index: number) => {
-    return (
-      <AddedItem
-        key={product.id}
-        index={index}
-        product={product}
-        moveCard={moveCard}
-      />
-    )
+    return <AddedItem key={product.id} index={index} product={product} moveCard={moveCard} />
   }, [])
 
   return (
     <div className="p-4">
       {mutation?.isLoading && <LoadingWrap />}
-      <Form
-        className="pt-4"
-        layout="vertical"
-        form={form}
-        onValuesChange={handleFormChange}
-      >
+      <Form className="pt-4" layout="vertical" form={form} onValuesChange={handleFormChange}>
         <div className="flex justify-between mb-4">
           <SettingButton />
-          <SaveButton />
+          <SaveButton type="primary" icon={<SaveFilled />} disabled={mutation?.isLoading || productsResult?.isFetching} />
         </div>
         <Alert
           className="mb-4"
