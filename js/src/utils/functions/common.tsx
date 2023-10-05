@@ -4,8 +4,7 @@ export const windowOuterWidth = window?.outerWidth || 1200
 
 export const isIphone = /iPhone/.test(navigator.userAgent)
 
-export const renderHTML = (rawHTML: string) =>
-  React.createElement('div', { dangerouslySetInnerHTML: { __html: rawHTML } })
+export const renderHTML = (rawHTML: string) => React.createElement('div', { dangerouslySetInnerHTML: { __html: rawHTML } })
 
 export const handleClearZero = (e: React.MouseEvent<HTMLInputElement>) => {
   const target = e.target as HTMLInputElement
@@ -15,13 +14,8 @@ export const handleClearZero = (e: React.MouseEvent<HTMLInputElement>) => {
 }
 
 export const getCopyableJson = (variable: any) => {
-  const jsonStringStrippedEscapeC = JSON.stringify(
-    JSON.stringify(variable || '{}'),
-  ).replace(/\\/g, '')
-  const jsonString = jsonStringStrippedEscapeC.slice(
-    1,
-    jsonStringStrippedEscapeC.length - 1,
-  )
+  const jsonStringStrippedEscapeC = JSON.stringify(JSON.stringify(variable || '{}')).replace(/\\/g, '')
+  const jsonString = jsonStringStrippedEscapeC.slice(1, jsonStringStrippedEscapeC.length - 1)
 
   if (typeof variable === 'object') {
     const countKeys = Object.keys(variable).length
@@ -37,13 +31,7 @@ export const getQueryString = (name: string) => {
   return paramValue
 }
 
-export const getCurrencyString = ({
-  price,
-  symbol = 'NT$',
-}: {
-  price: number | string | undefined
-  symbol?: string
-}) => {
+export const getCurrencyString = ({ price, symbol = 'NT$' }: { price: number | string | undefined; symbol?: string }) => {
   if (typeof price === 'undefined') return ''
   if (typeof price === 'string') return `${symbol} ${price}`
   return `${symbol} ${price.toString()}`
@@ -74,9 +62,7 @@ export const formatYoutubeLinkToIframe = (rawContent: string) => {
         border: 'none',
         aspectRatio: '16/9',
       }
-      iframe.src =
-        'https://www.youtube.com/embed/' +
-        videoLink.substr(videoLink.lastIndexOf('=') + 1)
+      iframe.src = 'https://www.youtube.com/embed/' + videoLink.substr(videoLink.lastIndexOf('=') + 1)
       Object.assign(iframe.style, styles)
 
       // 替换原始的链接
@@ -87,3 +73,5 @@ export const formatYoutubeLinkToIframe = (rawContent: string) => {
 
   return content
 }
+
+export const isUsingBlockEditor = typeof window?.wp !== 'undefined' && typeof window?.wp?.blocks !== 'undefined'

@@ -19,6 +19,9 @@ declare global {
       meta: TFSMeta[]
     }
   }
+  var wp: {
+    blocks: any
+  }
 }
 
 export {}
