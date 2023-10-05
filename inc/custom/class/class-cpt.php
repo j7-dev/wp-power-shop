@@ -250,6 +250,9 @@ class CPT extends Bootstrap
 		$screen = \get_current_screen();
 		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
 
+		$info = \Power_Shop_Pro_Base::get_register_info();
+		if (@$info->is_valid) return;
+
 		$buy_link = $_ENV['BUY_LICENSE_LINK'];
 		$license_link = \admin_url(self::LICENSE_LINK);
 		$support_email = $_ENV['SUPPORT_EMAIL'];
