@@ -17,12 +17,14 @@ $name = $product->get_name();
 ] = $meta;
 
 $price_arr = [];
+$regular_price_arr = [];
 foreach ($variations as $variation) {
-	if(empty((int) $variation['salesPrice'])){
+	if (empty((int) $variation['salesPrice'])) {
 		$price_arr[] = (int) $variation['regularPrice'];
-	}else{
+	} else {
 		$price_arr[] = (int) $variation['salesPrice'];
 	}
+	$regular_price_arr[] = (int) $variation['regularPrice'];
 }
 
 
@@ -32,6 +34,7 @@ $filtered_price_arr = array_filter($price_arr, function ($price) {
 
 $max = max($filtered_price_arr);
 $min = min($filtered_price_arr);
+$max_regular_price = max($regular_price_arr);
 
 
 ?>
@@ -46,7 +49,9 @@ $min = min($filtered_price_arr);
 		<?php if ($max === $min) : ?>
 			NT$ <?= $max ?>
 		<?php else : ?>
-			NT$ <?= $min ?> – NT$ <?= $max ?>
+			<p class="mb-0 mt-1"><del>NT$ <?= $max_regular_price ?></del></p>
+			<p class="mb-0 mt-1 text-red-500">NT$ <?= $min ?> – NT$ <?= $max ?></p>
+
 		<?php endif; ?>
 	</div>
 
