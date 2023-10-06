@@ -14,6 +14,7 @@
     const createShopNodeSelectorsString = createShopNodeSelectors.join(', ')
 
     init()
+    handleReminder()
 
     function init() {
       // add event listener to the selector
@@ -52,6 +53,21 @@
           },
         })
       })
+    }
+
+    function handleReminder() {
+      const hideReminder = document.getElementById('hide-reminder')
+      if (!hideReminder) return
+      hideReminder.addEventListener('click', function () {
+        localStorage.setItem('show-power-shop-reminder', 'false')
+        reminder.style.display = 'none'
+      })
+
+      const showPowerShopReminder = localStorage.getItem('show-power-shop-reminder')
+      const reminder = document.getElementById('power-shop-reminder')
+      if (showPowerShopReminder === 'false') {
+        reminder.style.display = 'none'
+      }
     }
   })
 })(jQuery)

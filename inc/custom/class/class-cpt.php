@@ -225,7 +225,7 @@ class CPT extends Bootstrap
 		$color = self::COLOR;
 
 		$html = <<<EOD
-		<div class="notice notice-info is-dismissible" style="border-left-color:$color;">
+		<div id='power-shop-reminder' class="notice notice-info is-dismissible" style="border-left-color:$color;">
 			<div class="e-notice__content">
 				<h3>升級PowerShop，讓你的商店更有POWER!</h3>
 
@@ -237,6 +237,7 @@ class CPT extends Bootstrap
 					<a href="$buy_link" target="_blank" class="button button-primary button-large" style="margin-right: 0.5rem;background-color: $color;border-color:$color;">購買授權</a>
 					<a href="$license_link" class="button button-large" style="border-color:$color;color:$color;">輸入授權碼</a>
 				</div>
+				<a href="#" id="hide-reminder">不要再顯示</a>
 			</div>
 		</div>
 EOD;
