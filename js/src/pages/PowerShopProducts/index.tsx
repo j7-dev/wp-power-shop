@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Main from './Main'
 import ShopClosed from './ShopClosed'
 import ShopComing from './ShopComing'
@@ -5,14 +6,12 @@ import { useAjaxGetPostMeta } from '@/hooks'
 import { postId, snake } from '@/utils'
 import { TSettings, defaultSettings } from '@/types'
 import dayjs from 'dayjs'
+import { message } from 'antd'
+import { isProductModalOpenAtom, modalProductIdAtom } from '@/pages/PowerShopProducts/atom'
+import { useSetAtom, useAtom } from 'jotai'
+import ProductModal from '@/pages/PowerShopProducts/ProductModal'
 
-const getStatus = ({
-  startTime,
-  endTime,
-}: {
-  startTime: number | undefined
-  endTime: number | undefined
-}): 'published' | 'coming' | 'closed' => {
+const getStatus = ({ startTime, endTime }: { startTime: number | undefined; endTime: number | undefined }): 'published' | 'coming' | 'closed' => {
   const now = dayjs().valueOf()
 
   if (!startTime && !endTime) return 'published'
@@ -45,19 +44,63 @@ const PowerShopProducts = () => {
   const endTime = settings?.endTime
   const shopStatus = getStatus({ startTime, endTime })
 
-  if (shopStatus === 'published')
-    return (
-      <Main
-        endTime={endTime}
-        isLoading={isLoading}
-        isSuccess={isSuccess}
-        isError={isError}
-      />
-    )
-  if (shopStatus === 'coming') return <ShopComing startTime={startTime} />
-  if (shopStatus === 'closed') return <ShopClosed endTime={endTime} />
+  const products = window?.appData?.products_info?.products ?? []
 
-  return <Main isLoading={isLoading} isSuccess={isSuccess} isError={isError} />
+  const setIsProductModalOpen = useSetAtom(isProductModalOpenAtom)
+  const [
+    modalProductId,
+    setModalProductId,
+  ] = useAtom(modalProductIdAtom)
+  const modalProduct = products.find((p) => p.id === modalProductId)
+
+  const els = document.querySelectorAll('div[data-ps-product-id]') ?? []
+  const handleModalOpen = (id: number) => (e: Event) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsProductModalOpen(true)
+    setModalProductId(id)
+  }
+
+  useEffect(() => {
+    if (isLoading) {
+      // 因為PHP已經有class了，所以這邊不用加
+      // els.forEach((el) => {
+      // 	el.classList.add('ps-not-ready')
+      // })
+    } else if (isSuccess) {
+      els.forEach((el) => {
+        el.classList.remove('ps-not-ready')
+        const productId = parseInt(el.getAttribute('data-ps-product-id') ?? '0', 10)
+        if (productId) {
+          el.addEventListener('click', handleModalOpen(productId))
+
+          // removeEventListener
+
+          return () => {
+            el.removeEventListener('click', handleModalOpen(productId))
+          }
+        }
+      })
+    } else if (isError) {
+      message.open({
+        key: 'jsLoaded',
+        type: 'error',
+        content: ' 商品載入失敗，請重新刷新頁面再試一次',
+        duration: 0,
+      })
+    }
+  }, [isLoading])
+
+  return (
+    <>
+      {shopStatus === 'published' && <Main endTime={endTime} products={products} />}
+      {shopStatus === 'coming' && <ShopComing startTime={startTime} />}
+      {shopStatus === 'closed' && <ShopClosed endTime={endTime} />}
+
+      {shopStatus !== 'published' && shopStatus !== 'coming' && shopStatus !== 'closed' && <Main products={products} />}
+      {modalProduct && <ProductModal product={modalProduct} />}
+    </>
+  )
 }
 
 export default PowerShopProducts

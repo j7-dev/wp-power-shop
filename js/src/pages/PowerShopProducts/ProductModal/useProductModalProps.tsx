@@ -13,6 +13,7 @@ const useProductModalProps = (product: TAjaxProduct) => {
     isProductModalOpen,
     setIsProductModalOpen,
   ] = useAtom(isProductModalOpenAtom)
+
   const modalProps: ModalProps = {
     centered: true,
     footer: null,
