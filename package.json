@@ -1,7 +1,7 @@
 {
-  "name": "@J7/PowerShop.wp-plugin",
+  "name": "@J7/wp-power-shop",
   "private": true,
-  "version": "2.4.19",
+  "version": "2.4.20",
   "type": "module",
   "scripts": {
     "init": "npm install && composer install --no-interaction",
@@ -21,6 +21,7 @@
     "@tanstack/react-query": "^4.24.9",
     "@wordpress/hooks": "^3.38.0",
     "antd": "^5.5.2",
+    "antd-utility": "0.1.8",
     "axios": "^1.3.3",
     "immutability-helper": "^3.1.1",
     "immutable": "^4.3.0",

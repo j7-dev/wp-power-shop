@@ -7,7 +7,7 @@ import { postId, snake } from '@/utils'
 import { TSettings, defaultSettings } from '@/types'
 import dayjs from 'dayjs'
 import { message } from 'antd'
-import { isProductModalOpenAtom, modalProductIdAtom } from '@/pages/PowerShopProducts/atom'
+import { isProductModalOpenAtom, modalProductIdAtom, shopStatusAtom } from '@/pages/PowerShopProducts/atom'
 import { useSetAtom, useAtom } from 'jotai'
 import ProductModal from '@/pages/PowerShopProducts/ProductModal'
 
@@ -43,6 +43,7 @@ const PowerShopProducts = () => {
   const startTime = settings?.startTime
   const endTime = settings?.endTime
   const shopStatus = getStatus({ startTime, endTime })
+  const setShopStatus = useSetAtom(shopStatusAtom)
 
   const products = window?.appData?.products_info?.products ?? []
 
@@ -90,6 +91,10 @@ const PowerShopProducts = () => {
       })
     }
   }, [isLoading])
+
+  useEffect(() => {
+    setShopStatus(shopStatus)
+  }, [shopStatus])
 
   return (
     <>

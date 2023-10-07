@@ -3,7 +3,7 @@ import { Button, notification } from 'antd'
 import { useAjax } from '@/hooks'
 import { ajaxNonce, postId } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
-import { isProductModalOpenAtom, showCartAtom, selectedVariationIdAtom, selectedAttributesAtom } from '@/pages/PowerShopProducts/atom'
+import { isProductModalOpenAtom, showCartAtom, selectedVariationIdAtom, selectedAttributesAtom, shopStatusAtom } from '@/pages/PowerShopProducts/atom'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 const AddToCartButton: React.FC<{
@@ -20,6 +20,7 @@ const AddToCartButton: React.FC<{
 
   const selectedVariationId = useAtomValue(selectedVariationIdAtom)
   const selectedAttributes = useAtomValue(selectedAttributesAtom)
+  const shopStatus = useAtomValue(shopStatusAtom)
 
   const setIsProductModalOpen = useSetAtom(isProductModalOpenAtom)
   const setShowCart = useSetAtom(showCartAtom)
@@ -57,7 +58,7 @@ const AddToCartButton: React.FC<{
   return (
     <>
       {contextHolder}
-      <Button className="w-full mt-4" type="primary" onClick={handleClick} loading={isLoading} disabled={!selectedVariationId && props?.productType === 'variable'}>
+      <Button className="w-full mt-4" type="primary" onClick={handleClick} loading={isLoading} disabled={(!selectedVariationId && props?.productType === 'variable') || shopStatus !== 'published'}>
         加入購物車
       </Button>
     </>

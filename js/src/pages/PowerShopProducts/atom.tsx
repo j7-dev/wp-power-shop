@@ -9,3 +9,6 @@ export const modalProductIdAtom = atom<number>(0)
 export const showCartAtom = atom<boolean>(false)
 export const selectedVariationIdAtom = atom<number | null>(null)
 export const selectedAttributesAtom = atom<TProductVariationAttribute[]>([])
+
+type TShopStatus = 'published' | 'coming' | 'closed'
+export const shopStatusAtom = atom<TShopStatus>('published')
