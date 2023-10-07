@@ -27,7 +27,6 @@ foreach ($variations as $variation) {
 	$regular_price_arr[] = (int) $variation['regularPrice'];
 }
 
-
 $filtered_price_arr = array_filter($price_arr, function ($price) {
 	return !empty($price);
 });
@@ -47,7 +46,8 @@ $max_regular_price = max($regular_price_arr);
 	</div>
 	<div>
 		<?php if ($max === $min) : ?>
-			NT$ <?= $max ?>
+			<p class="mb-0 mt-1"><del>NT$ <?= $max_regular_price ?></del></p>
+			<p class="mb-0 mt-1 text-red-500">NT$ <?= $min ?></p>
 		<?php else : ?>
 			<p class="mb-0 mt-1"><del>NT$ <?= $max_regular_price ?></del></p>
 			<p class="mb-0 mt-1 text-red-500">NT$ <?= $min ?> – NT$ <?= $max ?></p>
