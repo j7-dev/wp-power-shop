@@ -48,9 +48,10 @@ $max_regular_price = max($regular_price_arr);
 		<?php if ($max === $min) : ?>
 			<?php if ($max === $max_regular_price) : ?>
 				<p class="mb-0 mt-1">NT$ <?= $min ?></p>
+			<?php else : ?>
+				<p class="mb-0 mt-1"><del>NT$ <?= $max_regular_price ?></del></p>
+				<p class="mb-0 mt-1 text-red-500">NT$ <?= $min ?></p>
 			<?php endif; ?>
-			<p class="mb-0 mt-1"><del>NT$ <?= $max_regular_price ?></del></p>
-			<p class="mb-0 mt-1 text-red-500">NT$ <?= $min ?></p>
 		<?php else : ?>
 			<p class="mb-0 mt-1"><del>NT$ <?= $max_regular_price ?></del></p>
 			<p class="mb-0 mt-1 text-red-500">NT$ <?= $min ?> – NT$ <?= $max ?></p>
