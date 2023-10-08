@@ -28,8 +28,10 @@ const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
   return (
     <Modal {...modalProps}>
       <Row gutter={24} className="max-h-[75vh] overflow-y-auto">
-        <Col span={24} lg={{ span: 10 }} className="mb-4">
-          <Gallery images={images} />
+        <Col span={24} lg={{ span: 10 }} className="mb-4 relative">
+          <div className="sticky top-0">
+            <Gallery images={images} />
+          </div>
         </Col>
         <Col span={24} lg={{ span: 14 }}>
           <div className="flex flex-col">
