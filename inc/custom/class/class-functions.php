@@ -155,8 +155,8 @@ class Functions
 				$product_data['regularPrice'] = $meta['regularPrice'];
 				$product_data['salesPrice'] = $meta['salesPrice'];
 			}
-			if ('variable' === $product->get_type()) {
-				$variation_meta = $meta['variations'];
+			if ('variable' === $product->get_type() && !empty($meta['variations'])) {
+				$variation_meta = $meta['variations']; //  Undefined array key "variations"
 				$product_data['variations'] = [];
 				$product_data['variation_attributes'] = $product->get_variation_attributes();
 

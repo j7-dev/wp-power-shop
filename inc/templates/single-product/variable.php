@@ -31,9 +31,9 @@ $filtered_price_arr = array_filter($price_arr, function ($price) {
 	return !empty($price);
 });
 
-$max = max($filtered_price_arr);
-$min = min($filtered_price_arr);
-$max_regular_price = max($regular_price_arr);
+$max = empty($filtered_price_arr) ? '' : max($filtered_price_arr);
+$min = empty($filtered_price_arr) ? '' : min($filtered_price_arr);
+$max_regular_price = empty($regular_price_arr) ? '' :  max($regular_price_arr);
 
 
 ?>
@@ -45,7 +45,7 @@ $max_regular_price = max($regular_price_arr);
 		<?= $name ?>
 	</div>
 	<div>
-		<?php if ($max === $min) : ?>
+		<?php if ($max === $min && !empty($min)) : ?>
 			<?php if ($max === $max_regular_price) : ?>
 				<p class="mb-0 mt-1">NT$ <?= $min ?></p>
 			<?php else : ?>
@@ -53,8 +53,12 @@ $max_regular_price = max($regular_price_arr);
 				<p class="mb-0 mt-1 text-red-500">NT$ <?= $min ?></p>
 			<?php endif; ?>
 		<?php else : ?>
-			<p class="mb-0 mt-1"><del>NT$ <?= $max_regular_price ?></del></p>
-			<p class="mb-0 mt-1 text-red-500">NT$ <?= $min ?> – NT$ <?= $max ?></p>
+			<?php if (!empty($max_regular_price)) : ?>
+				<p class="mb-0 mt-1"><del>NT$ <?= $max_regular_price ?></del></p>
+			<?php endif; ?>
+			<?php if (!empty($max)) : ?>
+				<p class="mb-0 mt-1 text-red-500">NT$ <?= $min ?> – NT$ <?= $max ?></p>
+			<?php endif; ?>
 		<?php endif; ?>
 	</div>
 
