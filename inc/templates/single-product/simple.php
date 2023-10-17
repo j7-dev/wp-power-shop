@@ -1,6 +1,7 @@
 <?php
 
 
+
 [
 	'product' => $product,
 	'meta' => $meta,
@@ -17,9 +18,16 @@ $name = $product->get_name();
 	'salesPrice' => $sales_price,
 ] = $meta;
 
+if (strpos($_SERVER['REQUEST_URI'], $_ENV['KEBAB']) === false) {
+	// 如果不包含 $_ENV['KEBAB'] 字串，有可能在其他編輯器預覽，則不加入 ps-not-ready class
+	$class = '';
+} else {
+	// 如果包含 $_ENV['KEBAB'] 字串，則加入 ps-not-ready class
+	$class = 'ps-not-ready';
+}
 
 ?>
-<div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 ps-not-ready">
+<div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 <?= $class ?>">
 	<div>
 		<img src="<?= $img_src[0] ?>" class="w-full aspect-square object-cover" alt="<?= $name ?>">
 	</div>
