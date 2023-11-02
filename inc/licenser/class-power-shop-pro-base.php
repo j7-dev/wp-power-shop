@@ -16,6 +16,7 @@ if (!class_exists("Power_Shop_Pro_Base")) {
 		private static $_on_delete_license = [];
 		function __construct($plugin_base_file = '')
 		{
+
 			if (empty($plugin_base_file)) {
 				$dir = str_replace('\\', '/', dirname(__FILE__));
 			} else {
@@ -39,6 +40,7 @@ if (!class_exists("Power_Shop_Pro_Base")) {
 			}
 
 			if ($this->has_check_update) {
+
 				if (function_exists("add_action")) {
 					add_action('admin_post_power-shop-pro_fupc', function () {
 						update_option('_site_transient_update_plugins', '');
@@ -51,6 +53,7 @@ if (!class_exists("Power_Shop_Pro_Base")) {
 					add_action('init', [$this, "init_action_handler"]);
 				}
 				if (function_exists("add_filter")) {
+
 					if ($this->is_theme) {
 						add_filter('pre_set_site_transient_update_themes', [$this, "plugin_update"]);
 						add_filter('themes_api', [$this, 'check_update_info'], 10, 3);
@@ -58,9 +61,18 @@ if (!class_exists("Power_Shop_Pro_Base")) {
 							add_theme_page('Update Check', 'Update Check', 'edit_theme_options', 'update_check', [$this, "theme_force_update"]);
 						}, 999);
 					} else {
+
+
+
 						add_filter('pre_set_site_transient_update_plugins', [$this, "plugin_update"]);
 						add_filter('plugins_api', [$this, 'check_update_info'], 10, 3);
 						add_filter('plugin_row_meta', function ($links, $plugin_file) {
+							/**
+							 * plugin_basename($this->plugin_file) = "power-shop/PowerShopPro.php"
+							 * $plugin_file = "power-shop/plugin.php"
+							 */
+
+
 							if (plugin_basename($this->plugin_file) == $plugin_file) {
 								$links[] = " <a class='edit coption' href='" . esc_url(admin_url('admin-post.php') . '?action=power-shop-pro_fupc') . "'>Update Check</a>";
 							}
@@ -280,6 +292,8 @@ if (!class_exists("Power_Shop_Pro_Base")) {
 		}
 		function plugin_update($transient)
 		{
+
+
 			if (empty($transient)) {
 				$transient = new stdClass();
 				$transient->response = [];
