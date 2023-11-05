@@ -4,7 +4,7 @@
  * Plugin Name:       Power Shop | 讓你的商店充滿 Power
  * Plugin URI:        https://luke.cafe/plugins/power-shop
  * Description:       Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
- * Version:           0.9.2
+ * Version:           0.9.4
  * Requires at least: 5.7
  * Requires PHP:      7.4
  * Author:            j7.dev
@@ -16,25 +16,24 @@
  * Tags: woocommerce, shop, order
  */
 
-
 require_once "inc/index.php";
-require_once "licenser/class-power-shop-pro-base.php";
+require_once "licenser/class-power-shop-base.php";
 
-class PowerShopPro
+class PowerShop
 {
 	public $plugin_file = __FILE__;
 	public $response_obj;
 	public $license_message;
 	public $show_message = false;
-	public $slug = "power-shop-pro";
+	public $slug = "power-shop";
 	public $plugin_version = '';
 	public $text_domain = '';
 	function __construct()
 	{
 		add_action('admin_print_styles', [$this, 'set_admin_style']);
 		$this->set_plugin_data();
-		$main_lic_key = "PowerShopPro_lic_Key";
-		$lic_key_name = Power_Shop_Pro_Base::get_lic_key_param($main_lic_key);
+		$main_lic_key = "PowerShop_lic_Key";
+		$lic_key_name = Power_Shop_Base::get_lic_key_param($main_lic_key);
 		$license_key = get_option($lic_key_name, "");
 		if (empty($license_key)) {
 			$license_key = get_option($main_lic_key, "");
@@ -42,13 +41,13 @@ class PowerShopPro
 				update_option($lic_key_name, $license_key) || add_option($lic_key_name, $license_key);
 			}
 		}
-		$lice_email = get_option("PowerShopPro_lic_email", "");
-		Power_Shop_Pro_Base::add_on_delete(function () {
-			update_option("PowerShopPro_lic_Key", "");
+		$lice_email = get_option("PowerShop_lic_email", "");
+		Power_Shop_Base::add_on_delete(function () {
+			update_option("PowerShop_lic_Key", "");
 		});
-		if (Power_Shop_Pro_Base::check_wp_plugin($license_key, $lice_email, $this->license_message, $this->response_obj, __FILE__)) {
+		if (Power_Shop_Base::check_wp_plugin($license_key, $lice_email, $this->license_message, $this->response_obj, __FILE__)) {
 			add_action('admin_menu', [$this, 'active_admin_menu'], 99999);
-			add_action('admin_post_PowerShopPro_el_deactivate_license', [$this, 'action_deactivate_license']);
+			add_action('admin_post_PowerShop_el_deactivate_license', [$this, 'action_deactivate_license']);
 			//$this->licenselMessage=$this->mess;
 			//***Write you plugin's code here***
 
@@ -57,7 +56,7 @@ class PowerShopPro
 				$this->show_message = true;
 			}
 			update_option($license_key, "") || add_option($license_key, "");
-			add_action('admin_post_PowerShopPro_el_activate_license', [$this, 'action_activate_license']);
+			add_action('admin_post_PowerShop_el_activate_license', [$this, 'action_activate_license']);
 			add_action('admin_menu', [$this, 'inactive_menu']);
 		}
 	}
@@ -111,72 +110,72 @@ class PowerShopPro
 	}
 	public function set_admin_style()
 	{
-		wp_register_style("PowerShopProLic", plugins_url("_lic_style.css", __DIR__ . '/licenser/_lic_style.css'), 10, time());
-		wp_enqueue_style("PowerShopProLic");
+		wp_register_style("PowerShopLic", plugins_url("_lic_style.css", __DIR__ . '/licenser/_lic_style.css'), 10, time());
+		wp_enqueue_style("PowerShopLic");
 	}
 	public function active_admin_menu()
 	{
 
-		add_submenu_page('edit.php?post_type=power-shop', "PowerShopPro License", "License Info", "activate_plugins",  $this->slug . "-license", [$this, "activated"]);
+		add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins",  $this->slug . "-license", [$this, "activated"]);
 	}
 	public function inactive_menu()
 	{
-		add_submenu_page('edit.php?post_type=power-shop', "PowerShopPro License", "License Info", "activate_plugins",  $this->slug . "-license", [$this, "license_form"]);
+		add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins",  $this->slug . "-license", [$this, "license_form"]);
 	}
 	function action_activate_license()
 	{
 		check_admin_referer('el-license');
 		$license_key = !empty($_POST['el_license_key']) ? sanitize_text_field(wp_unslash($_POST['el_license_key'])) : "";
 		$license_email = !empty($_POST['el_license_email']) ? sanitize_email(wp_unslash($_POST['el_license_email'])) : "";
-		update_option("PowerShopPro_lic_Key", $license_key) || add_option("PowerShopPro_lic_Key", $license_key);
-		update_option("PowerShopPro_lic_email", $license_email) || add_option("PowerShopPro_lic_email", $license_email);
+		update_option("PowerShop_lic_Key", $license_key) || add_option("PowerShop_lic_Key", $license_key);
+		update_option("PowerShop_lic_email", $license_email) || add_option("PowerShop_lic_email", $license_email);
 		update_option('_site_transient_update_plugins', '');
-		wp_safe_redirect(admin_url('edit.php?post_type=power-shop&page=power-shop-pro-license'));
+		wp_safe_redirect(admin_url('edit.php?post_type=power-shop&page=power-shop-license'));
 	}
 	function action_deactivate_license()
 	{
 		check_admin_referer('el-license');
 		$message = "";
-		$main_lic_key = "PowerShopPro_lic_Key";
-		$lic_key_name = Power_Shop_Pro_Base::get_lic_key_param($main_lic_key);
-		if (Power_Shop_Pro_Base::remove_license_key(__FILE__, $message)) {
+		$main_lic_key = "PowerShop_lic_Key";
+		$lic_key_name = Power_Shop_Base::get_lic_key_param($main_lic_key);
+		if (Power_Shop_Base::remove_license_key(__FILE__, $message)) {
 			update_option($lic_key_name, "") || add_option($lic_key_name, "");
 			update_option('_site_transient_update_plugins', '');
 		}
-		wp_safe_redirect(admin_url('edit.php?post_type=power-shop&page=power-shop-pro-license'));
+		wp_safe_redirect(admin_url('edit.php?post_type=power-shop&page=power-shop-license'));
 	}
 	function activated()
 	{
 ?>
 		<form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-			<input type="hidden" name="action" value="PowerShopPro_el_deactivate_license" />
+			<input type="hidden" name="action" value="PowerShop_el_deactivate_license" />
 			<div class="el-license-container">
-				<h3 class="el-license-title"><i class="dashicons-before dashicons-star-filled"></i> <?php esc_html_e("Power Shop Pro License Info", "power-shop-pro"); ?> </h3>
+				<h3 class="el-license-title"><i class="dashicons-before dashicons-star-filled"></i> <?php esc_html_e("Power Shop License Info", "power-shop"); ?> </h3>
 				<hr>
 				<ul class="el-license-info">
 					<li>
 						<div>
-							<span class="el-license-info-title"><?php esc_html_e("Status", "power-shop-pro"); ?></span>
+							<span class="el-license-info-title"><?php esc_html_e("Status", "power-shop"); ?></span>
 
 							<?php if ($this->response_obj->is_valid) : ?>
-								<span class="el-license-valid"><?php esc_html_e("Valid", "power-shop-pro"); ?></span>
+								<span class="el-license-valid"><?php esc_html_e("Valid", "power-shop"); ?></span>
 							<?php else : ?>
-								<span class="el-license-valid"><?php esc_html_e("Invalid", "power-shop-pro"); ?></span>
+								<span class="el-license-valid"><?php esc_html_e("Invalid", "power-shop"); ?></span>
 							<?php endif; ?>
 						</div>
 					</li>
 
 					<li>
 						<div>
-							<span class="el-license-info-title"><?php esc_html_e("License Type", "power-shop-pro"); ?></span>
-							<?php echo esc_html($this->response_obj->license_title, "power-shop-pro"); ?>
+							<span class="el-license-info-title"><?php esc_html_e("License Type", "power-shop"); ?></span>
+							<?php echo esc_html($this->response_obj->license_title, "power-shop"); ?>
 						</div>
 					</li>
 
 					<li>
 						<div>
-							<span class="el-license-info-title"><?php esc_html_e("License Expired on", "power-shop-pro"); ?></span>
-							<?php echo esc_html($this->response_obj->expire_date, "power-shop-pro");
+							<span class="el-license-info-title"><?php esc_html_e("License Expired on", "power-shop"); ?></span>
+							<?php echo esc_html($this->response_obj->expire_date, "power-shop");
 							if (!empty($this->response_obj->expire_renew_link)) {
 							?>
 								<a target="_blank" class="el-blue-btn" href="<?php echo esc_url($this->response_obj->expire_renew_link); ?>">Renew</a>
@@ -188,9 +187,9 @@ class PowerShopPro
 
 					<li>
 						<div>
-							<span class="el-license-info-title"><?php esc_html_e("Support Expired on", "power-shop-pro"); ?></span>
+							<span class="el-license-info-title"><?php esc_html_e("Support Expired on", "power-shop"); ?></span>
 							<?php
-							echo esc_html($this->response_obj->support_end, "power-shop-pro");;
+							echo esc_html($this->response_obj->support_end, "power-shop");;
 							if (!empty($this->response_obj->support_renew_link)) {
 							?>
 								<a target="_blank" class="el-blue-btn" href="<?php echo esc_url($this->response_obj->support_renew_link); ?>">Renew</a>
@@ -201,7 +200,7 @@ class PowerShopPro
 					</li>
 					<li>
 						<div>
-							<span class="el-license-info-title"><?php esc_html_e("Your License Key", "power-shop-pro"); ?></span>
+							<span class="el-license-info-title"><?php esc_html_e("Your License Key", "power-shop"); ?></span>
 							<span class="el-license-key"><?php echo esc_attr(substr($this->response_obj->license_key, 0, 9) . "XXXXXXXX-XXXXXXXX" . substr($this->response_obj->license_key, -9)); ?></span>
 						</div>
 					</li>
@@ -219,33 +218,32 @@ class PowerShopPro
 	{
 	?>
 		<form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-			<input type="hidden" name="action" value="PowerShopPro_el_activate_license" />
+			<input type="hidden" name="action" value="PowerShop_el_activate_license" />
 			<div class="el-license-container">
-				<h3 class="el-license-title"><i class="dashicons-before dashicons-star-filled"></i> <?php esc_html_e("Power Shop Pro Licensing", "power-shop-pro"); ?></h3>
+				<h3 class="el-license-title"><i class="dashicons-before dashicons-star-filled"></i> <?php esc_html_e("Power Shop Licensing", "power-shop"); ?></h3>
 				<hr>
 				<?php
 				if (!empty($this->show_message) && !empty($this->license_message)) {
 				?>
 					<div class="notice notice-error is-dismissible">
-						<p><?php echo esc_html($this->license_message, "power-shop-pro"); ?></p>
+						<p><?php echo esc_html($this->license_message, "power-shop"); ?></p>
 					</div>
 				<?php
 				}
-
 				?>
 				<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="<?= $_ENV['BUY_LICENSE_LINK']; ?>">站長路可網站</a>購買
 					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:<?= $_ENV['SUPPORT_EMAIL']; ?>" target="_blank"><?= $_ENV['SUPPORT_EMAIL']; ?></a></p>
 				<div class="el-license-field">
-					<label for="el_license_key"><?php echo esc_html("License code", "power-shop-pro"); ?></label>
+					<label for="el_license_key"><?php echo esc_html("License code", "power-shop"); ?></label>
 					<input type="text" class="regular-text code" name="el_license_key" size="50" placeholder="xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx" required="required">
 				</div>
 				<div class="el-license-field">
-					<label for="el_license_key"><?php echo esc_html("Email Address", "power-shop-pro"); ?></label>
+					<label for="el_license_key"><?php echo esc_html("Email Address", "power-shop"); ?></label>
 					<?php
-					$purchase_email   = get_option("PowerShopPro_lic_email", get_bloginfo('admin_email'));
+					$purchase_email   = get_option("PowerShop_lic_email", get_bloginfo('admin_email'));
 					?>
 					<input type="text" class="regular-text code" name="el_license_email" size="50" value="<?php echo esc_html($purchase_email); ?>" placeholder="" required="required">
-					<div><small><?php echo esc_html("We will send update news of this product by this email address, don't worry, we hate spam", "power-shop-pro"); ?></small></div>
+					<div><small><?php echo esc_html("We will send update news of this product by this email address, don't worry, we hate spam", "power-shop"); ?></small></div>
 				</div>
 				<div class="el-license-active-btn">
 					<?php wp_nonce_field('el-license'); ?>
@@ -257,4 +255,4 @@ class PowerShopPro
 	}
 }
 
-new PowerShopPro();
+new PowerShop();

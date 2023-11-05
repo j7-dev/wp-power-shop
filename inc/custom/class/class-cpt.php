@@ -57,7 +57,7 @@ class CPT extends Bootstrap
 
 		\flush_rewrite_rules();
 
-		$info = \Power_Shop_Pro_Base::get_register_info();
+		$info = \Power_Shop_Base::get_register_info();
 		if (@$info->is_valid) return;
 
 		$count_posts = \wp_count_posts(self::CPT_SLUG);
@@ -216,7 +216,7 @@ class CPT extends Bootstrap
 		$screen = \get_current_screen();
 		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
 
-		$info = \Power_Shop_Pro_Base::get_register_info();
+		$info = \Power_Shop_Base::get_register_info();
 		if (@$info->is_valid) return;
 
 		$buy_link = $_ENV['BUY_LICENSE_LINK'];

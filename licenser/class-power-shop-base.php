@@ -1,10 +1,10 @@
 <?php
-if (!class_exists("Power_Shop_Pro_Base")) {
-	class Power_Shop_Pro_Base
+if (!class_exists("Power_Shop_Base")) {
+	class Power_Shop_Base
 	{
-		public $key = "51A6ECF4EF9C6B7C";
-		private $product_id = "1";
-		private $product_base = "power-shop-pro";
+		public $key = "19804775DFE5E653";
+		private $product_id = "6";
+		private $product_base = "power-shop";
 		private $server_host = "https://cloud.luke.cafe/wp-json/licensor/";
 		private $has_check_update = true;
 		private $plugin_file;
@@ -40,7 +40,7 @@ if (!class_exists("Power_Shop_Pro_Base")) {
 
 			if ($this->has_check_update) {
 				if (function_exists("add_action")) {
-					add_action('admin_post_power-shop-pro_fupc', function () {
+					add_action('admin_post_power-shop_fupc', function () {
 						update_option('_site_transient_update_plugins', '');
 						update_option('_site_transient_update_themes', '');
 						set_site_transient('update_themes', null);
@@ -62,7 +62,7 @@ if (!class_exists("Power_Shop_Pro_Base")) {
 						add_filter('plugins_api', [$this, 'check_update_info'], 10, 3);
 						add_filter('plugin_row_meta', function ($links, $plugin_file) {
 							if (plugin_basename($this->plugin_file) == $plugin_file) {
-								$links[] = " <a class='edit coption' href='" . esc_url(admin_url('admin-post.php') . '?action=power-shop-pro_fupc') . "'>Update Check</a>";
+								$links[] = " <a class='edit coption' href='" . esc_url(admin_url('admin-post.php') . '?action=power-shop_fupc') . "'>Update Check</a>";
 							}
 							return $links;
 						}, 10, 2);
@@ -81,7 +81,7 @@ if (!class_exists("Power_Shop_Pro_Base")) {
 		{
 			$this->clean_update_info();
 			$url = admin_url('themes.php');
-			echo wp_kses_post('<h1>' . __("Update Checking..", "power-shop-pro") . '</h1>');
+			echo wp_kses_post('<h1>' . __("Update Checking..", "power-shop") . '</h1>');
 			call_user_func('printf', '%s', "<script>location.href = '" . $url . "'</script>");
 		}
 		public function set_email_address($email_address)
