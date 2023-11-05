@@ -134,6 +134,7 @@ class Functions
 
 		function get_product_data($meta)
 		{
+			$meta = (array) $meta ?? [];
 			$product = \wc_get_product($meta['productId']);
 			$feature_image_id = $product->get_image_id();
 			$attachment_ids = [$feature_image_id, ...$product->get_gallery_image_ids()];
