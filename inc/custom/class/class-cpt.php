@@ -12,7 +12,7 @@ class CPT extends Bootstrap
 	const POST_META = ['meta', 'settings'];
 	const CPT_LABEL = 'Power Shop';
 	const CPT_SLUG = 'power-shop';
-	const LICENSE_LINK = 'edit.php?post_type=power-shop&page=power-shop-pro-license';
+	const LICENSE_LINK = 'edit.php?post_type=power-shop&page=power-shop-license';
 	const COLOR = '#72aee6';
 
 
