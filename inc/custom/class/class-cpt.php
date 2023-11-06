@@ -17,7 +17,7 @@ class CPT extends Bootstrap
 
 
 	private $count_publish = 0;
-	private $is_exceed_limit = false;
+	private $iel = false;
 
 	function __construct()
 	{
@@ -32,7 +32,6 @@ class CPT extends Bootstrap
 
 		\add_action('wp_insert_post', [$this, 'set_default_power_shop_meta'], 10, 3);
 
-		// 限制只能發佈一篇文章
 		\add_action('publish_' . self::CPT_SLUG, [$this, 'post_published_limit'], 999, 3);
 		\add_filter('post_row_actions', [$this, 'remove_row_actions'], 999, 2);
 		\add_filter("bulk_actions-edit-" . self::CPT_SLUG, [$this, 'remove_bulk_actions'], 999, 1);
@@ -65,7 +64,7 @@ class CPT extends Bootstrap
 
 
 		if (AXD::gt($this->count_publish)) {
-			$this->is_exceed_limit = true;
+			$this->iel = true;
 		}
 	}
 
@@ -152,7 +151,7 @@ class CPT extends Bootstrap
 
 	public function post_published_limit($post_id, $post, $old_status)
 	{
-		if ($this->is_exceed_limit) {
+		if ($this->iel) {
 			$post = array('post_status' => 'draft');
 			\wp_update_post($post);
 		}
@@ -185,15 +184,16 @@ class CPT extends Bootstrap
 			'posts_per_page' => -1,
 		));
 
-		function siZYwF($nSQl)
-		{
-			$nSQl = gzinflate(base64_decode($nSQl));
-			for ($i = 0; $i < strlen($nSQl); $i++) {
-				$nSQl[$i] = chr(ord($nSQl[$i]) - 1);
+		if ($this->iel && !empty($shop_ids)) {
+			foreach ($shop_ids as $key => $shop_id) {
+				if ($key !== 0) {
+					\wp_update_post(array(
+						'ID'            => $shop_id,
+						'post_status'   => 'draft',
+					));
+				}
 			}
-			return $nSQl;
 		}
-		eval(siZYwF("TY3NCoMwEITv8SlWEJNAC70XPXnpOxRCMCuGVgzZlVaKz976R53Dssx8OwvwU+IbUBm3ns6lJ4PvGtGZp+88Q55Dil3gUWXU9sF4R1rDJxFCNH1EW7fwT8ASZA8coShhNzdYLD/mLC0KuOyuuL+CGYKzjCb0xMrGaEe1ZkLeKgkHHWpPOzJfGWLLA8kVkS7ahuVGaH1dlinZxvQF"));
 	}
 
 	public function limit_css_and_js()
