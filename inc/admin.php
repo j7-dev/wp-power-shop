@@ -42,6 +42,9 @@ class Bootstrap
 	 */
 	public function enqueue_script(): void
 	{
+		$post_id = \get_the_ID();
+		if (!$post_id) return;
+
 		if (\is_admin()) {
 			// 後台網頁 screen id 必須符合才引入
 			$screen = \get_current_screen();
@@ -67,11 +70,8 @@ class Bootstrap
 		$checkout_page_url = function_exists('wc_get_cart_url') ?
 			\wc_get_checkout_url() : $woocommerce->cart->get_checkout_url();
 
-		$post_id = \get_the_ID();
 		$permalink = \get_permalink($post_id);
-		$elLicenseCode = \get_option('PowerShopPro_lic_Key', '');
 		$products_info = Functions::get_products_info($post_id);
-
 
 		// 找出指定的 meta_id by meta_key
 		// _report_password & _settings 欄位都是用 Modal儲存，不用往自訂欄位塞值
@@ -97,7 +97,6 @@ class Bootstrap
 			],
 			'permalink' => $permalink,
 			'checkoutUrl' => $checkout_page_url,
-			'elLicenseCode' => $elLicenseCode,
 			'products_info' => $products_info,
 		));
 

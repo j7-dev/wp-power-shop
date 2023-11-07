@@ -27,6 +27,15 @@ class ShortCode
 		global $post;
 		$meta_string = \get_post_meta($post->ID, $_ENV['SNAKE'] . '_meta', true);
 		$shop_meta = Functions::json_parse($meta_string, [], true);
+		$settings_string = \get_post_meta($post->ID, $_ENV['SNAKE'] . '_settings', true);
+		$settings = Functions::json_parse($settings_string, [], true);
+
+		if (!empty($settings['endTime'])) {
+			$is_shop_closed = $settings['endTime'] < (time() * 1000);
+		} else {
+			$is_shop_closed = false;
+		}
+
 
 		$html = '';
 		ob_start();
@@ -44,6 +53,7 @@ class ShortCode
 								'product' => $product,
 								'meta' => $meta,
 								'default_image_src' => $default_image_src,
+								'is_shop_closed' => $is_shop_closed
 							]);
 							break;
 						case 'simple':
@@ -51,6 +61,7 @@ class ShortCode
 								'product' => $product,
 								'meta' => $meta,
 								'default_image_src' => $default_image_src,
+								'is_shop_closed' => $is_shop_closed
 							]);
 							break;
 						default:
@@ -58,6 +69,7 @@ class ShortCode
 								'product' => $product,
 								'meta' => $meta,
 								'default_image_src' => $default_image_src,
+								'is_shop_closed' => $is_shop_closed
 							]);
 							break;
 					}

@@ -122,7 +122,7 @@ class Functions
 		}
 	}
 
-	public static function get_products_info(int $post_id)
+	public static function get_products_info(int $post_id): array
 	{
 		$shop_meta_string = \get_post_meta($post_id, $_ENV['SNAKE'] . '_meta', true) ?? '[]';
 

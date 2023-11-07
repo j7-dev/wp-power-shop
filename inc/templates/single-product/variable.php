@@ -4,6 +4,7 @@
 	'product' => $product,
 	'meta' => $meta,
 	'default_image_src' => $default_image_src,
+	'is_shop_closed' => $is_shop_closed
 ] = $args;
 
 $img_id = $product->get_image_id();
@@ -44,7 +45,7 @@ if (strpos($_SERVER['REQUEST_URI'], $_ENV['KEBAB']) === false) {
 }
 
 ?>
-<div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 <?= $class ?>">
+<div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 <?= $is_shop_closed ? 'pointer-events-none' : '' ?> <?= $class ?>">
 	<div>
 		<img src="<?= $img_src[0] ?>" class="w-full aspect-square object-cover" alt="<?= $name ?>">
 	</div>
@@ -69,5 +70,5 @@ if (strpos($_SERVER['REQUEST_URI'], $_ENV['KEBAB']) === false) {
 		<?php endif; ?>
 	</div>
 
-	<button type="button" class="ps-btn ps-btn-primary w-full absolute bottom-0"><span>加入購物車</span></button>
+	<button type="button" <?= $is_shop_closed ? 'disabled' : '' ?> class="ps-btn ps-btn-primary w-full absolute bottom-0"><span><?php echo $is_shop_closed ? '商店已關閉' : '加入購物車' ?></span></button>
 </div>
