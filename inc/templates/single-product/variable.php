@@ -45,9 +45,9 @@ if (strpos($_SERVER['REQUEST_URI'], $_ENV['KEBAB']) === false) {
 }
 
 ?>
-<div data-ps-product-id="<?= $product_id ?>" class="relative pb-12 <?= $is_shop_closed ? 'pointer-events-none' : '' ?> <?= $class ?>">
-	<div>
-		<img src="<?= $img_src[0] ?>" class="w-full aspect-square object-cover" alt="<?= $name ?>">
+<div data-ps-product-id="<?= $product_id ?>" class="group relative pb-12 <?= $is_shop_closed ? 'pointer-events-none' : '' ?> <?= $class ?>">
+	<div class="w-full aspect-square overflow-hidden">
+		<img src="<?= $img_src[0] ?>" class="group-hover:scale-125 duration-300 w-full aspect-square object-cover" alt="<?= $name ?>">
 	</div>
 	<div class="mt-2">
 		<?= $name ?>
