@@ -41,7 +41,22 @@ const AddToCartButton: React.FC<{
         onSuccess: () => {
           setIsProductModalOpen(false)
           api.success({
-            message: '加入購物車成功',
+            message: (
+              <div>
+                <p className="m-0">加入購物車成功</p>
+                <p
+                  className="m-0 cursor-pointer text-primary"
+                  onClick={() => {
+                    const cartTable = document.getElementById('ps-cart-table')
+                    if (!cartTable) return
+                    cartTable.scrollIntoView({
+                      behavior: 'smooth',
+                    })
+                  }}>
+                  前往購物車
+                </p>
+              </div>
+            ),
           })
           queryClient.invalidateQueries({ queryKey: ['get_cart'] })
         },
