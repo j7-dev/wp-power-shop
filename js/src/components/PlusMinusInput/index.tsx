@@ -29,12 +29,12 @@ const PlusMinusInput: FC<{
     <InputNumber
       className="w-full"
       addonBefore={
-        <span className="fs-addon" onClick={handleMinus}>
+        <span className="ps-addon" onClick={handleMinus}>
           -
         </span>
       }
       addonAfter={
-        <span className="fs-addon" onClick={handlePlus}>
+        <span className="ps-addon" onClick={handlePlus}>
           +
         </span>
       }

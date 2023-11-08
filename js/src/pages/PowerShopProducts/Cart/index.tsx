@@ -69,7 +69,7 @@ const Cart = () => {
   }
 
   const main = (
-    <table className="fs-cart-table">
+    <table id="" className="ps-cart-table">
       <thead>
         <tr>
           <th data-key="product">商品</th>

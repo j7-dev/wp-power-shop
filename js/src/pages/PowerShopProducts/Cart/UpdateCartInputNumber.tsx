@@ -97,12 +97,12 @@ const UpdateCartInputNumber: React.FC<{ item: any }> = ({ item }) => {
       <InputNumber
         className="w-full"
         addonBefore={
-          <span className="fs-addon" onClick={handleDecrement}>
+          <span className="ps-addon" onClick={handleDecrement}>
             -
           </span>
         }
         addonAfter={
-          <span className="fs-addon" onClick={handleIncrement}>
+          <span className="ps-addon" onClick={handleIncrement}>
             +
           </span>
         }
