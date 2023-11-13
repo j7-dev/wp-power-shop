@@ -13,15 +13,15 @@ class ShortCode
 
 	public function shortcode_callback()
 	{
-		// 每次進到頁面先清空購物車
-		if (!is_admin()) {
-			try {
-				\WC()->cart->empty_cart();
-			} catch (\Throwable $th) {
-				//throw $th;
-				// do nothing
-			}
-		}
+		// 每次進到頁面先清空購物車 #45
+		// if (!is_admin()) {
+		// 	try {
+		// 		\WC()->cart->empty_cart();
+		// 	} catch (\Throwable $th) {
+		// 		//throw $th;
+		// 		// do nothing
+		// 	}
+		// }
 
 		// 取得 power shop meta 資料
 		global $post;
