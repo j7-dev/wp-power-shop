@@ -45,8 +45,9 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({ product 
 
     const theVariation = variations.find((v) => {
       const theAttributes = v?.attributes
+
       return Object.keys(theAttributes).every((a) => {
-        const theSelectedAttribute = sortedNewSelected.find((s) => `attribute_${s.name.toLowerCase()}` === a)
+        const theSelectedAttribute = sortedNewSelected.find((s) => `attribute_${decodeURIComponent(s.name.toLowerCase())}` === decodeURIComponent(a.toLowerCase()))
 
         return theSelectedAttribute?.value === theAttributes[a]
       })
