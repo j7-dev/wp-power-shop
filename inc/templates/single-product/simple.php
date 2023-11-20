@@ -1,7 +1,5 @@
 <?php
 
-
-
 [
 	'product' => $product,
 	'meta' => $meta,
@@ -20,6 +18,7 @@ $name = $product->get_name();
 ] = $meta;
 
 if (empty($regular_price) && empty($sales_price)) {
+	// 商品類型轉換時，才會發生這種情況
 	$regular_price = $product->get_regular_price();
 	$sales_price = $product->get_sale_price();
 }

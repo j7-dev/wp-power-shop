@@ -85,6 +85,15 @@ const Variable: React.FC<{
         hidden>
         <Input />
       </Form.Item>
+      <Form.Item
+        name={[
+          index,
+          'productType',
+        ]}
+        hidden
+        initialValue={type}>
+        <Input />
+      </Form.Item>
 
       <div className={`pl-20 pr-8 ${isExpended ? 'block' : 'hidden'}`}>
         {productVariations.map((variation, i) => (

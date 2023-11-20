@@ -11,7 +11,7 @@ class ShortCode
 		\add_shortcode($_ENV['SNAKE'] . '_products', [$this, 'shortcode_callback']);
 	}
 
-	public function shortcode_callback()
+	public function shortcode_callback(): string
 	{
 		// 每次進到頁面先清空購物車 #45
 		// if (!is_admin()) {
@@ -36,13 +36,14 @@ class ShortCode
 			$is_shop_closed = false;
 		}
 
+		$handled_shop_meta = $this->handleShopMeta($shop_meta);
 
 		$html = '';
 		ob_start();
 ?>
 		<div class="power-shop-products">
 			<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-				<?php foreach ($shop_meta as $meta) {
+				<?php foreach ($handled_shop_meta as $meta) {
 					$product_id = $meta['productId'];
 					$product = \wc_get_product($product_id);
 					$product_type = $product->get_type();
@@ -81,8 +82,74 @@ class ShortCode
 <?php
 		$html .= ob_get_clean();
 
-
 		return $html;
+	}
+
+	/**
+	 * 檢查 shop_meta 裡面的商品與 woocommerce 裡面的商品是否 type 一致
+	 * 如果不一致，就更新 shop_meta 裡面的 data
+	 *
+	 * @param array $shop_meta
+	 * @return array
+	 */
+	private function handleShopMeta(array $shop_meta): array
+	{
+		$need_update = false;
+		// 檢查當前的 shop_meta 裡面的商品與 woocommerce 裡面的商品是否 type 一致
+		foreach ($shop_meta as $key => $meta) {
+			$meta_product_type = $meta['productType'] ?? '';
+			if (empty($meta_product_type)) {
+				// 如果舊版本用戶沒有存到 productType，就判斷給個預設值
+				$is_variable_product = !empty($meta['variations']);
+				$meta_product_type = $is_variable_product ? 'variable' : 'simple';
+			}
+
+			$product_id = $meta['productId'];
+			$product = \wc_get_product($product_id);
+			$product_type = $product->get_type();
+
+			if ($meta_product_type !== $product_type) {
+				$need_update = true;
+				// 如果不一致，就更新 shop_meta 裡面的 productType
+				$shop_meta[$key]['productType'] = $product_type;
+
+				if ($product_type === 'simple') {
+					$shop_meta[$key] = [
+						"productId" => $product_id,
+						"productType" => $product_type,
+						"regularPrice" => $product->get_regular_price(),
+						"salesPrice" => $product->get_sale_price(),
+					];
+				}
+
+				if ($product_type === 'variable') {
+					$variations = $product->get_available_variations();
+					$formattedVariations = [];
+
+					foreach ($variations as $variation) {
+						$formattedVariations[] = [
+							"variationId" => $variation['variation_id'],
+							"regularPrice" => $variation['display_regular_price'],
+							"salesPrice" => $variation['display_price'],
+						];
+					}
+
+					$shop_meta[$key] = [
+						"productId" => $product_id,
+						"productType" => $product_type,
+						"variations"  => $formattedVariations,
+					];
+				}
+			}
+		}
+
+		if ($need_update) {
+			// 更新 post_meta
+			global $post;
+			\update_post_meta($post->ID, $_ENV['SNAKE'] . '_meta', \wp_json_encode($shop_meta));
+		}
+
+		return $shop_meta;
 	}
 }
 

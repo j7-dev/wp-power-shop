@@ -3,7 +3,23 @@ import { Form, InputNumber, Tooltip, Input } from 'antd'
 import { TProductVariation, TSimpleAttribute } from '@/types/wcRestApi'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 import { nanoid } from 'nanoid'
-import { TFSMeta } from '@/types'
+import { TFSMeta, TFSVariation } from '@/types'
+
+const getPrices = (mv: TFSVariation | null | undefined, v: TProductVariation) => {
+  const matchProductSalesPrice = Number(mv?.salesPrice ?? '0')
+  const matchProductRegularPrice = Number(mv?.regularPrice ?? '0')
+
+  if (!matchProductSalesPrice && !matchProductRegularPrice) {
+    return {
+      salesPrice: Number(v?.sale_price ?? '0'),
+      regularPrice: Number(v?.regular_price ?? '0'),
+    }
+  }
+  return {
+    salesPrice: matchProductSalesPrice,
+    regularPrice: matchProductRegularPrice,
+  }
+}
 
 const Variation: React.FC<{
   variation: TProductVariation
@@ -23,8 +39,7 @@ const Variation: React.FC<{
   const form = Form.useFormInstance()
 
   const imageSrc = variation?.image?.src ?? defaultImage
-  const salesPrice = !!matchVariation ? matchVariation?.salesPrice : variation?.sale_price ?? '0'
-  const regularPrice = !!matchVariation ? matchVariation?.regularPrice : variation?.regular_price ?? '0'
+  const { salesPrice, regularPrice } = getPrices(matchVariation, variation)
 
   useEffect(() => {
     form.setFieldsValue({

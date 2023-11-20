@@ -1,21 +1,20 @@
-import { Space, Tag, Form, InputNumber } from 'antd'
+import { Space, Tag, Form, InputNumber, Input } from 'antd'
 import { TProduct } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
 import { FSMetaAtom } from '../atoms'
 import { useAtomValue } from 'jotai'
-import { toNumber } from 'lodash-es'
 import { useEffect } from 'react'
 import RemoveIcon from './RemoveIcon'
 import { TFSMeta } from '@/types'
 
 const getPrices = (mp: TFSMeta | undefined, p: TProduct) => {
-  const matchProductSalesPrice = toNumber(mp?.salesPrice ?? '0')
-  const matchProductRegularPrice = toNumber(mp?.regularPrice ?? '0')
+  const matchProductSalesPrice = Number(mp?.salesPrice ?? '0')
+  const matchProductRegularPrice = Number(mp?.regularPrice ?? '0')
 
   if (!matchProductSalesPrice && !matchProductRegularPrice) {
     return {
-      salesPrice: toNumber(p?.sale_price ?? '0'),
-      regularPrice: toNumber(p?.regular_price ?? '0'),
+      salesPrice: Number(p?.sale_price ?? '0'),
+      regularPrice: Number(p?.regular_price ?? '0'),
     }
   }
   return {
@@ -47,6 +46,7 @@ const Simple: React.FC<{
         productId: id,
         regularPrice,
         salesPrice,
+        productType: type,
       },
     })
   }, [
@@ -92,7 +92,16 @@ const Simple: React.FC<{
                 ]}
                 hidden
                 initialValue={id}>
-                <InputNumber className="w-full" />
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name={[
+                  index,
+                  'productType',
+                ]}
+                hidden
+                initialValue={type}>
+                <Input />
               </Form.Item>
               <Form.Item
                 name={[
