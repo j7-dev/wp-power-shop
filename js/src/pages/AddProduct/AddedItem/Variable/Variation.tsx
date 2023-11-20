@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Form, InputNumber, Tooltip, Input } from 'antd'
 import { TProductVariation, TSimpleAttribute } from '@/types/wcRestApi'
-import { defaultImage } from '@/utils'
+import defaultImage from '@/assets/images/defaultImage.jpg'
 import { nanoid } from 'nanoid'
 import { TFSMeta } from '@/types'
 
@@ -13,9 +13,7 @@ const Variation: React.FC<{
   matchProduct: TFSMeta | undefined
 }> = ({ variation, parentIndex, parentId, index, matchProduct }) => {
   const id = variation?.id ?? 0
-  const matchVariation = !!matchProduct
-    ? (matchProduct?.variations ?? [])?.find((v) => v.variationId === id)
-    : null
+  const matchVariation = !!matchProduct ? (matchProduct?.variations ?? [])?.find((v) => v.variationId === id) : null
   const attributes = (variation?.attributes ?? []) as TSimpleAttribute[]
   const name = attributes.map((a) => (
     <span key={nanoid()} className="mr-2 font-medium">
@@ -25,12 +23,8 @@ const Variation: React.FC<{
   const form = Form.useFormInstance()
 
   const imageSrc = variation?.image?.src ?? defaultImage
-  const salesPrice = !!matchVariation
-    ? matchVariation?.salesPrice
-    : variation?.sale_price ?? '0'
-  const regularPrice = !!matchVariation
-    ? matchVariation?.regularPrice
-    : variation?.regular_price ?? '0'
+  const salesPrice = !!matchVariation ? matchVariation?.salesPrice : variation?.sale_price ?? '0'
+  const regularPrice = !!matchVariation ? matchVariation?.regularPrice : variation?.regular_price ?? '0'
 
   useEffect(() => {
     form.setFieldsValue({
@@ -58,12 +52,8 @@ const Variation: React.FC<{
           <div className="mr-4">
             <img className="h-16 w-16 rounded-xl object-cover" src={imageSrc} />
             <p className="m-0 text-xs text-gray-400">ID: #{id}</p>
-            <p className="m-0 text-xs text-gray-400">
-              原價: {variation?.regular_price ?? ''}
-            </p>
-            <p className="m-0 text-xs text-gray-400">
-              特價: {variation?.sale_price ?? ''}
-            </p>
+            <p className="m-0 text-xs text-gray-400">原價: {variation?.regular_price ?? ''}</p>
+            <p className="m-0 text-xs text-gray-400">特價: {variation?.sale_price ?? ''}</p>
           </div>
           <div className="flex-1">
             {name}
@@ -76,8 +66,7 @@ const Variation: React.FC<{
                   'variationId',
                 ]}
                 initialValue={id}
-                hidden
-              >
+                hidden>
                 <Input />
               </Form.Item>
               <Form.Item
@@ -89,8 +78,7 @@ const Variation: React.FC<{
                 ]}
                 label="原價"
                 className="w-full mr-4"
-                initialValue={regularPrice}
-              >
+                initialValue={regularPrice}>
                 <InputNumber className="w-full" />
               </Form.Item>
               <Form.Item
@@ -102,8 +90,7 @@ const Variation: React.FC<{
                 ]}
                 label="特價"
                 className="w-full"
-                initialValue={salesPrice}
-              >
+                initialValue={salesPrice}>
                 <InputNumber className="w-full" />
               </Form.Item>
             </div>
