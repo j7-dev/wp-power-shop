@@ -19,6 +19,11 @@ $name = $product->get_name();
 	'salesPrice' => $sales_price,
 ] = $meta;
 
+if (empty($regular_price) && empty($sales_price)) {
+	$regular_price = $product->get_regular_price();
+	$sales_price = $product->get_sale_price();
+}
+
 if (strpos($_SERVER['REQUEST_URI'], $_ENV['KEBAB']) === false) {
 	// 如果不包含 $_ENV['KEBAB'] 字串，有可能在其他編輯器預覽，則不加入 ps-not-ready class
 	$class = '';
@@ -27,23 +32,27 @@ if (strpos($_SERVER['REQUEST_URI'], $_ENV['KEBAB']) === false) {
 	$class = 'ps-not-ready';
 }
 
+$product_status = $product->get_status();
+
+if ($product_status === 'publish') :
 ?>
-<div data-ps-product-id="<?= $product_id ?>" class="group relative pb-12 <?= $is_shop_closed ? 'pointer-events-none' : '' ?> <?= $class ?>">
-	<div class="w-full aspect-square overflow-hidden">
-		<img src="<?= $img_src[0] ?>" class="group-hover:scale-125 duration-300 w-full aspect-square object-cover" alt="<?= $name ?>">
-	</div>
-	<div class="mt-2">
-		<?= $name ?>
-	</div>
-	<div>
-		<?php if (!empty($sales_price)) : ?>
-			<p class="mb-0 mt-1"><del>NT$ <?= $regular_price ?></del></p>
-			<p class="mb-0 mt-1 text-red-500">NT$ <?= $sales_price ?></p>
-		<?php else : ?>
-			<p class="mb-0 mt-1">NT$ <?= $regular_price ?></p>
-		<?php endif; ?>
+	<div data-ps-product-id="<?= $product_id ?>" class="group relative pb-12 <?= $is_shop_closed ? 'pointer-events-none' : '' ?> <?= $class ?>">
+		<div class="w-full aspect-square overflow-hidden">
+			<img src="<?= $img_src[0] ?>" class="group-hover:scale-125 duration-300 w-full aspect-square object-cover" alt="<?= $name ?>">
+		</div>
+		<div class="mt-2">
+			<?= $name ?>
+		</div>
+		<div>
+			<?php if (!empty($sales_price)) : ?>
+				<p class="mb-0 mt-1"><del>NT$ <?= $regular_price ?></del></p>
+				<p class="mb-0 mt-1 text-red-500">NT$ <?= $sales_price ?></p>
+			<?php else : ?>
+				<p class="mb-0 mt-1">NT$ <?= $regular_price ?></p>
+			<?php endif; ?>
 
-	</div>
+		</div>
 
-	<button type="button" <?= $is_shop_closed ? 'disabled' : '' ?> class="ps-btn ps-btn-primary w-full absolute bottom-0"><span><?php echo $is_shop_closed ? '商店已關閉' : '加入購物車' ?></span></button>
-</div>
+		<button type="button" <?= $is_shop_closed ? 'disabled' : '' ?> class="ps-btn ps-btn-primary w-full absolute bottom-0"><span><?php echo $is_shop_closed ? '商店已關閉' : '加入購物車' ?></span></button>
+	</div>
+<?php endif; ?>

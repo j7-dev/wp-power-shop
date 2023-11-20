@@ -6,6 +6,23 @@ import { useAtomValue } from 'jotai'
 import { toNumber } from 'lodash-es'
 import { useEffect } from 'react'
 import RemoveIcon from './RemoveIcon'
+import { TFSMeta } from '@/types'
+
+const getPrices = (mp: TFSMeta | undefined, p: TProduct) => {
+  const matchProductSalesPrice = toNumber(mp?.salesPrice ?? '0')
+  const matchProductRegularPrice = toNumber(mp?.regularPrice ?? '0')
+
+  if (!matchProductSalesPrice && !matchProductRegularPrice) {
+    return {
+      salesPrice: toNumber(p?.sale_price ?? '0'),
+      regularPrice: toNumber(p?.regular_price ?? '0'),
+    }
+  }
+  return {
+    salesPrice: matchProductSalesPrice,
+    regularPrice: matchProductRegularPrice,
+  }
+}
 
 const Simple: React.FC<{
   product: TProduct
@@ -14,14 +31,12 @@ const Simple: React.FC<{
   const FSMeta = useAtomValue(FSMetaAtom)
   const id = product?.id ?? 0
   const matchProduct = FSMeta.find((item) => item.productId === id)
+
   const name = renderHTML(product?.name ?? '未知商品')
   const imageSrc = getProductImageSrc(product)
-  const salesPrice = !!matchProduct
-    ? toNumber(matchProduct?.salesPrice)
-    : toNumber(product?.sale_price ?? '0')
-  const regularPrice = !!matchProduct
-    ? toNumber(matchProduct?.regularPrice)
-    : toNumber(product?.regular_price ?? '0')
+
+  const { salesPrice, regularPrice } = getPrices(matchProduct, product)
+
   const categories = product?.categories ?? []
   const type = product?.type ?? ''
   const form = Form.useFormInstance()
@@ -39,22 +54,20 @@ const Simple: React.FC<{
     index,
   ])
 
+  if (!matchProduct) {
+    return <p>找不到對應的商品，商品是否被刪除了?</p>
+  }
+
   return (
     <>
       <div className="flex justify-between">
         <div className="flex flex-1 mr-4">
           <div className="mr-4">
             <img className="h-16 w-16 rounded-xl object-cover" src={imageSrc} />
-            <p className="m-0 text-xs text-gray-400">
-              {getProductTypeLabel(type)}
-            </p>
+            <p className="m-0 text-xs text-gray-400">{getProductTypeLabel(type)}</p>
             <p className="m-0 text-xs text-gray-400">ID: #{id}</p>
-            <p className="m-0 text-xs text-gray-400">
-              原價: {product?.regular_price ?? ''}
-            </p>
-            <p className="m-0 text-xs text-gray-400">
-              特價: {product?.sale_price ?? ''}
-            </p>
+            <p className="m-0 text-xs text-gray-400">原價: {product?.regular_price ?? ''}</p>
+            <p className="m-0 text-xs text-gray-400">特價: {product?.sale_price ?? ''}</p>
           </div>
           <div className="flex-1">
             <Space
@@ -62,8 +75,7 @@ const Simple: React.FC<{
                 0,
                 8,
               ]}
-              wrap
-            >
+              wrap>
               {categories.map((cat) => (
                 <Tag key={cat?.id} color="#2db7f5">
                   {cat?.name}
@@ -79,8 +91,7 @@ const Simple: React.FC<{
                   'productId',
                 ]}
                 hidden
-                initialValue={id}
-              >
+                initialValue={id}>
                 <InputNumber className="w-full" />
               </Form.Item>
               <Form.Item
@@ -90,8 +101,7 @@ const Simple: React.FC<{
                 ]}
                 label="原價"
                 className="w-full mr-4"
-                initialValue={regularPrice}
-              >
+                initialValue={regularPrice}>
                 <InputNumber className="w-full" />
               </Form.Item>
               <Form.Item
@@ -101,8 +111,7 @@ const Simple: React.FC<{
                 ]}
                 label="特價"
                 className="w-full"
-                initialValue={salesPrice}
-              >
+                initialValue={salesPrice}>
                 <InputNumber className="w-full" />
               </Form.Item>
             </div>

@@ -49,9 +49,12 @@ const AddProduct = () => {
     dataProvider: 'wc',
     args: {
       include: shop_meta_product_ids,
+      status: 'publish',
     },
     queryOptions: {
       enabled: shop_meta_product_ids.length > 0,
+      staleTime: 1000 * 60 * 15,
+      cacheTime: 1000 * 60 * 15,
     },
   })
 
@@ -78,12 +81,6 @@ const AddProduct = () => {
 
   const handleSave = async (e: Event) => {
     notification.destroy('saveNotification')
-
-    // if (preventDefault) {
-    //   e.preventDefault()
-    //   e.stopPropagation()
-    // }
-
     if (!fieldNode) {
       await save()
     }

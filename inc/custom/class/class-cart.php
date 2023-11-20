@@ -13,8 +13,6 @@ class Cart
 	const REMOVE_CART_ACTION = 'handle_remove_cart';
 	const GET_CART_ACTION = 'handle_get_cart';
 
-
-
 	function __construct()
 	{
 		\add_action('woocommerce_before_calculate_totals', [$this, 'price_refresh']);

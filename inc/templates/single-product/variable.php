@@ -17,6 +17,11 @@ $name = $product->get_name();
 	'variations' => $variations,
 ] = $meta;
 
+// ob_start();
+// print_r($meta);
+// $debug = ob_get_clean();
+// error_log('⭐ $meta ' . $debug);
+
 $price_arr = [];
 $regular_price_arr = [];
 foreach ($variations as $variation) {
