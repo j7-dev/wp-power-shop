@@ -14,13 +14,6 @@ use Kucrut\Vite;
 
 class Bootstrap
 {
-	function __construct()
-	{
-		$_ENV['APP_NAME'];
-		$_ENV['KEBAB'] = str_replace(' ', '-', strtolower($_ENV['APP_NAME']));
-		$_ENV['SNAKE'] = str_replace(' ', '_', strtolower($_ENV['APP_NAME']));
-	}
-
 	public function init(): void
 	{
 		\add_action('admin_enqueue_scripts', [$this, 'enqueue_script'], 99);
