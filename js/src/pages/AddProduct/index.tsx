@@ -18,12 +18,10 @@ import { SaveFilled } from '@ant-design/icons'
 import usePSMeta from './hooks/usePSMeta'
 import useChangeNotification from './hooks/useChangeNotification'
 import useAddProductSave from './hooks/useAddProductSave'
+import useHandleShopMeta from './hooks/useHandleShopMeta'
 
 const { Paragraph } = Typography
-export const tinyMCESaveBtn = document.getElementById('publish') as HTMLInputElement | null
-
-// 因為發布與更新的 按鈕不同
-
+export const tinyMCESaveBtn = document.getElementById('publish') as HTMLInputElement | null // 因為發布與更新的 按鈕不同
 export const blockEditorSaveBtn = document.querySelector('[class*="editor-post-publish-button"]') as HTMLInputElement | null
 const metaId = window?.appData?.metaIds?.power_shop_meta
 export const fieldNode = document.getElementById(`meta-${metaId}-value`) as HTMLInputElement | null
@@ -51,6 +49,7 @@ const AddProduct = () => {
     addedProducts,
     setAddedProducts,
   ] = useAtom(addedProductsAtom)
+  console.log('⭐  addedProducts:', addedProducts)
 
   const [form] = Form.useForm()
   const ref = useRef<HTMLInputElement>(null)
@@ -58,6 +57,11 @@ const AddProduct = () => {
   const { handleSave: _ } = useAddProductSave({
     form,
     isPSMetaLoading,
+    productsResult,
+    shop_meta,
+  })
+
+  const { isLoading: isHandleShopMetaLoading } = useHandleShopMeta({
     productsResult,
     shop_meta,
   })
@@ -88,11 +92,11 @@ const AddProduct = () => {
 
   return (
     <div className="p-4">
-      {isPSMetaLoading && <LoadingWrap />}
+      {(isPSMetaLoading || isHandleShopMetaLoading) && <LoadingWrap />}
       <Form className="pt-4" layout="vertical" form={form} onValuesChange={handleFormChange}>
         <div className="flex justify-between mb-4">
           <SettingButton />
-          <SaveButton type="primary" icon={<SaveFilled />} disabled={isPSMetaLoading || productsResult?.isFetching} />
+          <SaveButton type="primary" icon={<SaveFilled />} disabled={isPSMetaLoading || productsResult?.isFetching || isHandleShopMetaLoading} />
         </div>
         <Alert
           className="mb-4"

@@ -3,15 +3,15 @@ import { useAjaxGetPostMeta } from '@/hooks'
 import { TPSMeta } from '@/types'
 
 const usePSMeta = () => {
-  const mutation = useAjaxGetPostMeta<TPSMeta[]>({
+  const result = useAjaxGetPostMeta<TPSMeta[]>({
     post_id: postId,
     meta_key: `${snake}_meta`,
     formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
   })
-  const shop_meta = mutation?.meta ?? []
+  const shop_meta = result?.meta ?? []
 
   return {
-    ...mutation,
+    ...result,
     shop_meta,
   }
 }

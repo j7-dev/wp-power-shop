@@ -6,7 +6,7 @@ export type TFSVariation = {
 
 export type TPSMeta = {
   productId: number
-  type: string
+  productType?: string
   variations?: TFSVariation[]
   regularPrice?: number | string
   salesPrice?: number | string
@@ -14,7 +14,6 @@ export type TPSMeta = {
 
 export const defaulTPSMeta: TPSMeta = {
   productId: 0,
-  type: '',
   variations: [],
   regularPrice: 0,
   salesPrice: 0,

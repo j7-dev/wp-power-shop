@@ -33,13 +33,13 @@ const getStatus = ({ startTime, endTime }: { startTime: number | undefined; endT
 }
 
 const PowerShopProducts = () => {
-  const mutation = useAjaxGetPostMeta<TSettings>({
+  const result = useAjaxGetPostMeta<TSettings>({
     post_id: postId,
     meta_key: `${snake}_settings`,
     formatter: (post_meta: string) => JSON.parse(post_meta || '{}'),
   })
-  const { isLoading, isSuccess, isError } = mutation
-  const settings = mutation?.meta ?? defaultSettings
+  const { isLoading, isSuccess, isError } = result
+  const settings = result?.meta ?? defaultSettings
   const startTime = settings?.startTime
   const endTime = settings?.endTime
   const shopStatus = getStatus({ startTime, endTime })

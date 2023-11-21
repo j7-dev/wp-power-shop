@@ -56,11 +56,11 @@ const ReportPassword = () => {
     confirmLoading: updateIsLoading,
   }
 
-  const mutation = useAjaxGetPostMeta<string>({
+  const result = useAjaxGetPostMeta<string>({
     post_id: postId,
     meta_key: `${snake}_report_password`,
   })
-  const fetchedReportPassword = mutation?.meta ?? ''
+  const fetchedReportPassword = result?.meta ?? ''
 
   useEffect(() => {
     const decryptedReportPassword = atob(fetchedReportPassword)

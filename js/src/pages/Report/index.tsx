@@ -7,11 +7,11 @@ import SalesStats from '@/pages/SalesStats'
 
 const Report = () => {
   const [form] = Form.useForm()
-  const mutation = useAjaxGetPostMeta<string>({
+  const result = useAjaxGetPostMeta<string>({
     post_id: postId,
     meta_key: `${snake}_report_password`,
   })
-  const fetchedPassword = mutation?.meta ?? ''
+  const fetchedPassword = result?.meta ?? ''
   const decryptedReportPassword = atob(fetchedPassword)
 
   const [
@@ -45,23 +45,11 @@ const Report = () => {
             },
           ]}
           className="mb-8"
-          hasFeedback={true}
-        >
-          <Input.Password
-            allowClear
-            className="w-full"
-            placeholder="請輸入密碼"
-            size="large"
-          />
+          hasFeedback={true}>
+          <Input.Password allowClear className="w-full" placeholder="請輸入密碼" size="large" />
         </Form.Item>
         <Form.Item noStyle>
-          <Button
-            htmlType="submit"
-            className="w-full"
-            size="large"
-            type="primary"
-            onClick={handleSubmit}
-          >
+          <Button htmlType="submit" className="w-full" size="large" type="primary" onClick={handleSubmit}>
             送出
           </Button>
         </Form.Item>

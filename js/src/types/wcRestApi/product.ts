@@ -82,6 +82,7 @@ export type TProduct = TProductBase & {
   price_html: string
   related_ids: number[]
   has_options: boolean
+  productVariations?: TProductVariation[] // 自己接上的
 }
 
 export type TProductVariation = TProductBase & {

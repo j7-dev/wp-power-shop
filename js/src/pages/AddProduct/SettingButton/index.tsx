@@ -1,12 +1,4 @@
-import {
-  Button,
-  Modal,
-  DatePicker,
-  Form,
-  notification,
-  ModalProps,
-  Alert,
-} from 'antd'
+import { Button, Modal, DatePicker, Form, notification, ModalProps, Alert } from 'antd'
 import { SettingFilled, SwapRightOutlined } from '@ant-design/icons'
 import { useModal, useUpdate, useColor, useAjaxGetPostMeta } from '@/hooks'
 import { kebab, postId, snake, disabledDate, disabledTime } from '@/utils'
@@ -62,13 +54,13 @@ const SettingButton = () => {
     confirmLoading: isLoading,
   }
 
-  const mutation = useAjaxGetPostMeta<TSettings>({
+  const result = useAjaxGetPostMeta<TSettings>({
     post_id: postId,
     meta_key: `${snake}_settings`,
     formatter: (post_meta: string) => JSON.parse(post_meta || '{}'),
   })
-  const { isLoading: getIsLoading } = mutation
-  const settings = mutation?.meta ?? defaultSettings
+  const { isLoading: getIsLoading } = result
+  const settings = result?.meta ?? defaultSettings
   const initStartTime = settings?.startTime ? dayjs(settings?.startTime) : null
   const initEndTime = settings?.endTime ? dayjs(settings?.endTime) : null
 
@@ -108,16 +100,8 @@ const SettingButton = () => {
           {getIsLoading ? (
             <LoadingText width="w-full" height="h-[2rem]" className="my-8" />
           ) : (
-            <div
-              className="flex justify-between my-8 rounded-md w-full"
-              style={{ border: `1px solid ${colorBorder}` }}
-            >
-              <Form.Item
-                name={['startTime']}
-                noStyle
-                className="m-0"
-                initialValue={initStartTime}
-              >
+            <div className="flex justify-between my-8 rounded-md w-full" style={{ border: `1px solid ${colorBorder}` }}>
+              <Form.Item name={['startTime']} noStyle className="m-0" initialValue={initStartTime}>
                 <DatePicker
                   disabledDate={disabledDate({
                     type: 'startTime',
@@ -139,12 +123,7 @@ const SettingButton = () => {
                 />
               </Form.Item>
               <SwapRightOutlined className="mx-4" />
-              <Form.Item
-                name={['endTime']}
-                noStyle
-                className="m-0"
-                initialValue={initEndTime}
-              >
+              <Form.Item name={['endTime']} noStyle className="m-0" initialValue={initEndTime}>
                 <DatePicker
                   disabledDate={disabledDate({
                     type: 'endTime',

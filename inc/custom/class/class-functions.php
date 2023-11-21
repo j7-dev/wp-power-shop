@@ -132,9 +132,10 @@ class Functions
 			$shop_meta = [];
 		}
 
-		function get_product_data($meta)
+		function get_product_data(array $meta): array
 		{
 			$meta = (array) $meta ?? [];
+			if (empty($meta['productId'])) return [];
 			$product = \wc_get_product($meta['productId']);
 			$feature_image_id = $product->get_image_id();
 			$attachment_ids = [$feature_image_id, ...$product->get_gallery_image_ids()];

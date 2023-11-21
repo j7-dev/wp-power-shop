@@ -21,7 +21,7 @@ const useAddProductSave = ({ form, isPSMetaLoading, productsResult, shop_meta }:
   const { handleSave: save } = useSave(form)
 
   const setAddedProducts = useSetAtom(addedProductsAtom)
-  const seTPSMeta = useSetAtom(PSMetaAtom)
+  const setPSMeta = useSetAtom(PSMetaAtom)
 
   const handleSave = async (e: Event) => {
     notification.destroy('saveNotification')
@@ -52,8 +52,15 @@ const useAddProductSave = ({ form, isPSMetaLoading, productsResult, shop_meta }:
         return sortOrder.indexOf(p.id)
       })
 
-      setAddedProducts(sortedProducts)
-      seTPSMeta(shop_meta)
+      const isUndefined = sortOrder.every((o) => o === undefined)
+
+      if (isUndefined) {
+        setAddedProducts([])
+        setPSMeta([])
+      } else {
+        setAddedProducts(sortedProducts)
+        setPSMeta(shop_meta)
+      }
 
       // 載入完成後，啟用儲存按鈕
 
