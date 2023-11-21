@@ -13,6 +13,7 @@ import ShippingField from './ShippingField'
 import { BiMoneyWithdraw } from 'react-icons/bi'
 import UpdateCartInputNumber from './UpdateCartInputNumber'
 import { toNumber } from 'lodash-es'
+import defaultImage from '@/assets/images/defaultImage.jpg'
 
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
@@ -92,7 +93,7 @@ const Cart = () => {
             const variation = item?.variation ?? []
             const variationText = variation.map((v: any) => `${v?.attribute}: ${v?.value}`).join(' | ')
             const isVariable = variation.length > 0
-            const image = item?.images?.[0]?.src ?? ''
+            const image = item?.images?.[0]?.src ?? defaultImage
             const id = item?.id ?? ''
             const metaPrice = getMetaPrice({
               productId: id,

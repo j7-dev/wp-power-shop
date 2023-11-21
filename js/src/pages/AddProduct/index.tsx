@@ -19,6 +19,7 @@ import usePSMeta from './hooks/usePSMeta'
 import useChangeNotification from './hooks/useChangeNotification'
 import useAddProductSave from './hooks/useAddProductSave'
 import useHandleShopMeta from './hooks/useHandleShopMeta'
+import useGetAddProducts from './hooks/useGetAddProducts'
 
 const { Paragraph } = Typography
 export const tinyMCESaveBtn = document.getElementById('publish') as HTMLInputElement | null // 因為發布與更新的 按鈕不同
@@ -31,25 +32,12 @@ const AddProduct = () => {
 
   const shop_meta_product_ids = shop_meta.map((item) => item.productId)
 
-  const productsResult = useMany({
-    resource: 'products',
-    dataProvider: 'wc',
-    args: {
-      include: shop_meta_product_ids,
-      status: 'publish',
-    },
-    queryOptions: {
-      enabled: shop_meta_product_ids.length > 0,
-      staleTime: 1000 * 60 * 15,
-      cacheTime: 1000 * 60 * 15,
-    },
-  })
+  const productsResult = useGetAddProducts(shop_meta_product_ids)
 
   const [
     addedProducts,
     setAddedProducts,
   ] = useAtom(addedProductsAtom)
-  console.log('⭐  addedProducts:', addedProducts)
 
   const [form] = Form.useForm()
   const ref = useRef<HTMLInputElement>(null)
