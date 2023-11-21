@@ -3,7 +3,7 @@ import { Button, notification } from 'antd'
 import { useAjax } from '@/hooks'
 import { ajaxNonce, postId } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
-import { isProductModalOpenAtom, showCartAtom, selectedVariationIdAtom, selectedAttributesAtom, shopStatusAtom } from '@/pages/PowerShopProducts/atom'
+import { isProductModalOpenAtom, selectedVariationIdAtom, selectedAttributesAtom, shopStatusAtom } from '@/pages/PowerShopProducts/atom'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 const AddToCartButton: React.FC<{
@@ -23,10 +23,8 @@ const AddToCartButton: React.FC<{
   const shopStatus = useAtomValue(shopStatusAtom)
 
   const setIsProductModalOpen = useSetAtom(isProductModalOpenAtom)
-  const setShowCart = useSetAtom(showCartAtom)
 
   const handleClick = () => {
-    setShowCart(true)
     mutate(
       {
         action: 'handle_add_cart',
