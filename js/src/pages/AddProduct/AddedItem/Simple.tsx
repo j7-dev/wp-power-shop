@@ -1,13 +1,13 @@
 import { Space, Tag, Form, InputNumber, Input } from 'antd'
 import { TProduct } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
-import { FSMetaAtom } from '../atoms'
+import { PSMetaAtom } from '../atoms'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import RemoveIcon from './RemoveIcon'
-import { TFSMeta } from '@/types'
+import { TPSMeta } from '@/types'
 
-const getPrices = (mp: TFSMeta | undefined, p: TProduct) => {
+const getPrices = (mp: TPSMeta | undefined, p: TProduct) => {
   const matchProductSalesPrice = Number(mp?.salesPrice ?? '0')
   const matchProductRegularPrice = Number(mp?.regularPrice ?? '0')
 
@@ -27,7 +27,7 @@ const Simple: React.FC<{
   product: TProduct
   index: number
 }> = ({ product, index }) => {
-  const FSMeta = useAtomValue(FSMetaAtom)
+  const FSMeta = useAtomValue(PSMetaAtom)
   const id = product?.id ?? 0
   const matchProduct = FSMeta.find((item) => item.productId === id)
 
@@ -53,10 +53,6 @@ const Simple: React.FC<{
     id,
     index,
   ])
-
-  if (!matchProduct) {
-    return <p>找不到對應的商品，商品是否被刪除了?</p>
-  }
 
   return (
     <>

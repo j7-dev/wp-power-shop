@@ -1,7 +1,7 @@
 {
   "name": "wp-power-shop",
   "private": true,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "scripts": {
     "init": "npm install && composer install --no-interaction",

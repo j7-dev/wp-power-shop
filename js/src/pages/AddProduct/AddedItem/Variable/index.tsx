@@ -3,7 +3,7 @@ import { ArrowsAltOutlined, ShrinkOutlined } from '@ant-design/icons'
 import { Space, Tag, Form, Input } from 'antd'
 import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
-import { FSMetaAtom } from '../../atoms'
+import { PSMetaAtom } from '../../atoms'
 import { useAtomValue } from 'jotai'
 import { useMany } from '@/hooks'
 import Variation from './Variation'
@@ -17,7 +17,7 @@ const Variable: React.FC<{
     isExpended,
     setIsExpended,
   ] = useState(false)
-  const FSMeta = useAtomValue(FSMetaAtom)
+  const FSMeta = useAtomValue(PSMetaAtom)
   const id = product?.id ?? 0
   const matchProduct = FSMeta.find((item) => item.productId === id)
   const name = renderHTML(product?.name ?? '未知商品')

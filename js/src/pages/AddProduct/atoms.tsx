@@ -1,7 +1,7 @@
 import { atom } from 'jotai'
 import { TProduct } from '@/types/wcRestApi'
-import { TFSMeta } from '@/types'
+import { TPSMeta } from '@/types'
 
 export const addedProductsAtom = atom<TProduct[]>([])
-export const FSMetaAtom = atom<TFSMeta[]>([])
+export const PSMetaAtom = atom<TPSMeta[]>([])
 export const isChangeAtom = atom<boolean>(false)

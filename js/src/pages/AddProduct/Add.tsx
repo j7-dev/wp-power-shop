@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { Select, Button } from 'antd'
+import { Select, Button, Typography } from 'antd'
 import { useMany } from '@/hooks'
 import { TProduct, TProductCat } from '@/types/wcRestApi'
 import { renderHTML, getProductImageSrc } from '@/utils'
 import { addedProductsAtom, isChangeAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
+
+const { Paragraph } = Typography
 
 const renderItem = (product: TProduct) => {
   const imageSrc = getProductImageSrc(product)
@@ -12,8 +14,11 @@ const renderItem = (product: TProduct) => {
   return (
     <div className="flex items-start justify-between">
       <div className="flex items-start">
-        <img className="w-8 h-8 object-cover mt-1 mr-4 rounded-md" src={imageSrc} />
-        {renderHTML(product?.name ?? '未知產品')}
+        <img className="w-8 h-8 object-cover mt-1 mr-2 rounded-md" src={imageSrc} />
+        <Paragraph ellipsis style={{ width: 240 }}>
+          {product?.name ?? '未知產品'}
+        </Paragraph>
+        {/* {renderHTML()} */}
       </div>
 
       <div>{renderHTML(product?.price_html)}</div>
@@ -60,6 +65,7 @@ const Add = () => {
     resource: 'products',
     dataProvider: 'wc',
     args: {
+      status: 'publish',
       per_page: 100,
       category: selectedCatId,
       orderby: 'title',

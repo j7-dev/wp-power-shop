@@ -58,8 +58,7 @@ const AddedItem: React.FC<{
 
       // Get vertical middle
 
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
 
       // Determine mouse position
 

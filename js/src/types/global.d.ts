@@ -1,4 +1,4 @@
-import { TAjaxProduct, TFSMeta } from '@/types/custom'
+import { TAjaxProduct, TPSMeta } from '@/types/custom'
 
 declare global {
   var wpApiSettings: {
@@ -19,7 +19,7 @@ declare global {
     elLicenseCode: string
     products_info: {
       products: TAjaxProduct[]
-      meta: TFSMeta[]
+      meta: TPSMeta[]
     }
   }
   var wp: {

@@ -3,7 +3,7 @@ import { Form, InputNumber, Tooltip, Input } from 'antd'
 import { TProductVariation, TSimpleAttribute } from '@/types/wcRestApi'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 import { nanoid } from 'nanoid'
-import { TFSMeta, TFSVariation } from '@/types'
+import { TPSMeta, TFSVariation } from '@/types'
 
 const getPrices = (mv: TFSVariation | null | undefined, v: TProductVariation) => {
   const matchProductSalesPrice = Number(mv?.salesPrice ?? '0')
@@ -26,7 +26,7 @@ const Variation: React.FC<{
   parentIndex: number
   parentId: number
   index: number
-  matchProduct: TFSMeta | undefined
+  matchProduct: TPSMeta | undefined
 }> = ({ variation, parentIndex, parentId, index, matchProduct }) => {
   const id = variation?.id ?? 0
   const matchVariation = !!matchProduct ? (matchProduct?.variations ?? [])?.find((v) => v.variationId === id) : null

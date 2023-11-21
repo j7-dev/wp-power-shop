@@ -3,7 +3,7 @@ import { useOne, useAjax } from '@/hooks'
 import { useSetAtom } from 'jotai'
 import { storeApiNonceAtom } from '../atom'
 import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons'
-import { TFSMeta } from '@/types'
+import { TPSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
 import { Popconfirm, notification, Button, Empty, Spin } from 'antd'
 import { ajaxNonce, checkoutUrl, renderHTML, getPrice } from '@/utils'
@@ -16,7 +16,7 @@ import { toNumber } from 'lodash-es'
 
 const Cart = () => {
   const setStoreApiNonce = useSetAtom(storeApiNonceAtom)
-  const shop_meta = (window?.appData?.products_info?.meta ?? []) as TFSMeta[]
+  const shop_meta = (window?.appData?.products_info?.meta ?? []) as TPSMeta[]
 
   const { mutate, isLoading } = useAjax()
   const [
@@ -185,7 +185,7 @@ const Cart = () => {
   )
 }
 
-function getMetaPrice({ productId, isVariable, shop_meta }: { productId: number; isVariable: boolean; shop_meta: TFSMeta[] }) {
+function getMetaPrice({ productId, isVariable, shop_meta }: { productId: number; isVariable: boolean; shop_meta: TPSMeta[] }) {
   if (!isVariable) return shop_meta.find((m) => m.productId === productId)
 
   const metaWithVariations = shop_meta.filter((m) => (m?.variations || [])?.length > 0)

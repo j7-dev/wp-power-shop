@@ -1,6 +1,6 @@
 import { TProduct } from '@/types/wcRestApi'
 import { FormInstance } from 'antd'
-import { TFSMeta } from '@/types'
+import { TPSMeta } from '@/types'
 
 export const formateMeta = (addedProducts: TProduct[]) => {
   const meta = addedProducts.map((product) => ({
@@ -28,7 +28,7 @@ export const formatShopMeta = async ({ form }: { form: FormInstance<any> }) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const allFields_obj = form.getFieldsValue()
-      const allFields = Object.values(allFields_obj) as TFSMeta[]
+      const allFields = Object.values(allFields_obj) as TPSMeta[]
       resolve(allFields)
     }, 1000)
 

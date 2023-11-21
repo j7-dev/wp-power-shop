@@ -1,15 +1,13 @@
 /* eslint-disable no-lonely-if */
-import { useEffect, useRef, useCallback } from 'react'
-import { Form, Alert, Typography, notification } from 'antd'
+import { useRef, useCallback } from 'react'
+import { Form, Alert, Typography } from 'antd'
 import Add from './Add'
 import AddedItem from './AddedItem'
-import { addedProductsAtom, FSMetaAtom, isChangeAtom } from './atoms'
-import { useAtom, useSetAtom } from 'jotai'
-import { postId, snake, formatShopMeta } from '@/utils'
-import { useMany, useAjaxGetPostMeta } from '@/hooks'
-import { TFSMeta } from '@/types'
+import { addedProductsAtom } from './atoms'
+import { useAtom } from 'jotai'
+import { snake } from '@/utils'
+import { useMany } from '@/hooks'
 import { TProduct } from '@/types/wcRestApi'
-import { sortBy } from 'lodash-es'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 import SaveButton from './SaveButton'
 import { DndProvider } from 'react-dnd'
@@ -17,30 +15,21 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper'
 import SettingButton from './SettingButton'
 import { SaveFilled } from '@ant-design/icons'
-import useSave from './SaveButton/useSave'
+import usePSMeta from './hooks/usePSMeta'
+import useChangeNotification from './hooks/useChangeNotification'
+import useAddProductSave from './hooks/useAddProductSave'
 
 const { Paragraph } = Typography
-const tinyMCESaveBtn = document.getElementById('publish') as HTMLInputElement | null
+export const tinyMCESaveBtn = document.getElementById('publish') as HTMLInputElement | null
 
 // 因為發布與更新的 按鈕不同
 
-const blockEditorSaveBtn = document.querySelector('[class*="editor-post-publish-button"]') as HTMLInputElement | null
+export const blockEditorSaveBtn = document.querySelector('[class*="editor-post-publish-button"]') as HTMLInputElement | null
 const metaId = window?.appData?.metaIds?.power_shop_meta
-const fieldNode = document.getElementById(`meta-${metaId}-value`) as HTMLInputElement | null
+export const fieldNode = document.getElementById(`meta-${metaId}-value`) as HTMLInputElement | null
 
 const AddProduct = () => {
-  const [
-    isChange,
-    setIsChange,
-  ] = useAtom(isChangeAtom)
-  const setFSMeta = useSetAtom(FSMetaAtom)
-
-  const mutation = useAjaxGetPostMeta<TFSMeta[]>({
-    post_id: postId,
-    meta_key: `${snake}_meta`,
-    formatter: (post_meta: string) => JSON.parse(post_meta || '[]'),
-  })
-  const shop_meta = mutation?.meta ?? []
+  const { shop_meta, isLoading: isPSMetaLoading } = usePSMeta()
 
   const shop_meta_product_ids = shop_meta.map((item) => item.productId)
 
@@ -66,90 +55,14 @@ const AddProduct = () => {
   const [form] = Form.useForm()
   const ref = useRef<HTMLInputElement>(null)
 
-  const handleSetCustomFieldValue = async () => {
-    // Form 改變時，寫入自訂欄位
+  const { handleSave: _ } = useAddProductSave({
+    form,
+    isPSMetaLoading,
+    productsResult,
+    shop_meta,
+  })
 
-    if (fieldNode) {
-      const sortedAllFields = await formatShopMeta({
-        form,
-      })
-      fieldNode.value = JSON.stringify(sortedAllFields)
-    }
-  }
-
-  const { handleSave: save } = useSave(form)
-
-  const handleSave = async (e: Event) => {
-    notification.destroy('saveNotification')
-    if (!fieldNode) {
-      await save()
-    }
-  }
-
-  useEffect(() => {
-    if (!!blockEditorSaveBtn) {
-      blockEditorSaveBtn.addEventListener('click', handleSave)
-    }
-    return () => {
-      if (!!blockEditorSaveBtn) {
-        blockEditorSaveBtn.removeEventListener('click', handleSave)
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!productsResult?.isFetching && !mutation?.isLoading) {
-      const products = (productsResult?.data?.data || []) as TProduct[]
-
-      // 排序
-
-      const sortOrder = shop_meta.map((m) => m.productId)
-      const sortedProducts = sortBy(products, (p) => {
-        return sortOrder.indexOf(p.id)
-      })
-
-      setAddedProducts(sortedProducts)
-      setFSMeta(shop_meta)
-
-      // 載入完成後，啟用儲存按鈕
-
-      if (tinyMCESaveBtn) tinyMCESaveBtn.disabled = false
-      if (blockEditorSaveBtn) blockEditorSaveBtn.disabled = false
-    } else {
-      // 載入完成前，禁用儲存按鈕
-
-      if (tinyMCESaveBtn) tinyMCESaveBtn.disabled = true
-      if (blockEditorSaveBtn) blockEditorSaveBtn.disabled = true
-    }
-  }, [
-    mutation?.isLoading,
-    productsResult?.isFetching,
-  ])
-
-  const handleFormChange = () => {
-    setIsChange(true)
-    handleSetCustomFieldValue()
-  }
-
-  useEffect(() => {
-    if (isChange) {
-      notification.config({
-        maxCount: 1,
-      })
-      notification.warning({
-        key: 'saveNotification',
-        message: '偵測到變更，記得儲存！',
-        duration: null,
-        placement: 'bottomRight',
-      })
-    } else {
-      notification.destroy('saveNotification')
-    }
-  }, [isChange])
-
-  useEffect(() => {
-    handleSetCustomFieldValue()
-  }, [addedProducts.length])
+  const { handleFormChange } = useChangeNotification(form)
 
   const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
     setAddedProducts((pre: TProduct[]) =>
@@ -175,11 +88,11 @@ const AddProduct = () => {
 
   return (
     <div className="p-4">
-      {mutation?.isLoading && <LoadingWrap />}
+      {isPSMetaLoading && <LoadingWrap />}
       <Form className="pt-4" layout="vertical" form={form} onValuesChange={handleFormChange}>
         <div className="flex justify-between mb-4">
           <SettingButton />
-          <SaveButton type="primary" icon={<SaveFilled />} disabled={mutation?.isLoading || productsResult?.isFetching} />
+          <SaveButton type="primary" icon={<SaveFilled />} disabled={isPSMetaLoading || productsResult?.isFetching} />
         </div>
         <Alert
           className="mb-4"
