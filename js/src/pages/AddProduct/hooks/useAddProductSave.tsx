@@ -7,13 +7,12 @@ import { TProduct } from '@/types/wcRestApi'
 import { sortBy } from 'lodash-es'
 import { useSetAtom } from 'jotai'
 import { addedProductsAtom, PSMetaAtom } from '../atoms'
-import { UseQueryResult } from '@tanstack/react-query'
-import { AxiosResponse } from 'axios'
+import { TResult } from './useGetAddProducts'
 
 type TUseAddProductSaveProps = {
   form: FormInstance
   isPSMetaLoading: boolean
-  productsResult: UseQueryResult<AxiosResponse<any, any>, unknown>
+  productsResult: TResult<TProduct>
   shop_meta: TPSMeta[]
 }
 

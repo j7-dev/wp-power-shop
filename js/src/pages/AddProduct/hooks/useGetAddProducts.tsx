@@ -3,11 +3,19 @@ import { useMany } from '@/hooks'
 import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { useState, useEffect } from 'react'
 
+export type TResult<T> = {
+  data: {
+    data: T[]
+  }
+  isLoading: boolean
+  isFetching: boolean
+}
+
 const useGetAddProducts = (shop_meta_product_ids: number[]) => {
   const [
     result,
     setResult,
-  ] = useState<any>({
+  ] = useState<TResult<TProduct>>({
     data: {
       data: [],
     },
@@ -32,7 +40,7 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
   const products = (productsResult?.data?.data || []) as TProduct[]
 
   useEffect(() => {
-    if (!productsResult.isLoading) {
+    if (!productsResult.isLoading && productsResult.isSuccess) {
       Promise.all(
         products.map(async (product) => {
           if (product?.type !== 'variable' && !product?.productVariations) return product
@@ -73,6 +81,18 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
         })
     }
   }, [productsResult.isLoading])
+
+  useEffect(() => {
+    if (shop_meta_product_ids.length === 0) {
+      setResult({
+        data: {
+          data: [],
+        },
+        isLoading: false,
+        isFetching: false,
+      })
+    }
+  }, [shop_meta_product_ids.length])
 
   // productsResult!.data!.data = Promise.all(formattedProducts)
 

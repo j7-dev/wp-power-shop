@@ -1,14 +1,14 @@
 import { TPSMeta, TFSVariation } from '@/types'
 import { TProduct } from '@/types/wcRestApi'
-import { useQueryClient, UseQueryResult } from '@tanstack/react-query'
-import { AxiosResponse } from 'axios'
+import { useQueryClient } from '@tanstack/react-query'
 import { notification } from 'antd'
 import { useUpdate } from '@/hooks'
 import { kebab, postId, snake } from '@/utils'
 import { useEffect } from 'react'
+import { TResult } from './useGetAddProducts'
 
 type TUseHandleShopMetaProps = {
-  productsResult: UseQueryResult<AxiosResponse<any, any>, unknown>
+  productsResult: TResult<TProduct>
   shop_meta: TPSMeta[]
 }
 
