@@ -2,6 +2,8 @@ import { getResource } from '@/api'
 import { useMany } from '@/hooks'
 import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { useState, useEffect } from 'react'
+import { addedProductsAtom } from '../atoms'
+import { useSetAtom } from 'jotai'
 
 export type TResult<T> = {
   data: {
@@ -23,6 +25,8 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
     isFetching: true,
   })
 
+  const setAddedProducts = useSetAtom(addedProductsAtom)
+
   const productsResult = useMany({
     resource: 'products',
     dataProvider: 'wc',
@@ -43,7 +47,7 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
     if (!productsResult.isLoading && productsResult.isSuccess) {
       Promise.all(
         products.map(async (product) => {
-          if (product?.type !== 'variable' && !product?.productVariations) return product
+          if (product?.type !== 'variable' && !product?.productVariations) return await product
           const productVariationsResult = await getResource({
             resource: `products/${product?.id}/variations`,
             dataProvider: 'wc',
@@ -59,6 +63,7 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
         }),
       )
         .then((res) => {
+          setAddedProducts(res)
           setResult({
             data: {
               data: res,

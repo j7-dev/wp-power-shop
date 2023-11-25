@@ -14,7 +14,7 @@ const useSave = (form: FormInstance) => {
     mutationOptions: {
       onSuccess: () => {
         notification.success({
-          message: '儲存成功',
+          message: 'Power Shop 儲存成功',
         })
         setIsChange(false)
         notification.destroy('saveNotification')
