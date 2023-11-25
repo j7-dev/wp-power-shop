@@ -21,6 +21,7 @@ declare global {
       products: TAjaxProduct[]
       meta: TPSMeta[]
     }
+    colorPrimary: string
   }
   var wp: {
     blocks: any

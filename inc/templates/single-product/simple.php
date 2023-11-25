@@ -4,7 +4,7 @@
 	'product' => $product,
 	'meta' => $meta,
 	'default_image_src' => $default_image_src,
-	'is_shop_closed' => $is_shop_closed
+	'is_shop_closed' => $is_shop_closed,
 ] = $args;
 
 $img_id = $product->get_image_id();

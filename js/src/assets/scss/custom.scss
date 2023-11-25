@@ -194,7 +194,7 @@ $pad_width: 810px;
 			padding: 0.25rem 0.5rem;
 		}
 		&.active {
-			border: 1px solid $primary;
+			border: 1px solid var(--ps-primary);
 			color: #333;
 		}
 		&.disabled {

@@ -22,11 +22,13 @@ export const defaulTPSMeta: TPSMeta = {
 export type TSettings = {
   startTime: number
   endTime: number
+  btnColor: string
 }
 
 export const defaultSettings = {
   startTime: 0,
   endTime: 0,
+  btnColor: '#1677ff',
 }
 
 // Ajax Product

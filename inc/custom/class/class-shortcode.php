@@ -36,11 +36,18 @@ class ShortCode
 			$is_shop_closed = false;
 		}
 
+		$btn_color = $settings['btnColor'] ?? '#1677ff';
+
 		$handled_shop_meta = $this->handleShopMeta($shop_meta);
 
 		$html = '';
 		ob_start();
 ?>
+		<style>
+			:root {
+				--ps-primary: <?= $btn_color ?>;
+			}
+		</style>
 		<div class="power-shop-products">
 			<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
 				<?php foreach ($handled_shop_meta as $meta) {
@@ -54,7 +61,7 @@ class ShortCode
 								'product' => $product,
 								'meta' => $meta,
 								'default_image_src' => $default_image_src,
-								'is_shop_closed' => $is_shop_closed
+								'is_shop_closed' => $is_shop_closed,
 							]);
 							break;
 						case 'simple':
@@ -62,7 +69,7 @@ class ShortCode
 								'product' => $product,
 								'meta' => $meta,
 								'default_image_src' => $default_image_src,
-								'is_shop_closed' => $is_shop_closed
+								'is_shop_closed' => $is_shop_closed,
 							]);
 							break;
 						default:
@@ -70,7 +77,7 @@ class ShortCode
 								'product' => $product,
 								'meta' => $meta,
 								'default_image_src' => $default_image_src,
-								'is_shop_closed' => $is_shop_closed
+								'is_shop_closed' => $is_shop_closed,
 							]);
 							break;
 					}

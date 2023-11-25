@@ -2,12 +2,15 @@ import React, { lazy } from 'react'
 import ReactDOM from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { renderId1, renderId2, renderId3, renderId4 } from './utils'
+import { renderId1, renderId2, renderId3, renderId4, colorPrimary } from './utils'
+import { ConfigProvider } from 'antd'
 
-const App = lazy(() => import('./App'))
+const App1 = lazy(() => import('./App1'))
 const App2 = lazy(() => import('./App2'))
 const App3 = lazy(() => import('./App3'))
 const App4 = lazy(() => import('./App4'))
+
+console.log('⭐  colorPrimary:', colorPrimary)
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,53 +21,45 @@ const queryClient = new QueryClient({
   },
 })
 const id1 = document.getElementById(renderId1)
-
-if (!!id1) {
-  ReactDOM.createRoot(id1).render(
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <App />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </React.StrictMode>,
-  )
-}
-
 const id2 = document.getElementById(renderId2)
-
-if (!!id2) {
-  ReactDOM.createRoot(id2).render(
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <App2 />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </React.StrictMode>,
-  )
-}
-
 const id3 = document.getElementById(renderId3)
-
-if (!!id3) {
-  ReactDOM.createRoot(id3).render(
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <App3 />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </React.StrictMode>,
-  )
-}
-
 const id4 = document.getElementById(renderId4)
 
-if (!!id4) {
-  ReactDOM.createRoot(id4).render(
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <App4 />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </React.StrictMode>,
-  )
-}
+const mapping = [
+  {
+    el: id1,
+    App: App1,
+  },
+  {
+    el: id2,
+    App: App2,
+  },
+  {
+    el: id3,
+    App: App3,
+  },
+  {
+    el: id4,
+    App: App4,
+  },
+]
+
+mapping.forEach(({ el, App }) => {
+  if (!!el) {
+    ReactDOM.createRoot(el).render(
+      <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary,
+              },
+            }}>
+            <App />
+          </ConfigProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </React.StrictMode>,
+    )
+  }
+})

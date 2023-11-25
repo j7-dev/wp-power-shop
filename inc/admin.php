@@ -77,7 +77,9 @@ class Bootstrap
 			)
 		);
 
-
+		$settings_string = \get_post_meta($post_id, $_ENV['SNAKE'] . '_settings', true);
+		$settings = Functions::json_parse($settings_string, [], true);
+		$btn_color = $settings['btnColor'] ?? '#1677ff';
 
 		\wp_localize_script($_ENV['KEBAB'], 'appData', array(
 			'siteUrl' => \site_url(),
@@ -91,6 +93,7 @@ class Bootstrap
 			'permalink' => $permalink,
 			'checkoutUrl' => $checkout_page_url,
 			'products_info' => $products_info,
+			'colorPrimary' => $btn_color,
 		));
 
 		\wp_localize_script($_ENV['KEBAB'], 'wpApiSettings', array(
