@@ -25,6 +25,26 @@ const AddToCartButton: React.FC<{
   const { mutate, isLoading } = useAjax({
     mutationOptions: {
       onMutate: (variables) => {
+        api.success({
+          key: 'cart_add',
+          message: (
+            <div>
+              <p className="m-0">加入購物車成功</p>
+              <p
+                className="m-0 cursor-pointer text-primary"
+                onClick={() => {
+                  const cartTable = document.getElementById('ps-cart-table')
+                  if (!cartTable) return
+                  cartTable.scrollIntoView({
+                    behavior: 'smooth',
+                  })
+                }}>
+                前往購物車
+              </p>
+            </div>
+          ),
+        })
+
         const variation_id = variables.variation_id
         const { id, name, short_description, description, images } = product
         const variation = JSON.parse(variables.variation as string) as TProductVariationAttribute[]
@@ -106,25 +126,6 @@ const AddToCartButton: React.FC<{
       },
       {
         onSuccess: () => {
-          api.success({
-            message: (
-              <div>
-                <p className="m-0">加入購物車成功</p>
-                <p
-                  className="m-0 cursor-pointer text-primary"
-                  onClick={() => {
-                    const cartTable = document.getElementById('ps-cart-table')
-                    if (!cartTable) return
-                    cartTable.scrollIntoView({
-                      behavior: 'smooth',
-                    })
-                  }}>
-                  前往購物車
-                </p>
-              </div>
-            ),
-          })
-
           // set isMutating to false
 
           setCartData((prev) => {
@@ -151,7 +152,13 @@ const AddToCartButton: React.FC<{
         onError: (error: any, variables, rollBack) => {
           console.log('Error', error)
           api.error({
-            message: error?.response?.data?.message || '加入購物車失敗',
+            key: 'cart_add',
+            message: (
+              <div>
+                <p className="m-0">OOPS! 出了點問題</p>
+                <p className="m-0">{error?.response?.data?.message || '加入購物車失敗'}</p>
+              </div>
+            ),
           })
 
           if (rollBack) {
