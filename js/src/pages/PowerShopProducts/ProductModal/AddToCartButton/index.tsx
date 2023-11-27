@@ -190,7 +190,7 @@ const AddToCartButton: React.FC<{
   return (
     <>
       {contextHolder}
-      <Button className="w-full mt-4" type="primary" onClick={handleClick} loading={isLoading} disabled={(!selectedVariationId && productType === 'variable') || shopStatus !== 'published'}>
+      <Button className="w-full mt-4" type="primary" onClick={handleClick} disabled={(!selectedVariationId && productType === 'variable') || shopStatus !== 'published'}>
         加入購物車
       </Button>
     </>
