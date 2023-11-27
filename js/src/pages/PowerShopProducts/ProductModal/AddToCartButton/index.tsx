@@ -77,6 +77,7 @@ const AddToCartButton: React.FC<{
           if (findSameItem) {
             return {
               ...prev,
+              isMutating: true,
               items: prev.items.map((i) => {
                 if (i.id === newCartItem.id && JSON.stringify(i.variation) === JSON.stringify(newCartItem.variation)) {
                   return {
@@ -92,6 +93,7 @@ const AddToCartButton: React.FC<{
           }
           return {
             ...prev,
+            isMutating: true,
             items: [
               ...prev.items,
               newCartItem,
@@ -128,25 +130,26 @@ const AddToCartButton: React.FC<{
         onSuccess: () => {
           // set isMutating to false
 
-          setCartData((prev) => {
-            return {
-              ...prev,
-              items: prev.items.map((i) => {
-                const variation = selectedAttributes.map((a) => ({
-                  attribute: a.name,
-                  value: a.value,
-                }))
+          // setCartData((prev) => {
+          //   return {
+          //     ...prev,
+          //     items: prev.items.map((i) => {
+          //       const variation = selectedAttributes.map((a) => ({
+          //         attribute: a.name,
+          //         value: a.value,
+          //       }))
 
-                if (i.id === productId && JSON.stringify(i.variation) === JSON.stringify(variation)) {
-                  return {
-                    ...i,
-                    isMutating: false,
-                  }
-                }
-                return i
-              }),
-            }
-          })
+          //       if (i.id === productId && JSON.stringify(i.variation) === JSON.stringify(variation)) {
+          //         return {
+          //           ...i,
+          //           isMutating: false,
+          //         }
+          //       }
+          //       return i
+          //     }),
+          //   }
+          // })
+
           queryClient.invalidateQueries({ queryKey: ['get_cart'] })
         },
         onError: (error: any, variables, rollBack) => {
@@ -164,6 +167,7 @@ const AddToCartButton: React.FC<{
           if (rollBack) {
             setCartData((prev) => ({
               ...prev,
+              isMutating: false,
               items: prev.items.map((i) => {
                 if (i.key === (rollBack as TCartItem).key) {
                   return rollBack as TCartItem
@@ -174,6 +178,7 @@ const AddToCartButton: React.FC<{
           } else {
             setCartData((prev) => ({
               ...prev,
+              isMutating: false,
               items: prev.items.filter((i) => i.id !== (variables.id as number)),
             }))
           }

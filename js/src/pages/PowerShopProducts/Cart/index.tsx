@@ -28,6 +28,7 @@ const Cart = () => {
         setCartData((prev) => ({
           ...prev,
           items: prev.items.filter((item) => item.key !== variables.cart_item_key),
+          isMutating: true,
         }))
 
         const rollBack = cartData.items.find((item) => item.key === variables.cart_item_key)
@@ -54,7 +55,7 @@ const Cart = () => {
   const total_items = getPrice(raw_total_items, currency_minor_unit)
   const raw_total_price = Number(rawCartData?.totals?.total_price || '0')
   const total_price = getPrice(raw_total_price, currency_minor_unit)
-  const catItems = cartData?.items ?? []
+  const cartItems = cartData?.items ?? []
 
   useEffect(() => {
     setStoreApiNonce(wcStoreApiNonce)
@@ -78,6 +79,7 @@ const Cart = () => {
       setCartData({
         ...rawCartData,
         items: formattedCartItems,
+        isMutating: false,
       })
     }
   }, [cartResult?.isFetching])
@@ -103,6 +105,7 @@ const Cart = () => {
           })
           setCartData((prev) => ({
             ...prev,
+            isMutating: false,
             items: prev.items.map((item) => {
               if (item.key === (rollBack as TCartItem).key) {
                 return rollBack as TCartItem
@@ -127,15 +130,15 @@ const Cart = () => {
         </tr>
       </thead>
       <tbody>
-        {catItems.length === 0 && (
+        {cartItems.length === 0 && (
           <tr>
             <td colSpan={5}>
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="沒有資料" />
             </td>
           </tr>
         )}
-        {catItems.length !== 0 &&
-          catItems.map((item) => {
+        {cartItems.length !== 0 &&
+          cartItems.map((item) => {
             const variation = item?.variation ?? []
             const variationText = variation.map((v) => `${v?.attribute}: ${v?.value}`).join(' | ')
             const isVariable = variation.length > 0
@@ -200,13 +203,13 @@ const Cart = () => {
     </table>
   )
 
-  return catItems.length === 0 ? null : (
+  return cartItems.length === 0 ? null : (
     <div className="w-full mt-20">
       {contextHolder}
       {main}
       <div className="text-right mb-8">
         <a href={checkoutUrl}>
-          <Button icon={<BiMoneyWithdraw className="relative top-[2px]" />} size="large" className="px-12" type="primary" disabled={catItems.length === 0 || isLoading || cartIsFetching}>
+          <Button icon={<BiMoneyWithdraw className="relative top-[2px]" />} size="large" className="px-12" type="primary" disabled={cartItems.length === 0 || cartData.isMutating}>
             前往結帳
           </Button>
         </a>

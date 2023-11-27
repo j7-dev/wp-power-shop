@@ -37,6 +37,7 @@ export type TCartItem = {
 }
 
 const defaultCart = {
+  isMutating: false,
   coupons: [],
   shipping_rates: [],
   shipping_address: {
@@ -100,6 +101,7 @@ const defaultCart = {
 
 export type TCartData = Omit<TCart, 'items'> & {
   items: TCartItem[]
+  isMutating: boolean
 }
 
 export const cartDataAtom = atom<TCartData>(defaultCart)

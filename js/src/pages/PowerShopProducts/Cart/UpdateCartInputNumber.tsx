@@ -29,6 +29,7 @@ const UpdateCartInputNumber: React.FC<{ item: TCartItem }> = ({ item }) => {
       onMutate: (variables) => {
         setCartData((prev) => ({
           ...prev,
+          isMutating: true,
           items: prev.items.map((i) => {
             if (i.key === variables.key) {
               return {
@@ -56,13 +57,13 @@ const UpdateCartInputNumber: React.FC<{ item: TCartItem }> = ({ item }) => {
         queryClient.invalidateQueries({ queryKey: ['get_cart'] })
       },
       onError: (error: any, _variables, rollBack) => {
-        console.log('⭐  rollBack:', rollBack)
         console.log('Error', error)
         api.error({
           message: error?.response?.data?.message || '修改購物車失敗',
         })
         setCartData((prev) => ({
           ...prev,
+          isMutating: false,
           items: prev.items.map((i) => {
             if (i.key === (rollBack as TCartItem).key) {
               return rollBack as TCartItem
