@@ -3,7 +3,7 @@ import { TAjaxProduct } from '@/types/custom'
 import { Modal, Col, Row } from 'antd'
 import Gallery from '@/components/Gallery'
 import PlusMinusInput from '@/components/PlusMinusInput'
-import AddToCartButton from '@/components/AddToCartButton'
+import AddToCartButton from '@/pages/PowerShopProducts/ProductModal/AddToCartButton'
 import ToggleContent from '@/pages/PowerShopProducts/ProductModal/ToggleContent'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
 import useProductModalProps from '@/pages/PowerShopProducts/ProductModal/useProductModalProps'
@@ -12,7 +12,6 @@ import { useAtom, useAtomValue } from 'jotai'
 import { isExpandAtom, showReadMoreAtom } from '@/pages/PowerShopProducts/ProductModal/atom'
 
 const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
-  const productId = product?.id ?? 0
   const { modalProps, images, name, price, description, plusMinusInputProps, qty } = useProductModalProps(product)
 
   const [
@@ -65,7 +64,7 @@ const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
             <div className="">
               <p className="mb-0 mt-4">數量</p>
               <PlusMinusInput {...plusMinusInputProps} />
-              <AddToCartButton productId={productId} quantity={qty} productType={product?.type} />
+              <AddToCartButton product={product} quantity={qty} />
             </div>
           </div>
         </Col>
