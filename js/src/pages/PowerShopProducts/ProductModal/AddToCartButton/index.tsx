@@ -22,9 +22,6 @@ const AddToCartButton: React.FC<{
   const productId = product?.id
   const productType = product?.type
 
-  const shop_meta = (window?.appData?.products_info?.meta ?? []) as TPSMeta[]
-  console.log('⭐  shop_meta:', shop_meta)
-
   const { mutate, isLoading } = useAjax({
     mutationOptions: {
       onMutate: (variables) => {
