@@ -55,7 +55,6 @@ const Cart = () => {
   const raw_total_price = Number(rawCartData?.totals?.total_price || '0')
   const total_price = getPrice(raw_total_price, currency_minor_unit)
   const catItems = cartData?.items ?? []
-  console.log('⭐  catItems:', catItems)
 
   useEffect(() => {
     setStoreApiNonce(wcStoreApiNonce)
