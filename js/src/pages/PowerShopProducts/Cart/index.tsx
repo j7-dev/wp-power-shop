@@ -153,7 +153,7 @@ const Cart = () => {
             const quantity = item?.quantity ?? 1
 
             return (
-              <tr key={item.key} className={`${item.isMutating ? 'opacity-25' : ''}`}>
+              <tr key={item.key} className={`${item.isMutating ? 'animate-pulse' : ''}`}>
                 <td>
                   <div className="flex">
                     <img className="w-16 h-16 rounded-md aspect-square object-cover mr-2" src={image} />
