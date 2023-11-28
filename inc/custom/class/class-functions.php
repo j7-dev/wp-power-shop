@@ -114,7 +114,7 @@ class Functions
 	{
 		$out_put = '';
 		try {
-			$out_put = json_decode(str_replace('\\', '', $stringfy), $associative);
+			$out_put = json_decode(str_replace('\\', '', $stringfy), $associative) ?? $default;
 		} catch (\Throwable $th) {
 			$out_put = $default;
 		} finally {
