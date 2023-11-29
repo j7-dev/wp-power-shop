@@ -48,19 +48,24 @@ const AddToCartButton: React.FC<{
         if (isConfetti) {
           confetti({
             particleCount: 100,
-            gravity: 5,
+            ticks: 60,
             startVelocity: 70,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0, y: 0.9 },
+            spread: 360,
+            origin: { x: randomInRange(0.1, 0.9), y: randomInRange(-0.2, 0.8) },
           })
           confetti({
             particleCount: 100,
-            gravity: 5,
+            ticks: 60,
             startVelocity: 70,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1, y: 0.9 },
+            spread: 360,
+            origin: { x: randomInRange(0.1, 0.9), y: randomInRange(-0.2, 0.8) },
+          })
+          confetti({
+            particleCount: 100,
+            ticks: 60,
+            startVelocity: 70,
+            spread: 360,
+            origin: { x: randomInRange(0.1, 0.9), y: randomInRange(-0.2, 0.8) },
           })
         }
 
@@ -192,6 +197,10 @@ const AddToCartButton: React.FC<{
       </Button>
     </>
   )
+}
+
+function randomInRange(min: number, max: number) {
+  return Math.random() * (max - min) + min
 }
 
 export default AddToCartButton
