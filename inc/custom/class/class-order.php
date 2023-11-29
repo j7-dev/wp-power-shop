@@ -130,16 +130,12 @@ class Order
 		{
 			// date_default_timezone_set('Asia/Taipei');
 			unset($args['paginate']);
+
 			if ($date_no === -1) {
-				$sum_args = [
-					...$args,
-					'limit' => -1,
-				];
+
+				$sum_args = array_merge($args, ['limit' => -1]);
 			} else {
-				$sum_args = [
-					...$args,
-					'date_created' => date("Y-m-d", strtotime('-' . $date_no . ' day')) . '...' . date("Y-m-d"),
-				];
+				$sum_args = array_merge($args, ['date_created' => date("Y-m-d", strtotime('-' . $date_no . ' day')) . '...' . date("Y-m-d"),]);
 			}
 
 
