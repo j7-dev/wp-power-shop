@@ -1,13 +1,14 @@
 import React from 'react'
 import { Button, notification } from 'antd'
 import { useAjax } from '@/hooks'
-import { ajaxNonce, postId } from '@/utils'
+import { ajaxNonce, postId, isConfetti } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { isProductModalOpenAtom, selectedVariationIdAtom, selectedAttributesAtom, shopStatusAtom, cartDataAtom, TCartItem } from '@/pages/PowerShopProducts/atom'
 import { useSetAtom, useAtomValue, useAtom } from 'jotai'
-import { TAjaxProduct, TPSMeta } from '@/types/custom'
+import { TAjaxProduct } from '@/types/custom'
 import { nanoid } from 'nanoid'
 import { TProductVariationAttribute } from '@/types/wcStoreApi'
+import confetti from 'canvas-confetti'
 
 const AddToCartButton: React.FC<{
   product: TAjaxProduct
@@ -44,6 +45,24 @@ const AddToCartButton: React.FC<{
             </div>
           ),
         })
+        if (isConfetti) {
+          confetti({
+            particleCount: 100,
+            gravity: 5,
+            startVelocity: 70,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0, y: 0.9 },
+          })
+          confetti({
+            particleCount: 100,
+            gravity: 5,
+            startVelocity: 70,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1, y: 0.9 },
+          })
+        }
 
         const variation_id = variables.variation_id
         const { id, name, short_description, description, images } = product
@@ -128,28 +147,6 @@ const AddToCartButton: React.FC<{
       },
       {
         onSuccess: () => {
-          // set isMutating to false
-
-          // setCartData((prev) => {
-          //   return {
-          //     ...prev,
-          //     items: prev.items.map((i) => {
-          //       const variation = selectedAttributes.map((a) => ({
-          //         attribute: a.name,
-          //         value: a.value,
-          //       }))
-
-          //       if (i.id === productId && JSON.stringify(i.variation) === JSON.stringify(variation)) {
-          //         return {
-          //           ...i,
-          //           isMutating: false,
-          //         }
-          //       }
-          //       return i
-          //     }),
-          //   }
-          // })
-
           queryClient.invalidateQueries({ queryKey: ['get_cart'] })
         },
         onError: (error: any, variables, rollBack) => {

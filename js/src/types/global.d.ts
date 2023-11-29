@@ -22,6 +22,7 @@ declare global {
       meta: TPSMeta[]
     }
     colorPrimary: string
+    isConfetti: boolean
   }
   var wp: {
     blocks: any

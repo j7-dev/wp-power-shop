@@ -23,6 +23,7 @@ export type TSettings = {
   startTime: number
   endTime: number
   btnColor: string
+  isConfetti: boolean
 }
 
 export const defaultSettings = {

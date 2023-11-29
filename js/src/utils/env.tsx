@@ -23,3 +23,4 @@ export const apiTimeout = import.meta.env.VITE_API_TIMEOUT || '30000'
 export const elApiKey = 'F9B52619-A5AC9B31-F7E931B1-526AD47D'
 
 export const colorPrimary = window?.appData?.colorPrimary || '#1677ff'
+export const isConfetti = window?.appData?.isConfetti || true

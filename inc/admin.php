@@ -94,6 +94,7 @@ class Bootstrap
 			'checkoutUrl' => $checkout_page_url,
 			'products_info' => $products_info,
 			'colorPrimary' => $btn_color,
+			'isConfetti' => $settings['isConfetti'] ?? true,
 		));
 
 		\wp_localize_script($_ENV['KEBAB'], 'wpApiSettings', array(
