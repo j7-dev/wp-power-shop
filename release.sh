@@ -2,7 +2,7 @@
 
 release_folder='power-shop-release'
 release_zip='power-shop-release.zip'
-folder_array=("js/dist")
+folder_array=("js/dist" "inc")
 file_array=("plugin.php" "LICENSE" ".env.production")
 full_version=$(grep -oP "Version: \K.*" plugin.php)
 
@@ -14,6 +14,10 @@ for folder in "${folder_array[@]}"; do
 	rm -rf ../$release_folder/$folder
   cp -r ./$folder ../$release_folder/$folder
 done
+
+# 移除 class-cpt.php 將 class-cpt-encrypted.php 改名為 class-cpt.php
+rm -f ../$release_folder/inc/custom/class/class-cpt.php
+mv ../$release_folder/inc/custom/class/class-cpt-encrypted.php ../$release_folder/inc/custom/class/class-cpt.php
 
 for file in "${file_array[@]}"; do
 	rm -rf ../$release_folder/$file
