@@ -31,11 +31,11 @@ class Cart
 	{
 
 		foreach ($cart_object->get_cart_contents() as $key => $item) {
-			if (!empty($item[$_ENV['SNAKE'] . '_sales_price'])) {
-				$item['data']->set_price($item[$_ENV['SNAKE'] . '_sales_price']);
+			if (!empty($item[\PowerShop::SNAKE . '_sales_price'])) {
+				$item['data']->set_price($item[\PowerShop::SNAKE . '_sales_price']);
 			}
-			if (!empty($item[$_ENV['SNAKE'] . '_regular_price'])  && empty($item[$_ENV['SNAKE'] . '_sales_price'])) {
-				$item['data']->set_price($item[$_ENV['SNAKE'] . '_regular_price']);
+			if (!empty($item[\PowerShop::SNAKE . '_regular_price'])  && empty($item[\PowerShop::SNAKE . '_sales_price'])) {
+				$item['data']->set_price($item[\PowerShop::SNAKE . '_regular_price']);
 			}
 		}
 	}
@@ -44,7 +44,7 @@ class Cart
 	public function handle_add_cart_callback()
 	{
 		// Security check
-		\check_ajax_referer($_ENV['KEBAB'], 'nonce');
+		\check_ajax_referer(\PowerShop::KEBAB, 'nonce');
 
 		// global $woocommerce;
 		$post_id = \sanitize_text_field($_POST['post_id'] ?? 0);
@@ -53,7 +53,7 @@ class Cart
 		$quantity = \sanitize_text_field($_POST['quantity'] ?? 1);
 		$variation_id = \sanitize_text_field($_POST['variation_id'] ?? 0);
 		$variation_stringfy = \sanitize_text_field($_POST['variation'] ?? '[]');
-		$shop_meta_string = \get_post_meta($post_id, $_ENV['SNAKE'] . '_meta', true) ?? '[]';
+		$shop_meta_string = \get_post_meta($post_id, \PowerShop::SNAKE . '_meta', true) ?? '[]';
 
 		try {
 			$variation_obj_arr = json_decode(str_replace('\\', '', $variation_stringfy));
@@ -85,18 +85,18 @@ class Cart
 		if (empty($variation_id)) {
 			// 加入購物車 簡單商品
 			\WC()->cart->add_to_cart($product_id, $quantity, 0, [], [
-				$_ENV['SNAKE'] . '_regular_price' => $the_product_meta['regularPrice'],
-				$_ENV['SNAKE'] . '_sales_price' => $the_product_meta['salesPrice'],
-				$_ENV['SNAKE'] . '_post_id' => $post_id,
+				\PowerShop::SNAKE . '_regular_price' => $the_product_meta['regularPrice'],
+				\PowerShop::SNAKE . '_sales_price' => $the_product_meta['salesPrice'],
+				\PowerShop::SNAKE . '_post_id' => $post_id,
 			]);
 		} else {
 			// 加入購物車 可變商品
 			$the_variations_meta = $the_product_meta['variations'] ?? [];
 			$the_variation_meta = find($the_variations_meta, ['variationId' => $variation_id]) ?? [];
 			\WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation, [
-				$_ENV['SNAKE'] . '_regular_price' => $the_variation_meta['regularPrice'],
-				$_ENV['SNAKE'] . '_sales_price' => $the_variation_meta['salesPrice'],
-				$_ENV['SNAKE'] . '_post_id' => $post_id,
+				\PowerShop::SNAKE . '_regular_price' => $the_variation_meta['regularPrice'],
+				\PowerShop::SNAKE . '_sales_price' => $the_variation_meta['salesPrice'],
+				\PowerShop::SNAKE . '_post_id' => $post_id,
 			]);
 		}
 
@@ -128,7 +128,7 @@ class Cart
 	public function handle_remove_cart_callback()
 	{
 		// Security check
-		\check_ajax_referer($_ENV['KEBAB'], 'nonce');
+		\check_ajax_referer(\PowerShop::KEBAB, 'nonce');
 
 		$cart_item_key = \sanitize_text_field($_POST['cart_item_key'] ?? '');
 
@@ -150,7 +150,7 @@ class Cart
 	public function handle_get_cart_callback()
 	{
 		// Security check
-		\check_ajax_referer($_ENV['KEBAB'], 'nonce');
+		\check_ajax_referer(\PowerShop::KEBAB, 'nonce');
 
 		$totals = \WC()->cart->get_totals();
 
@@ -170,7 +170,7 @@ class Cart
 
 	public function save_custom_data_to_order_meta($item, $cart_item_key, $values, $order)
 	{
-		$meta_key = $_ENV['SNAKE'] . '_post_id';
+		$meta_key = \PowerShop::SNAKE . '_post_id';
 		if (isset($values[$meta_key])) {
 			$order->update_meta_data($meta_key, $values[$meta_key]);
 		}

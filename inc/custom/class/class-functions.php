@@ -22,40 +22,40 @@ class Functions
 		$snake = str_replace(' ', '_', strtolower($label));
 
 		$labels = [
-			'name'                     => \esc_html__($label, $_ENV['KEBAB']),
-			'singular_name'            => \esc_html__($label, $_ENV['KEBAB']),
-			'add_new'                  => \esc_html__('Add new', $_ENV['KEBAB']),
-			'add_new_item'             => \esc_html__('Add new item', $_ENV['KEBAB']),
-			'edit_item'                => \esc_html__('Edit', $_ENV['KEBAB']),
-			'new_item'                 => \esc_html__('New', $_ENV['KEBAB']),
-			'view_item'                => \esc_html__('View', $_ENV['KEBAB']),
-			'view_items'               => \esc_html__('View', $_ENV['KEBAB']),
-			'search_items'             => \esc_html__('Search ' . $label, $_ENV['KEBAB']),
-			'not_found'                => \esc_html__('Not Found', $_ENV['KEBAB']),
-			'not_found_in_trash'       => \esc_html__('Not found in trash', $_ENV['KEBAB']),
-			'parent_item_colon'        => \esc_html__('Parent item', $_ENV['KEBAB']),
-			'all_items'                => \esc_html__('All', $_ENV['KEBAB']),
-			'archives'                 => \esc_html__($label . ' archives', $_ENV['KEBAB']),
-			'attributes'               => \esc_html__($label . ' attributes', $_ENV['KEBAB']),
-			'insert_into_item'         => \esc_html__('Insert to this ' . $label, $_ENV['KEBAB']),
-			'uploaded_to_this_item'    => \esc_html__('Uploaded to this ' . $label, $_ENV['KEBAB']),
-			'featured_image'           => \esc_html__('Featured image', $_ENV['KEBAB']),
-			'set_featured_image'       => \esc_html__('Set featured image', $_ENV['KEBAB']),
-			'remove_featured_image'    => \esc_html__('Remove featured image', $_ENV['KEBAB']),
-			'use_featured_image'       => \esc_html__('Use featured image', $_ENV['KEBAB']),
-			'menu_name'                => \esc_html__($label, $_ENV['KEBAB']),
-			'filter_items_list'        => \esc_html__('Filter ' . $label . ' list', $_ENV['KEBAB']),
-			'filter_by_date'           => \esc_html__('Filter by date', $_ENV['KEBAB']),
-			'items_list_navigation'    => \esc_html__($label . ' list navigation', $_ENV['KEBAB']),
-			'items_list'               => \esc_html__($label . ' list', $_ENV['KEBAB']),
-			'item_published'           => \esc_html__($label . ' published', $_ENV['KEBAB']),
-			'item_published_privately' => \esc_html__($label . ' published privately', $_ENV['KEBAB']),
-			'item_reverted_to_draft'   => \esc_html__($label . ' reverted to draft', $_ENV['KEBAB']),
-			'item_scheduled'           => \esc_html__($label . ' scheduled', $_ENV['KEBAB']),
-			'item_updated'             => \esc_html__($label . ' updated', $_ENV['KEBAB']),
+			'name'                     => \esc_html__($label, \PowerShop::KEBAB),
+			'singular_name'            => \esc_html__($label, \PowerShop::KEBAB),
+			'add_new'                  => \esc_html__('Add new', \PowerShop::KEBAB),
+			'add_new_item'             => \esc_html__('Add new item', \PowerShop::KEBAB),
+			'edit_item'                => \esc_html__('Edit', \PowerShop::KEBAB),
+			'new_item'                 => \esc_html__('New', \PowerShop::KEBAB),
+			'view_item'                => \esc_html__('View', \PowerShop::KEBAB),
+			'view_items'               => \esc_html__('View', \PowerShop::KEBAB),
+			'search_items'             => \esc_html__('Search ' . $label, \PowerShop::KEBAB),
+			'not_found'                => \esc_html__('Not Found', \PowerShop::KEBAB),
+			'not_found_in_trash'       => \esc_html__('Not found in trash', \PowerShop::KEBAB),
+			'parent_item_colon'        => \esc_html__('Parent item', \PowerShop::KEBAB),
+			'all_items'                => \esc_html__('All', \PowerShop::KEBAB),
+			'archives'                 => \esc_html__($label . ' archives', \PowerShop::KEBAB),
+			'attributes'               => \esc_html__($label . ' attributes', \PowerShop::KEBAB),
+			'insert_into_item'         => \esc_html__('Insert to this ' . $label, \PowerShop::KEBAB),
+			'uploaded_to_this_item'    => \esc_html__('Uploaded to this ' . $label, \PowerShop::KEBAB),
+			'featured_image'           => \esc_html__('Featured image', \PowerShop::KEBAB),
+			'set_featured_image'       => \esc_html__('Set featured image', \PowerShop::KEBAB),
+			'remove_featured_image'    => \esc_html__('Remove featured image', \PowerShop::KEBAB),
+			'use_featured_image'       => \esc_html__('Use featured image', \PowerShop::KEBAB),
+			'menu_name'                => \esc_html__($label, \PowerShop::KEBAB),
+			'filter_items_list'        => \esc_html__('Filter ' . $label . ' list', \PowerShop::KEBAB),
+			'filter_by_date'           => \esc_html__('Filter by date', \PowerShop::KEBAB),
+			'items_list_navigation'    => \esc_html__($label . ' list navigation', \PowerShop::KEBAB),
+			'items_list'               => \esc_html__($label . ' list', \PowerShop::KEBAB),
+			'item_published'           => \esc_html__($label . ' published', \PowerShop::KEBAB),
+			'item_published_privately' => \esc_html__($label . ' published privately', \PowerShop::KEBAB),
+			'item_reverted_to_draft'   => \esc_html__($label . ' reverted to draft', \PowerShop::KEBAB),
+			'item_scheduled'           => \esc_html__($label . ' scheduled', \PowerShop::KEBAB),
+			'item_updated'             => \esc_html__($label . ' updated', \PowerShop::KEBAB),
 		];
 		$args = [
-			'label'               => \esc_html__($label, $_ENV['KEBAB']),
+			'label'               => \esc_html__($label, \PowerShop::KEBAB),
 			'labels'              => $labels,
 			'description'         => '',
 			'public'              => true,
@@ -90,9 +90,9 @@ class Functions
 	{
 		\add_meta_box(
 			$args['id'],
-			__($args['label'], $_ENV['KEBAB']),
+			__($args['label'], \PowerShop::KEBAB),
 			array(__CLASS__, 'render_metabox'),
-			$_ENV['KEBAB'],
+			\PowerShop::KEBAB,
 			'advanced',
 			'default',
 			array('id' => $args['id'])
@@ -124,7 +124,7 @@ class Functions
 
 	public static function get_products_info(int $post_id): array
 	{
-		$shop_meta_string = \get_post_meta($post_id, $_ENV['SNAKE'] . '_meta', true) ?? '[]';
+		$shop_meta_string = \get_post_meta($post_id, \PowerShop::SNAKE . '_meta', true) ?? '[]';
 
 		try {
 			$shop_meta = (json_decode($shop_meta_string, true));

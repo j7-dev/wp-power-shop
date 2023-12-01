@@ -10,7 +10,7 @@
 
 <body <?php body_class(); ?> style="background-color:#fff;">
 
-	<div id="<?= $_ENV['VITE_RENDER_ID_4'] ?>"></div>
+	<div id="<?= \PowerShop::RENDER_ID_4 ?>"></div>
 
 	<?php wp_footer(); ?>
 </body>

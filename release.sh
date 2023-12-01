@@ -3,7 +3,7 @@
 release_folder='power-shop-release'
 release_zip='power-shop-release.zip'
 folder_array=("js/dist" "inc")
-file_array=("plugin.php" "LICENSE" ".env.production")
+file_array=("plugin.php" "LICENSE")
 full_version=$(grep -oP "Version: \K.*" plugin.php)
 
 # remove old release

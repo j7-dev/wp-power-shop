@@ -23,6 +23,15 @@ declare global {
     }
     colorPrimary: string
     isConfetti: boolean
+    APP_NAME: string
+    KEBAB: string
+    SNAKE: string
+    BASE_URL: string
+    RENDER_ID_1: string
+    RENDER_ID_2: string
+    RENDER_ID_3: string
+    RENDER_ID_4: string
+    API_TIMEOUT: string
   }
   var wp: {
     blocks: any

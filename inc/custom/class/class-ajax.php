@@ -24,7 +24,7 @@ class Ajax
 	public function handle_get_post_meta_callback()
 	{
 		// Security check
-		\check_ajax_referer($_ENV['KEBAB'], 'nonce');
+		\check_ajax_referer(\PowerShop::KEBAB, 'nonce');
 		$post_id = \sanitize_text_field($_POST['post_id'] ?? '');
 		$meta_key = \sanitize_text_field($_POST['meta_key'] ?? '');
 
@@ -47,7 +47,7 @@ class Ajax
 	public function handle_update_post_meta_callback()
 	{
 		// Security check
-		\check_ajax_referer($_ENV['KEBAB'], 'nonce');
+		\check_ajax_referer(\PowerShop::KEBAB, 'nonce');
 		$post_id = \sanitize_text_field($_POST['post_id'] ?? '');
 		$meta_key = \sanitize_text_field($_POST['meta_key'] ?? '');
 		$meta_value = \sanitize_text_field($_POST['meta_value'] ?? '');

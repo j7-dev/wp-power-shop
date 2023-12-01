@@ -49,7 +49,7 @@ try {
 		$order->set_date_created(new WC_DateTime(getRandomTime()));
 
 		// 更新 meta
-		$order->update_meta_data($_ENV['SNAKE'] . '_post_id', SHOP_POST_ID);
+		$order->update_meta_data('power_shop_post_id', SHOP_POST_ID);
 
 		// 保存訂單變更
 		$order->save();

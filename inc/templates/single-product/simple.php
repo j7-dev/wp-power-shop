@@ -23,11 +23,11 @@ if (empty($regular_price) && empty($sales_price)) {
 	$sales_price = $product->get_sale_price();
 }
 
-if (strpos($_SERVER['REQUEST_URI'], $_ENV['KEBAB']) === false) {
-	// 如果不包含 $_ENV['KEBAB'] 字串，有可能在其他編輯器預覽，則不加入 ps-not-ready class
+if (strpos($_SERVER['REQUEST_URI'], \PowerShop::KEBAB) === false) {
+	// 如果不包含 \PowerShop::KEBAB 字串，有可能在其他編輯器預覽，則不加入 ps-not-ready class
 	$class = '';
 } else {
-	// 如果包含 $_ENV['KEBAB'] 字串，則加入 ps-not-ready class
+	// 如果包含 \PowerShop::KEBAB 字串，則加入 ps-not-ready class
 	$class = 'ps-not-ready';
 }
 

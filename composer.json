@@ -1,12 +1,12 @@
 {
-  "name": "j7-dev/boilerplate-react-mpa.wordpress-plugin",
-  "description": "This is a boilerplate for creating a WordPress plugin with React, Tailwind, Ant Design, TypeScript, Zod, MSW, React Router v6, React Query v4, SCSS and Vite.",
+  "name": "j7-dev/wp-power-shop",
+  "description": "Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-only",
   "authors": [
     {
-      "name": "JerryLiu",
-      "email": "j7.dev.gg@outlook.com"
+      "name": "J7",
+      "email": "j7.dev.gg@gmail.com"
     }
   ],
   "config": {
@@ -17,7 +17,6 @@
   "require": {
     "kucrut/vite-for-wp": "^0.5.2",
     "usefulteam/jwt-auth": "^2.1",
-    "vlucas/phpdotenv": "^5.5",
     "lodash-php/lodash-php": "^0.0.7",
     "yahnis-elsts/plugin-update-checker": "^5.3"
   },

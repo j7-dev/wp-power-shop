@@ -2,11 +2,6 @@
 define('WP_CORE_PATH', 'C:\Users\user\Local Sites\wpdev\app\public\wp-load.php');
 define('WC_CORE_PATH', 'C:\Users\user\Local Sites\wpdev\app\public\wp-content\plugins\woocommerce\woocommerce.php');
 
-$_ENV = [];
-$_ENV['APP_NAME'] = 'Power Shop';
-$_ENV['KEBAB'] = str_replace(' ', '-', strtolower($_ENV['APP_NAME']));
-$_ENV['SNAKE'] = str_replace(' ', '_', strtolower($_ENV['APP_NAME']));
-
 
 function getRandomArray($arr)
 {

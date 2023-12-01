@@ -4,10 +4,10 @@
  * Plugin Name:       Power Shop | 讓你的商店充滿 Power
  * Plugin URI:        https://cloud.luke.cafe/plugins/power-shop/
  * Description:       Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
- * Version:           1.2.9
+ * Version:           1.2.10
  * Requires at least: 5.7
  * Requires PHP:      7.4
- * Author:            j7.dev
+ * Author:            J7
  * Author URI:        https://github.com/j7-dev
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,21 +19,7 @@
 require_once "inc/index.php";
 require_once "licenser/class-power-shop-base.php";
 
-/**
- * wp plugin 更新檢查 update checker
- */
-
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
-
-$updateChecker = PucFactory::buildUpdateChecker(
-	$_ENV['GITHUB_REPO'],
-	__FILE__,
-	$_ENV['APP_SLUG']
-);
-$updateChecker->setAuthentication('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');
-
-$updateChecker->getVcsApi()->enableReleaseAssets();
-
 
 class PowerShop
 {
@@ -41,11 +27,42 @@ class PowerShop
 	public $response_obj;
 	public $license_message;
 	public $show_message = false;
-	public $slug = "power-shop";
 	public $plugin_version = '';
 	public $text_domain = '';
+
+	const APP_NAME = 'Power Shop';
+	const KEBAB = 'power-shop';
+	const SNAKE = 'power_shop';
+	const BUY_LICENSE_LINK = 'https://cloud.luke.cafe/plugins/power-shop';
+	const SUPPORT_EMAIL = 'cloud@luke.cafe';
+	const BASE_URL = '/';
+	const RENDER_ID_1 = 'power_shop_added_products_app';
+	const RENDER_ID_2 = 'power_shop_statistic_app';
+	const RENDER_ID_3 = 'power_shop_products_app';
+	const RENDER_ID_4 = 'power_shop_report_app';
+	const API_TIMEOUT = '30000';
+	const GITHUB_REPO = 'https://github.com/j7-dev/wp-power-shop';
+	const GITHUB_PAT = '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';
+
 	function __construct()
 	{
+
+		/**
+		 * wp plugin 更新檢查 update checker
+		 */
+
+		$updateChecker = PucFactory::buildUpdateChecker(
+			self::GITHUB_REPO,
+			__FILE__,
+			self::KEBAB
+		);
+		$updateChecker->setAuthentication(self::GITHUB_PAT);
+
+		$updateChecker->getVcsApi()->enableReleaseAssets();
+
+		/**
+		 * ---
+		 */
 		add_action('admin_print_styles', [$this, 'set_admin_style']);
 		$this->set_plugin_data();
 		$main_lic_key = "PowerShop_lic_Key";
@@ -132,11 +149,11 @@ class PowerShop
 	public function active_admin_menu()
 	{
 
-		add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins",  $this->slug . "-license", [$this, "activated"]);
+		add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins",  self::KEBAB . "-license", [$this, "activated"]);
 	}
 	public function inactive_menu()
 	{
-		add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins",  $this->slug . "-license", [$this, "license_form"]);
+		add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins",  self::KEBAB . "-license", [$this, "license_form"]);
 	}
 	function action_activate_license()
 	{
@@ -247,8 +264,8 @@ class PowerShop
 				<?php
 				}
 				?>
-				<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="<?= $_ENV['BUY_LICENSE_LINK']; ?>">站長路可網站</a>購買
-					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:<?= $_ENV['SUPPORT_EMAIL']; ?>" target="_blank"><?= $_ENV['SUPPORT_EMAIL']; ?></a></p>
+				<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="<?= self::BUY_LICENSE_LINK; ?>">站長路可網站</a>購買
+					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:<?= self::SUPPORT_EMAIL; ?>" target="_blank"><?= self::SUPPORT_EMAIL; ?></a></p>
 				<div class="el-license-field">
 					<label for="el_license_key"><?php echo esc_html("License code", "power-shop"); ?></label>
 					<input type="text" class="regular-text code" name="el_license_key" size="50" placeholder="xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx" required="required">
