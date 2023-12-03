@@ -53,7 +53,6 @@ const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
 					) : (
 						<div>{price_html}</div>
 					)} */}
-              <div>{price}</div>
             </div>
             <div className="my-4">
               <ToggleContent content={description} />
@@ -61,7 +60,9 @@ const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
 
             {product?.type === 'variable' && !!product && <ProductVariationsSelect product={product} />}
 
-            <div className="">
+            <div className="mt-4">{price}</div>
+
+            <div>
               <p className="mb-0 mt-4">數量</p>
               <PlusMinusInput {...plusMinusInputProps} />
               <AddToCartButton product={product} quantity={qty} />
