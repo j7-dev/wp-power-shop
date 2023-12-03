@@ -36,15 +36,18 @@ class Bootstrap
 	public function enqueue_script(): void
 	{
 		$post_id = \get_the_ID();
-		if (!$post_id) return;
+		if (!$post_id)
+			return;
 
 		if (\is_admin()) {
 			// 後台網頁 screen id 必須符合才引入
 			$screen = \get_current_screen();
-			if (($screen->id !== \PowerShop::KEBAB)) return;
+			if (($screen->id !== \PowerShop::KEBAB))
+				return;
 		} else {
 			// 前台網頁必須包含 {\PowerShop::KEBAB} 字串 才引用
-			if (strpos($_SERVER['REQUEST_URI'], \PowerShop::KEBAB) === false) return;
+			if (strpos($_SERVER['REQUEST_URI'], \PowerShop::KEBAB) === false)
+				return;
 		}
 
 
@@ -81,35 +84,43 @@ class Bootstrap
 		$settings = Functions::json_parse($settings_string, [], true);
 		$btn_color = $settings['btnColor'] ?? '#1677ff';
 
-		\wp_localize_script(\PowerShop::KEBAB, 'appData', array(
-			'siteUrl' => \site_url(),
-			'ajaxUrl' => \admin_url('admin-ajax.php'),
-			'ajaxNonce'  => \wp_create_nonce(\PowerShop::KEBAB),
-			'userId' => \wp_get_current_user()->data->ID,
-			'postId' => $post_id,
-			'metaIds' => [
-				'power_shop_meta' => $power_shop_meta_meta_id,
-			],
-			'permalink' => $permalink,
-			'checkoutUrl' => $checkout_page_url,
-			'products_info' => $products_info,
-			'colorPrimary' => $btn_color,
-			'isConfetti' => $settings['isConfetti'] ?? true,
-			"APP_NAME" => \PowerShop::APP_NAME,
-			"KEBAB" => \PowerShop::KEBAB,
-			"SNAKE" => \PowerShop::SNAKE,
-			"BASE_URL" => \PowerShop::BASE_URL,
-			"RENDER_ID_1" => \PowerShop::RENDER_ID_1,
-			"RENDER_ID_2" => \PowerShop::RENDER_ID_2,
-			"RENDER_ID_3" => \PowerShop::RENDER_ID_3,
-			"RENDER_ID_4" => \PowerShop::RENDER_ID_4,
-			"API_TIMEOUT" => \PowerShop::API_TIMEOUT,
-		));
+		\wp_localize_script(
+			\PowerShop::KEBAB,
+			'appData',
+			array(
+				'siteUrl' => \site_url(),
+				'ajaxUrl' => \admin_url('admin-ajax.php'),
+				'ajaxNonce' => \wp_create_nonce(\PowerShop::KEBAB),
+				'userId' => \wp_get_current_user()->data->ID,
+				'postId' => $post_id,
+				'metaIds' => [
+					'power_shop_meta' => $power_shop_meta_meta_id,
+				],
+				'permalink' => $permalink,
+				'checkoutUrl' => $checkout_page_url,
+				'products_info' => $products_info,
+				'colorPrimary' => $btn_color,
+				'isConfetti' => $settings['isConfetti'] ?? true,
+				"APP_NAME" => \PowerShop::APP_NAME,
+				"KEBAB" => \PowerShop::KEBAB,
+				"SNAKE" => \PowerShop::SNAKE,
+				"BASE_URL" => \PowerShop::BASE_URL,
+				"RENDER_ID_1" => \PowerShop::RENDER_ID_1,
+				"RENDER_ID_2" => \PowerShop::RENDER_ID_2,
+				"RENDER_ID_3" => \PowerShop::RENDER_ID_3,
+				"RENDER_ID_4" => \PowerShop::RENDER_ID_4,
+				"API_TIMEOUT" => \PowerShop::API_TIMEOUT,
+			)
+		);
 
-		\wp_localize_script(\PowerShop::KEBAB, 'wpApiSettings', array(
-			'root' => \esc_url_raw(rest_url()),
-			'nonce' => \wp_create_nonce('wp_rest'),
-		));
+		\wp_localize_script(
+			\PowerShop::KEBAB,
+			'wpApiSettings',
+			array(
+				'root' => \esc_url_raw(rest_url()),
+				'nonce' => \wp_create_nonce('wp_rest'),
+			)
+		);
 
 		// 获取目录中的所有文件
 		$files = glob(self::get_plugin_dir() . '/js/dist/assets/*.css');

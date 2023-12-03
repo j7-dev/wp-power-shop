@@ -46,27 +46,17 @@ const AddToCartButton: React.FC<{
           ),
         })
         if (isConfetti) {
-          confetti({
+          const defaultArgs = {
             particleCount: 100,
+            scalar: 0.6,
             ticks: 60,
             startVelocity: 70,
             spread: 360,
             origin: { x: randomInRange(0.1, 0.9), y: randomInRange(-0.2, 0.8) },
-          })
-          confetti({
-            particleCount: 100,
-            ticks: 60,
-            startVelocity: 70,
-            spread: 360,
-            origin: { x: randomInRange(0.1, 0.9), y: randomInRange(-0.2, 0.8) },
-          })
-          confetti({
-            particleCount: 100,
-            ticks: 60,
-            startVelocity: 70,
-            spread: 360,
-            origin: { x: randomInRange(0.1, 0.9), y: randomInRange(-0.2, 0.8) },
-          })
+          }
+          for (let index = 0; index < 3; index++) {
+            confetti(defaultArgs)
+          }
         }
 
         const variation_id = variables.variation_id
