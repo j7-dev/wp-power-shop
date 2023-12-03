@@ -111,6 +111,8 @@ $pad_width: 810px;
 						// 數量
 						grid-area: qty;
 						align-self: center;
+						padding-left: 0rem;
+						padding-right: 0rem;
 					}
 					&:nth-child(3) {
 						// 單價

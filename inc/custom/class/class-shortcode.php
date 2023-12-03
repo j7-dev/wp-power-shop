@@ -8,7 +8,7 @@ class ShortCode
 {
 	function __construct()
 	{
-		\add_shortcode($_ENV['SNAKE'] . '_products', [$this, 'shortcode_callback']);
+		\add_shortcode(\PowerShop::SNAKE . '_products', [$this, 'shortcode_callback']);
 	}
 
 	public function shortcode_callback(): string
@@ -23,11 +23,14 @@ class ShortCode
 		// 	}
 		// }
 
+		// 如果不是 power shop 頁面，就不 render
+		if (strpos($_SERVER['REQUEST_URI'], \PowerShop::KEBAB) === false) return 'Power Shop 只能在 Power Shop 頁面使用';
+
 		// 取得 power shop meta 資料
 		global $post;
-		$meta_string = \get_post_meta($post->ID, $_ENV['SNAKE'] . '_meta', true);
+		$meta_string = \get_post_meta($post->ID, \PowerShop::SNAKE . '_meta', true);
 		$shop_meta = Functions::json_parse($meta_string, [], true);
-		$settings_string = \get_post_meta($post->ID, $_ENV['SNAKE'] . '_settings', true);
+		$settings_string = \get_post_meta($post->ID, \PowerShop::SNAKE . '_settings', true);
 		$settings = Functions::json_parse($settings_string, [], true);
 
 		if (!empty($settings['endTime'])) {
@@ -85,7 +88,7 @@ class ShortCode
 				?>
 			</div>
 		</div>
-		<div id="<?= $_ENV['VITE_RENDER_ID_3'] ?>"></div>
+		<div id="<?= \PowerShop::RENDER_ID_3 ?>"></div>
 <?php
 		$html .= ob_get_clean();
 
@@ -153,7 +156,7 @@ class ShortCode
 		if ($need_update) {
 			// 更新 post_meta
 			global $post;
-			\update_post_meta($post->ID, $_ENV['SNAKE'] . '_meta', \wp_json_encode($shop_meta));
+			\update_post_meta($post->ID, \PowerShop::SNAKE . '_meta', \wp_json_encode($shop_meta));
 		}
 
 		return $shop_meta;

@@ -51,7 +51,7 @@ const Add = () => {
 
   const productCats: TProductCat[] = productCatsResult?.data?.data ?? []
 
-  const productCatItems = productCats.map((cat) => ({
+  const productCartItems = productCats.map((cat) => ({
     value: cat.id,
     label: cat?.name ?? '未知分類',
   }))
@@ -122,7 +122,7 @@ const Add = () => {
           optionLabelProp="label"
           filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
           filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())}
-          options={productCatItems}
+          options={productCartItems}
           onChange={handleChangeProductCat}
         />
         <Select

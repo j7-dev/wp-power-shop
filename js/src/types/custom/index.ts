@@ -23,6 +23,7 @@ export type TSettings = {
   startTime: number
   endTime: number
   btnColor: string
+  isConfetti: boolean
 }
 
 export const defaultSettings = {
@@ -95,7 +96,7 @@ export type TAjaxProduct = {
   name: string
   description: string
   images: string[]
-  shortDescription: string
+  short_description: string
   sku: string
   variations?: TAjaxProductVariation[]
   variation_attributes?: {

@@ -10,8 +10,6 @@ const App2 = lazy(() => import('./App2'))
 const App3 = lazy(() => import('./App3'))
 const App4 = lazy(() => import('./App4'))
 
-console.log('⭐  colorPrimary:', colorPrimary)
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

@@ -9,7 +9,7 @@ const PlusMinusInput: FC<{
 }> = ({ value, setValue, defaultValue }) => {
   const handleMinus = () => {
     if (value > 1) {
-      setValue((pre) => pre - 1)
+      setValue((pre) => (pre <= 1 ? 1 : pre - 1))
     }
   }
 
@@ -27,6 +27,7 @@ const PlusMinusInput: FC<{
 
   return (
     <InputNumber
+      min={1}
       className="w-full"
       addonBefore={
         <span className="ps-addon" onClick={handleMinus}>

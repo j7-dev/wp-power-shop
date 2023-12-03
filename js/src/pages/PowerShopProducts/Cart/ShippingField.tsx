@@ -1,10 +1,10 @@
 import React from 'react'
 import { LoadingText } from '@/components/PureComponents'
-import { TCart, TShippingRates } from '@/types/wcStoreApi'
+import { TShippingRates } from '@/types/wcStoreApi'
 import { Select, Tooltip } from 'antd'
 import { useUpdate } from '@/hooks'
 import { useAtomValue } from 'jotai'
-import { storeApiNonceAtom } from '../atom'
+import { storeApiNonceAtom, TCartData } from '../atom'
 import { useQueryClient } from '@tanstack/react-query'
 import { InfoCircleFilled } from '@ant-design/icons'
 import { getPrice } from '@/utils'
@@ -21,7 +21,7 @@ const renderItem = (shipping_rate: TShippingRates, currency_minor_unit: number) 
   )
 }
 
-const ShippingField: React.FC<{ cartData: TCart; isLoading: boolean }> = ({ cartData, isLoading }) => {
+const ShippingField: React.FC<{ cartData: TCartData; isLoading: boolean }> = ({ cartData, isLoading }) => {
   const shipments = cartData?.shipping_rates ?? []
   const currency_minor_unit = cartData?.totals?.currency_minor_unit || 0
   const package_id = shipments?.[0]?.package_id ?? 0
