@@ -42,7 +42,6 @@ class PowerShop
 	const RENDER_ID_4 = 'power_shop_report_app';
 	const API_TIMEOUT = '30000';
 	const GITHUB_REPO = 'https://github.com/j7-dev/wp-power-shop';
-	const GITHUB_PAT = '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';
 
 	function __construct()
 	{
@@ -56,7 +55,6 @@ class PowerShop
 			__FILE__,
 			self::KEBAB
 		);
-		$updateChecker->setAuthentication(self::GITHUB_PAT);
 
 		$updateChecker->getVcsApi()->enableReleaseAssets();
 

@@ -27,6 +27,7 @@
    <img src="https://github.com/j7-dev/power-shop.wp-plugin/assets/9213776/861903f9-2238-474c-9c82-cd65a1d57c6c" />
 
 4. 更流暢的購物車<br>
+   使用 "樂觀變更" (optimistic mutate) 即，畫面 UI 先更新，再發送請求，而不是等待請求回傳後再更新畫面，這樣可以讓使用者的購物體驗更加流暢<br>
    購物車使用 Woocommerce Store API 以及 ajax 實作，讓使用者的購物體驗更加流暢<br>
 
 5. 統計每一個快速商店的訂單<br>
@@ -37,7 +38,7 @@
 
 ## 🐞 Bug 回報
 
-請參考 [BUG 回報規範](https://doc.clickup.com/9009088049/d/h/8cfqhhh-520/f1f334803b7a672/8cfqhhh-860)
+請至 [ISSUE](https://github.com/j7-dev/wp-power-shop/issues) 描述遭遇的問題，並幫我付上外掛還有WP版本資訊
 
 <br><br><br>
 
@@ -69,7 +70,6 @@
 
 1. [usefulteam/jwt-auth](https://github.com/usefulteam/jwt-auth) - get JWT if a wordpress user is logged in
 2. [lodash-php/lodash-php](https://github.com/lodash-php/lodash-php) - easy to use utility functions for PHP
-3. [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) - loads environment variables from `.env`
 
 <br><br><br>
 
