@@ -15,6 +15,13 @@ class CPT extends Bootstrap
 	const LICENSE_LINK = 'edit.php?post_type=power-shop&page=power-shop-license';
 	const COLOR = '#72aee6';
 
+	const SNAKE = \PowerShop::SNAKE;
+	const KEBAB = \PowerShop::KEBAB;
+	const RENDER_ID_1 = \PowerShop::RENDER_ID_1;
+	const RENDER_ID_2 = \PowerShop::RENDER_ID_2;
+	const BUY_LICENSE_LINK = \PowerShop::BUY_LICENSE_LINK;
+	const SUPPORT_EMAIL = \PowerShop::SUPPORT_EMAIL;
+
 
 	private $count_publish = 0;
 	private $iel = false;
@@ -24,7 +31,7 @@ class CPT extends Bootstrap
 		\add_action('init', [$this, 'init']);
 		\add_action('rest_api_init', [$this, 'add_post_meta']);
 
-		\add_action('load-post.php',     [$this, 'init_metabox']);
+		\add_action('load-post.php', [$this, 'init_metabox']);
 		\add_action('load-post-new.php', [$this, 'init_metabox']);
 
 		\add_filter('query_vars', [$this, 'add_query_for_report']);
@@ -51,13 +58,14 @@ class CPT extends Bootstrap
 	{
 		Functions::register_cpt(self::CPT_LABEL);
 
-		// 新增 {\PowerShop::KEBAB}/{slug}/report 網址規則
+		// 新增 {self::KEBAB}/{slug}/report 網址規則
 		\add_rewrite_rule('^' . self::CPT_SLUG . '/([^/]+)/report/?$', 'index.php?post_type=' . self::CPT_SLUG . '&name=$matches[1]&' . self::VAR . '=1', 'top');
 
 		\flush_rewrite_rules();
 
 		$info = \Power_Shop_Base::get_register_info();
-		if (@$info->is_valid) return;
+		if (@$info->is_valid)
+			return;
 
 		$count_posts = \wp_count_posts(self::CPT_SLUG);
 		$this->count_publish = $count_posts->publish;
@@ -71,7 +79,7 @@ class CPT extends Bootstrap
 	public function add_post_meta(): void
 	{
 		foreach (self::POST_META as $meta_key) {
-			\register_meta('post', \PowerShop::SNAKE . '_' . $meta_key, [
+			\register_meta('post', self::SNAKE . '_' . $meta_key, [
 				'type' => 'string',
 				'show_in_rest' => true,
 				'single' => true,
@@ -102,12 +110,12 @@ class CPT extends Bootstrap
 	public function add_metaboxs(): void
 	{
 		Functions::add_metabox([
-			'id'       => \PowerShop::RENDER_ID_1,
-			'label' 	=> __('Added Products', \PowerShop::KEBAB),
+			'id' => self::RENDER_ID_1,
+			'label' => __('Added Products', self::KEBAB),
 		]);
 		Functions::add_metabox([
-			'id'       => \PowerShop::RENDER_ID_2,
-			'label' 	=> __('Sales Stats', \PowerShop::KEBAB),
+			'id' => self::RENDER_ID_2,
+			'label' => __('Sales Stats', self::KEBAB),
 		]);
 	}
 
@@ -115,13 +123,13 @@ class CPT extends Bootstrap
 
 
 	/**
-	 * 設定 {\PowerShop::KEBAB}/{slug}/report 的 php template
+	 * 設定 {self::KEBAB}/{slug}/report 的 php template
 	 */
 	public function load_report_template($template)
 	{
 		$repor_template_path = Bootstrap::get_plugin_dir() . 'inc/templates/report.php';
 
-		if (\get_query_var(self::VAR)) {
+		if (\get_query_var(self::VAR )) {
 			if (file_exists($repor_template_path)) {
 				return $repor_template_path;
 			}
@@ -138,14 +146,14 @@ class CPT extends Bootstrap
 		$post = \get_post($post_id);
 
 
-		// 剛創建時，且 post type === \PowerShop::KEBAB
+		// 剛創建時，且 post type === self::KEBAB
 		if (!$update && $post->post_type === self::CPT_SLUG) {
 			// Add default post_meta
-			$default_password = \wp_create_nonce(\PowerShop::KEBAB);
+			$default_password = \wp_create_nonce(self::KEBAB);
 			$encrypted_password = base64_encode($default_password);
 
-			\add_post_meta($post_id, \PowerShop::SNAKE . '_report_password', $encrypted_password, true);
-			\add_post_meta($post_id, \PowerShop::SNAKE . '_meta', '[]', true);
+			\add_post_meta($post_id, self::SNAKE . '_report_password', $encrypted_password, true);
+			\add_post_meta($post_id, self::SNAKE . '_meta', '[]', true);
 		}
 	}
 
@@ -175,22 +183,27 @@ class CPT extends Bootstrap
 	public function limit_admin_head()
 	{
 		$screen = \get_current_screen();
-		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
+		if ('edit-' . self::CPT_SLUG !== $screen->id)
+			return;
 
-		$shop_ids = \get_posts(array(
-			'post_type' => self::CPT_SLUG,
-			'post_status' => 'publish',
-			'fields' => 'ids',
-			'posts_per_page' => -1,
-		));
+		$shop_ids = \get_posts(
+			array(
+				'post_type' => self::CPT_SLUG,
+				'post_status' => 'publish',
+				'fields' => 'ids',
+				'posts_per_page' => -1,
+			)
+		);
 
 		if ($this->iel && !empty($shop_ids)) {
 			foreach ($shop_ids as $key => $shop_id) {
 				if ($key !== 0) {
-					\wp_update_post(array(
-						'ID'            => $shop_id,
-						'post_status'   => 'draft',
-					));
+					\wp_update_post(
+						array(
+							'ID' => $shop_id,
+							'post_status' => 'draft',
+						)
+					);
 				}
 			}
 		}
@@ -204,9 +217,9 @@ class CPT extends Bootstrap
 			\wp_enqueue_script('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.js', array('jquery'), '3.3.4', true);
 			\wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/js/main.js', array('jquery-confirm'), Bootstrap::get_plugin_ver(), true);
 			wp_localize_script(self::CPT_SLUG, 'powerShopData', [
-				'buyLink' => \PowerShop::BUY_LICENSE_LINK,
+				'buyLink' => self::BUY_LICENSE_LINK,
 				'licenseLink' => \admin_url(self::LICENSE_LINK),
-				'supportEmail' => \PowerShop::SUPPORT_EMAIL,
+				'supportEmail' => self::SUPPORT_EMAIL,
 			]);
 		}
 	}
@@ -214,14 +227,16 @@ class CPT extends Bootstrap
 	public function limit_admin_notices()
 	{
 		$screen = \get_current_screen();
-		if ('edit-' . self::CPT_SLUG !== $screen->id) return;
+		if ('edit-' . self::CPT_SLUG !== $screen->id)
+			return;
 
 		$info = \Power_Shop_Base::get_register_info();
-		if (@$info->is_valid) return;
+		if (@$info->is_valid)
+			return;
 
-		$buy_link = \PowerShop::BUY_LICENSE_LINK;
+		$buy_link = self::BUY_LICENSE_LINK;
 		$license_link = \admin_url(self::LICENSE_LINK);
-		$support_email = \PowerShop::SUPPORT_EMAIL;
+		$support_email = self::SUPPORT_EMAIL;
 		$color = self::COLOR;
 
 		$html = <<<EOD
