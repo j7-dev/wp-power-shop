@@ -4,7 +4,7 @@
  * Plugin Name:       Power Shop | 讓你的商店充滿 Power
  * Plugin URI:        https://cloud.luke.cafe/plugins/power-shop/
  * Description:       Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
- * Version:           1.2.3
+ * Version:           1.2.4
  * Requires at least: 5.7
  * Requires PHP:      7.4
  * Author:            J7
@@ -42,7 +42,6 @@ class PowerShop
 	const RENDER_ID_4 = 'power_shop_report_app';
 	const API_TIMEOUT = '30000';
 	const GITHUB_REPO = 'https://github.com/j7-dev/wp-power-shop';
-	const GITHUB_PAT = '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';
 
 	function __construct()
 	{
@@ -56,7 +55,6 @@ class PowerShop
 			__FILE__,
 			self::KEBAB
 		);
-		$updateChecker->setAuthentication(self::GITHUB_PAT);
 
 		$updateChecker->getVcsApi()->enableReleaseAssets();
 
