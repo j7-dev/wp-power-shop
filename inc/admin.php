@@ -17,6 +17,8 @@ class Bootstrap
         \add_action('admin_enqueue_scripts', [ $this, 'enqueue_script' ], 99);
         \add_action('wp_enqueue_scripts', [ $this, 'enqueue_script' ], 99);
         // \add_action('wp_footer', [$this, 'render_app']);
+
+        \add_action('wp_insert_post', [ $this, 'set_default_value_on_power_shop_create' ], 10, 3);
     }
 
     /**
@@ -43,13 +45,11 @@ class Bootstrap
             if (($screen->id !== \PowerShop::KEBAB)) {
                 return;
             }
-
         } else {
             // 前台網頁必須包含 {\PowerShop::KEBAB} 字串 才引用
             if (strpos($_SERVER[ 'REQUEST_URI' ], \PowerShop::KEBAB) === false) {
                 return;
             }
-
         }
 
         // if (!\is_admin() && ($screen->id !== \PowerShop::KEBAB)) return;
@@ -113,7 +113,7 @@ class Bootstrap
                     "RENDER_ID_4" => \PowerShop::RENDER_ID_4,
                     "API_TIMEOUT" => \PowerShop::API_TIMEOUT,
                  ],
-
+                'template'      => \get_page_template_slug($post_id),
             ),
         );
 
@@ -133,6 +133,14 @@ class Bootstrap
         foreach ($files as $file) {
             $file_url = self::get_plugin_url() . '/js/dist/assets/' . basename($file);
             \wp_enqueue_style(basename($file, '.css'), $file_url);
+        }
+    }
+
+    public function set_default_value_on_power_shop_create($post_ID, $post, $update)
+    {
+        // POSTTYPE 為 "power-shop" 且 是新增操作 且 安裝了 Elementor 才執行
+        if ($post->post_type === \PowerShop::KEBAB && !$update && defined('ELEMENTOR_VERSION')) {
+            \update_post_meta($post_ID, '_wp_page_template', 'elementor_header_footer');
         }
     }
 

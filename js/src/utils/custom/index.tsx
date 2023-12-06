@@ -35,3 +35,11 @@ export const formatShopMeta = async ({ form }: { form: FormInstance<any> }) => {
     // 時間太短會抓不到可變商品產生的欄位
   })
 }
+
+export const getUrlParam = (name: string) => {
+  const queryString = window.location.search
+  const params = new URLSearchParams(queryString)
+  const parameterValue = params.get(name)
+
+  return parameterValue
+}
