@@ -102,4 +102,9 @@ export type TAjaxProduct = {
   variation_attributes?: {
     [key: string]: string[]
   }
+  stock: {
+    manageStock: boolean
+    stockQuantity: number | null
+    stockStatus: string
+  }
 }

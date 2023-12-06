@@ -75,8 +75,6 @@ const PowerShopProducts = () => {
         if (productId) {
           el.addEventListener('click', handleModalOpen(productId))
 
-          // removeEventListener
-
           return () => {
             el.removeEventListener('click', handleModalOpen(productId))
           }

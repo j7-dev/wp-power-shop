@@ -5,7 +5,7 @@ import Add from './Add'
 import AddedItem from './AddedItem'
 import { addedProductsAtom } from './atoms'
 import { useAtom } from 'jotai'
-import { snake } from '@/utils'
+import { snake, power_shop_meta_meta_id as metaId } from '@/utils'
 import { TProduct } from '@/types/wcRestApi'
 import { LoadingWrap, LoadingCard } from '@/components/PureComponents'
 import SaveButton from './SaveButton'
@@ -23,7 +23,6 @@ import useGetAddProducts from './hooks/useGetAddProducts'
 const { Paragraph } = Typography
 export const tinyMCESaveBtn = document.getElementById('publish') as HTMLInputElement | null // 因為發布與更新的 按鈕不同
 export const blockEditorSaveBtn = document.querySelector('[class*="editor-post-publish-button"]') as HTMLInputElement | null
-const metaId = window?.appData?.metaIds?.power_shop_meta
 export const fieldNode = document.getElementById(`meta-${metaId}-value`) as HTMLInputElement | null
 
 const AddProduct = () => {

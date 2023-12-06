@@ -17,7 +17,7 @@ const Gallery: React.FC<{ images: string[]; selectedImage?: string }> = ({ image
     setSelected(src)
   }
 
-  const mainSrc = images.find((image) => image === selected) ?? images[0]
+  const mainSrc = images.find((image) => image === selected) || images[0] || defaultImage
 
   useEffect(() => {
     if (!!selectedImage && isInclude) {

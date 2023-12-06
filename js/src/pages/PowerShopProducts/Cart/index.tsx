@@ -142,7 +142,7 @@ const Cart = () => {
             const variation = item?.variation ?? []
             const variationText = variation.map((v) => `${v?.attribute}: ${v?.value}`).join(' | ')
             const isVariable = variation.length > 0
-            const image = item?.images?.[0]?.src ?? defaultImage
+            const image = item?.images?.[0]?.src || defaultImage
             const id = item?.id ?? ''
             const metaPrice = getMetaPrice({
               productId: id,
