@@ -5,7 +5,7 @@ import { TAjaxProduct } from '@/types/custom'
 import Price from '@/components/Price'
 import { renderHTML, formatYoutubeLinkToIframe } from '@/utils'
 import { usePlusMinusInput } from '@/hooks'
-import { ModalProps } from 'antd'
+import { ModalProps, InputNumberProps } from 'antd'
 import { isExpandAtom } from '@/pages/PowerShopProducts/ProductModal/atom'
 
 const useProductModalProps = (product: TAjaxProduct) => {
@@ -25,15 +25,20 @@ const useProductModalProps = (product: TAjaxProduct) => {
   const name = renderHTML(product?.name ?? '未知商品')
   const description = formatYoutubeLinkToIframe(product?.description ?? '')
   const images = product?.images ?? []
-  const plusMinusInputProps = usePlusMinusInput()
-  const { value: qty, setValue: setQty } = plusMinusInputProps
+  const { plusMinusInputProps, setPlusMinusInputProps } = usePlusMinusInput()
+
+  // const { value: qty, setValue: setQty } = plusMinusInputProps
+
   const setIsExpand = useSetAtom(isExpandAtom)
 
   useEffect(() => {
     // 開關重設數量 & 將內容收闔
 
     if (isProductModalOpen) {
-      setQty(1)
+      setPlusMinusInputProps({
+        ...plusMinusInputProps,
+        value: 1,
+      } as InputNumberProps)
       setIsExpand(false)
     }
   }, [isProductModalOpen])
@@ -65,7 +70,7 @@ const useProductModalProps = (product: TAjaxProduct) => {
     price,
     description,
     plusMinusInputProps,
-    qty,
+    qty: plusMinusInputProps?.value || 1,
     selectedVariationId,
   }
 }
