@@ -23,5 +23,7 @@ export const apiTimeout = window?.appData?.env?.API_TIMEOUT || '30000'
 export const elApiKey = 'F9B52619-A5AC9B31-F7E931B1-526AD47D'
 
 export const colorPrimary = window?.appData?.settings?.colorPrimary || '#1677ff'
-export const isConfetti = window?.appData?.settings?.isConfetti || true
+export const showConfetti = window?.appData?.settings?.showConfetti ?? true
+export const showStock = window?.appData?.settings?.showStock ?? true
+export const showBuyerCount = window?.appData?.settings?.showBuyerCount ?? true
 export const power_shop_meta_meta_id = window?.appData?.settings?.power_shop_meta_meta_id

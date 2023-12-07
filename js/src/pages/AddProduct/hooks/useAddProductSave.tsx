@@ -74,6 +74,7 @@ const useAddProductSave = ({ form, isPSMetaLoading, productsResult, shop_meta }:
   }, [
     isPSMetaLoading,
     productsResult?.isFetching,
+    shop_meta,
   ])
 
   return { handleSave }

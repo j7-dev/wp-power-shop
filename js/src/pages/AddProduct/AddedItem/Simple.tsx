@@ -1,6 +1,6 @@
 import { Space, Tag, Form, InputNumber, Input } from 'antd'
 import { TProduct } from '@/types/wcRestApi'
-import { getProductImageSrc, getProductTypeLabel, renderHTML } from '@/utils'
+import { getProductImageSrc, getProductTypeLabel, renderHTML, showBuyerCount } from '@/utils'
 import { PSMetaAtom } from '../atoms'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
@@ -27,14 +27,15 @@ const Simple: React.FC<{
   product: TProduct
   index: number
 }> = ({ product, index }) => {
-  const FSMeta = useAtomValue(PSMetaAtom)
+  const PSMeta = useAtomValue(PSMetaAtom)
   const id = product?.id ?? 0
-  const matchProduct = FSMeta.find((item) => item.productId === id)
+  const matchProduct = PSMeta.find((item) => item.productId === id)
 
   const name = renderHTML(product?.name ?? '未知商品')
   const imageSrc = getProductImageSrc(product)
 
   const { salesPrice, regularPrice } = getPrices(matchProduct, product)
+  const extraBuyerCount = matchProduct?.extraBuyerCount || 0
 
   const categories = product?.categories ?? []
   const type = product?.type ?? ''
@@ -47,6 +48,7 @@ const Simple: React.FC<{
         regularPrice,
         salesPrice,
         productType: type,
+        extraBuyerCount,
       },
     })
   }, [
@@ -105,9 +107,8 @@ const Simple: React.FC<{
                   'regularPrice',
                 ]}
                 label="原價"
-                className="w-full mr-4"
-                initialValue={regularPrice}>
-                <InputNumber className="w-full" />
+                className="w-full mr-4">
+                <InputNumber min={0} className="w-full" />
               </Form.Item>
               <Form.Item
                 name={[
@@ -115,9 +116,19 @@ const Simple: React.FC<{
                   'salesPrice',
                 ]}
                 label="特價"
+                className="w-full mr-4">
+                <InputNumber min={0} className="w-full" />
+              </Form.Item>
+              <Form.Item
+                name={[
+                  index,
+                  'extraBuyerCount',
+                ]}
+                label="灌水購買人數"
+                help="前台會顯示 真實購買人數 + 灌水購買人數"
                 className="w-full"
-                initialValue={salesPrice}>
-                <InputNumber className="w-full" />
+                hidden={!showBuyerCount}>
+                <InputNumber min={0} className="w-full" />
               </Form.Item>
             </div>
           </div>

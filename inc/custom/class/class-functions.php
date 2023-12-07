@@ -157,12 +157,17 @@ class Functions
                 'stockQuantity' => $product->get_stock_quantity(),
                 'stockStatus'   => $product->get_stock_status(),
              ];
+            $product_data[ 'is_sold_individually' ] = $product->is_sold_individually();
+            $product_data[ 'is_in_stock' ]          = $product->is_in_stock();
+            $product_data[ 'is_purchasable' ]       = $product->is_purchasable();
+            $product_data[ 'shortDescription' ]     = $product->get_short_description();
+            $product_data[ 'sku' ]                  = $product->get_sku();
+            $product_data[ 'total_sales' ]          = $product->get_total_sales();
 
-            $product_data[ 'shortDescription' ] = $product->get_short_description();
-            $product_data[ 'sku' ]              = $product->get_sku();
             if ('simple' === $product->get_type()) {
-                $product_data[ 'regularPrice' ] = $meta[ 'regularPrice' ];
-                $product_data[ 'salesPrice' ]   = $meta[ 'salesPrice' ];
+                $product_data[ 'regularPrice' ]    = $meta[ 'regularPrice' ];
+                $product_data[ 'salesPrice' ]      = $meta[ 'salesPrice' ];
+                $product_data[ 'extraBuyerCount' ] = $meta[ 'extraBuyerCount' ];
             }
             if ('variable' === $product->get_type() && !empty($meta[ 'variations' ])) {
                 $variation_meta                         = $meta[ 'variations' ]; //  Undefined array key "variations"
@@ -171,10 +176,17 @@ class Functions
 
                 foreach ($product->get_available_variations() as $key => $variation) {
                     $variation_id                                           = $variation[ 'variation_id' ];
+                    $variation_product                                      = \wc_get_product($variation_id);
                     $theMeta                                                = find($variation_meta, [ 'variationId' => $variation_id ]);
                     $product_data[ 'variations' ][ $key ]                   = $variation;
                     $product_data[ 'variations' ][ $key ][ 'regularPrice' ] = $theMeta[ 'regularPrice' ];
                     $product_data[ 'variations' ][ $key ][ 'salesPrice' ]   = $theMeta[ 'salesPrice' ];
+                    $product_data[ 'variations' ][ $key ][ 'stock' ]        = [
+                        'manageStock'   => $variation_product->get_manage_stock(),
+                        'stockQuantity' => $variation_product->get_stock_quantity(),
+                        'stockStatus'   => $variation_product->get_stock_status(),
+                     ];
+                    $product_data[ 'variations' ][ $key ][ 'extraBuyerCount' ] = $theMeta[ 'extraBuyerCount' ];
                 }
             }
 

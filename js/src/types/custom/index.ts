@@ -1,15 +1,17 @@
-export type TFSVariation = {
+export type TPSVariation = {
   variationId: number
   regularPrice: number
   salesPrice: number
+  extraBuyerCount?: number
 }
 
 export type TPSMeta = {
   productId: number
   productType?: string
-  variations?: TFSVariation[]
+  variations?: TPSVariation[]
   regularPrice?: number | string
   salesPrice?: number | string
+  extraBuyerCount?: number
 }
 
 export const defaulTPSMeta: TPSMeta = {
@@ -17,19 +19,25 @@ export const defaulTPSMeta: TPSMeta = {
   variations: [],
   regularPrice: 0,
   salesPrice: 0,
+  extraBuyerCount: 0,
 }
 
 export type TSettings = {
   startTime: number
   endTime: number
   btnColor: string
-  isConfetti: boolean
+  showConfetti: boolean
+  showStock: boolean
+  showBuyerCount: boolean
 }
 
 export const defaultSettings = {
   startTime: 0,
   endTime: 0,
   btnColor: '#1677ff',
+  showConfetti: true,
+  showStock: true,
+  showBuyerCount: true,
 }
 
 // Ajax Product
@@ -86,6 +94,14 @@ export type TAjaxProductVariation = {
   variation_is_visible: boolean
   weight: string
   weight_html: string
+  stock?: TStockInfo
+  extraBuyerCount?: number
+}
+
+export type TStockInfo = {
+  manageStock: boolean
+  stockQuantity: number | null
+  stockStatus: string
 }
 
 export type TAjaxProduct = {
@@ -102,9 +118,7 @@ export type TAjaxProduct = {
   variation_attributes?: {
     [key: string]: string[]
   }
-  stock: {
-    manageStock: boolean
-    stockQuantity: number | null
-    stockStatus: string
-  }
+  stock: TStockInfo
+  total_sales: number
+  extraBuyerCount?: number
 }

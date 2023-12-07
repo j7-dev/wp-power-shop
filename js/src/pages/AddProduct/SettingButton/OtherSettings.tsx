@@ -12,7 +12,9 @@ const OtherSettings: React.FC<{
     if (!isLoading) {
       form.setFieldsValue({
         btnColor: settings?.btnColor,
-        isConfetti: settings?.isConfetti ?? true,
+        showConfetti: settings?.showConfetti ?? true,
+        showStock: settings?.showStock ?? true,
+        showBuyerCount: settings?.showBuyerCount ?? true,
       })
     }
   }, [isLoading])
@@ -22,7 +24,15 @@ const OtherSettings: React.FC<{
         <ColorPicker size="small" showText />
       </Form.Item>
 
-      <Form.Item name={['isConfetti']} label="加入購物車啟用煙火效果" valuePropName="checked">
+      <Form.Item name={['showConfetti']} label="加入購物車啟用煙火效果" valuePropName="checked">
+        <Switch size="small" />
+      </Form.Item>
+
+      <Form.Item name={['showStock']} label="顯示庫存資訊" valuePropName="checked">
+        <Switch size="small" />
+      </Form.Item>
+
+      <Form.Item name={['showBuyerCount']} label="顯示有多少人購買過此商品" valuePropName="checked">
         <Switch size="small" />
       </Form.Item>
     </>

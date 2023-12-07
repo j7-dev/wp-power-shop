@@ -3,6 +3,8 @@ import { TAjaxProduct } from '@/types/custom'
 import { Modal, Col, Row } from 'antd'
 import Gallery from '@/components/Gallery'
 import PlusMinusInput from '@/components/PlusMinusInput'
+import StockInfo from '@/components/StockInfo'
+import BuyerCount from '@/components/BuyerCount'
 import AddToCartButton from '@/pages/PowerShopProducts/ProductModal/AddToCartButton'
 import ToggleContent from '@/pages/PowerShopProducts/ProductModal/ToggleContent'
 import ProductVariationsSelect from '@/components/ProductVariationsSelect'
@@ -10,9 +12,11 @@ import useProductModalProps from '@/pages/PowerShopProducts/ProductModal/useProd
 import { ShrinkOutlined, ArrowsAltOutlined } from '@ant-design/icons'
 import { useAtom, useAtomValue } from 'jotai'
 import { isExpandAtom, showReadMoreAtom } from '@/pages/PowerShopProducts/ProductModal/atom'
+import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/atom'
 
 const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
   const { modalProps, images, name, price, description, plusMinusInputProps, qty } = useProductModalProps(product)
+  const selectedVariationId = useAtomValue(selectedVariationIdAtom)
 
   const [
     isExpand,
@@ -58,7 +62,11 @@ const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
               <ToggleContent content={description} />
             </div>
 
-            {product?.type === 'variable' && !!product && <ProductVariationsSelect product={product} />}
+            <div>
+              {product?.type === 'variable' && !!product && <ProductVariationsSelect product={product} />}
+              <StockInfo product={product} selectedVariationId={selectedVariationId} />
+              <BuyerCount product={product} selectedVariationId={selectedVariationId} />
+            </div>
 
             <div className="mt-4">{price}</div>
 

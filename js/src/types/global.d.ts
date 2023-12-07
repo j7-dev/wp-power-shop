@@ -13,7 +13,9 @@ declare global {
     settings: {
       power_shop_meta_meta_id: string | null
       colorPrimary: string
-      isConfetti: boolean
+      showConfetti: boolean
+      showStock: boolean
+      showBuyerCount: boolean
     }
     env: {
       siteUrl: string

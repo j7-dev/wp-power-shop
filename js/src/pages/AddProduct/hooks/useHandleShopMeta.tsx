@@ -1,4 +1,4 @@
-import { TPSMeta, TFSVariation } from '@/types'
+import { TPSMeta, TPSVariation } from '@/types'
 import { TProduct } from '@/types/wcRestApi'
 import { useQueryClient } from '@tanstack/react-query'
 import { notification } from 'antd'
@@ -76,7 +76,7 @@ const useHandleShopMeta = ({ productsResult, shop_meta }: TUseHandleShopMetaProp
         }
 
         if (findProduct?.type === 'variable') {
-          const variations: TFSVariation[] | undefined = findProduct?.productVariations?.map((v) => {
+          const variations: TPSVariation[] | undefined = findProduct?.productVariations?.map((v) => {
             return {
               regularPrice: Number(v?.regular_price),
               salesPrice: Number(v?.sale_price),

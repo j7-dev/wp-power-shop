@@ -3,9 +3,10 @@ import { Form, InputNumber, Tooltip, Input } from 'antd'
 import { TProductVariation, TSimpleAttribute } from '@/types/wcRestApi'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 import { nanoid } from 'nanoid'
-import { TPSMeta, TFSVariation } from '@/types'
+import { TPSMeta, TPSVariation } from '@/types'
+import { showBuyerCount } from '@/utils'
 
-const getPrices = (mv: TFSVariation | null | undefined, v: TProductVariation) => {
+const getPrices = (mv: TPSVariation | null | undefined, v: TProductVariation) => {
   const matchProductSalesPrice = Number(mv?.salesPrice ?? '0')
   const matchProductRegularPrice = Number(mv?.regularPrice ?? '0')
 
@@ -40,6 +41,7 @@ const Variation: React.FC<{
 
   const imageSrc = variation?.image?.src ?? defaultImage
   const { salesPrice, regularPrice } = getPrices(matchVariation, variation)
+  const extraBuyerCount = matchVariation?.extraBuyerCount || 0
 
   useEffect(() => {
     form.setFieldsValue({
@@ -50,6 +52,7 @@ const Variation: React.FC<{
             variationId: id,
             regularPrice,
             salesPrice,
+            extraBuyerCount,
           },
         },
       },
@@ -94,7 +97,7 @@ const Variation: React.FC<{
                 label="原價"
                 className="w-full mr-4"
                 initialValue={regularPrice}>
-                <InputNumber className="w-full" />
+                <InputNumber min={0} className="w-full" />
               </Form.Item>
               <Form.Item
                 name={[
@@ -104,9 +107,22 @@ const Variation: React.FC<{
                   'salesPrice',
                 ]}
                 label="特價"
-                className="w-full"
+                className="w-full mr-4"
                 initialValue={salesPrice}>
-                <InputNumber className="w-full" />
+                <InputNumber min={0} className="w-full" />
+              </Form.Item>
+              <Form.Item
+                name={[
+                  parentIndex,
+                  'variations',
+                  index,
+                  'extraBuyerCount',
+                ]}
+                label="灌水購買人數"
+                help="前台會顯示 真實購買人數 + 灌水購買人數"
+                className="w-full"
+                hidden={!showBuyerCount}>
+                <InputNumber min={0} className="w-full" />
               </Form.Item>
             </div>
           </div>

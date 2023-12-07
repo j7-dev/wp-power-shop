@@ -93,7 +93,9 @@ class Bootstrap
                 'settings'      => [
                     'power_shop_meta_meta_id' => $power_shop_meta_meta_id,
                     'colorPrimary'            => $btn_color,
-                    'isConfetti'              => $settings[ 'isConfetti' ] ?? true,
+                    'showConfetti'            => $settings[ 'showConfetti' ] ?? true,
+                    'showStock'               => $settings[ 'showStock' ] ?? true,
+                    'showBuyerCount'          => $settings[ 'showBuyerCount' ] ?? true,
                  ],
                 'env'           => [
                     'siteUrl'     => \site_url(),
@@ -113,7 +115,6 @@ class Bootstrap
                     "RENDER_ID_4" => \PowerShop::RENDER_ID_4,
                     "API_TIMEOUT" => \PowerShop::API_TIMEOUT,
                  ],
-                'template'      => \get_page_template_slug($post_id),
             ),
         );
 

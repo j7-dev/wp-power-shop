@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button, notification } from 'antd'
 import { useAjax } from '@/hooks'
-import { ajaxNonce, postId, isConfetti } from '@/utils'
+import { ajaxNonce, postId, showConfetti } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
-import { isProductModalOpenAtom, selectedVariationIdAtom, selectedAttributesAtom, shopStatusAtom, cartDataAtom, TCartItem } from '@/pages/PowerShopProducts/atom'
+import { isProductModalOpenAtom, selectedVariationIdAtom, selectedAttributesAtom, shopStatusAtom, cartDataAtom, TCartItem, TShopStatus } from '@/pages/PowerShopProducts/atom'
 import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 import { TAjaxProduct } from '@/types/custom'
 import { nanoid } from 'nanoid'
@@ -45,7 +45,7 @@ const AddToCartButton: React.FC<{
             </div>
           ),
         })
-        if (isConfetti) {
+        if (showConfetti) {
           const defaultArgs = {
             particleCount: 100,
             scalar: 0.6,
@@ -182,7 +182,7 @@ const AddToCartButton: React.FC<{
   return (
     <>
       {contextHolder}
-      <Button className="w-full mt-4" type="primary" onClick={handleClick} disabled={(!selectedVariationId && productType === 'variable') || shopStatus !== 'published'}>
+      <Button className="w-full mt-4" type="primary" onClick={handleClick} disabled={!canAddToCart(product, selectedVariationId, shopStatus)}>
         加入購物車
       </Button>
     </>
@@ -191,6 +191,20 @@ const AddToCartButton: React.FC<{
 
 function randomInRange(min: number, max: number) {
   return Math.random() * (max - min) + min
+}
+
+function canAddToCart(product: TAjaxProduct, selectedVariationId: number | null, shopStatus: TShopStatus) {
+  if (shopStatus !== 'published') return false
+
+  if (product.type === 'variable') {
+    const variation = product?.variations?.find((v) => v.variation_id === selectedVariationId)
+    const stockStatus = variation?.stock?.stockStatus
+    return !!selectedVariationId && stockStatus !== 'outofstock'
+  } else if (product.type === 'simple') {
+    const stockStatus = product?.stock?.stockStatus
+    return stockStatus !== 'outofstock'
+  }
+  return true
 }
 
 export default AddToCartButton
