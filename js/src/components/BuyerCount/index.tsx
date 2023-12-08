@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { LikeFilled } from '@ant-design/icons'
+import { FireFilled } from '@ant-design/icons'
 import { showBuyerCount } from '@/utils'
 import { TAjaxProduct } from '@/types'
 
@@ -12,7 +12,7 @@ const index: FC<{ product: TAjaxProduct; selectedVariationId: number | null }> =
     const extraBuyerCount = product?.extraBuyerCount || 0
     return (
       <p className="m-0 text-gray-500 text-xs">
-        <LikeFilled className="mr-2 text-blue-500" />
+        <FireFilled className="mr-2 text-red-400" />
         已有 {count + extraBuyerCount} 人購買
       </p>
     )
@@ -24,7 +24,7 @@ const index: FC<{ product: TAjaxProduct; selectedVariationId: number | null }> =
       const extraBuyerCount = variation?.extraBuyerCount || 0
       return (
         <p className="m-0 text-gray-500 text-xs">
-          <LikeFilled className="mr-2 text-blue-500" />
+          <FireFilled className="mr-2 text-blue-500" />
           已有 {count + extraBuyerCount} 人購買
         </p>
       )

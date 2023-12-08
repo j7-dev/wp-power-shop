@@ -9,11 +9,13 @@ import { useAtomValue, useAtom } from 'jotai'
 const DELAY = 700
 
 const UpdateCartInputNumber: React.FC<{ item: TCartItem }> = ({ item }) => {
-  const quantity = item?.quantity || 1
+  const qtyInCart = item?.quantity || 1
   const [
     cartData,
     setCartData,
   ] = useAtom(cartDataAtom)
+
+  // const stockQty = getStockQty(product, selectedVariationId)
 
   const queryClient = useQueryClient()
   const [
@@ -117,18 +119,18 @@ const UpdateCartInputNumber: React.FC<{ item: TCartItem }> = ({ item }) => {
     }
 
   useEffect(() => {
-    if (quantity !== item?.quantity_raw) {
+    if (qtyInCart !== item?.quantity_raw) {
       const timer = setTimeout(() => {
         mutate({
           key,
-          quantity,
+          quantity: qtyInCart,
         })
       }, DELAY)
 
       return () => clearTimeout(timer)
     }
   }, [
-    quantity,
+    qtyInCart,
   ])
 
   return (
@@ -147,7 +149,7 @@ const UpdateCartInputNumber: React.FC<{ item: TCartItem }> = ({ item }) => {
             +
           </span>
         }
-        value={quantity}
+        value={qtyInCart}
         onChange={handleChange}
       />
     </>

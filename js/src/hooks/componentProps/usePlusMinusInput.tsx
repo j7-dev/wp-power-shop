@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { InputNumberProps } from 'antd'
 
-export const usePlusMinusInput = (stockQty: number | undefined | null) => {
+export const usePlusMinusInput = (max?: number) => {
   const [
     plusMinusInputProps,
     setPlusMinusInputProps,
@@ -11,7 +11,7 @@ export const usePlusMinusInput = (stockQty: number | undefined | null) => {
   })
 
   const MIN = 1
-  const MAX = stockQty ?? Infinity
+  const MAX = max ?? Infinity
 
   const handleMinus = () => {
     const value = Number(plusMinusInputProps?.value || 1)

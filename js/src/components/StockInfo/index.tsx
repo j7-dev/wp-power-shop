@@ -2,6 +2,8 @@ import { FC } from 'react'
 import { TAjaxProduct, TStockInfo } from '@/types/custom'
 import { CheckCircleFilled, CloseCircleFilled, ExclamationCircleFilled } from '@ant-design/icons'
 import { showStock } from '@/utils'
+import { useAtomValue } from 'jotai'
+import { cartDataAtom } from '@/pages/PowerShopProducts/atom'
 
 const defaultStock: TStockInfo = {
   manageStock: false,
@@ -15,12 +17,13 @@ const SoldOut: FC = () => (
     此商品已售完
   </>
 )
-const InStock: FC<{ qty?: number; text?: string }> = ({ qty, text = '此商品還有庫存' }) => {
+const InStock: FC<{ qty?: number; text?: string; qtyInCart?: number }> = ({ qty, text = '此商品還有庫存', qtyInCart }) => {
   return (
     <>
       <CheckCircleFilled className="mr-2 text-green-500" />
       {text}
       {qty !== undefined ? ` ${qty} 件` : ''}
+      <InCart qty={qtyInCart} />
     </>
   )
 }
@@ -31,15 +34,30 @@ const Onbackorder: FC = () => (
   </>
 )
 
+const InCart: FC<{ qty?: number; text?: string }> = ({ qty, text = '，已加入購物車' }) => {
+  if (!qty) return <></>
+  return (
+    <>
+      {text}
+      {qty !== undefined ? ` ${qty} 件` : ''}
+    </>
+  )
+}
+
 const index: FC<{ product: TAjaxProduct; selectedVariationId: number | null }> = ({ product, selectedVariationId }) => {
+  const cartData = useAtomValue(cartDataAtom)
+
   if (!showStock) return <></>
 
-  const stockText = getStockText(product, selectedVariationId)
+  const cartItems = cartData?.items ?? []
+  const qtyInCart = cartItems.find((item) => item.id === product?.id)?.quantity ?? 0
+
+  const stockText = getStockText(product, selectedVariationId, qtyInCart)
 
   return <p className="m-0 text-gray-500 text-xs">{stockText}</p>
 }
 
-function getStockText(product: TAjaxProduct, selectedVariationId: number | null) {
+function getStockText(product: TAjaxProduct, selectedVariationId: number | null, qtyInCart: number) {
   let stock = defaultStock
   if (!selectedVariationId) {
     stock = product?.stock ?? defaultStock
@@ -52,10 +70,10 @@ function getStockText(product: TAjaxProduct, selectedVariationId: number | null)
 
   switch (stockStatus) {
     case 'instock':
-      if (!manageStock) return <InStock />
+      if (!manageStock) return <InStock qtyInCart={qtyInCart} />
       if (manageStock && !!stockQuantity) {
-        if (stockQuantity <= 10) return <InStock qty={stockQuantity} text="此商品只剩最後" />
-        return <InStock qty={stockQuantity} text="此商品剩餘" />
+        if (stockQuantity <= 10) return <InStock qty={stockQuantity} text="此商品只剩最後" qtyInCart={qtyInCart} />
+        return <InStock qty={stockQuantity} text="此商品剩餘" qtyInCart={qtyInCart} />
       }
       return <SoldOut />
 
@@ -64,7 +82,7 @@ function getStockText(product: TAjaxProduct, selectedVariationId: number | null)
     case 'onbackorder':
       return <Onbackorder />
     default:
-      return <InStock />
+      return <InStock qtyInCart={qtyInCart} />
   }
 }
 

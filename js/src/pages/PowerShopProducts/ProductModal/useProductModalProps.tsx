@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { isProductModalOpenAtom, selectedVariationIdAtom } from '@/pages/PowerShopProducts/atom'
+import { isProductModalOpenAtom, selectedVariationIdAtom, cartDataAtom } from '@/pages/PowerShopProducts/atom'
 import { useAtomValue, useAtom, useSetAtom } from 'jotai'
 import { TAjaxProduct } from '@/types/custom'
 import Price from '@/components/Price'
@@ -14,6 +14,7 @@ const useProductModalProps = (product: TAjaxProduct) => {
     isProductModalOpen,
     setIsProductModalOpen,
   ] = useAtom(isProductModalOpenAtom)
+
   const selectedVariationId = useAtomValue(selectedVariationIdAtom)
 
   const modalProps: ModalProps = {
@@ -28,7 +29,11 @@ const useProductModalProps = (product: TAjaxProduct) => {
   const description = formatYoutubeLinkToIframe(product?.description ?? '')
   const images = product?.images ?? []
   const stockQty = getStockQty(product, selectedVariationId)
-  const { plusMinusInputProps, setPlusMinusInputProps } = usePlusMinusInput(stockQty)
+  const cartData = useAtomValue(cartDataAtom)
+  const cartItems = cartData?.items ?? []
+  const qtyInCart = cartItems.find((item) => item.id === product?.id)?.quantity ?? 0
+  const max = Number(stockQty) - Number(qtyInCart)
+  const { plusMinusInputProps, setPlusMinusInputProps } = usePlusMinusInput(max)
 
   // const { value: qty, setValue: setQty } = plusMinusInputProps
 

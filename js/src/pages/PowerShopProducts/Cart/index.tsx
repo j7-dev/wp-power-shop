@@ -20,6 +20,7 @@ const Cart = () => {
     cartData,
     setCartData,
   ] = useAtom(cartDataAtom)
+
   const shop_meta = (window?.appData?.products_info?.meta ?? []) as TPSMeta[]
 
   const { mutate, isLoading } = useAjax({

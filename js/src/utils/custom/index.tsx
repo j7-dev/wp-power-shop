@@ -62,5 +62,5 @@ export const getStockQty = (product: TAjaxProduct, selectedVariationId: number |
 
   const { stockQuantity } = stock
 
-  return stockQuantity
+  return stockQuantity ?? Infinity
 }

@@ -18,9 +18,12 @@ const SettingButton = () => {
     mutationOptions: {
       onSuccess: () => {
         notification.success({
-          message: '設定儲存成功',
+          message: '設定儲存成功，正刷新頁面...',
         })
         setIsModalOpen(false)
+        setTimeout(() => {
+          window.location.reload()
+        }, 1500)
       },
       onError: (error) => {
         console.log('Error', error)

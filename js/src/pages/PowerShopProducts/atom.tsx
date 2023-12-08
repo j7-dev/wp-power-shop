@@ -13,7 +13,7 @@ export type TCartItem = {
   key: string
   id: number
   quantity: number
-  quantity_raw: number
+  quantity_raw: number // 用來儲存原始數量，用於回復數量
   name: string
   short_description: string
   description: string

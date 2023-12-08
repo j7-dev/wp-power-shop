@@ -9,6 +9,7 @@ import { TAjaxProduct } from '@/types/custom'
 import { nanoid } from 'nanoid'
 import { TProductVariationAttribute } from '@/types/wcStoreApi'
 import confetti from 'canvas-confetti'
+import { getStockQty } from '@/utils/custom'
 
 const AddToCartButton: React.FC<{
   product: TAjaxProduct
@@ -21,9 +22,8 @@ const AddToCartButton: React.FC<{
     setCartData,
   ] = useAtom(cartDataAtom)
   const productId = product?.id
-  const productType = product?.type
 
-  const { mutate, isLoading } = useAjax({
+  const { mutate } = useAjax({
     mutationOptions: {
       onMutate: (variables) => {
         api.success({
@@ -178,11 +178,15 @@ const AddToCartButton: React.FC<{
       },
     )
   }
+  const stockQty = getStockQty(product, selectedVariationId)
+  const cartItems = cartData?.items ?? []
+  const qtyInCart = cartItems.find((item) => item.id === product?.id)?.quantity ?? 0
+  const qtyAvailable = Number(stockQty) - Number(qtyInCart)
 
   return (
     <>
       {contextHolder}
-      <Button className="w-full mt-4" type="primary" onClick={handleClick} disabled={!canAddToCart(product, selectedVariationId, shopStatus)}>
+      <Button className="w-full mt-4" type="primary" onClick={handleClick} disabled={!qtyAvailable || !canAddToCart(product, selectedVariationId, shopStatus, qtyInCart)}>
         加入購物車
       </Button>
     </>
@@ -193,7 +197,7 @@ function randomInRange(min: number, max: number) {
   return Math.random() * (max - min) + min
 }
 
-function canAddToCart(product: TAjaxProduct, selectedVariationId: number | null, shopStatus: TShopStatus) {
+function canAddToCart(product: TAjaxProduct, selectedVariationId: number | null, shopStatus: TShopStatus, qtyInCart: number) {
   if (shopStatus !== 'published') return false
 
   if (product.type === 'variable') {
