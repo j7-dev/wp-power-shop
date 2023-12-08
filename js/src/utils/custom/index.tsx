@@ -1,6 +1,7 @@
 import { TProduct } from '@/types/wcRestApi'
 import { FormInstance } from 'antd'
 import { TPSMeta } from '@/types'
+import { TAjaxProduct, TStockInfo } from '@/types/custom'
 
 export const formateMeta = (addedProducts: TProduct[]) => {
   const meta = addedProducts.map((product) => ({
@@ -42,4 +43,24 @@ export const getUrlParam = (name: string) => {
   const parameterValue = params.get(name)
 
   return parameterValue
+}
+
+export const getStockQty = (product: TAjaxProduct, selectedVariationId: number | null) => {
+  const defaultStock: TStockInfo = {
+    manageStock: false,
+    stockQuantity: null,
+    stockStatus: 'instock',
+  }
+
+  let stock = defaultStock
+  if (!selectedVariationId) {
+    stock = product?.stock ?? defaultStock
+  } else {
+    const variation = product?.variations?.find((v) => v.variation_id === selectedVariationId)
+    stock = variation?.stock ?? defaultStock
+  }
+
+  const { stockQuantity } = stock
+
+  return stockQuantity
 }

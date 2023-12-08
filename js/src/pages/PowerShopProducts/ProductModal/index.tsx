@@ -15,8 +15,8 @@ import { isExpandAtom, showReadMoreAtom } from '@/pages/PowerShopProducts/Produc
 import { selectedVariationIdAtom } from '@/pages/PowerShopProducts/atom'
 
 const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
-  const { modalProps, images, name, price, description, plusMinusInputProps, qty } = useProductModalProps(product)
   const selectedVariationId = useAtomValue(selectedVariationIdAtom)
+  const { modalProps, images, name, price, description, plusMinusInputProps, qty } = useProductModalProps(product)
 
   const [
     isExpand,

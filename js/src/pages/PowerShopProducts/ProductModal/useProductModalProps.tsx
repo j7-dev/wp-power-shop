@@ -7,12 +7,14 @@ import { renderHTML, formatYoutubeLinkToIframe } from '@/utils'
 import { usePlusMinusInput } from '@/hooks'
 import { ModalProps, InputNumberProps } from 'antd'
 import { isExpandAtom } from '@/pages/PowerShopProducts/ProductModal/atom'
+import { getStockQty } from '@/utils/custom'
 
 const useProductModalProps = (product: TAjaxProduct) => {
   const [
     isProductModalOpen,
     setIsProductModalOpen,
   ] = useAtom(isProductModalOpenAtom)
+  const selectedVariationId = useAtomValue(selectedVariationIdAtom)
 
   const modalProps: ModalProps = {
     centered: true,
@@ -25,7 +27,8 @@ const useProductModalProps = (product: TAjaxProduct) => {
   const name = renderHTML(product?.name ?? '未知商品')
   const description = formatYoutubeLinkToIframe(product?.description ?? '')
   const images = product?.images ?? []
-  const { plusMinusInputProps, setPlusMinusInputProps } = usePlusMinusInput()
+  const stockQty = getStockQty(product, selectedVariationId)
+  const { plusMinusInputProps, setPlusMinusInputProps } = usePlusMinusInput(stockQty)
 
   // const { value: qty, setValue: setQty } = plusMinusInputProps
 
@@ -42,8 +45,6 @@ const useProductModalProps = (product: TAjaxProduct) => {
       setIsExpand(false)
     }
   }, [isProductModalOpen])
-
-  const selectedVariationId = useAtomValue(selectedVariationIdAtom)
 
   const productType = product?.type ?? 'simple'
 
@@ -70,7 +71,7 @@ const useProductModalProps = (product: TAjaxProduct) => {
     price,
     description,
     plusMinusInputProps,
-    qty: plusMinusInputProps?.value || 1,
+    qty: Number(plusMinusInputProps?.value || 1),
     selectedVariationId,
   }
 }

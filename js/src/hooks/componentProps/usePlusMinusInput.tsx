@@ -1,19 +1,21 @@
 import { useState } from 'react'
 import { InputNumberProps } from 'antd'
 
-export const usePlusMinusInput = (
-  inputNumberProps: InputNumberProps = {
-    value: 1,
-    defaultValue: 1,
-  },
-) => {
+export const usePlusMinusInput = (stockQty: number | undefined | null) => {
   const [
     plusMinusInputProps,
     setPlusMinusInputProps,
-  ] = useState<InputNumberProps>(inputNumberProps)
+  ] = useState<InputNumberProps>({
+    value: 1,
+    defaultValue: 1,
+  })
+
+  const MIN = 1
+  const MAX = stockQty ?? Infinity
 
   const handleMinus = () => {
     const value = Number(plusMinusInputProps?.value || 1)
+    if (value <= MIN) return
     setPlusMinusInputProps({
       ...plusMinusInputProps,
       value: value - 1,
@@ -22,6 +24,7 @@ export const usePlusMinusInput = (
 
   const handlePlus = () => {
     const value = Number(plusMinusInputProps?.value || 1)
+    if (value >= MAX) return
     setPlusMinusInputProps({
       ...plusMinusInputProps,
       value: value + 1,
@@ -45,7 +48,7 @@ export const usePlusMinusInput = (
   return {
     plusMinusInputProps: {
       ...plusMinusInputProps,
-      min: 1,
+      min: MIN,
       className: 'w-full',
       addonBefore: (
         <span className="ps-addon" onClick={handleMinus}>
@@ -58,7 +61,7 @@ export const usePlusMinusInput = (
         </span>
       ),
       onChange: handleChange,
-    },
+    } as InputNumberProps<number>,
     setPlusMinusInputProps,
   }
 }
