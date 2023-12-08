@@ -15,7 +15,7 @@ const UpdateCartInputNumber: React.FC<{ item: TCartItem }> = ({ item }) => {
     setCartData,
   ] = useAtom(cartDataAtom)
 
-  // const stockQty = getStockQty(product, selectedVariationId)
+  const stockQty = findStockQtyById(item.id)
 
   const queryClient = useQueryClient()
   const [
@@ -105,7 +105,7 @@ const UpdateCartInputNumber: React.FC<{ item: TCartItem }> = ({ item }) => {
           ...prev,
           items: prev.items.map((i) => {
             if (i.key === key) {
-              const theQuantity = getQuantity(v, i)
+              const theQuantity = getQuantity(v, i, stockQty)
               return {
                 ...i,
                 quantity: theQuantity,
@@ -139,6 +139,7 @@ const UpdateCartInputNumber: React.FC<{ item: TCartItem }> = ({ item }) => {
       <InputNumber
         className="w-full"
         min={1}
+        max={stockQty}
         addonBefore={
           <span className="ps-addon" onClick={handleDecrement}>
             -
@@ -156,17 +157,33 @@ const UpdateCartInputNumber: React.FC<{ item: TCartItem }> = ({ item }) => {
   )
 }
 
-function getQuantity(value: number | null | 'INCREMENT' | 'DECREMENT', theItem: TCartItem) {
+function getQuantity(value: number | null | 'INCREMENT' | 'DECREMENT', theItem: TCartItem, stockQty: number) {
+  const currentQty = Number(theItem.quantity)
   switch (value) {
     case 'DECREMENT':
-      return theItem.quantity <= 1 ? 1 : Number(theItem.quantity) - 1
+      return currentQty <= 1 ? 1 : currentQty - 1
     case 'INCREMENT':
-      return Number(theItem.quantity) + 1
+      return currentQty >= stockQty ? stockQty : currentQty + 1
     case null:
       return 1
     default:
-      return value
+      return value >= stockQty ? stockQty : value
   }
+}
+
+function findStockQtyById(id: number) {
+  const findProduct = window.appData.products_info.products.find((p) => p.id === id)
+  if (findProduct) {
+    const stock = findProduct?.stock
+    return stock?.stockQuantity ?? Infinity
+  }
+  const allVariations = window.appData.products_info.products.flatMap((p) => p?.variations).filter((v) => !!v)
+  const findVariation = allVariations.find((v) => v?.variation_id === id)
+  if (findVariation) {
+    const stock = findVariation?.stock
+    return stock?.stockQuantity ?? Infinity
+  }
+  return Infinity
 }
 
 export default UpdateCartInputNumber
