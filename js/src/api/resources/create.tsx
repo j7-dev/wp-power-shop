@@ -14,14 +14,10 @@ export const createResource = async ({
   args?: {
     [key: string]: any
   }
-  config?: AxiosRequestConfig<{[key: string]: any;}> | undefined
+  config?: AxiosRequestConfig<{ [key: string]: any }> | undefined
 }) => {
   const dataProviderUrlParams = getDataProviderUrlParams(dataProvider)
-  const createResult = await axios.post(
-    `${apiUrl}${dataProviderUrlParams}/${resource}`,
-    args,
-    config,
-  )
+  const createResult = await axios.post(`${apiUrl}/${dataProviderUrlParams}/${resource}`, args, config)
 
   return createResult
 }

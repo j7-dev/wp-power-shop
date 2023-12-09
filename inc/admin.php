@@ -2,7 +2,7 @@
 
 declare (strict_types = 1);
 
-namespace J7\ViteReactWPPlugin\PowerShop\Admin;
+namespace J7\WpReactPlugin\PowerShop\Inc;
 
 use Kucrut\Vite;
 
@@ -100,8 +100,7 @@ class Bootstrap
                 'env'           => [
                     'siteUrl'     => \site_url(),
                     'ajaxUrl'     => \admin_url('admin-ajax.php'),
-                    'ajaxNonce'   => \wp_create_nonce(\PowerShop::KEBAB),
-                    'userId'      => \wp_get_current_user()->data->ID,
+                    'userId'      => \wp_get_current_user()->data->ID ?? null,
                     'postId'      => $post_id,
                     'permalink'   => $permalink,
                     'checkoutUrl' => $checkout_page_url,
@@ -122,7 +121,7 @@ class Bootstrap
             \PowerShop::KEBAB,
             'wpApiSettings',
             array(
-                'root'  => \esc_url_raw(rest_url()),
+                'root'  => \untrailingslashit(\esc_url_raw(rest_url())),
                 'nonce' => \wp_create_nonce('wp_rest'),
             )
         );

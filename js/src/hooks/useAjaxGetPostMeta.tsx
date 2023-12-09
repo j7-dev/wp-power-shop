@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { ajaxNonce } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import { adminAjax } from '@/api'
 import { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios'
+import useAjaxNonce from './useAjaxNonce'
 
 type TProps = {
   post_id: string
@@ -25,6 +25,8 @@ type TFnProps = {
 }
 
 export function useAjaxGetPostMeta<T>(props: TProps) {
+  const ajaxNonce = useAjaxNonce()
+
   const [
     meta,
     setMeta,
@@ -58,6 +60,7 @@ export function useAjaxGetPostMeta<T>(props: TProps) {
     onError: (error: AxiosError) => {
       console.log(error)
     },
+    enabled: !!ajaxNonce,
   })
 
   return {

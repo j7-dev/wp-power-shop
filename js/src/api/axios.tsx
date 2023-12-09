@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { getTypeText, baseUrl, apiTimeout } from '@/utils'
+import { baseUrl, apiTimeout } from '@/utils'
 
 const wpApiSettings = window?.wpApiSettings || {}
 

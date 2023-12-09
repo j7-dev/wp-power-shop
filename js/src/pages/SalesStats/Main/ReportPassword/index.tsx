@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Modal, Input, Alert, notification, Form } from 'antd'
 import { KeyOutlined, LinkOutlined } from '@ant-design/icons'
 import { useModal, useAjaxGetPostMeta, useAjax } from '@/hooks'
-import { permalink, postId, ajaxNonce, snake } from '@/utils'
+import { permalink, postId, snake } from '@/utils'
 
 const ReportPassword = () => {
   const [form] = Form.useForm()
@@ -13,8 +13,7 @@ const ReportPassword = () => {
 
   const { showModal, modalProps: deaultModalProps, setIsModalOpen } = useModal()
 
-  const updateMutation = useAjax()
-  const { mutate: updatePostMeta, isLoading: updateIsLoading } = updateMutation
+  const { mutate: updatePostMeta, isLoading: updateIsLoading } = useAjax()
 
   const handleUpdate = () => {
     form.validateFields().then((values) => {
@@ -23,7 +22,6 @@ const ReportPassword = () => {
       updatePostMeta(
         {
           action: 'handle_update_post_meta',
-          nonce: ajaxNonce,
           post_id: postId,
           meta_key: `${snake}_report_password`,
           meta_value: encryptedPassword,
@@ -72,20 +70,12 @@ const ReportPassword = () => {
   return (
     <Form form={form}>
       {contextHolder}
-      <div
-        className="flex items-center my-2  cursor-pointer"
-        onClick={showModal}
-      >
+      <div className="flex items-center my-2  cursor-pointer" onClick={showModal}>
         <KeyOutlined className="text-yellow-400 text-2xl mr-2" />
         設定頁面報告密碼
       </div>
       <Modal {...modalProps}>
-        <Alert
-          message="Power Shop 提供一個頁面報告，使用者可以直接輸入網址與密碼後，直接看到頁面報告"
-          type="info"
-          className="mb-8"
-          showIcon
-        />
+        <Alert message="Power Shop 提供一個頁面報告，使用者可以直接輸入網址與密碼後，直接看到頁面報告" type="info" className="mb-8" showIcon />
         <div className="flex justify-between">
           <span>設定密碼</span>
           <a target="_blank" href={`${permalink}report`} rel="noreferrer">
@@ -93,11 +83,7 @@ const ReportPassword = () => {
             <LinkOutlined className="ml-1" />
           </a>
         </div>
-        <Form.Item
-          name={['password']}
-          rules={[{ required: true, message: '密碼不能為空' }]}
-          hasFeedback={true}
-        >
+        <Form.Item name={['password']} rules={[{ required: true, message: '密碼不能為空' }]} hasFeedback={true}>
           <Input placeholder="請輸入密碼" />
         </Form.Item>
       </Modal>

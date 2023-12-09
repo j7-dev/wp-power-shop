@@ -8,7 +8,7 @@ export const updateResource = async ({
   dataProvider = 'wp',
   pathParams = [],
   args = {},
-	config = undefined,
+  config = undefined,
 }: {
   resource: string
   dataProvider?: TDataProvider
@@ -16,14 +16,10 @@ export const updateResource = async ({
   args?: {
     [key: string]: any
   }
-	config?: AxiosRequestConfig<{[key: string]: any;}> | undefined
+  config?: AxiosRequestConfig<{ [key: string]: any }> | undefined
 }) => {
   const dataProviderUrlParams = getDataProviderUrlParams(dataProvider)
-  const updateResult = await axios.post(
-    `${apiUrl}${dataProviderUrlParams}${resource}/${pathParams.join('/')}`,
-    args,
-		config
-  )
+  const updateResult = await axios.post(`${apiUrl}/${dataProviderUrlParams}${resource}/${pathParams.join('/')}`, args, config)
 
   return updateResult
 }

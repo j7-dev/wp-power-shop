@@ -2,7 +2,7 @@
 
 declare (strict_types = 1);
 
-namespace J7\ViteReactWPPlugin\PowerShop\Admin;
+namespace J7\WpReactPlugin\PowerShop\Inc;
 
 use function _\find;
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, notification } from 'antd'
 import { useAjax } from '@/hooks'
-import { ajaxNonce, postId, showConfetti } from '@/utils'
+import { postId, showConfetti } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { isProductModalOpenAtom, selectedVariationIdAtom, selectedAttributesAtom, shopStatusAtom, cartDataAtom, TCartItem, TShopStatus } from '@/pages/PowerShopProducts/atom'
 import { useSetAtom, useAtomValue, useAtom } from 'jotai'
@@ -133,7 +133,6 @@ const AddToCartButton: React.FC<{
     mutate(
       {
         action: 'handle_add_cart',
-        nonce: ajaxNonce,
         post_id: postId,
         id: productId,
         quantity,

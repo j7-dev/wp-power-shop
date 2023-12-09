@@ -6,7 +6,7 @@ import { DeleteOutlined } from '@ant-design/icons'
 import { TPSMeta } from '@/types'
 import { TCart } from '@/types/wcStoreApi'
 import { Popconfirm, notification, Button, Empty } from 'antd'
-import { ajaxNonce, checkoutUrl, renderHTML, getPrice } from '@/utils'
+import { checkoutUrl, renderHTML, getPrice } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import ShippingField from './ShippingField'
 import { BiMoneyWithdraw } from 'react-icons/bi'
@@ -89,7 +89,6 @@ const Cart = () => {
     mutate(
       {
         action: 'handle_remove_cart',
-        nonce: ajaxNonce,
         cart_item_key,
       },
       {
