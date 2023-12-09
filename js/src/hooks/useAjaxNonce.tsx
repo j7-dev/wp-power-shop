@@ -6,7 +6,7 @@ import { apiUrl } from '@/utils'
 
 export const ajaxNonceAtom = atom('')
 
-const useAjaxNonce = () => {
+export const useAjaxNonce = () => {
   const [
     ajaxNonce,
     setAjaxNonce,
@@ -32,5 +32,3 @@ const useAjaxNonce = () => {
 
   return ajaxNonce
 }
-
-export default useAjaxNonce

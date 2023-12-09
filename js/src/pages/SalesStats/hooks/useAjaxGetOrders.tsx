@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useAjax } from '@/hooks'
-import { ajaxNonce } from '@/utils'
+import { useAjax, useAjaxNonce } from '@/hooks'
 import { Dayjs } from 'dayjs'
 
 type TProps = {
@@ -14,6 +13,7 @@ type TProps = {
 }
 
 export function useAjaxGetOrders<T>(props?: TProps) {
+  const ajaxNonce = useAjaxNonce()
   const [
     orderData,
     setOrderData,
@@ -29,17 +29,14 @@ export function useAjaxGetOrders<T>(props?: TProps) {
   const { mutate } = mutation
 
   useEffect(() => {
-    if (status) {
+    if (status && ajaxNonce) {
       let date_created = ''
       if (rangePicker) {
-        date_created = `${rangePicker[0].format(
-          'YYYY-MM-DD',
-        )}...${rangePicker[1].format('YYYY-MM-DD')}`
+        date_created = `${rangePicker[0].format('YYYY-MM-DD')}...${rangePicker[1].format('YYYY-MM-DD')}`
       }
 
       const payload = {
         action: 'handle_get_orders',
-        nonce: ajaxNonce,
         post_id,
         paged,
         limit,
@@ -67,6 +64,7 @@ export function useAjaxGetOrders<T>(props?: TProps) {
     email,
     rangePicker,
     is_download,
+    ajaxNonce,
   ])
 
   return {

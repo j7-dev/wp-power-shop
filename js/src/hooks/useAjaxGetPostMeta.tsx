@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { adminAjax } from '@/api'
 import { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios'
-import useAjaxNonce from './useAjaxNonce'
+import { useAjaxNonce } from '@/hooks'
 
 type TProps = {
   post_id: string
