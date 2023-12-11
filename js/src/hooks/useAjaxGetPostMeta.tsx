@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { adminAjax } from '@/api'
 import { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios'
 import { useAjaxNonce } from '@/hooks'
@@ -26,6 +26,7 @@ type TFnProps = {
 
 export function useAjaxGetPostMeta<T>(props: TProps) {
   const ajaxNonce = useAjaxNonce()
+  const queryClient = useQueryClient()
 
   const [
     meta,
@@ -58,6 +59,11 @@ export function useAjaxGetPostMeta<T>(props: TProps) {
       }
     },
     onError: (error: AxiosError) => {
+      const status: number = error?.response?.status ?? 500
+      if (status === 403) {
+        queryClient.invalidateQueries(['get_ajax_nonce'])
+        queryClient.invalidateQueries(['get_post_meta'])
+      }
       console.log(error)
     },
     enabled: !!ajaxNonce,

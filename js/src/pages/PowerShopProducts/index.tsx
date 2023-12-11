@@ -38,7 +38,7 @@ const PowerShopProducts = () => {
     meta_key: `${snake}_settings`,
     formatter: (post_meta: string) => JSON.parse(post_meta || '{}'),
   })
-  const { isLoading, isSuccess, isError } = result
+  const { isLoading, isSuccess, isError, error } = result
   const settings = result?.meta ?? defaultSettings
   const startTime = settings?.startTime
   const endTime = settings?.endTime
@@ -81,12 +81,15 @@ const PowerShopProducts = () => {
         }
       })
     } else if (isError) {
-      message.open({
-        key: 'jsLoaded',
-        type: 'error',
-        content: ' 商品載入失敗，請重新刷新頁面再試一次',
-        duration: 0,
-      })
+      const status: number = error?.response?.status ?? 500
+      if (status !== 403) {
+        message.open({
+          key: 'jsLoaded',
+          type: 'error',
+          content: ' 商品載入失敗，請重新刷新頁面再試一次',
+          duration: 0,
+        })
+      }
     }
   }, [isLoading])
 
