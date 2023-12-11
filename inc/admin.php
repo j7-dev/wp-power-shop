@@ -12,6 +12,19 @@ use Kucrut\Vite;
 
 class Bootstrap
 {
+
+    const APP_NAME         = 'Power Shop';
+    const KEBAB            = 'power-shop';
+    const SNAKE            = 'power_shop';
+    const BUY_LICENSE_LINK = 'https://cloud.luke.cafe/plugins/power-shop';
+    const SUPPORT_EMAIL    = 'cloud@luke.cafe';
+    const BASE_URL         = '/';
+    const RENDER_ID_1      = 'power_shop_added_products_app';
+    const RENDER_ID_2      = 'power_shop_statistic_app';
+    const RENDER_ID_3      = 'power_shop_products_app';
+    const RENDER_ID_4      = 'power_shop_report_app';
+    const API_TIMEOUT      = '30000';
+    const GITHUB_REPO      = 'https://github.com/j7-dev/wp-power-shop';
     public function init(): void
     {
         \add_action('admin_enqueue_scripts', [ $this, 'enqueue_script' ], 99);
@@ -42,22 +55,22 @@ class Bootstrap
         if (\is_admin()) {
             // 後台網頁 screen id 必須符合才引入
             $screen = \get_current_screen();
-            if (($screen->id !== \PowerShop::KEBAB)) {
+            if (($screen->id !== self::KEBAB)) {
                 return;
             }
         } else {
-            // 前台網頁必須包含 {\PowerShop::KEBAB} 字串 才引用
-            if (strpos($_SERVER[ 'REQUEST_URI' ], \PowerShop::KEBAB) === false) {
+            // 前台網頁必須包含 {self::KEBAB} 字串 才引用
+            if (strpos($_SERVER[ 'REQUEST_URI' ], self::KEBAB) === false) {
                 return;
             }
         }
 
-        // if (!\is_admin() && ($screen->id !== \PowerShop::KEBAB)) return;
+        // if (!\is_admin() && ($screen->id !== self::KEBAB)) return;
         Vite\enqueue_asset(
             dirname(__DIR__) . '/js/dist',
             'js/src/main.tsx',
             [
-                'handle'    => \PowerShop::KEBAB,
+                'handle'    => self::KEBAB,
                 'in-footer' => true,
              ]
         );
@@ -77,16 +90,16 @@ class Bootstrap
             $wpdb->prepare(
                 "SELECT meta_id FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s",
                 $post_id,
-                \PowerShop::SNAKE . '_meta'
+                self::SNAKE . '_meta'
             )
         );
 
-        $settings_string = \get_post_meta($post_id, \PowerShop::SNAKE . '_settings', true);
+        $settings_string = \get_post_meta($post_id, self::SNAKE . '_settings', true);
         $settings        = Functions::json_parse($settings_string, [  ], true);
         $btn_color       = $settings[ 'btnColor' ] ?? '#1677ff';
 
         \wp_localize_script(
-            \PowerShop::KEBAB,
+            self::KEBAB,
             'appData',
             array(
                 'products_info' => $products_info,
@@ -104,21 +117,21 @@ class Bootstrap
                     'postId'      => $post_id,
                     'permalink'   => $permalink,
                     'checkoutUrl' => $checkout_page_url,
-                    "APP_NAME"    => \PowerShop::APP_NAME,
-                    "KEBAB"       => \PowerShop::KEBAB,
-                    "SNAKE"       => \PowerShop::SNAKE,
-                    "BASE_URL"    => \PowerShop::BASE_URL,
-                    "RENDER_ID_1" => \PowerShop::RENDER_ID_1,
-                    "RENDER_ID_2" => \PowerShop::RENDER_ID_2,
-                    "RENDER_ID_3" => \PowerShop::RENDER_ID_3,
-                    "RENDER_ID_4" => \PowerShop::RENDER_ID_4,
-                    "API_TIMEOUT" => \PowerShop::API_TIMEOUT,
+                    "APP_NAME"    => self::APP_NAME,
+                    "KEBAB"       => self::KEBAB,
+                    "SNAKE"       => self::SNAKE,
+                    "BASE_URL"    => self::BASE_URL,
+                    "RENDER_ID_1" => self::RENDER_ID_1,
+                    "RENDER_ID_2" => self::RENDER_ID_2,
+                    "RENDER_ID_3" => self::RENDER_ID_3,
+                    "RENDER_ID_4" => self::RENDER_ID_4,
+                    "API_TIMEOUT" => self::API_TIMEOUT,
                  ],
             ),
         );
 
         \wp_localize_script(
-            \PowerShop::KEBAB,
+            self::KEBAB,
             'wpApiSettings',
             array(
                 'root'  => \untrailingslashit(\esc_url_raw(rest_url())),
@@ -139,7 +152,7 @@ class Bootstrap
     public function set_default_value_on_power_shop_create($post_ID, $post, $update)
     {
         // POSTTYPE 為 "power-shop" 且 是新增操作 且 安裝了 Elementor 才執行
-        if ($post->post_type === \PowerShop::KEBAB && !$update && defined('ELEMENTOR_VERSION')) {
+        if ($post->post_type === self::KEBAB && !$update && defined('ELEMENTOR_VERSION')) {
             \update_post_meta($post_ID, '_wp_page_template', 'elementor_header_footer');
         }
     }

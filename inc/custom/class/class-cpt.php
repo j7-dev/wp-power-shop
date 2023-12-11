@@ -15,12 +15,12 @@ class CPT extends Bootstrap
     const LICENSE_LINK = 'edit.php?post_type=power-shop&page=power-shop-license';
     const COLOR        = '#72aee6';
 
-    const SNAKE            = \PowerShop::SNAKE;
-    const KEBAB            = \PowerShop::KEBAB;
-    const RENDER_ID_1      = \PowerShop::RENDER_ID_1;
-    const RENDER_ID_2      = \PowerShop::RENDER_ID_2;
-    const BUY_LICENSE_LINK = \PowerShop::BUY_LICENSE_LINK;
-    const SUPPORT_EMAIL    = \PowerShop::SUPPORT_EMAIL;
+    const SNAKE            = Bootstrap::SNAKE;
+    const KEBAB            = Bootstrap::KEBAB;
+    const RENDER_ID_1      = Bootstrap::RENDER_ID_1;
+    const RENDER_ID_2      = Bootstrap::RENDER_ID_2;
+    const BUY_LICENSE_LINK = Bootstrap::BUY_LICENSE_LINK;
+    const SUPPORT_EMAIL    = Bootstrap::SUPPORT_EMAIL;
 
     private $count_publish = 0;
     private $iel           = false;

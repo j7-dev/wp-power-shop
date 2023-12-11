@@ -28,7 +28,7 @@ class Order
     {
 
         // Security check
-        \check_ajax_referer(\PowerShop::KEBAB, 'nonce');
+        \check_ajax_referer(Bootstrap::KEBAB, 'nonce');
 
         $post_id = \sanitize_text_field($_POST[ 'post_id' ] ?? 0);
 
@@ -51,7 +51,7 @@ class Order
             'type'         => 'shop_order', // 'shop_order' | 'shop_order_refund'
             'limit'        => $limit,
             'paged'        => $paged,
-            'meta_key'     => \PowerShop::SNAKE . '_post_id',
+            'meta_key'     => Bootstrap::SNAKE . '_post_id',
             'meta_value'   => $post_id,
             'status'       => $status,
             'paginate'     => true,
@@ -219,7 +219,7 @@ class Order
             $reordered_columns[ $key ] = $column;
             if ($key == 'order_number') {
                 // Inserting after "Status" column
-                $reordered_columns[ \PowerShop::SNAKE . '_post_id' ] = \__('Linked Power Shop', \PowerShop::KEBAB);
+                $reordered_columns[ Bootstrap::SNAKE . '_post_id' ] = \__('Linked Power Shop', Bootstrap::KEBAB);
             }
         }
         return $reordered_columns;
@@ -228,8 +228,8 @@ class Order
     public function custom_orders_list_column_content($column, $post_id)
     {
         switch ($column) {
-            case \PowerShop::SNAKE . '_post_id':
-                $shop_id = \get_post_meta($post_id, \PowerShop::SNAKE . '_post_id', true);
+            case Bootstrap::SNAKE . '_post_id':
+                $shop_id = \get_post_meta($post_id, Bootstrap::SNAKE . '_post_id', true);
                 if (!empty($shop_id)) {
                     $title = \get_the_title($shop_id);
                     $url   = \add_query_arg(

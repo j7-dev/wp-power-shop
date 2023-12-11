@@ -47,7 +47,7 @@ class Api
 
     public function ajaxnonce_callback()
     {
-        $ajaxNonce = \wp_create_nonce(\PowerShop::KEBAB);
+        $ajaxNonce = \wp_create_nonce(Bootstrap::KEBAB);
 
         return \rest_ensure_response($ajaxNonce);
 
