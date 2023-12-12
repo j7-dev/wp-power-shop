@@ -4,7 +4,7 @@
  * Plugin Name:       Power Shop | 讓你的商店充滿 Power
  * Plugin URI:        https://cloud.luke.cafe/plugins/power-shop/
  * Description:       Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
- * Version:           1.2.5
+ * Version:           1.2.6
  * Requires at least: 5.7
  * Requires PHP:      7.4
  * Author:            J7
@@ -16,9 +16,12 @@
  * Tags: woocommerce, shop, order
  */
 
+namespace J7\WpReactPlugin;
+
 require_once "inc/index.php";
 require_once "licenser/class-power-shop-base.php";
 
+use J7\WpReactPlugin\PowerShop\Inc\Bootstrap;
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 class PowerShop
@@ -51,9 +54,9 @@ class PowerShop
          */
 
         $updateChecker = PucFactory::buildUpdateChecker(
-            self::GITHUB_REPO,
+            Bootstrap::GITHUB_REPO,
             __FILE__,
-            self::KEBAB
+            Bootstrap::KEBAB
         );
 
         $updateChecker->getVcsApi()->enableReleaseAssets();
@@ -64,7 +67,7 @@ class PowerShop
         add_action('admin_print_styles', [ $this, 'set_admin_style' ]);
         $this->set_plugin_data();
         $main_lic_key = "PowerShop_lic_Key";
-        $lic_key_name = Power_Shop_Base::get_lic_key_param($main_lic_key);
+        $lic_key_name = \Power_Shop_Base::get_lic_key_param($main_lic_key);
         $license_key  = get_option($lic_key_name, "");
         if (empty($license_key)) {
             $license_key = get_option($main_lic_key, "");
@@ -73,10 +76,10 @@ class PowerShop
             }
         }
         $lice_email = get_option("PowerShop_lic_email", "");
-        Power_Shop_Base::add_on_delete(function () {
+        \Power_Shop_Base::add_on_delete(function () {
             update_option("PowerShop_lic_Key", "");
         });
-        if (Power_Shop_Base::check_wp_plugin($license_key, $lice_email, $this->license_message, $this->response_obj, __FILE__)) {
+        if (\Power_Shop_Base::check_wp_plugin($license_key, $lice_email, $this->license_message, $this->response_obj, __FILE__)) {
             add_action('admin_menu', [ $this, 'active_admin_menu' ], 99999);
             add_action('admin_post_PowerShop_el_deactivate_license', [ $this, 'action_deactivate_license' ]);
             //$this->licenselMessage=$this->mess;
@@ -147,11 +150,11 @@ class PowerShop
     public function active_admin_menu()
     {
 
-        add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins", self::KEBAB . "-license", [ $this, "activated" ]);
+        add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins", Bootstrap::KEBAB . "-license", [ $this, "activated" ]);
     }
     public function inactive_menu()
     {
-        add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins", self::KEBAB . "-license", [ $this, "license_form" ]);
+        add_submenu_page('edit.php?post_type=power-shop', "PowerShop License", "License Info", "activate_plugins", Bootstrap::KEBAB . "-license", [ $this, "license_form" ]);
     }
     public function action_activate_license()
     {
@@ -168,8 +171,8 @@ class PowerShop
         check_admin_referer('el-license');
         $message      = "";
         $main_lic_key = "PowerShop_lic_Key";
-        $lic_key_name = Power_Shop_Base::get_lic_key_param($main_lic_key);
-        if (Power_Shop_Base::remove_license_key(__FILE__, $message)) {
+        $lic_key_name = \Power_Shop_Base::get_lic_key_param($main_lic_key);
+        if (\Power_Shop_Base::remove_license_key(__FILE__, $message)) {
             update_option($lic_key_name, "") || add_option($lic_key_name, "");
             update_option('_site_transient_update_plugins', '');
         }
@@ -287,9 +290,9 @@ if (!empty($this->show_message) && !empty($this->license_message)) {
 					<?php
 }
         ?>
-				<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="<?=self::BUY_LICENSE_LINK;?>">站長路可網站</a>購買
-					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:<?=self::SUPPORT_EMAIL;?>" target="_blank">
-						<?=self::SUPPORT_EMAIL;?>
+				<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="<?=Bootstrap::BUY_LICENSE_LINK;?>">站長路可網站</a>購買
+					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:<?=Bootstrap::SUPPORT_EMAIL;?>" target="_blank">
+						<?=Bootstrap::SUPPORT_EMAIL;?>
 					</a></p>
 				<div class="el-license-field">
 					<label for="el_license_key">
