@@ -47,8 +47,8 @@ const AddToCartButton: React.FC<{
         })
         if (showConfetti) {
           const defaultArgs = {
-            particleCount: 100,
-            scalar: 0.6,
+            particleCount: 150,
+            scalar: 0.75,
             ticks: 60,
             startVelocity: 70,
             spread: 360,
