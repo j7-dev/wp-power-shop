@@ -163,6 +163,7 @@ class Functions
             $product_data[ 'shortDescription' ]     = $product->get_short_description();
             $product_data[ 'sku' ]                  = $product->get_sku();
             $product_data[ 'total_sales' ]          = $product->get_total_sales();
+            $product_data[ 'backorders' ]           = $product->get_backorders(); // "yes" | "no" | "notify"
 
             if ('simple' === $product->get_type()) {
                 $product_data[ 'regularPrice' ]    = $meta[ 'regularPrice' ];

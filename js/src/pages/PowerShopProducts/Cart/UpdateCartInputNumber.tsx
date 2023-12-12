@@ -175,12 +175,16 @@ function findStockQtyById(id: number) {
   const findProduct = window.appData.products_info.products.find((p) => p.id === id)
   if (findProduct) {
     const stock = findProduct?.stock
+    const backorders = findProduct?.backorders ?? 'no'
+    if (backorders !== 'no') return Infinity
     return stock?.stockQuantity ?? Infinity
   }
   const allVariations = window.appData.products_info.products.flatMap((p) => p?.variations).filter((v) => !!v)
   const findVariation = allVariations.find((v) => v?.variation_id === id)
   if (findVariation) {
     const stock = findVariation?.stock
+    const backorders_allowed = findVariation?.backorders_allowed ?? false
+    if (backorders_allowed) return Infinity
     return stock?.stockQuantity ?? Infinity
   }
   return Infinity

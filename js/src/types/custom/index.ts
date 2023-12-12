@@ -111,7 +111,7 @@ export type TAjaxProduct = {
   type: string
   name: string
   description: string
-  images: string[]
+  images: string[] | false[]
   short_description: string
   sku: string
   variations?: TAjaxProductVariation[]
@@ -121,4 +121,8 @@ export type TAjaxProduct = {
   stock: TStockInfo
   total_sales: number
   extraBuyerCount?: number
+  is_sold_individually?: boolean
+  is_in_stock?: boolean
+  is_purchasable?: boolean
+  backorders?: 'no' | 'notify' | 'yes'
 }

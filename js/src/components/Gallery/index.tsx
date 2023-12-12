@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import defaultImage from '@/assets/images/defaultImage.jpg'
 import { nanoid } from 'nanoid'
 
-const Gallery: React.FC<{ images: string[]; selectedImage?: string }> = ({ images, selectedImage }) => {
+const Gallery: React.FC<{ images: string[] | false[]; selectedImage?: string }> = ({ images, selectedImage }) => {
   if (images.length === 0) {
     return <img className="aspect-square w-full object-cover" src={defaultImage} />
   }
@@ -13,8 +13,12 @@ const Gallery: React.FC<{ images: string[]; selectedImage?: string }> = ({ image
     setSelected,
   ] = useState(images[0])
 
-  const handleClick = (src: string) => () => {
-    setSelected(src)
+  const handleClick = (src: string | false) => () => {
+    if (src) {
+      setSelected(src)
+    } else {
+      setSelected(defaultImage)
+    }
   }
 
   const mainSrc = images.find((image) => image === selected) || images[0] || defaultImage
@@ -33,7 +37,7 @@ const Gallery: React.FC<{ images: string[]; selectedImage?: string }> = ({ image
       {images.length > 1 && (
         <div className="mt-2 w-full grid grid-cols-4 gap-2">
           {images.map((image) => (
-            <img key={nanoid()} className={`aspect-square cursor-pointer object-cover w-full ${image === selected && 'border-2 border-blue-500 border-solid'}`} onClick={handleClick(image)} src={image} style={{ width: '-webkit-fill-available' }} />
+            <img key={nanoid()} className={`aspect-square cursor-pointer object-cover w-full ${image === selected && 'border-2 border-blue-500 border-solid'}`} onClick={handleClick(image)} src={image || defaultImage} style={{ width: '-webkit-fill-available' }} />
           ))}
         </div>
       )}

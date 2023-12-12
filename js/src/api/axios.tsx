@@ -27,6 +27,21 @@ instance.interceptors.response.use(
     return response
   },
   async function (error) {
+    const status: number = error?.response?.status ?? 500
+    const refreshCount = Number(sessionStorage.getItem('refreshCount') || '0')
+    if (status === 403 && refreshCount < 2) {
+      // 如果 403 就刷新頁面最多2次吧
+
+      sessionStorage.setItem('refreshCount', (refreshCount + 1).toString())
+      setTimeout(() => {
+        window.location.reload()
+      }, 0)
+
+      // 以下是用 invalidate 不刷新頁面的方法，但有時候不一定是 nonce 錯，有時候是 cookie 錯
+      // queryClient.invalidateQueries(['get_ajax_nonce'])
+      // queryClient.invalidateQueries(['get_post_meta'])
+    }
+
     // Any status codes that falls outside the range of 2xx cause this function to trigger
 
     console.log('error', error)

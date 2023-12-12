@@ -27,10 +27,11 @@ const InStock: FC<{ qty?: number; text?: string; qtyInCart?: number }> = ({ qty,
     </>
   )
 }
-const Onbackorder: FC = () => (
+const Onbackorder: FC<{ qtyInCart?: number }> = ({ qtyInCart }) => (
   <>
     <ExclamationCircleFilled className="mr-2 text-orange-500" />
     此商品為延期交貨商品
+    <InCart qty={qtyInCart} />
   </>
 )
 
@@ -80,7 +81,7 @@ function getStockText(product: TAjaxProduct, selectedVariationId: number | null,
     case 'outofstock':
       return <SoldOut />
     case 'onbackorder':
-      return <Onbackorder />
+      return <Onbackorder qtyInCart={qtyInCart} />
     default:
       return <InStock qtyInCart={qtyInCart} />
   }

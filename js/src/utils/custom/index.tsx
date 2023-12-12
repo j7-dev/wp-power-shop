@@ -46,6 +46,8 @@ export const getUrlParam = (name: string) => {
 }
 
 export const getStockQty = (product: TAjaxProduct, selectedVariationId: number | null) => {
+  const backorders = product?.backorders ?? 'no'
+  if (backorders !== 'no') return Infinity
   const defaultStock: TStockInfo = {
     manageStock: false,
     stockQuantity: null,
