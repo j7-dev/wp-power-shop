@@ -1,3 +1,5 @@
+<?php use J7\WpReactPlugin\PowerShop\Inc\Bootstrap;?>
+
 <!doctype html>
 <html <?php language_attributes();?>>
 

@@ -31,3 +31,10 @@ done
 # zip -r ../$release_zip ../$release_folder
 
 echo '✅ Release created'
+
+cd ../$release_folder
+git add .
+git commit -m "Release v$full_version"
+git push origin master
+
+echo '✅ Release pushed to Github'
