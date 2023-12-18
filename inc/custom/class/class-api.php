@@ -6,12 +6,13 @@ namespace J7\WpReactPlugin\PowerShop\Inc;
 
 class Api
 {
-    const POSTMETA_API_ENDPOINT = 'postmeta';
-    const AJAX_NONCE_ENDPOINT   = 'ajaxnonce';
+    const POSTMETA_API_ENDPOINT       = 'postmeta';
+    const AJAX_NONCE_ENDPOINT         = 'ajaxnonce';
+    const PURGE_KINSTA_CACHE_ENDPOINT = 'purge_kinsta_cache';
 
     function __construct()
     {
-        foreach ([ self::POSTMETA_API_ENDPOINT, self::AJAX_NONCE_ENDPOINT ] as $action) {
+        foreach ([ self::POSTMETA_API_ENDPOINT, self::AJAX_NONCE_ENDPOINT, self::PURGE_KINSTA_CACHE_ENDPOINT ] as $action) {
             \add_action('rest_api_init', [ $this, "register_{$action}_api" ]);
         }
     }
@@ -56,6 +57,32 @@ class Api
     public function register_ajaxnonce_api()
     {
         $endpoint = self::AJAX_NONCE_ENDPOINT;
+        \register_rest_route('wrp', "{$endpoint}", array(
+            'methods'  => 'GET',
+            'callback' => [ $this, "{$endpoint}_callback" ],
+        ));
+    }
+
+    public function purge_kinsta_cache_callback()
+    {
+        if (class_exists('Kinsta\Cache_Purge')) {
+            try {
+                $response = wp_remote_get('https://localhost/kinsta-clear-cache-all', [
+                    'sslverify' => false,
+                    'timeout'   => 5,
+                 ]);
+                return \rest_ensure_response($response);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+
+        }
+        return \rest_ensure_response('not find kinsta mu-plugin');
+    }
+
+    public function register_purge_kinsta_cache_api()
+    {
+        $endpoint = self::PURGE_KINSTA_CACHE_ENDPOINT;
         \register_rest_route('wrp', "{$endpoint}", array(
             'methods'  => 'GET',
             'callback' => [ $this, "{$endpoint}_callback" ],
