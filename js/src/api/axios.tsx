@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { baseUrl, apiTimeout } from '@/utils'
+import { baseUrl, apiTimeout, apiUrl } from '@/utils'
 
 const wpApiSettings = window?.wpApiSettings || {}
 
@@ -30,6 +30,11 @@ instance.interceptors.response.use(
     const status: number = error?.response?.status ?? 500
     const refreshCount = Number(sessionStorage.getItem('refreshCount') || '0')
     if (status === 403 && refreshCount < 2) {
+      // 如果是KINSTA 就清除 KINSTA CACHE
+
+      const res = await axios.get(`${apiUrl}/wrp/purge_kinsta_cache`)
+      console.log('purge kinsta cache result :', res)
+
       // 如果 403 就刷新頁面最多2次吧
 
       sessionStorage.setItem('refreshCount', (refreshCount + 1).toString())
