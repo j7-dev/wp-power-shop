@@ -98,7 +98,9 @@ class CPT extends Bootstrap
     public function custom_post_type_rewrite_rules($rules)
     {
         global $wp_rewrite;
-        $wp_rewrite->flush_rules();
+        if (is_object($wp_rewrite) && !is_null($wp_rewrite)) {
+            $wp_rewrite->flush_rules();
+        }
         return $rules;
     }
 

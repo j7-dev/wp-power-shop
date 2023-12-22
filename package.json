@@ -26,7 +26,7 @@
     "canvas-confetti": "^1.9.2",
     "immutability-helper": "^3.1.1",
     "immutable": "^4.3.0",
-    "jotai": "^2.1.1",
+    "jotai": "^2.6.0",
     "lodash-es": "^4.17.21",
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
