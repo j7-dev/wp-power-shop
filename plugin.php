@@ -18,36 +18,30 @@
 
 namespace J7\WpReactPlugin;
 
-\register_activation_hook(__FILE__, __NAMESPACE__ . '\pluginActivation');
+use J7\WpReactPlugin\PowerShop\Inc\Bootstrap;
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
-// 啟用插件時執行的函數
-function pluginActivation()
+\add_action('plugins_loaded', __NAMESPACE__ . '\checkDependency');
+function checkDependency()
 {
-    // 檢查是否安裝 WooCommerce 插件
-    if (!\is_plugin_active('woocommerce/woocommerce.php')) {
-        // WooCommerce 未安裝，顯示通知
+    if (!class_exists('WooCommerce', false)) {
         \add_action('admin_notices', __NAMESPACE__ . '\dependencyNotice');
-
-        // 阻止插件啟用
-        \deactivate_plugins(plugin_basename(__FILE__));
+    } else {
+        require_once "inc/index.php";
+        require_once "licenser/class-power-shop-base.php";
+        new PowerShop();
     }
 }
 
 // 顯示 WooCommerce 未安裝的通知
-function dependencyNotice()
+function dependencyNotice(): void
 {
     ?>
-	<div class="error">
-			<p>使用此外掛必須先安裝並啟用 Woocommerce，請前往安裝</p>
-	</div>
-	<?php
+<div class="notice notice-error is-dismissible">
+<p>使用 Power Shop 外掛必須先安裝並啟用 <a href="https://tw.wordpress.org/plugins/woocommerce/" target="_blank">Woocommerce</a> ，請先安裝並啟用 <a href="https://tw.wordpress.org/plugins/woocommerce/" target="_blank">Woocommerce</a></p>
+</div>
+<?php
 }
-
-require_once "inc/index.php";
-require_once "licenser/class-power-shop-base.php";
-
-use J7\WpReactPlugin\PowerShop\Inc\Bootstrap;
-use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 class PowerShop
 {
@@ -348,5 +342,3 @@ $purchase_email = get_option("PowerShop_lic_email", get_bloginfo('admin_email'))
 		<?php
 }
 }
-
-new PowerShop();
