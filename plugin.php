@@ -18,6 +18,31 @@
 
 namespace J7\WpReactPlugin;
 
+\register_activation_hook(__FILE__, __NAMESPACE__ . '\pluginActivation');
+
+// 啟用插件時執行的函數
+function pluginActivation()
+{
+    // 檢查是否安裝 WooCommerce 插件
+    if (!\is_plugin_active('woocommerce/woocommerce.php')) {
+        // WooCommerce 未安裝，顯示通知
+        \add_action('admin_notices', __NAMESPACE__ . '\dependencyNotice');
+
+        // 阻止插件啟用
+        \deactivate_plugins(plugin_basename(__FILE__));
+    }
+}
+
+// 顯示 WooCommerce 未安裝的通知
+function dependencyNotice()
+{
+    ?>
+	<div class="error">
+			<p>使用此外掛必須先安裝並啟用 Woocommerce，請前往安裝</p>
+	</div>
+	<?php
+}
+
 require_once "inc/index.php";
 require_once "licenser/class-power-shop-base.php";
 
