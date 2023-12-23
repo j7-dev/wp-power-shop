@@ -18,11 +18,30 @@
 
 namespace J7\WpReactPlugin;
 
-require_once "inc/index.php";
-require_once "licenser/class-power-shop-base.php";
-
 use J7\WpReactPlugin\PowerShop\Inc\Bootstrap;
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+\add_action('plugins_loaded', __NAMESPACE__ . '\checkDependency');
+function checkDependency()
+{
+    if (!class_exists('WooCommerce', false)) {
+        \add_action('admin_notices', __NAMESPACE__ . '\dependencyNotice');
+    } else {
+        require_once "inc/index.php";
+        require_once "licenser/class-power-shop-base.php";
+        new PowerShop();
+    }
+}
+
+// 顯示 WooCommerce 未安裝的通知
+function dependencyNotice(): void
+{
+    ?>
+<div class="notice notice-error is-dismissible">
+<p>使用 Power Shop 外掛必須先安裝並啟用 <a href="https://tw.wordpress.org/plugins/woocommerce/" target="_blank">Woocommerce</a> ，請先安裝並啟用 <a href="https://tw.wordpress.org/plugins/woocommerce/" target="_blank">Woocommerce</a></p>
+</div>
+<?php
+}
 
 class PowerShop
 {
@@ -323,5 +342,3 @@ $purchase_email = get_option("PowerShop_lic_email", get_bloginfo('admin_email'))
 		<?php
 }
 }
-
-new PowerShop();
