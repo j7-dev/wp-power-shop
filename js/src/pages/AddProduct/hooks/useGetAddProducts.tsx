@@ -33,6 +33,7 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
     args: {
       include: shop_meta_product_ids,
       status: 'publish',
+      per_page: 100,
     },
     queryOptions: {
       enabled: shop_meta_product_ids.length > 0,

@@ -18,13 +18,9 @@ $name = $product->get_name();
     'variations' => $variations,
  ] = $meta;
 
-// ob_start();
-// print_r($meta);
-// $debug = ob_get_clean();
-// error_log('⭐ $meta ' . $debug);
-
 $price_arr         = [  ];
 $regular_price_arr = [  ];
+$variations        = $variations ?? [  ];
 foreach ($variations as $variation) {
     if (empty((int) $variation[ 'salesPrice' ])) {
         $price_arr[  ] = (int) $variation[ 'regularPrice' ];
