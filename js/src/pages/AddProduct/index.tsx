@@ -78,7 +78,7 @@ const AddProduct = () => {
 
   return (
     <div className="p-4">
-      {(isPSMetaLoading || isHandleShopMetaLoading) && <LoadingWrap />}
+      {(isPSMetaLoading || isHandleShopMetaLoading || productsResult.isLoading) && <LoadingWrap />}
       <Form className="pt-4" layout="vertical" form={form} onValuesChange={handleFormChange}>
         <div className="flex justify-between mb-4">
           <SettingButton />
@@ -99,7 +99,7 @@ const AddProduct = () => {
           showIcon
         />
         <DndProvider backend={HTML5Backend}>
-          {productsResult?.isLoading && productsResult?.isFetching
+          {productsResult?.isLoading && productsResult?.isLoading
             ? [
                 1,
                 2,

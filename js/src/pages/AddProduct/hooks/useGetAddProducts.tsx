@@ -4,6 +4,7 @@ import { TProduct, TProductVariation } from '@/types/wcRestApi'
 import { useState, useEffect } from 'react'
 import { addedProductsAtom } from '../atoms'
 import { useSetAtom } from 'jotai'
+import { sortBy } from 'lodash-es'
 
 export type TResult<T> = {
   data: {
@@ -24,6 +25,11 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
     isLoading: true,
     isFetching: true,
   })
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(true)
 
   const setAddedProducts = useSetAtom(addedProductsAtom)
 
@@ -64,7 +70,16 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
         }),
       )
         .then((res) => {
-          setAddedProducts(res)
+          // 排序後再 set
+
+          const formattedProducts = (Array.isArray(res) ? res : []) as TProduct[]
+
+          const sortOrder = shop_meta_product_ids
+          const sortedProducts = sortBy(formattedProducts, (p) => {
+            return sortOrder.indexOf(p.id)
+          })
+
+          setAddedProducts(sortedProducts)
           setResult({
             data: {
               data: res,
@@ -72,10 +87,13 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
             isLoading: false,
             isFetching: false,
           })
+          setLoading(false)
           return res
         })
         .catch((err) => {
           console.log('err:', err)
+          setLoading(false)
+
           setResult({
             data: {
               data: [],
@@ -102,7 +120,10 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
 
   // productsResult!.data!.data = Promise.all(formattedProducts)
 
-  return result
+  return {
+    ...result,
+    isLoading: loading,
+  }
 }
 
 export default useGetAddProducts
