@@ -115,6 +115,7 @@ const useGetAddProducts = (shop_meta_product_ids: number[]) => {
         isLoading: false,
         isFetching: false,
       })
+      setLoading(false)
     }
   }, [shop_meta_product_ids.length])
 
