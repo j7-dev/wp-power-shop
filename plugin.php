@@ -4,7 +4,7 @@
  * Plugin Name:       Power Shop | 讓你的商店充滿 Power
  * Plugin URI:        https://cloud.luke.cafe/plugins/power-shop/
  * Description:       Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
- * Version:           1.2.12
+ * Version:           1.2.13
  * Requires at least: 5.7
  * Requires PHP:      7.4
  * Author:            J7
@@ -197,148 +197,307 @@ class PowerShop
         }
         wp_safe_redirect(admin_url('edit.php?post_type=power-shop&page=power-shop-license'));
     }
+
     public function activated()
     {
+
         ?>
-		<form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-			<input type="hidden" name="action" value="PowerShop_el_deactivate_license" />
-			<div class="el-license-container">
-				<h3 class="el-license-title"><i class="dashicons-before dashicons-star-filled"></i>
-					<?php esc_html_e("Power Shop License Info", "power-shop");?>
-				</h3>
-				<hr>
-				<ul class="el-license-info">
-					<li>
-						<div>
-							<span class="el-license-info-title">
-								<?php esc_html_e("Status", "power-shop");?>
-							</span>
+		<form class="pt-24 w-fit mx-auto" method="post"
+			action="<?php echo \esc_url(admin_url('admin-post.php')); ?>">
+			<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 z-50 relative">
+				<div class="sm:mx-auto sm:w-full sm:max-w-sm">
+				<input type="hidden" name="action" value="PowerShop_el_deactivate_license" />
 
-							<?php if ($this->response_obj->is_valid): ?>
-								<span class="el-license-valid">
-									<?php esc_html_e("Valid", "power-shop");?>
-								</span>
-							<?php else: ?>
-								<span class="el-license-valid">
-									<?php esc_html_e("Invalid", "power-shop");?>
-								</span>
-							<?php endif;?>
-						</div>
-					</li>
 
-					<li>
-						<div>
-							<span class="el-license-info-title">
-								<?php esc_html_e("License Type", "power-shop");?>
-							</span>
-							<?php echo esc_html($this->response_obj->license_title, "power-shop"); ?>
-						</div>
-					</li>
 
-					<li>
-						<div>
-							<span class="el-license-info-title">
-								<?php esc_html_e("License Expired on", "power-shop");?>
-							</span>
-							<?php echo esc_html($this->response_obj->expire_date, "power-shop");
-        if (!empty($this->response_obj->expire_renew_link)) {
+					<!-- <img class="h-16 mx-auto w-auto" src="https://morepower.club/wp-content/uploads/2020/10/powerlogo-y.png"> -->
+					<h2 class="text-gray-700 text-center text-4xl font-black leading-9 tracking-tight">站長路可</h2>
+					<h2 class="text-gray-700 mt-10 mb-4 text-center text-2xl font-bold leading-9 tracking-tight">
+						<?php esc_html_e("Power Shop 授權", "power-shop");?>
+					</h2>
+					<?php
+if (!empty($this->show_message) && !empty($this->license_message)) {
             ?>
-								<a target="_blank" class="el-blue-btn"
-									href="<?php echo esc_url($this->response_obj->expire_renew_link); ?>">Renew</a>
-								<?php
+						<div class="notice notice-error is-dismissible">
+							<p>
+								<?php echo \esc_html($this->license_message, "power-shop"); ?>
+							</p>
+						</div>
+						<?php
 }
         ?>
-						</div>
-					</li>
+					<p class='text-gray-500'>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" class="font-semibold leading-6 text-primary hover:text-primary-400" href="<?=Bootstrap::BUY_LICENSE_LINK;?>">站長路可網站</a>購買
+					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:<?=Bootstrap::SUPPORT_EMAIL;?>" target="_blank" class="font-semibold leading-6 text-primary hover:text-primary-400">
+						<?=Bootstrap::SUPPORT_EMAIL;?>
+					</a></p>
+				</div>
 
-					<li>
-						<div>
-							<span class="el-license-info-title">
-								<?php esc_html_e("Support Expired on", "power-shop");?>
-							</span>
-							<?php
+				<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+					<table class="table table-fixed table-small th-left">
+						<tbody>
+							<tr>
+								<th>
+									<?php \esc_html_e("狀態", "power-shop");?>
+								</th>
+								<td>
+									<?php if ($this->response_obj->is_valid): ?>
+										<span class="text-white bg-teal-400 rounded-md px-2 py-1">
+											<?php \esc_html_e("啟用", "power-shop");?>
+										</span>
+									<?php else: ?>
+										<span class="text-white bg-crimson-400 rounded-md px-2 py-1">
+											<?php \esc_html_e("尚未啟用", "power-shop");?>
+										</span>
+									<?php endif;?>
+								</td>
+							</tr>
+							<tr>
+								<th>
+									<?php \esc_html_e("授權種類", "power-shop");?>
+								</th>
+								<td>
+									<?php echo \esc_html($this->response_obj->license_title, "power-shop"); ?>
+								</td>
+							</tr>
+							<tr>
+								<th>
+									<?php \esc_html_e("到期日", "power-shop");?>
+								</th>
+								<td>
+									<?php echo \esc_html($this->response_obj->expire_date, "power-shop");
+        if (!empty($this->response_obj->expire_renew_link)) {
+            ?>
+										<a target="_blank" class="el-blue-btn"
+											href="<?php echo \esc_url($this->response_obj->expire_renew_link); ?>">購買授權</a>
+										<?php
+}
+        ?>
+								</td>
+							</tr>
+							<tr>
+								<th>
+									<?php \esc_html_e("支援更新時間", "power-shop");?>
+								</th>
+								<td>
+									<?php
 echo esc_html($this->response_obj->support_end, "power-shop");
 
         if (!empty($this->response_obj->support_renew_link)) {
             ?>
-								<a target="_blank" class="el-blue-btn"
-									href="<?php echo esc_url($this->response_obj->support_renew_link); ?>">Renew</a>
-								<?php
+										<a target="_blank" class="el-blue-btn"
+											href="<?php echo \esc_url($this->response_obj->support_renew_link); ?>">購買授權</a>
+										<?php
 }
         ?>
-						</div>
-					</li>
-					<li>
-						<div>
-							<span class="el-license-info-title">
-								<?php esc_html_e("Your License Key", "power-shop");?>
-							</span>
-							<span class="el-license-key">
-								<?php echo esc_attr(substr($this->response_obj->license_key, 0, 9) . "XXXXXXXX-XXXXXXXX" . substr($this->response_obj->license_key, -9)); ?>
-							</span>
-						</div>
-					</li>
-				</ul>
-				<div class="el-license-active-btn">
-					<?php wp_nonce_field('el-license');?>
-					<?php submit_button('Deactivate');?>
+								</td>
+							</tr>
+							<tr>
+								<th>
+									<?php \esc_html_e("授權碼", "power-shop");?>
+								</th>
+								<td>
+									<?php echo \esc_attr(substr($this->response_obj->license_key, 0, 9) . "XXXXXXXX-XXXXXXXX" . substr($this->response_obj->license_key, -9)); ?>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+
+					<div class="mt-8">
+						<button type="submit"
+							class="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">棄用授權</button>
+					</div>
+
+					<p class="mt-10 text-center text-sm text-gray-400">
+						網站速度不夠快？
+						<a target="_blank" href="https://cloud.luke.cafe/"
+							class="font-semibold leading-6 text-primary hover:text-primary-400">我們的主機代管服務</a>
+						提供30天免費試用
+					</p>
+					<?php \wp_nonce_field('el-license');?>
+
 				</div>
 			</div>
 		</form>
+
 		<?php
-}
+$this->get_background_html();
+    }
 
     public function license_form()
     {
         ?>
-		<form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-			<input type="hidden" name="action" value="PowerShop_el_activate_license" />
-			<div class="el-license-container">
-				<h3 class="el-license-title"><i class="dashicons-before dashicons-star-filled"></i>
-					<?php esc_html_e("Power Shop Licensing", "power-shop");?>
-				</h3>
-				<hr>
-				<?php
+		<form class="pt-24 w-fit mx-auto" method="post"
+			action="<?php echo \esc_url(\admin_url('admin-post.php')); ?>">
+			<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 z-50 relative">
+				<div class="sm:mx-auto sm:w-full sm:max-w-sm">
+					<input type="hidden" name="action" value="PowerShop_el_activate_license" />
+
+
+					<!-- <img class="h-16 mx-auto w-auto" src="https://morepower.club/wp-content/uploads/2020/10/powerlogo-y.png"> -->
+					<h2 class="text-gray-700 text-center text-4xl font-black leading-9 tracking-tight">站長路可</h2>
+					<h2 class="text-gray-700 mt-10 mb-4 text-center text-2xl font-bold leading-9 tracking-tight">
+						<?php \esc_html_e("Power Shop授權", "power-shop");?>
+					</h2>
+					<?php
 if (!empty($this->show_message) && !empty($this->license_message)) {
             ?>
-					<div class="notice notice-error is-dismissible">
-						<p>
-							<?php echo esc_html($this->license_message, "power-shop"); ?>
-						</p>
-					</div>
-					<?php
+						<div class="notice notice-error is-dismissible">
+							<p>
+								<?php echo \esc_html($this->license_message, "power-shop"); ?>
+							</p>
+						</div>
+						<?php
 }
         ?>
-				<p>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" href="<?=Bootstrap::BUY_LICENSE_LINK;?>">站長路可網站</a>購買
-					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:<?=Bootstrap::SUPPORT_EMAIL;?>" target="_blank">
+
+					<p class='text-gray-500'>請輸入授權碼以開通進階功能，購買授權請到<a target="_blank" class="font-semibold leading-6 text-primary hover:text-primary-400" href="<?=Bootstrap::BUY_LICENSE_LINK;?>">站長路可網站</a>購買
+					有任何客服問題，請私訊站長路可網站右下方對話框，或是來信 <a href="mailto:<?=Bootstrap::SUPPORT_EMAIL;?>" target="_blank" class="font-semibold leading-6 text-primary hover:text-primary-400">
 						<?=Bootstrap::SUPPORT_EMAIL;?>
 					</a></p>
-				<div class="el-license-field">
-					<label for="el_license_key">
-						<?php echo esc_html("License code", "power-shop"); ?>
-					</label>
-					<input type="text" class="regular-text code" name="el_license_key" size="50"
-						placeholder="xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx" required="required">
+
+					<input id="el_license_key" type="text"
+						class="h-[36px] block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+						name="el_license_key" size="50" placeholder="xxxxxxxx-xxxxxxxx-xxxxxxxx-xxxxxxxx"
+						required="required">
 				</div>
-				<div class="el-license-field">
-					<label for="el_license_key">
-						<?php echo esc_html("Email Address", "power-shop"); ?>
-					</label>
+
+
+			<div class="mb-4">
+				<label for="el_license_email" class="block text-sm font-medium leading-6 text-gray-500">
+					<?php echo esc_html("Email", "power-shop"); ?>
+				</label>
+				<div class="mt-2">
 					<?php
-$purchase_email = get_option("PowerShop_lic_email", get_bloginfo('admin_email'));
+$purchase_email = \get_option("PowerShop_lic_email", \get_bloginfo('admin_email'));
         ?>
-					<input type="text" class="regular-text code" name="el_license_email" size="50"
-						value="<?php echo esc_html($purchase_email); ?>" placeholder="" required="required">
-					<div><small>
-							<?php echo esc_html("We will send update news of this product by this email address, don't worry, we hate spam", "power-shop"); ?>
-						</small></div>
-				</div>
-				<div class="el-license-active-btn">
-					<?php wp_nonce_field('el-license');?>
-					<?php submit_button('Activate');?>
+					<input id="el_license_email" type="email"
+						class="h-[36px] block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+						name="el_license_email" size="50" value="<?php echo \esc_html($purchase_email); ?>"
+						placeholder="" required="required">
 				</div>
 			</div>
+
+			<div class="mt-8">
+				<button type="submit"
+					class="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">啟用授權</button>
+			</div>
+		</form>
+
+		<p class="mt-10 text-center text-sm text-gray-400">
+			網站速度不夠快？
+			<a target="_blank" href="https://cloud.luke.cafe/"
+				class="font-semibold leading-6 text-primary hover:text-primary-400">我們的主機代管服務</a> 提供30天免費試用
+		</p>
+		<?php wp_nonce_field('el-license');?>
+
+		</div>
+		</div>
 		</form>
 		<?php
+$this->get_background_html();
+    }
+
+    public function get_background_html()
+    {
+        ?>
+		<style>
+			table.table {
+				color: #334155;
+				width: 100%;
+				border-collapse: collapse;
+				table-layout: auto;
+				/* 让列宽自动分配 */
+			}
+
+			table.table.table-fixed {
+				table-layout: fixed;
+				/* 让列宽平均分配 */
+			}
+
+			table.table tr {
+				background-color: transparent;
+				transition: 0.3s ease-in-out;
+			}
+
+			table.table tr:hover {
+				color: #4096ff;
+			}
+
+			table.table td,
+			table.table th {
+				width: auto;
+				border: 0px solid #ddd;
+				padding: 0.75rem 0.5rem;
+				line-height: 1;
+			}
+
+			table.table th {
+				width: 90px;
+			}
+
+			table.table.table-small td,
+			table.table.table-small th {
+				padding: 0.5rem 0rem;
+				font-size: 0.75rem;
+			}
+
+			table.table.table-nowrap td,
+			table.table.table-nowrap th {
+				white-space: nowrap;
+			}
+
+			table.table td {
+				text-align: right;
+			}
+
+			table.table.th-left th {
+				text-align: left;
+			}
+
+			table.table th {
+				text-align: center;
+				font-weight: 700;
+			}
+
+			table.table.table-vertical {
+				table-layout: fixed;
+			}
+
+			table.table.table-vertical tr {
+				display: flex;
+				border-bottom: 1px solid #ddd;
+			}
+
+			table.table.table-vertical th {
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				background-color: #f8f8f8;
+				border: none;
+				width: 15rem;
+			}
+
+			table.table.table-vertical th * {
+				text-align: left;
+			}
+
+			table.table.table-vertical td {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				flex: 1;
+				border: none;
+			}
+			#wpfooter{
+				display: none !important;
+			}
+		</style>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>		tailwind.config = {			theme: {				extend: {					colors: {						primary: '#1677ff',						'primary-400': '#4096ff',					}				}			}		}
+		</script>
+
+		<?php
 }
+
 }
