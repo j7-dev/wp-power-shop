@@ -13,14 +13,12 @@ $img_src = \wp_get_attachment_image_src($img_id, [ 450, 450 ]) ?: [ $default_ima
 
 $name = $product->get_name();
 
-[
-    'productId'  => $product_id,
-    'variations' => $variations,
- ] = $meta;
+$product_id = $meta[ 'productId' ] ?? '';
+$variations = $meta[ 'variations' ] ?? [  ];
 
 $price_arr         = [  ];
 $regular_price_arr = [  ];
-$variations        = $variations ?? [  ];
+
 foreach ($variations as $variation) {
     if (empty((int) $variation[ 'salesPrice' ])) {
         $price_arr[  ] = (int) $variation[ 'regularPrice' ];
