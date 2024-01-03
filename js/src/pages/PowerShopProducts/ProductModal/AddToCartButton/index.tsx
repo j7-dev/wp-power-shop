@@ -10,6 +10,7 @@ import { nanoid } from 'nanoid'
 import { TProductVariationAttribute } from '@/types/wcStoreApi'
 import confetti from 'canvas-confetti'
 import { getStockQty } from '@/utils/custom'
+import defaultImage from '@/assets/images/defaultImage.jpg'
 
 const AddToCartButton: React.FC<{
   product: TAjaxProduct
@@ -74,7 +75,7 @@ const AddToCartButton: React.FC<{
           short_description,
           description,
           images: images.map((src) => ({
-            src,
+            src: (src ?? defaultImage) as string,
           })),
           variation: variation
             ? variation.map((item) => ({
@@ -142,6 +143,7 @@ const AddToCartButton: React.FC<{
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['get_cart'] })
+          window.jQuery('body').trigger('wc_fragment_refresh')
         },
         onError: (error: any, variables, rollBack) => {
           console.log('Error', error)
