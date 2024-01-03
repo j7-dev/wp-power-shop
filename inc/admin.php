@@ -159,19 +159,19 @@ class Bootstrap
 
     public static function get_plugin_dir(): string
     {
-        $plugin_dir = \wp_normalize_path(\plugin_dir_path(__DIR__ . '../'));
+        $plugin_dir = \untrailingslashit(\wp_normalize_path(\plugin_dir_path(__DIR__ . '../')));
         return $plugin_dir;
     }
 
     public static function get_plugin_url(): string
     {
-        $plugin_url = \plugin_dir_url(self::get_plugin_dir() . 'plugin.php');
+        $plugin_url = \untrailingslashit(\plugin_dir_url(self::get_plugin_dir() . '/plugin.php'));
         return $plugin_url;
     }
 
     public static function get_plugin_ver(): string
     {
-        $plugin_data = \get_plugin_data(self::get_plugin_dir() . 'plugin.php');
+        $plugin_data = \get_plugin_data(self::get_plugin_dir() . '/plugin.php');
         $plugin_ver  = $plugin_data[ 'Version' ];
         return $plugin_ver;
     }
