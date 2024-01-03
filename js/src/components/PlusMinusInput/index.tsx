@@ -7,7 +7,6 @@ const PlusMinusInput: FC<
     stockQty?: number | null
   }
 > = ({ stockQty, ...inputNumberProps }) => {
-  console.log('⭐  stockQty:', stockQty)
   const getProps = (v: number | undefined | null) => {
     if (v === undefined || v === null) return inputNumberProps
 
