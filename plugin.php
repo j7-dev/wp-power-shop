@@ -27,8 +27,8 @@ function checkDependency()
     if (!class_exists('WooCommerce', false)) {
         \add_action('admin_notices', __NAMESPACE__ . '\dependencyNotice');
     } else {
-        require_once "inc/index.php";
-        require_once "licenser/class-power-shop-base.php";
+        require_once __DIR__ . "/inc/index.php";
+        require_once __DIR__ . "/licenser/class-power-shop-base.php";
         new PowerShop();
     }
 }
