@@ -209,10 +209,10 @@ class CPT extends Bootstrap
     public function limit_css_and_js()
     {
         if (AXD::gte($this->count_publish)) {
-            \wp_enqueue_style(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/css/main.css');
-            \wp_enqueue_style('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.css');
-            \wp_enqueue_script('jquery-confirm', Bootstrap::get_plugin_url() . 'inc/assets/packages/jquery-confirm/jquery-confirm.min.js', array('jquery'), '3.3.4', true);
-            \wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . 'inc/assets/js/main.js', array('jquery-confirm'), Bootstrap::get_plugin_ver(), true);
+            \wp_enqueue_style(self::CPT_SLUG, Bootstrap::get_plugin_url() . '/inc/assets/css/main.css');
+            \wp_enqueue_style('jquery-confirm', Bootstrap::get_plugin_url() . '/inc/assets/packages/jquery-confirm/jquery-confirm.min.css');
+            \wp_enqueue_script('jquery-confirm', Bootstrap::get_plugin_url() . '/inc/assets/packages/jquery-confirm/jquery-confirm.min.js', array('jquery'), '3.3.4', true);
+            \wp_enqueue_script(self::CPT_SLUG, Bootstrap::get_plugin_url() . '/inc/assets/js/main.js', array('jquery-confirm'), Bootstrap::get_plugin_ver(), true);
             wp_localize_script(self::CPT_SLUG, 'powerShopData', [
                 'buyLink'      => self::BUY_LICENSE_LINK,
                 'licenseLink'  => \admin_url(self::LICENSE_LINK),
