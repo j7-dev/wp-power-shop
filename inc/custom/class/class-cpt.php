@@ -124,7 +124,7 @@ class CPT extends Bootstrap
      */
     public function load_report_template($template)
     {
-        $repor_template_path = Bootstrap::get_plugin_dir() . 'inc/templates/report.php';
+        $repor_template_path = Bootstrap::get_plugin_dir() . '/inc/templates/report.php';
 
         if (\get_query_var(self::VAR )) {
             if (file_exists($repor_template_path)) {
