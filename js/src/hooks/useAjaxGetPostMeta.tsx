@@ -42,7 +42,7 @@ export function useAjaxGetPostMeta<T>(props: TProps) {
     queryFn: (fnProps?: TFnProps) =>
       adminAjax({
         args: {
-          action: 'handle_get_post_meta',
+          action: 'ps_handle_get_post_meta',
           nonce: ajaxNonce,
           post_id: fnProps?.post_id || props.post_id,
           meta_key: fnProps?.meta_key || props.meta_key,
