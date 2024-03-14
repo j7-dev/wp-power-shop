@@ -37,7 +37,7 @@ const OtherSettings: React.FC<{
         <Switch size="small" />
       </Form.Item>
 
-      <Form.Item name={['enableVirtualList']} label="啟用虛擬列表" help="如果你的 Power Shop 包含非常大量的商品(ex 超過20個)的話，建議開啟此項來提升渲染效率" valuePropName="checked">
+      <Form.Item name={['enableVirtualList']} label="啟用虛擬列表" help="如果你的 Power Shop 包含非常大量的商品(ex 超過20個)的話，建議開啟此項來提升渲染效率 (此功能尚在開發中，敬請期待)" valuePropName="checked">
         <Switch size="small" />
       </Form.Item>
     </>

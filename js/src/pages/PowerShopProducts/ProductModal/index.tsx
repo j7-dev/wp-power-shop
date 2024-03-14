@@ -30,7 +30,7 @@ const ProductModal: FC<{ product: TAjaxProduct }> = ({ product }) => {
 
   return (
     <Modal {...modalProps}>
-      <Row gutter={24} className="max-h-[75vh] overflow-y-auto">
+      <Row gutter={24} className="max-h-[75vh] overflow-y-auto overflow-x-hidden">
         <Col span={24} lg={{ span: 10 }} className="mb-4 relative">
           <div className="sticky top-0">
             <Gallery images={images} />
