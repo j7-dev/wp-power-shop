@@ -18,6 +18,7 @@ declare global {
         showConfetti: boolean
         showStock: boolean
         showBuyerCount: boolean
+        enableVirtualList: boolean
       }
       env: {
         siteUrl: string

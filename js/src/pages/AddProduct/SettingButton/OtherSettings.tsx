@@ -15,6 +15,7 @@ const OtherSettings: React.FC<{
         showConfetti: settings?.showConfetti ?? true,
         showStock: settings?.showStock ?? true,
         showBuyerCount: settings?.showBuyerCount ?? true,
+        enableVirtualList: settings?.enableVirtualList ?? false,
       })
     }
   }, [isLoading])
@@ -33,6 +34,10 @@ const OtherSettings: React.FC<{
       </Form.Item>
 
       <Form.Item name={['showBuyerCount']} label="顯示有多少人購買過此商品" valuePropName="checked">
+        <Switch size="small" />
+      </Form.Item>
+
+      <Form.Item name={['enableVirtualList']} label="啟用虛擬列表" help="如果你的 Power Shop 包含非常大量的商品(ex 超過20個)的話，建議開啟此項來提升渲染效率" valuePropName="checked">
         <Switch size="small" />
       </Form.Item>
     </>

@@ -25,4 +25,6 @@ export const colorPrimary = window?.appData?.settings?.colorPrimary || '#1677ff'
 export const showConfetti = window?.appData?.settings?.showConfetti ?? true
 export const showStock = window?.appData?.settings?.showStock ?? true
 export const showBuyerCount = window?.appData?.settings?.showBuyerCount ?? true
+export const enableVirtualList = window?.appData?.settings?.enableVirtualList ?? false
+
 export const power_shop_meta_meta_id = window?.appData?.settings?.power_shop_meta_meta_id

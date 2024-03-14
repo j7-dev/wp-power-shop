@@ -29,6 +29,7 @@ export type TSettings = {
   showConfetti: boolean
   showStock: boolean
   showBuyerCount: boolean
+  enableVirtualList: boolean
 }
 
 export const defaultSettings = {
@@ -38,6 +39,7 @@ export const defaultSettings = {
   showConfetti: true,
   showStock: true,
   showBuyerCount: true,
+  enableVirtualList: false,
 }
 
 // Ajax Product
