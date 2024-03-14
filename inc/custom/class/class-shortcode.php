@@ -35,7 +35,6 @@ class ShortCode
 		$settings_string = \get_post_meta($post->ID, Bootstrap::SNAKE . '_settings', true);
 		$settings        = Functions::json_parse($settings_string, [], true);
 		$enable_virtual_list = $settings['enableVirtualList'] ?? false;
-		var_dump($enable_virtual_list);
 
 		if (!empty($settings['endTime'])) {
 			$is_shop_closed = $settings['endTime'] < (time() * 1000);
