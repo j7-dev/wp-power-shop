@@ -26,7 +26,7 @@ const useProductModalProps = (product: TAjaxProduct) => {
   }
 
   const name = renderHTML(product?.name ?? '未知商品')
-  const description = formatYoutubeLinkToIframe(product?.description ?? '')
+  const description = formatYoutubeLinkToIframe(`${product?.shortDescription || ''}${product?.description || ''}`)
   const images = product?.images ?? []
   const stockQty = getStockQty(product, selectedVariationId)
   const cartData = useAtomValue(cartDataAtom)

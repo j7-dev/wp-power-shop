@@ -114,7 +114,7 @@ export type TAjaxProduct = {
   name: string
   description: string
   images: string[] | false[]
-  short_description: string
+  shortDescription: string
   sku: string
   variations?: TAjaxProductVariation[]
   variation_attributes?: {
