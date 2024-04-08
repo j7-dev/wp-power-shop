@@ -132,7 +132,11 @@ class Functions {
 				return array();
 			}
 
-			$product          = \wc_get_product( $meta['productId'] );
+			$product = \wc_get_product( $meta['productId'] );
+			if ( ! $product ) {
+				return array();
+			}
+
 			$feature_image_id = $product->get_image_id();
 			$attachment_ids   = array( $feature_image_id, ...$product->get_gallery_image_ids() );
 			$images           = array();
