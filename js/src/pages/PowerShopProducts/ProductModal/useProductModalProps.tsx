@@ -23,6 +23,7 @@ const useProductModalProps = (product: TAjaxProduct) => {
     className: 'lg:w-1/2 lg:max-w-[960px]',
     open: isProductModalOpen,
     onCancel: () => setIsProductModalOpen(false),
+		zIndex: 1000000,
   }
 
   const name = renderHTML(product?.name ?? '未知商品')
