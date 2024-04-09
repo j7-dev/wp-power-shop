@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
 import Main from './Main'
-import ShopClosed from './ShopClosed'
-import ShopComing from './ShopComing'
 import { useAjaxGetPostMeta } from '@/hooks'
 import { postId, snake } from '@/utils'
 import { TSettings, defaultSettings } from '@/types'
@@ -99,11 +97,7 @@ const PowerShopProducts = () => {
 
   return (
     <>
-      {shopStatus === 'published' && <Main endTime={endTime} products={products} />}
-      {shopStatus === 'coming' && <ShopComing startTime={startTime} />}
-      {shopStatus === 'closed' && <ShopClosed endTime={endTime} />}
-
-      {shopStatus !== 'published' && shopStatus !== 'coming' && shopStatus !== 'closed' && <Main products={products} />}
+			<Main products={products} />
       {modalProduct && <ProductModal product={modalProduct} />}
     </>
   )

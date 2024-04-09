@@ -1,10 +1,12 @@
-import { DatePicker, Form, Alert } from 'antd'
+import { DatePicker, Form, Alert, Typography } from 'antd'
 import { SwapRightOutlined } from '@ant-design/icons'
 import { useColor } from '@/hooks'
 import { disabledDate, disabledTime } from '@/utils'
 import dayjs, { Dayjs } from 'dayjs'
 import { TSettings } from '@/types'
 import { LoadingText } from '@/components/PureComponents'
+
+const {Paragraph} = Typography
 
 const TimeSetting: React.FC<{
   isLoading: boolean
@@ -25,6 +27,8 @@ const TimeSetting: React.FC<{
         message="使用方法"
         description={
           <>
+					<div className='flex'>將 <Paragraph className='mx-3' copyable>[power_shop_countdown]</Paragraph> shortcode 貼到你想放置的地方 (🚩僅在 powershop 頁面有效)</div>
+
             <ol>
               <li>
                 [開始時間] & [結束時間] <b> 可設定也可不設定</b>
