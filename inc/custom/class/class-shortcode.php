@@ -206,7 +206,9 @@ class ShortCode {
 		$html = '';
 		ob_start();
 		?>
-		<div id="flipdown" class="flipdown" data-start-time="<?php echo $start_time;//phpcs:ignore ?>" data-end-time="<?php echo $end_time;//phpcs:ignore ?>"></div>
+		<div class="w-full flex justify-center">
+			<div id="flipdown" class="flipdown" data-start-time="<?php echo $start_time;//phpcs:ignore ?>" data-end-time="<?php echo $end_time;//phpcs:ignore ?>"></div>
+		</div>
 		<script>
 			(function($){
 				const startTime = $('#flipdown').data('start-time');
