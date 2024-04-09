@@ -8,7 +8,7 @@
 
 ## 🎮 範例網站
 
-[測試商店](https://fs.yc-tech.co/power-shop/j7/)
+[測試商店](https://demo.sc-ads.com/power-shop/a/)
 
 
 <br><br><br>
