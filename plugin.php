@@ -161,10 +161,10 @@ class PowerShop {
 	}
 	public function active_admin_menu() {
 
-		add_submenu_page( 'edit.php?post_type=power-shop', 'PowerShop License', 'License Info', 'activate_plugins', Bootstrap::KEBAB . '-license', array( $this, 'activated' ) );
+		// add_submenu_page( 'edit.php?post_type=power-shop', 'PowerShop License', 'License Info', 'activate_plugins', Bootstrap::KEBAB . '-license', array( $this, 'activated' ) );
 	}
 	public function inactive_menu() {
-		add_submenu_page( 'edit.php?post_type=power-shop', 'PowerShop License', 'License Info', 'activate_plugins', Bootstrap::KEBAB . '-license', array( $this, 'license_form' ) );
+		// add_submenu_page( 'edit.php?post_type=power-shop', 'PowerShop License', 'License Info', 'activate_plugins', Bootstrap::KEBAB . '-license', array( $this, 'license_form' ) );
 	}
 	public function action_activate_license() {
 		check_admin_referer( 'el-license' );
