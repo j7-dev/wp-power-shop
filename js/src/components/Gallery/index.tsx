@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import defaultImage from '@/assets/images/defaultImage.jpg'
-import { nanoid } from 'nanoid'
 
 const Gallery: React.FC<{ images: string[] | false[]; selectedImage?: string }> = ({ images, selectedImage }) => {
   if (images.length === 0) {
@@ -36,8 +35,8 @@ const Gallery: React.FC<{ images: string[] | false[]; selectedImage?: string }> 
       <img className="aspect-square w-full object-cover" src={mainSrc} />
       {images.length > 1 && (
         <div className="mt-2 w-full grid grid-cols-4 gap-2">
-          {images.map((image) => (
-            <img key={nanoid()} className={`aspect-square cursor-pointer object-cover w-full ${image === selected && 'border-2 border-blue-500 border-solid'}`} onClick={handleClick(image)} src={image || defaultImage} style={{ width: '-webkit-fill-available' }} />
+          {images.map((image, i) => (
+            <img key={`${image}-${i}`} className={`aspect-square cursor-pointer object-cover w-full ${image === selected && 'border-2 border-blue-500 border-solid'}`} onClick={handleClick(image)} src={image || defaultImage} style={{ width: '-webkit-fill-available' }} />
           ))}
         </div>
       )}
