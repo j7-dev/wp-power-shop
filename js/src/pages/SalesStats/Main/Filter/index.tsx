@@ -16,11 +16,11 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
     setFilter,
   ] = useAtom(filterAtom)
   const orderStatuses = orderData?.info?.orderStatuses ?? []
-  const options = orderStatuses.map((orderStatus) => {
-    const { label } = getOrderStatus(orderStatus.value)
+  const options = orderStatuses?.map((orderStatus) => {
+    const { label } = getOrderStatus(orderStatus?.value)
     return {
       label,
-      value: orderStatus.value,
+      value: orderStatus?.value,
     }
   })
 
@@ -32,13 +32,7 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
       event.stopPropagation()
     }
     return (
-      <Tag
-        color={color}
-        onMouseDown={onPreventMouseDown}
-        closable={closable}
-        onClose={onClose}
-        style={{ marginRight: 3 }}
-      >
+      <Tag color={color} onMouseDown={onPreventMouseDown} closable={closable} onClose={onClose} style={{ marginRight: 3 }}>
         {label}
       </Tag>
     )
@@ -58,8 +52,7 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
             name={[
               'rangePicker',
             ]}
-            noStyle
-          >
+            noStyle>
             <RangePicker
               className="w-full"
               placeholder={[
@@ -73,40 +66,21 @@ const Filter: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
           <p className="my-0">選擇狀態</p>
           <Form.Item name={['status']} noStyle initialValue={filter.status}>
-            <Select
-              mode="multiple"
-              allowClear
-              tagRender={tagRender}
-              style={{ width: '100%' }}
-              options={options}
-              loading={isLoading}
-            />
+            <Select mode="multiple" allowClear tagRender={tagRender} style={{ width: '100%' }} options={options} loading={isLoading} />
           </Form.Item>
         </Col>
         {isAdmin && (
           <Form.Item name={['email']} noStyle initialValue={filter.email}>
             <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
               <p className="my-0">搜尋特定顧客 ID 或 E-mail</p>
-              <Input
-                placeholder="搜尋顧客ID 或 E-mail"
-                disabled={isLoading}
-                allowClear
-                className="py-[1px]"
-              />
+              <Input placeholder="搜尋顧客ID 或 E-mail" disabled={isLoading} allowClear className="py-[1px]" />
             </Col>
           </Form.Item>
         )}
 
         <Col span={24} md={{ span: 12 }} xxl={{ span: 8 }} className="mb-4">
           <p className="my-0">&nbsp;</p>
-          <Button
-            htmlType="submit"
-            className="w-full"
-            type="primary"
-            icon={<SearchOutlined />}
-            onClick={handleFilter}
-            loading={isLoading}
-          >
+          <Button htmlType="submit" className="w-full" type="primary" icon={<SearchOutlined />} onClick={handleFilter} loading={isLoading}>
             搜尋
           </Button>
         </Col>

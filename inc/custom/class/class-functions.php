@@ -126,6 +126,10 @@ class Functions {
 			$shop_meta = array();
 		}
 
+		if ( ! is_array( $shop_meta ) ) {
+			$shop_meta = array();
+		}
+
 		function get_product_data( array $meta ): array {
 			$meta = (array) $meta ?? array();
 			if ( empty( $meta['productId'] ) ) {
