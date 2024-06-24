@@ -1,13 +1,16 @@
-import { Button, Modal, Form, notification, ModalProps, Tabs, TabsProps } from 'antd'
+import { FC } from 'react'
+import { Button, Modal, Form, notification, ModalProps, Tabs, TabsProps, FormInstance } from 'antd'
 import { SettingFilled } from '@ant-design/icons'
 import { useModal, useUpdate, useAjaxGetPostMeta } from '@/hooks'
-import { kebab, postId, snake } from '@/utils'
+import { kebab, postId, snake, formatShopMeta } from '@/utils'
 import dayjs from 'dayjs'
 import { TSettings, defaultSettings } from '@/types'
 import TimeSetting from './TimeSetting'
 import OtherSettings from './OtherSettings'
 
-const SettingButton = () => {
+const SettingButton: FC<{
+  form: FormInstance
+}> = ({ form: metaForm }) => {
   const { showModal, modalProps, setIsModalOpen } = useModal()
   const [form] = Form.useForm()
 
@@ -16,11 +19,12 @@ const SettingButton = () => {
     dataProvider: 'wp',
     pathParams: [postId],
     mutationOptions: {
-      onSuccess: () => {
+      onSuccess: async () => {
         notification.success({
           message: '設定儲存成功，正刷新頁面...',
         })
         setIsModalOpen(false)
+
         setTimeout(() => {
           window.location.reload()
         }, 1500)
@@ -34,16 +38,20 @@ const SettingButton = () => {
     },
   })
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const values = form.getFieldsValue()
     const { startTime, endTime } = values
     values.startTime = startTime ? dayjs(startTime).valueOf() : null
     values.endTime = endTime ? dayjs(endTime).valueOf() : null
     values.btnColor = values.btnColor?.toHexString()
 
+    // 儲存價格
+
+    const allFields = await formatShopMeta({ form: metaForm })
     mutate({
       meta: {
         [`${snake}_settings`]: JSON.stringify(values),
+        [`${snake}_meta`]: JSON.stringify(allFields),
       },
     })
   }

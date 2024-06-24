@@ -55,8 +55,11 @@ const AddProduct = () => {
   const { handleFormChange } = useChangeNotification(form)
 
   const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
-    setAddedProducts((pre: TProduct[]) =>
-      update(pre, {
+    const values = form.getFieldsValue()
+    const valuesInArray = Object.values(values)
+
+    setAddedProducts((pre: TProduct[]) => {
+      return update(pre, {
         $splice: [
           [
             dragIndex,
@@ -68,8 +71,26 @@ const AddProduct = () => {
             pre[dragIndex] as TProduct,
           ],
         ],
-      }),
-    )
+      })
+    })
+
+    setTimeout(() => {
+      const newValues = update(valuesInArray, {
+        $splice: [
+          [
+            dragIndex,
+            1,
+          ],
+          [
+            hoverIndex,
+            0,
+            values[dragIndex],
+          ],
+        ],
+      })
+
+      form.setFieldsValue(newValues)
+    }, 100)
   }, [])
 
   const renderItem = useCallback((product: TProduct, index: number) => {
@@ -81,7 +102,7 @@ const AddProduct = () => {
       {(isPSMetaLoading || isHandleShopMetaLoading || productsResult.isLoading) && <LoadingWrap />}
       <Form className="pt-4" layout="vertical" form={form} onValuesChange={handleFormChange}>
         <div className="flex justify-between mb-4">
-          <SettingButton />
+          <SettingButton form={form} />
           <SaveButton type="primary" icon={<SaveFilled />} disabled={isPSMetaLoading || productsResult?.isFetching || isHandleShopMetaLoading} />
         </div>
         <Alert
