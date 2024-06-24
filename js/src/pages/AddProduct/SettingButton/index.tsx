@@ -27,7 +27,7 @@ const SettingButton: FC<{
 
         setTimeout(() => {
           window.location.reload()
-        }, 1500)
+        }, 3000)
       },
       onError: (error) => {
         console.log('Error', error)
