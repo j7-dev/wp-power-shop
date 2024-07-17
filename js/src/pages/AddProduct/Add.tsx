@@ -92,12 +92,23 @@ const Add = () => {
     setSelectedProductId(value)
   }
 
-  const handleAddProduct = () => {
+  const handleAddProductBottom = () => {
     const selectedProduct = products.find((product) => product.id === selectedProductId)
     if (!!selectedProduct) {
       setAddedProducts([
         ...addedProducts,
         selectedProduct,
+      ])
+      setIsChange(true)
+    }
+  }
+
+  const handleAddProductTop = () => {
+    const selectedProduct = products.find((product) => product.id === selectedProductId)
+    if (!!selectedProduct) {
+      setAddedProducts([
+        selectedProduct,
+        ...addedProducts,
       ])
       setIsChange(true)
     }
@@ -109,11 +120,11 @@ const Add = () => {
     <div className="mb-8">
       <p className="mb-2 text-[1rem] font-semibold">選擇要加入的商品</p>
 
-      <div className="flex md:flex-row flex-col">
+      <div className="flex md:flex-row flex-col gap-2">
         <Select
           loading={productCatsResult.isLoading}
           disabled={productCatsResult.isLoading}
-          className="w-full md:mr-4 mb-2 md:mb-0"
+          className="w-full mb-2 md:mb-0"
           allowClear
           size="large"
           showSearch
@@ -128,7 +139,7 @@ const Add = () => {
         <Select
           loading={productResult.isLoading && !!selectedCatId}
           disabled={!selectedCatId || productResult.isLoading}
-          className="w-full md:mr-4 mb-2 md:mb-0"
+          className="w-full mb-2 md:mb-0"
           allowClear
           size="large"
           showSearch
@@ -145,8 +156,11 @@ const Add = () => {
             return (theProduct?.name ?? '').toLowerCase().includes(input.toLowerCase())
           }}
         />
-        <Button disabled={btnDisabled} size="large" type="primary" className="mx-0" onClick={handleAddProduct}>
-          新增
+        <Button disabled={btnDisabled} size="large" type="primary" className="mx-0" onClick={handleAddProductBottom}>
+          從底部新增
+        </Button>
+        <Button disabled={btnDisabled} size="large" type="primary" className="mx-0" onClick={handleAddProductTop}>
+          從頂部新增
         </Button>
       </div>
     </div>
