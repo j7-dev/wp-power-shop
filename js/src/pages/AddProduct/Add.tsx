@@ -177,12 +177,14 @@ const Add = () => {
             return (theProduct?.name ?? '').toLowerCase().includes(input.toLowerCase())
           }}
         />
-        <Button disabled={btnDisabled} size="large" type="primary" className="mx-0" onClick={handleAddProductBottom}>
-          從底部新增
-        </Button>
-        <Button disabled={btnDisabled} size="large" type="primary" className="mx-0" onClick={handleAddProductTop}>
-          從頂部新增
-        </Button>
+        <div className="flex gap-2">
+          <Button disabled={btnDisabled} size="large" type="primary" className="mx-0 w-1/2" onClick={handleAddProductBottom}>
+            從底部新增
+          </Button>
+          <Button disabled={btnDisabled} size="large" type="primary" className="mx-0 w-1/2" onClick={handleAddProductTop}>
+            從頂部新增
+          </Button>
+        </div>
       </div>
     </div>
   )
