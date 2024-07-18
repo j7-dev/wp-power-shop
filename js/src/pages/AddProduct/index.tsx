@@ -55,42 +55,43 @@ const AddProduct = () => {
   const { handleFormChange } = useChangeNotification(form)
 
   const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
-    const values = form.getFieldsValue()
-    const valuesInArray = Object.values(values)
-
     setAddedProducts((pre: TProduct[]) => {
       return update(pre, {
         $splice: [
           [
-            dragIndex,
-            1,
+            dragIndex, // 從 drag 的地方
+            1, // 刪除 1 個
           ],
           [
-            hoverIndex,
-            0,
-            pre[dragIndex] as TProduct,
+            hoverIndex, // 從 hover 的地方
+            0, // 刪除 0 個
+            pre[dragIndex] as TProduct, // 添加 1 個
           ],
         ],
       })
     })
 
-    setTimeout(() => {
-      const newValues = update(valuesInArray, {
-        $splice: [
-          [
-            dragIndex,
-            1,
-          ],
-          [
-            hoverIndex,
-            0,
-            values[dragIndex],
-          ],
+    const values = form.getFieldsValue() // 舊的
+    const valuesInArray = Object.values(values)
+    const newValuesInArray = update(valuesInArray, {
+      $splice: [
+        [
+          // 把原本的位置刪除
+          dragIndex, // 從 drag 的地方
+          1, // 刪除 1 個
         ],
-      })
+        [
+          // 移動到這裡，簡單講就是交換位置
+          hoverIndex, // 從 hover 的地方
+          0, // 刪除 0 個
+          valuesInArray[dragIndex], // 添加 1 個
+        ],
+      ],
+    })
 
-      form.setFieldsValue(newValues)
-    }, 100)
+    // console.log('⭐  交換位置後 newValuesInArray:', newValuesInArray)
+
+    form.setFieldsValue(newValuesInArray)
   }, [])
 
   const renderItem = useCallback((product: TProduct, index: number) => {

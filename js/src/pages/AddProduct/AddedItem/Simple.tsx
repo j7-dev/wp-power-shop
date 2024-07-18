@@ -42,8 +42,15 @@ const Simple: React.FC<{
   const form = Form.useFormInstance()
 
   useEffect(() => {
+    // 每當從後端拿取商品價格時
+    const values = form.getFieldsValue() // 為 object
+    const valuesInArray = Object.values(values)
+    const findIndex = valuesInArray.findIndex((item: any) => item.productId === id)
+
+    /** 找到商品然後，把後端價格填入表單內 */
+
     form.setFieldsValue({
-      [index]: {
+      [findIndex]: {
         productId: id,
         regularPrice,
         salesPrice,
@@ -51,10 +58,9 @@ const Simple: React.FC<{
         extraBuyerCount,
       },
     })
-  }, [
-    id,
-    index,
-  ])
+
+    // console.log('⭐ id 改變  form.setFieldsValue:')
+  }, [id])
 
   return (
     <>

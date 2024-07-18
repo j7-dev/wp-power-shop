@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Select, Button, Typography } from 'antd'
+import { Select, Button, Typography, Form } from 'antd'
 import { useMany } from '@/hooks'
 import { TProduct, TProductCat } from '@/types/wcRestApi'
 import { renderHTML, getProductImageSrc } from '@/utils'
@@ -103,14 +103,35 @@ const Add = () => {
     }
   }
 
+  const form = Form.useFormInstance()
+
   const handleAddProductTop = () => {
     const selectedProduct = products.find((product) => product.id === selectedProductId)
     if (!!selectedProduct) {
+      // 改變了主畫面的商品順序
+
       setAddedProducts([
         selectedProduct,
         ...addedProducts,
       ])
       setIsChange(true)
+
+      // 同時也要改變表單順序
+      const values = form.getFieldsValue() // 舊的
+      const valuesInArray = Object.values(values)
+      const newValuesInArray = [
+        {
+          productId: selectedProduct.id,
+          regularPrice: selectedProduct.regular_price,
+          salesPrice: selectedProduct.sale_price,
+          productType: selectedProduct.type,
+          extraBuyerCount: 0,
+        },
+        ...valuesInArray,
+      ]
+      form.setFieldsValue(newValuesInArray)
+
+      // console.log('⭐  從頂部新增後:', newValuesInArray)
     }
   }
 
