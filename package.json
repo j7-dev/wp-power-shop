@@ -21,7 +21,7 @@
     "@tanstack/react-query": "^4.24.9",
     "@wordpress/hooks": "^3.38.0",
     "antd": "^5.5.2",
-    "antd-utility": "0.1.8",
+    "antd-toolkit": "^1.1.8",
     "axios": "^1.3.3",
     "canvas-confetti": "^1.9.2",
     "immutability-helper": "^3.1.1",
