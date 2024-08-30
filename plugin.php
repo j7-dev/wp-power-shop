@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name:       Power Shop | 讓你的商店充滿 Power
  * Plugin URI:        https://cloud.luke.cafe/plugins/power-shop/
@@ -26,7 +27,7 @@ function checkDependency() {
 		\add_action( 'admin_notices', __NAMESPACE__ . '\dependencyNotice' );
 	} else {
 		require_once __DIR__ . '/inc/index.php';
-		// require_once __DIR__ . '/licenser/class-power-shop-base.php';
+		require_once __DIR__ . '/licenser/class-power-shop-base.php';
 		new PowerShop();
 	}
 }
@@ -75,6 +76,41 @@ class PowerShop {
 		);
 
 		$updateChecker->getVcsApi()->enableReleaseAssets();
+
+		/**
+		 * ---
+		 */
+		add_action( 'admin_print_styles', array( $this, 'set_admin_style' ) );
+		$this->set_plugin_data();
+		$main_lic_key = 'PowerShop_lic_Key';
+		$lic_key_name = \Power_Shop_Base::get_lic_key_param( $main_lic_key );
+		$license_key  = get_option( $lic_key_name, '' );
+		if ( empty( $license_key ) ) {
+			$license_key = get_option( $main_lic_key, '' );
+			if ( ! empty( $license_key ) ) {
+				update_option( $lic_key_name, $license_key ) || add_option( $lic_key_name, $license_key );
+			}
+		}
+		$lice_email = get_option( 'PowerShop_lic_email', '' );
+		\Power_Shop_Base::add_on_delete(
+			function () {
+				update_option( 'PowerShop_lic_Key', '' );
+			}
+		);
+		if ( \Power_Shop_Base::check_wp_plugin( $license_key, $lice_email, $this->license_message, $this->response_obj, __FILE__ ) ) {
+			add_action( 'admin_menu', array( $this, 'active_admin_menu' ), 99999 );
+			add_action( 'admin_post_PowerShop_el_deactivate_license', array( $this, 'action_deactivate_license' ) );
+			// $this->licenselMessage=$this->mess;
+			// ***Write you plugin's code here***
+
+		} else {
+			if ( ! empty( $license_key ) && ! empty( $this->license_message ) ) {
+				$this->show_message = true;
+			}
+			update_option( $license_key, '' ) || add_option( $license_key, '' );
+			add_action( 'admin_post_PowerShop_el_activate_license', array( $this, 'action_activate_license' ) );
+			add_action( 'admin_menu', array( $this, 'inactive_menu' ) );
+		}
 	}
 	public function set_plugin_data() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
@@ -125,10 +161,10 @@ class PowerShop {
 	}
 	public function active_admin_menu() {
 
-		// add_submenu_page( 'edit.php?post_type=power-shop', 'PowerShop License', 'License Info', 'activate_plugins', Bootstrap::KEBAB . '-license', array( $this, 'activated' ) );
+		add_submenu_page( 'edit.php?post_type=power-shop', 'PowerShop License', 'License Info', 'activate_plugins', Bootstrap::KEBAB . '-license', array( $this, 'activated' ) );
 	}
 	public function inactive_menu() {
-		// add_submenu_page( 'edit.php?post_type=power-shop', 'PowerShop License', 'License Info', 'activate_plugins', Bootstrap::KEBAB . '-license', array( $this, 'license_form' ) );
+		add_submenu_page( 'edit.php?post_type=power-shop', 'PowerShop License', 'License Info', 'activate_plugins', Bootstrap::KEBAB . '-license', array( $this, 'license_form' ) );
 	}
 	public function action_activate_license() {
 		check_admin_referer( 'el-license' );
@@ -139,7 +175,17 @@ class PowerShop {
 		update_option( '_site_transient_update_plugins', '' );
 		wp_safe_redirect( admin_url( 'edit.php?post_type=power-shop&page=power-shop-license' ) );
 	}
-
+	public function action_deactivate_license() {
+		check_admin_referer( 'el-license' );
+		$message      = '';
+		$main_lic_key = 'PowerShop_lic_Key';
+		$lic_key_name = \Power_Shop_Base::get_lic_key_param( $main_lic_key );
+		if ( \Power_Shop_Base::remove_license_key( __FILE__, $message ) ) {
+			update_option( $lic_key_name, '' ) || add_option( $lic_key_name, '' );
+			update_option( '_site_transient_update_plugins', '' );
+		}
+		wp_safe_redirect( admin_url( 'edit.php?post_type=power-shop&page=power-shop-license' ) );
+	}
 
 	public function activated() {
 
