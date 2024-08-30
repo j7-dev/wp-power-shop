@@ -4,90 +4,140 @@ declare(strict_types=1);
 
 namespace J7\WpReactPlugin\PowerShop\Inc;
 
-class Api
-{
+class Api {
+
 	const POSTMETA_API_ENDPOINT       = 'postmeta';
 	const AJAX_NONCE_ENDPOINT         = 'ajaxnonce';
 	const PURGE_KINSTA_CACHE_ENDPOINT = 'purge_kinsta_cache';
+	const PRODUCT_CATEGORY_ENDPOINT = 'product_categories';
 
-	function __construct()
-	{
-		foreach ([self::POSTMETA_API_ENDPOINT, self::AJAX_NONCE_ENDPOINT, self::PURGE_KINSTA_CACHE_ENDPOINT] as $action) {
-			\add_action('rest_api_init', [$this, "register_{$action}_api"]);
+	function __construct() {
+		foreach ( array( self::POSTMETA_API_ENDPOINT, self::AJAX_NONCE_ENDPOINT, self::PURGE_KINSTA_CACHE_ENDPOINT, self::PRODUCT_CATEGORY_ENDPOINT ) as $action ) {
+			\add_action( 'rest_api_init', array( $this, "register_{$action}_api" ) );
 		}
 	}
 
-	public function postmeta_callback($request)
-	{
+	public function product_categories_callback() {
+		$product_categories = \get_terms(
+			array(
+				'taxonomy'   => 'product_cat',
+				'hide_empty' => false,
+			)
+		);
+
+		$formatted_product_categories = \array_map(
+			function ( $product_category ) {
+				return array(
+					'id'   => $product_category->term_id,
+					'name' => $product_category->name,
+					// 'slug' => $product_category->slug,
+					// 'parent' => $product_category->parent,
+					// 'description' => $product_category->description,
+					// 'display' => $product_category->display,
+					// 'image' => $product_category->image,
+					// 'menu_order' => $product_category->menu_order,
+					// 'count' => $product_category->count,
+				);
+			},
+			$product_categories
+		);
+
+		return \rest_ensure_response( $formatted_product_categories );
+	}
+
+	public function register_product_categories_api() {
+		$endpoint = self::PRODUCT_CATEGORY_ENDPOINT;
+		\register_rest_route(
+			'power-shop',
+			$endpoint,
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, "{$endpoint}_callback" ),
+				'permission_callback' => '__return_true',
+			)
+		);
+	}
+
+	public function postmeta_callback( $request ) {
 		$post_id = $request['id'];
 
 		// 檢查文章是否存在
-		if (\get_post_status($post_id)) {
-			$post_meta           = \get_post_meta($post_id);
-			$formatted_post_meta = [];
-			foreach ($post_meta as $key => $value) {
-				$formatted_post_meta[$key] = $value[0];
+		if ( \get_post_status( $post_id ) ) {
+			$post_meta           = \get_post_meta( $post_id );
+			$formatted_post_meta = array();
+			foreach ( $post_meta as $key => $value ) {
+				$formatted_post_meta[ $key ] = $value[0];
 			}
 
 			// 在此處理 post_meta 資訊，你可以根據需要進行資料處理
 
-			return \rest_ensure_response($formatted_post_meta);
+			return \rest_ensure_response( $formatted_post_meta );
 		} else {
-			return new \WP_Error('post_not_found', '文章不存在', array('status' => 404));
+			return new \WP_Error( 'post_not_found', '文章不存在', array( 'status' => 404 ) );
 		}
 	}
 
-	public function register_postmeta_api()
-	{
+	public function register_postmeta_api() {
 		$endpoint = self::POSTMETA_API_ENDPOINT;
-		\register_rest_route('wrp', "{$endpoint}/(?P<id>\d+)", array(
-			'methods'  => 'GET',
-			'callback' => [$this, "{$endpoint}_callback"],
-			'permission_callback' => '__return_true'
-		));
+		\register_rest_route(
+			'wrp',
+			"{$endpoint}/(?P<id>\d+)",
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, "{$endpoint}_callback" ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
-	public function ajaxnonce_callback()
-	{
-		$ajaxNonce = \wp_create_nonce(Bootstrap::KEBAB);
+	public function ajaxnonce_callback() {
+		$ajaxNonce = \wp_create_nonce( Bootstrap::KEBAB );
 
-		return \rest_ensure_response($ajaxNonce);
+		return \rest_ensure_response( $ajaxNonce );
 	}
 
-	public function register_ajaxnonce_api()
-	{
+	public function register_ajaxnonce_api() {
 		$endpoint = self::AJAX_NONCE_ENDPOINT;
-		\register_rest_route('wrp', "{$endpoint}", array(
-			'methods'  => 'GET',
-			'callback' => [$this, "{$endpoint}_callback"],
-			'permission_callback' => '__return_true'
-		));
+		\register_rest_route(
+			'wrp',
+			"{$endpoint}",
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, "{$endpoint}_callback" ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
-	public function purge_kinsta_cache_callback()
-	{
-		if (class_exists('Kinsta\Cache_Purge')) {
+	public function purge_kinsta_cache_callback() {
+		if ( class_exists( 'Kinsta\Cache_Purge' ) ) {
 			try {
-				$response = wp_remote_get('https://localhost/kinsta-clear-cache-all', [
-					'sslverify' => false,
-					'timeout'   => 5,
-				]);
-				return \rest_ensure_response($response);
-			} catch (\Throwable $th) {
+				$response = wp_remote_get(
+					'https://localhost/kinsta-clear-cache-all',
+					array(
+						'sslverify' => false,
+						'timeout'   => 5,
+					)
+				);
+				return \rest_ensure_response( $response );
+			} catch ( \Throwable $th ) {
 				throw $th;
 			}
 		}
-		return \rest_ensure_response('not find kinsta mu-plugin');
+		return \rest_ensure_response( 'not find kinsta mu-plugin' );
 	}
 
-	public function register_purge_kinsta_cache_api()
-	{
+	public function register_purge_kinsta_cache_api() {
 		$endpoint = self::PURGE_KINSTA_CACHE_ENDPOINT;
-		\register_rest_route('wrp', "{$endpoint}", array(
-			'methods'  => 'GET',
-			'callback' => [$this, "{$endpoint}_callback"],
-			'permission_callback' => '__return_true'
-		));
+		\register_rest_route(
+			'wrp',
+			"{$endpoint}",
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, "{$endpoint}_callback" ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 }
 

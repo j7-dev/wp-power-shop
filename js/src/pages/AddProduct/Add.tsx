@@ -42,8 +42,8 @@ const Add = () => {
     setSelectedProductId,
   ] = useState<number | undefined>(undefined)
   const productCatsResult = useMany({
-    resource: 'products/categories',
-    dataProvider: 'wc',
+    resource: '/product_categories',
+    dataProvider: 'power-shop',
     args: {
       per_page: 100,
     },
