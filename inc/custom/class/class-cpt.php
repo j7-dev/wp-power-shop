@@ -63,7 +63,7 @@ class CPT extends Bootstrap
         \flush_rewrite_rules();
 
         $info = \Power_Shop_Base::get_register_info();
-        if (@$info->is_valid) {
+        if (@$info?->is_valid) {
             return;
         }
 
@@ -229,7 +229,7 @@ class CPT extends Bootstrap
         }
 
         $info = \Power_Shop_Base::get_register_info();
-        if (@$info->is_valid) {
+        if (@$info?->is_valid) {
             return;
         }
 

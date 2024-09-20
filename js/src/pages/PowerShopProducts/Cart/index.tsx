@@ -48,7 +48,7 @@ const Cart = () => {
     resource: 'cart',
     dataProvider: 'wc-store',
   })
-  const wcStoreApiNonce = cartResult?.data?.headers?.['x-wc-store-api-nonce'] || ''
+  const wcStoreApiNonce = cartResult?.data?.headers?.['x-wc-store-api-nonce'] || cartResult?.data?.headers?.nonce || ''
   const rawCartData = (cartResult?.data?.data || {}) as TCart
   const cartIsFetching = cartResult?.isFetching || false
   const currency_minor_unit = rawCartData?.totals?.currency_minor_unit || 0
