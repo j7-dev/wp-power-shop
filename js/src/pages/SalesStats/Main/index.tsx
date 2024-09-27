@@ -5,10 +5,10 @@ import { postId } from '@/utils'
 import { useAjaxGetOrders } from '@/pages/SalesStats/hooks/useAjaxGetOrders'
 import { TOrderData, defaultOrderData } from '@/pages/SalesStats/types'
 import {
-  orderDataAtom,
-  paginationAtom,
-  filterAtom,
-  isAdminAtom,
+	orderDataAtom,
+	paginationAtom,
+	filterAtom,
+	isAdminAtom,
 } from '@/pages/SalesStats/atom'
 import { useSetAtom, useAtomValue } from 'jotai'
 import ReportPassword from './ReportPassword'
@@ -18,42 +18,42 @@ import ReportPassword from './ReportPassword'
 import Filter from './Filter'
 
 const Main = () => {
-  const pagination = useAtomValue(paginationAtom)
-  const filter = useAtomValue(filterAtom)
-  const isAdmin = useAtomValue(isAdminAtom)
-  const mutation = useAjaxGetOrders<TOrderData>({
-    ...pagination,
-    ...filter,
-    post_id: postId,
-  })
+	const pagination = useAtomValue(paginationAtom)
+	const filter = useAtomValue(filterAtom)
+	const isAdmin = useAtomValue(isAdminAtom)
+	const mutation = useAjaxGetOrders<TOrderData>({
+		...pagination,
+		...filter,
+		post_id: postId,
+	})
 
-  const isLoading = mutation?.isLoading ?? false
+	const isLoading = mutation?.isLoading ?? false
 
-  // const isError = mutation?.isError ?? false
-  // const isSuccess = mutation?.isSuccess ?? false
+	// const isError = mutation?.isError ?? false
+	// const isSuccess = mutation?.isSuccess ?? false
 
-  const setOrderData = useSetAtom(orderDataAtom)
+	const setOrderData = useSetAtom(orderDataAtom)
 
-  useEffect(() => {
-    if (!isLoading) {
-      const orderData = mutation?.orderData ?? defaultOrderData
-      setOrderData(orderData)
-    }
-  }, [isLoading])
+	useEffect(() => {
+		if (!isLoading) {
+			const orderData = mutation?.orderData ?? defaultOrderData
+			setOrderData(orderData)
+		}
+	}, [isLoading])
 
-  return (
-    <div className="py-4">
-      <DashBoard isLoading={isLoading} />
-      <Filter isLoading={isLoading} />
-      {/* <DownloadExcel
+	return (
+		<div className="py-4">
+			<DashBoard isLoading={isLoading} />
+			<Filter isLoading={isLoading} />
+			{/* <DownloadExcel
         isLoading={isLoading}
         isError={isError}
         isSuccess={isSuccess}
       /> */}
-      {isAdmin && <ReportPassword />}
-      <Table isLoading={isLoading} />
-    </div>
-  )
+			{isAdmin && <ReportPassword />}
+			<Table isLoading={isLoading} />
+		</div>
+	)
 }
 
 export default Main

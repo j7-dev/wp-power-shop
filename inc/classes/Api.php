@@ -2,32 +2,33 @@
 
 declare(strict_types=1);
 
-namespace J7\WpReactPlugin\PowerShop\Inc;
+namespace J7\PowerShop;
 
-class Api {
+final class Api {
+	use \J7\WpUtils\Traits\SingletonTrait;
 
 	const POSTMETA_API_ENDPOINT       = 'postmeta';
 	const AJAX_NONCE_ENDPOINT         = 'ajaxnonce';
 	const PURGE_KINSTA_CACHE_ENDPOINT = 'purge_kinsta_cache';
-	const PRODUCT_CATEGORY_ENDPOINT = 'product_categories';
+	const PRODUCT_CATEGORY_ENDPOINT   = 'product_categories';
 
 	function __construct() {
-		foreach ( array( self::POSTMETA_API_ENDPOINT, self::AJAX_NONCE_ENDPOINT, self::PURGE_KINSTA_CACHE_ENDPOINT, self::PRODUCT_CATEGORY_ENDPOINT ) as $action ) {
-			\add_action( 'rest_api_init', array( $this, "register_{$action}_api" ) );
+		foreach ( [ self::POSTMETA_API_ENDPOINT, self::AJAX_NONCE_ENDPOINT, self::PURGE_KINSTA_CACHE_ENDPOINT, self::PRODUCT_CATEGORY_ENDPOINT ] as $action ) {
+			\add_action( 'rest_api_init', [ $this, "register_{$action}_api" ] );
 		}
 	}
 
 	public function product_categories_callback() {
 		$product_categories = \get_terms(
-			array(
+			[
 				'taxonomy'   => 'product_cat',
 				'hide_empty' => false,
-			)
+			]
 		);
 
 		$formatted_product_categories = \array_map(
 			function ( $product_category ) {
-				return array(
+				return [
 					'id'   => $product_category->term_id,
 					'name' => $product_category->name,
 					// 'slug' => $product_category->slug,
@@ -37,7 +38,7 @@ class Api {
 					// 'image' => $product_category->image,
 					// 'menu_order' => $product_category->menu_order,
 					// 'count' => $product_category->count,
-				);
+				];
 			},
 			$product_categories
 		);
@@ -50,11 +51,11 @@ class Api {
 		\register_rest_route(
 			'power-shop',
 			$endpoint,
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, "{$endpoint}_callback" ),
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, "{$endpoint}_callback" ],
 				'permission_callback' => '__return_true',
-			)
+			]
 		);
 	}
 
@@ -64,7 +65,7 @@ class Api {
 		// 檢查文章是否存在
 		if ( \get_post_status( $post_id ) ) {
 			$post_meta           = \get_post_meta( $post_id );
-			$formatted_post_meta = array();
+			$formatted_post_meta = [];
 			foreach ( $post_meta as $key => $value ) {
 				$formatted_post_meta[ $key ] = $value[0];
 			}
@@ -73,7 +74,7 @@ class Api {
 
 			return \rest_ensure_response( $formatted_post_meta );
 		} else {
-			return new \WP_Error( 'post_not_found', '文章不存在', array( 'status' => 404 ) );
+			return new \WP_Error( 'post_not_found', '文章不存在', [ 'status' => 404 ] );
 		}
 	}
 
@@ -82,16 +83,16 @@ class Api {
 		\register_rest_route(
 			'wrp',
 			"{$endpoint}/(?P<id>\d+)",
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, "{$endpoint}_callback" ),
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, "{$endpoint}_callback" ],
 				'permission_callback' => '__return_true',
-			)
+			]
 		);
 	}
 
 	public function ajaxnonce_callback() {
-		$ajaxNonce = \wp_create_nonce( Bootstrap::KEBAB );
+		$ajaxNonce = \wp_create_nonce( Plugin::$kebab );
 
 		return \rest_ensure_response( $ajaxNonce );
 	}
@@ -101,11 +102,11 @@ class Api {
 		\register_rest_route(
 			'wrp',
 			"{$endpoint}",
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, "{$endpoint}_callback" ),
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, "{$endpoint}_callback" ],
 				'permission_callback' => '__return_true',
-			)
+			]
 		);
 	}
 
@@ -114,10 +115,10 @@ class Api {
 			try {
 				$response = wp_remote_get(
 					'https://localhost/kinsta-clear-cache-all',
-					array(
+					[
 						'sslverify' => false,
 						'timeout'   => 5,
-					)
+					]
 				);
 				return \rest_ensure_response( $response );
 			} catch ( \Throwable $th ) {
@@ -132,13 +133,11 @@ class Api {
 		\register_rest_route(
 			'wrp',
 			"{$endpoint}",
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, "{$endpoint}_callback" ),
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, "{$endpoint}_callback" ],
 				'permission_callback' => '__return_true',
-			)
+			]
 		);
 	}
 }
-
-new Api();

@@ -10,11 +10,11 @@ define('CUSTOMER_ID', 1);
 
 
 
-$order_status = ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed', 'wc-wmp-in-transit', 'wc-wmp-shipped', 'wc-checkout-draft', 'wc-ry-at-cvs', 'wc-ry-out-cvs'];
+$order_status = [ 'wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed', 'wc-wmp-in-transit', 'wc-wmp-shipped', 'wc-checkout-draft', 'wc-ry-at-cvs', 'wc-ry-out-cvs' ];
 
 // 检查 WooCommerce 是否已激活
 if (!function_exists('WC')) {
-	echo "WooCommerce 未激活";
+	echo 'WooCommerce 未激活';
 	exit;
 }
 
@@ -24,11 +24,13 @@ try {
 	$start_time = microtime(true);
 
 	// get all woocommerce product ids
-	$product_ids = wc_get_products([
-		'limit' => -1,
-		'status' => 'publish',
-		'return' => 'ids',
-	]);
+	$product_ids = wc_get_products(
+		[
+			'limit'  => -1,
+			'status' => 'publish',
+			'return' => 'ids',
+		]
+		);
 
 	$output_order_ids = '';
 
@@ -58,13 +60,13 @@ try {
 	}
 
 
-	//計時結束
-	$end_time = microtime(true);
+	// 計時結束
+	$end_time       = microtime(true);
 	$execution_time = $end_time - $start_time;
 
-	$output = "\n\n創建 " . ORDER_QTY . " 個訂單成功! 耗時 " . $execution_time .  " 秒\n\n";
-	$output .= "訂單編號: " . $output_order_ids . "\n\n";
-	$output = str_replace("\n", "" . PHP_EOL, $output);
+	$output  = "\n\n創建 " . ORDER_QTY . ' 個訂單成功! 耗時 ' . $execution_time . " 秒\n\n";
+	$output .= '訂單編號: ' . $output_order_ids . "\n\n";
+	$output  = str_replace("\n", '' . PHP_EOL, $output);
 
 	echo $output;
 } catch (\Throwable $th) {

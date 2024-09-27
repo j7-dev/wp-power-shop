@@ -11,10 +11,10 @@
 		"plugin:@wordpress/eslint-plugin/custom",
 		"plugin:@wordpress/eslint-plugin/esnext",
 		"plugin:@wordpress/eslint-plugin/jsdoc",
-		"plugin:prettier/recommended",
 		"plugin:react/recommended",
 		"eslint-config-prettier",
-		"prettier"
+		"prettier",
+		"plugin:prettier/recommended"
 	],
 	"parserOptions": {
 		"ecmaVersion": "latest",
@@ -27,8 +27,9 @@
 		"prettier"
 	],
 	"rules": {
+		"quote-props": "off",
+		"@typescript-eslint/no-explicit-any": "warn",
 		"@wordpress/no-unused-vars-before-return": "off",
-		"prettier/prettier": "off",
 		"semi": [
 			"error",
 			"never"
@@ -40,6 +41,7 @@
 		"no-console": [
 			"warn"
 		],
+		"array-callback-return": "off",
 		"no-duplicate-imports": "error",
 		"linebreak-style": "off",
 		"@typescript-eslint/ban-types": "off",
@@ -47,6 +49,15 @@
 		"@typescript-eslint/explicit-function-return-type": "off",
 		"react/prop-types": "off",
 		"react/react-in-jsx-scope": "off",
+		"prettier/prettier": [
+			"error",
+			{
+				"endOfLine": "auto",
+				"useTabs": true,
+				"tabWidth": 2,
+				"prettier-multiline-arrays-set-threshold": 1
+			}
+		],
 		"no-unused-vars": [
 			"warn",
 			{
@@ -71,9 +82,9 @@
 			"error",
 			{
 				"beforeBlockComment": true,
-				"afterBlockComment": true,
+				"afterBlockComment": false,
 				"beforeLineComment": true,
-				"afterLineComment": true,
+				"afterLineComment": false,
 				"allowBlockStart": true,
 				"allowBlockEnd": true,
 				"allowObjectStart": true,

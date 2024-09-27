@@ -1,11 +1,11 @@
 import { atom } from 'jotai'
 import {
-  TOrderData,
-  defaultOrderData,
-  TPagination,
-  defaultPagination,
-  TFilter,
-  defaultFilter,
+	TOrderData,
+	defaultOrderData,
+	TPagination,
+	defaultPagination,
+	TFilter,
+	defaultFilter,
 } from './types'
 
 export const orderDataAtom = atom<TOrderData>(defaultOrderData)

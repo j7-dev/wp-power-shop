@@ -9,9 +9,15 @@ pnpm-lock.yaml
 lerna-debug.log*
 
 **/node_modules/**
-dist
+js/dist/**
+**/vendor/**
 dist-ssr
 *.local
+release/*
+!release/*.cjs
+.env
+!js/dist/vite-dev-server.json
+.puc_pat
 
 # Editor directories and files
 .vscode/*
@@ -25,3 +31,5 @@ dist-ssr
 *.sw?
 
 /vendor/
+
+composer.lock

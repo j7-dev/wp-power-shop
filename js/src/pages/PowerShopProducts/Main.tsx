@@ -6,17 +6,17 @@ import Cart from '@/pages/PowerShopProducts/Cart'
 import { TAjaxProduct } from '@/types'
 
 const Main: FC<{
-  products: TAjaxProduct[]
+	products: TAjaxProduct[]
 }> = ({ products }) => {
-  if (products.length === 0) {
-    return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="沒有資料" />
-  }
+	if (products.length === 0) {
+		return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="沒有資料" />
+	}
 
-  return (
-    <div className={`${kebab}-products`}>
-      <Cart />
-    </div>
-  )
+	return (
+		<div className={`${kebab}-products`}>
+			<Cart />
+		</div>
+	)
 }
 
 export default Main

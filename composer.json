@@ -1,39 +1,49 @@
 {
-  "name": "j7-dev/wp-power-shop",
-  "description": "Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額",
-  "type": "wordpress-plugin",
-  "license": "GPL-2.0-only",
-  "authors": [
-    {
-      "name": "J7",
-      "email": "j7.dev.gg@gmail.com"
-    }
-  ],
-  "config": {
-    "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
-    }
-  },
-  "require": {
-    "kucrut/vite-for-wp": "^0.5.2",
-    "usefulteam/jwt-auth": "^2.1",
-    "lodash-php/lodash-php": "^0.0.7",
-    "yahnis-elsts/plugin-update-checker": "^5.3"
-  },
-  "require-dev": {
-    "wp-coding-standards/wpcs": "^2.3",
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2"
-  },
-  "scripts": {
-    "lint": "phpcs ./inc"
-  },
-  "extra": {
-    "mozart": {
-      "dep_namespace": "J7\\PowerShop\\",
-      "dep_directory": "/vendor",
-      "classmap_directory": "/inc/",
-      "classmap_prefix": "J7_",
-      "delete_vendor_directories": true
-    }
-  }
+	"name": "j7-dev/wp-power-shop",
+	"description": "Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "JerryLiu",
+			"email": "j7.dev.gg@gmail.com",
+			"homepage": "https://github.com/j7-dev",
+			"role": "Developer"
+		}
+	],
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://wpackagist.org"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"J7\\PowerShop\\": "inc/classes/"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"phpstan/extension-installer": true
+		}
+	},
+	"require": {
+		"kucrut/vite-for-wp": "^0.8.0",
+		"lodash-php/lodash-php": "^0.0.7",
+		"j7-dev/wp-plugin-trait": "^0.0.12"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "@stable",
+		"wp-coding-standards/wpcs": "@stable",
+		"dealerdirect/phpcodesniffer-composer-installer": "@stable",
+		"phpcompatibility/php-compatibility": "@stable",
+		"phpstan/phpstan": "^1.11",
+		"php-stubs/woocommerce-stubs": "^9.0",
+		"php-stubs/wordpress-stubs": "^6.5",
+		"phpstan/extension-installer": "^1.4"
+	},
+	"scripts": {
+		"lint": "phpcs"
+	}
 }

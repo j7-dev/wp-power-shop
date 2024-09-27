@@ -8,7 +8,8 @@ export const renderId3 = window?.appData?.env?.RENDER_ID_3 || 'my-app'
 export const renderId4 = window?.appData?.env?.RENDER_ID_4 || 'my-app'
 
 export const apiUrl = window?.wpApiSettings?.root || '/wp-json'
-export const ajaxUrl = window?.appData?.env?.ajaxUrl || '/wp-admin/admin-ajax.php'
+export const ajaxUrl =
+	window?.appData?.env?.ajaxUrl || '/wp-admin/admin-ajax.php'
 export const siteUrl = window?.appData?.env?.siteUrl || '/'
 export const checkoutUrl = window?.appData?.env?.checkoutUrl || '/checkout'
 export const currentUserId = window?.appData?.env?.userId || '0'
@@ -25,6 +26,8 @@ export const colorPrimary = window?.appData?.settings?.colorPrimary || '#1677ff'
 export const showConfetti = window?.appData?.settings?.showConfetti ?? true
 export const showStock = window?.appData?.settings?.showStock ?? true
 export const showBuyerCount = window?.appData?.settings?.showBuyerCount ?? true
-export const enableVirtualList = window?.appData?.settings?.enableVirtualList ?? false
+export const enableVirtualList =
+	window?.appData?.settings?.enableVirtualList ?? false
 
-export const power_shop_meta_meta_id = window?.appData?.settings?.power_shop_meta_meta_id
+export const power_shop_meta_meta_id =
+	window?.appData?.settings?.power_shop_meta_meta_id

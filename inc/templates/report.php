@@ -1,20 +1,20 @@
-<?php use J7\WpReactPlugin\PowerShop\Inc\Bootstrap;?>
+<?php use J7\PowerShop\Bootstrap; ?>
 
 <!doctype html>
-<html <?php language_attributes();?>>
+<html <?php language_attributes(); ?>>
 
 <head>
-	<meta charset="<?php bloginfo('charset');?>">
+	<meta charset="<?php bloginfo('charset'); ?>">
 	<meta name="viewport" content="<?php echo esc_attr($viewport_content); ?>">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
-	<?php wp_head();?>
+	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class();?> style="background-color:#fff;">
+<body <?php body_class(); ?> style="background-color:#fff;">
 
-	<div id="<?=Bootstrap::RENDER_ID_4?>"></div>
+	<div id="<?php echo Bootstrap::RENDER_ID_4; ?>"></div>
 
-	<?php wp_footer();?>
+	<?php wp_footer(); ?>
 </body>
 
 </html>

@@ -6,10 +6,10 @@ import { axios } from '@/api'
  */
 
 export const getToken = async () => {
-  const token = await axios.post('/jwt-auth/v1/token', {
-    username: 'admin',
-    password: 'password',
-  })
+	const token = await axios.post('/jwt-auth/v1/token', {
+		username: 'admin',
+		password: 'password',
+	})
 
-  return token
+	return token
 }
