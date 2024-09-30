@@ -27,8 +27,8 @@ final class CPT {
 	const BUY_LICENSE_LINK = Bootstrap::BUY_LICENSE_LINK;
 	const SUPPORT_EMAIL    = Bootstrap::SUPPORT_EMAIL;
 
-	private $count_publish = 0;
-	private $iel           = false;
+	private $count = 0;
+	private $iel   = true;
 
 	public function __construct() {
 		\add_action( 'init', [ $this, 'init' ] );
@@ -46,9 +46,9 @@ final class CPT {
 		\add_filter( 'post_row_actions', [ $this, 'remove_row_actions' ], 999, 2 );
 		\add_filter( 'bulk_actions-edit-' . self::CPT_SLUG, [ $this, 'remove_bulk_actions' ], 999, 1 );
 
-		// \add_action('admin_enqueue_scripts', [ $this, 'limit_css_and_js' ], 999);
-		// \add_action('admin_head', [ $this, 'limit_admin_head' ], 999, 1);
-		// \add_action('admin_notices', [ $this, 'limit_admin_notices' ], 999);
+		\add_action('admin_enqueue_scripts', [ $this, 'limit_css_and_js' ], 999);
+		\add_action('admin_head', [ $this, 'limit_admin_head' ], 999, 1);
+		\add_action('admin_notices', [ $this, 'limit_admin_notices' ], 999);
 	}
 
 	public function add_query_for_report( $vars ) {
@@ -64,16 +64,16 @@ final class CPT {
 
 		\flush_rewrite_rules();
 
-		// if (@$info->is_valid) {
-		return;
-		// }
+		if (\J7\Powerhouse\LC::ia(Bootstrap::KEBAB)) {
+			$this->iel = false;
+			return;
+		}
 
-		// $count_posts         = \wp_count_posts(self::CPT_SLUG);
-		// $this->count_publish = $count_posts->publish;
+		$count = \wp_count_posts(self::CPT_SLUG);
 
-		// if (AXD::gt($this->count_publish)) {
-		// $this->iel = true;
-		// }
+		$this->count = $count->publish + $count->draft;
+
+		$this->iel = AXD::gt($this->count);
 	}
 
 	public function add_post_meta(): void {
@@ -206,7 +206,7 @@ final class CPT {
 	}
 
 	public function limit_css_and_js() {
-		if ( AXD::gte( $this->count_publish ) ) {
+		if ( $this->iel ) {
 			\wp_enqueue_style( self::CPT_SLUG, Plugin::$url . '/inc/assets/css/main.css' );
 			\wp_enqueue_style( 'jquery-confirm', Plugin::$url . '/inc/assets/packages/jquery-confirm/jquery-confirm.min.css' );
 			\wp_enqueue_script( 'jquery-confirm', Plugin::$url . '/inc/assets/packages/jquery-confirm/jquery-confirm.min.js', [ 'jquery' ], '3.3.4', true );
@@ -225,13 +225,14 @@ final class CPT {
 
 	public function limit_admin_notices() {
 		$screen = \get_current_screen();
-		if ( 'edit-' . self::CPT_SLUG !== $screen->id ) {
+
+		if (!\class_exists('\J7\Powerhouse\LC')) {
 			return;
 		}
 
-		// if (@$info->is_valid) {
-		return;
-		// }
+		if ( 'edit-' . self::CPT_SLUG !== $screen->id || \J7\Powerhouse\LC::ia(Bootstrap::KEBAB) ) {
+			return;
+		}
 
 		$buy_link      = self::BUY_LICENSE_LINK;
 		$license_link  = \admin_url( self::LICENSE_LINK );

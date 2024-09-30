@@ -31,7 +31,7 @@
 	"require": {
 		"kucrut/vite-for-wp": "^0.8.0",
 		"lodash-php/lodash-php": "^0.0.7",
-		"j7-dev/wp-plugin-trait": "^0.0.12"
+		"j7-dev/wp-plugin-trait": "^0.0.13"
 	},
 	"require-dev": {
 		"squizlabs/php_codesniffer": "@stable",

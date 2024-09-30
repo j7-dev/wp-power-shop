@@ -75,14 +75,6 @@
 
 <br><br><br>
 
-#### 發布流程
-
-> `inc/custom/class/class-cpt.php`, `inc/custom/index.php` 中有個 `$is_exceed_limit` 參數，已改名為 `$iel`
-
-1. 到 [php-obfuscator.com](https://www.php-obfuscator.com/?demo)
-2. 參照下圖配置混淆 `inc/custom/class/class-cpt.php`
-<img src="https://github.com/j7-dev/wp-power-shop/assets/9213776/3db71b16-99eb-421f-8483-39279ff470a6" />
-
 
 
 

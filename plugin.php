@@ -42,7 +42,7 @@ final class Plugin {
 				'name'     => 'Powerhouse',
 				'slug'     => 'powerhouse',
 				'source'   => 'https://github.com/j7-dev/wp-powerhouse/releases/latest/download/powerhouse.zip',
-				'version'  => '1.0.24',
+				'version'  => '2.0.0',
 				'required' => true,
 			],
 			[
@@ -58,7 +58,7 @@ final class Plugin {
 				'app_name'     => 'Power Shop',
 				'github_repo'  => 'https://github.com/j7-dev/wp-power-shop',
 				'callback'     => [ Bootstrap::class, 'instance' ],
-				'lc'           => false,
+				'lc'           => 'skip',
 				'hide_submenu' => true,
 			]
 		);
