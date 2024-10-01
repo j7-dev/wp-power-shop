@@ -44,7 +44,6 @@ final class CPT {
 
 		\add_action( 'publish_' . self::CPT_SLUG, [ $this, 'post_published_limit' ], 999, 3 );
 		\add_filter( 'post_row_actions', [ $this, 'remove_row_actions' ], 999, 2 );
-		\add_filter( 'bulk_actions-edit-' . self::CPT_SLUG, [ $this, 'remove_bulk_actions' ], 999, 1 );
 
 		\add_action('admin_menu', [ $this, 'add_lc_submenu' ], 999);
 		\add_action('admin_enqueue_scripts', [ $this, 'limit_css_and_js' ], 999);
@@ -169,11 +168,6 @@ final class CPT {
 			unset( $actions['inline hide-if-no-js'] );
 			return $actions;
 		}
-		return $actions;
-	}
-
-	public function remove_bulk_actions( $actions ) {
-		unset( $actions['edit'] );
 		return $actions;
 	}
 
