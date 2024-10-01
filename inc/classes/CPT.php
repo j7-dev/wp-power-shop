@@ -19,7 +19,7 @@ final class CPT {
 	const POST_META    = [ 'meta', 'settings' ];
 	const CPT_LABEL    = 'Power Shop';
 	const CPT_SLUG     = 'power-shop';
-	const LICENSE_LINK = 'edit.php?post_type=power-shop&page=power-shop-license';
+	const LICENSE_LINK = 'admin.php?page=powerhouse-license-codes';
 	const COLOR        = '#72aee6';
 
 	const RENDER_ID_1      = Bootstrap::RENDER_ID_1;
@@ -46,6 +46,7 @@ final class CPT {
 		\add_filter( 'post_row_actions', [ $this, 'remove_row_actions' ], 999, 2 );
 		\add_filter( 'bulk_actions-edit-' . self::CPT_SLUG, [ $this, 'remove_bulk_actions' ], 999, 1 );
 
+		\add_action('admin_menu', [ $this, 'add_lc_submenu' ], 999);
 		\add_action('admin_enqueue_scripts', [ $this, 'limit_css_and_js' ], 999);
 		\add_action('admin_head', [ $this, 'limit_admin_head' ], 999, 1);
 		\add_action('admin_notices', [ $this, 'limit_admin_notices' ], 999);
@@ -257,5 +258,16 @@ final class CPT {
 		</div>
 EOD;
 		echo $html;
+	}
+
+	public function add_lc_submenu() {
+		\add_submenu_page(
+			'edit.php?post_type=' . self::CPT_SLUG,
+			'授權碼',
+			'授權碼',
+			'manage_options',
+			'admin.php?page=powerhouse-license-codes',
+			''
+			);
 	}
 }
