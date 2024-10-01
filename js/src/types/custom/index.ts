@@ -127,4 +127,13 @@ export type TAjaxProduct = {
 	is_in_stock?: boolean
 	is_purchasable?: boolean
 	backorders?: 'no' | 'notify' | 'yes'
+	attributes?: {
+		name: string
+		slug: string
+		options: {
+			value: string
+			name: string
+		}[]
+		position: number
+	}[]
 }

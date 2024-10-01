@@ -27,6 +27,7 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({
 
 	const variations = product?.variations ?? []
 	const formattedAttributes = product?.variation_attributes ?? {}
+	const attributes = product?.attributes ?? []
 
 	const handleClick = (attributeName: string, option: string) => () => {
 		const otherSelectedAttribute = selectedAttributes.filter(
@@ -82,15 +83,16 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({
 	return (
 		<>
 			{Object.keys(formattedAttributes).map((attributeName) => {
+				const attribute = attributes?.find((a) => a.slug === attributeName)
+				const attributeOptions = attribute?.options || []
+
 				const options = toArray(formattedAttributes[attributeName])
 				const selectedOption = selectedAttributes.find(
 					(item) => item.name === attributeName,
 				) ?? { name: '', value: '' }
 				return (
 					<div key={attributeName} className="mb-4">
-						<p className="mb-0">
-							{attributeName === 'pa_color' ? '顏色' : attributeName}
-						</p>
+						<p className="mb-0">{attribute?.name}</p>
 						<div className="flex flex-wrap">
 							{options.map((option) => (
 								<Button
@@ -102,7 +104,9 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({
 									size="small"
 									className="mr-1 mb-1"
 								>
-									<span className="text-xs">{decodeURIComponent(option)}</span>
+									<span className="text-xs">
+										{attributeOptions?.find((o) => o?.value === option)?.name}
+									</span>
 								</Button>
 							))}
 						</div>

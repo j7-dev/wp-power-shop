@@ -176,6 +176,38 @@ final class Functions {
 				$variation_meta                       = $meta['variations']; // Undefined array key "variations"
 				$product_data['variations']           = [];
 				$product_data['variation_attributes'] = $product->get_variation_attributes();
+				$attributes_arr = [];
+				$attributes     = $product?->get_attributes(); // get attributes object
+
+				foreach ( $attributes as $key => $attribute ) {
+					$option_ids   = $attribute->get_options(); // option_ids
+					$slugs        = $attribute->get_slugs(); // option_slugs
+					$attr_options = [];
+
+					foreach ( $option_ids as $index => $option_id ) {
+						$term           = \get_term_by( 'slug', $slugs[ $index ], $attribute->get_name() );
+						$option_name    = $term->name;
+						$attr_options[] = [
+							'value' => $slugs[ $index ],
+							'name' => $option_name,
+						];
+					}
+
+					if ( $attribute instanceof \WC_Product_Attribute ) {
+						$attributes_arr[] = [
+							'name'      => \wc_attribute_label( $attribute->get_name() ),
+							'slug'      => $attribute->get_name(),
+							'options'   => $attr_options,
+							'position'  => $attribute->get_position(),
+						];
+					}
+
+					if ( is_string( $key ) && is_string( $attribute ) ) {
+						$attributes_arr[ urldecode( $key ) ] = $attribute;
+					}
+				}
+
+				$product_data['attributes'] = $attributes_arr;
 
 				foreach ( $product->get_available_variations() as $key => $variation ) {
 					$variation_id                       = $variation['variation_id'];
