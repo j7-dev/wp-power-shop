@@ -5,7 +5,7 @@
  * Description:       Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額
  * Version:           2.0.3
  * Requires at least: 5.7
- * Requires PHP:      8.0
+ * Requires PHP:      8.1
  * Author:            J7
  * Author URI:        https://github.com/j7-dev
  * License:           GPL v2 or later

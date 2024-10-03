@@ -8,8 +8,8 @@ use J7\PowerShop\Bootstrap;
 	'is_shop_closed'    => $is_shop_closed,
 ] = $args;
 
-$img_id  = $product->get_image_id();
-$img_src = \wp_get_attachment_image_src($img_id, [ 450, 450 ]) ?: [ $default_image_src ];
+$feature_image_id = $product->get_image_id();
+$img_src          = \wp_get_attachment_url( $feature_image_id ) ?: $default_image_src;
 
 $name = $product->get_name();
 
@@ -50,7 +50,7 @@ if (strpos($_SERVER['REQUEST_URI'], Bootstrap::KEBAB) === false) {
 ?>
 <div data-ps-product-id="<?php echo $product_id; ?>" class="group relative pb-12 <?php echo $is_shop_closed ? 'pointer-events-none' : ''; ?> <?php echo $class; ?>">
 	<div class="w-full aspect-square overflow-hidden">
-		<img src="<?php echo $img_src[0]; ?>" class="group-hover:scale-125 duration-300 w-full aspect-square object-cover" alt="<?php echo $name; ?>">
+		<img src="<?php echo $img_src; ?>" class="group-hover:scale-125 duration-300 w-full aspect-square object-cover" alt="<?php echo $name; ?>">
 	</div>
 	<div class="mt-2">
 		<?php echo $name; ?>
