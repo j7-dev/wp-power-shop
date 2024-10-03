@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.jconfirm-holder {
+  max-width: 800px !important;
+  margin: auto !important;
+}

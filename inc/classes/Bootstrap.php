@@ -78,6 +78,8 @@ class Bootstrap {
 			}
 		}
 
+		\wp_enqueue_style( 'power-shop-front', Plugin::$url . '/inc/assets/css/front.min.css', [], Plugin::$version );
+
 		// if (!\is_admin() && ($screen->id !== Plugin::$kebab)) return;
 		Vite\enqueue_asset(
 			Plugin::$dir . '/js/dist',
