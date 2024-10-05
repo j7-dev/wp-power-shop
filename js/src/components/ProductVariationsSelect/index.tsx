@@ -85,8 +85,8 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({
 			{Object.keys(formattedAttributes).map((attributeName) => {
 				const attribute = attributes?.find((a) => a.slug === attributeName)
 				const attributeOptions = attribute?.options || []
-
 				const options = toArray(formattedAttributes[attributeName])
+
 				const selectedOption = selectedAttributes.find(
 					(item) => item.name === attributeName,
 				) ?? { name: '', value: '' }
@@ -97,15 +97,14 @@ const ProductVariationsSelect: React.FC<{ product: TAjaxProduct }> = ({
 							{options.map((option) => (
 								<Button
 									key={option}
-									type={`${
-										selectedOption.value === option ? 'primary' : 'default'
-									}`}
+									type={`${selectedOption.value === option ? 'primary' : 'default'
+										}`}
 									onClick={handleClick(attributeName, option)}
 									size="small"
 									className="mr-1 mb-1"
 								>
 									<span className="text-xs">
-										{attributeOptions?.find((o) => o?.value === option)?.name}
+										{attributeOptions?.find((o) => o?.value === decodeURI(option))?.name}
 									</span>
 								</Button>
 							))}

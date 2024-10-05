@@ -176,8 +176,8 @@ final class Functions {
 				$variation_meta                       = $meta['variations']; // Undefined array key "variations"
 				$product_data['variations']           = [];
 				$product_data['variation_attributes'] = $product->get_variation_attributes();
-				$attributes_arr = [];
-				$attributes     = $product?->get_attributes(); // get attributes object
+				$attributes_arr                       = [];
+				$attributes                           = $product?->get_attributes(); // get attributes object
 
 				foreach ( $attributes as $key => $attribute ) {
 					$option_ids   = $attribute->get_options(); // option_ids
@@ -186,19 +186,19 @@ final class Functions {
 
 					foreach ( $option_ids as $index => $option_id ) {
 						$term           = \get_term_by( 'slug', $slugs[ $index ], $attribute->get_name() );
-						$option_name    = $term->name;
+						$option_name    = $term ? $term->name : $slugs[ $index ];
 						$attr_options[] = [
-							'value' => $slugs[ $index ],
-							'name' => $option_name,
+							'value' => urldecode( $slugs[ $index ] ),
+							'name'  => urldecode( $option_name ),
 						];
 					}
 
 					if ( $attribute instanceof \WC_Product_Attribute ) {
 						$attributes_arr[] = [
-							'name'      => \wc_attribute_label( $attribute->get_name() ),
-							'slug'      => $attribute->get_name(),
-							'options'   => $attr_options,
-							'position'  => $attribute->get_position(),
+							'name'     => \wc_attribute_label( $attribute->get_name() ),
+							'slug'     => $attribute->get_name(),
+							'options'  => $attr_options,
+							'position' => $attribute->get_position(),
 						];
 					}
 
