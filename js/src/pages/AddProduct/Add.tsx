@@ -47,9 +47,6 @@ const Add = () => {
 	const productCatsResult = useMany({
 		resource: '/product_categories',
 		dataProvider: 'power-shop',
-		args: {
-			per_page: 100,
-		},
 	})
 
 	const productCats: TProductCat[] = productCatsResult?.data?.data ?? []
