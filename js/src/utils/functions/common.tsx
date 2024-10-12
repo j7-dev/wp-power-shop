@@ -44,7 +44,7 @@ export const getCurrencyString = ({
 	price: number | string | undefined
 	symbol?: string
 }) => {
-	if (typeof price === 'undefined' || price === null) return ''
+	if (!price && price !== 0 && price !== '0') return ''
 	if (typeof price === 'string') return `${symbol} ${price}`
 	return `${symbol} ${price.toString()}`
 }
