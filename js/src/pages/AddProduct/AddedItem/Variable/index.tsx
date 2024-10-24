@@ -108,7 +108,7 @@ const Variable: React.FC<{
 				<Input />
 			</Form.Item>
 
-			<div className={`pl-20 pr-8 ${isExpended ? 'block' : 'hidden'}`}>
+			<div className={`pl-20 pr-8 ${isExpended ? 'block' : 'tw-hidden'}`}>
 				{productVariations.map((variation, i) => (
 					<Variation
 						key={variation?.id}
