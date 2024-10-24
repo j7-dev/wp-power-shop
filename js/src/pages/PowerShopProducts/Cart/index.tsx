@@ -51,6 +51,10 @@ const Cart = () => {
 	const cartResult = useOne({
 		resource: 'cart',
 		dataProvider: 'wc-store',
+		queryOptions: {
+			cacheTime: 0,
+			staleTime: 0,
+		},
 	})
 	const wcStoreApiNonce =
 		cartResult?.data?.headers?.['x-wc-store-api-nonce'] ||
