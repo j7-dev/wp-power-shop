@@ -8,7 +8,7 @@
 $pad_width: 576px;
 $pad_width: 810px;
 
-@import "./php.scss";
+@use "./php.scss";
 
 #power_shop_products_app {
 	table.ps-cart-table {
