@@ -59,7 +59,7 @@ final class Functions {
 			'description'           => '',
 			'public'                => true,
 			'hierarchical'          => false,
-			'exclude_from_search'   => true,
+			'exclude_from_search'   => false,
 			'publicly_queryable'    => true,
 			'show_ui'               => true,
 			'show_in_nav_menus'     => false,
