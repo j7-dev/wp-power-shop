@@ -44,6 +44,7 @@ const Report = () => {
 							message: '密碼錯誤',
 						},
 					]}
+					hasFeedback={false}
 					className="mb-8"
 				>
 					<Input.Password
