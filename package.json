@@ -7,7 +7,7 @@
 		"bootstrap": "yarn && composer install --no-interaction",
 		"dev": "vite",
 		"prebuild": "echo 'todo: remove console'",
-		"build": "vite build && sh release.sh",
+		"build": "vite build",
 		"preview": "vite preview",
 		"format": "prettier-eslint --write \"js/src/**/*.tsx\"",
 		"lint": "npx eslint \"js/src/**/*.{ts,tsx}\" --ext .ts,.tsx --rule \"no-unused-vars: off\" && phpcbf",
