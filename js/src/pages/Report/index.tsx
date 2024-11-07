@@ -45,7 +45,6 @@ const Report = () => {
 						},
 					]}
 					className="mb-8"
-					hasFeedback={true}
 				>
 					<Input.Password
 						allowClear

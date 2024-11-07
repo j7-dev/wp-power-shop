@@ -94,7 +94,6 @@ const ReportPassword = () => {
 				<Form.Item
 					name={['password']}
 					rules={[{ required: true, message: '密碼不能為空' }]}
-					hasFeedback={true}
 				>
 					<Input placeholder="請輸入密碼" />
 				</Form.Item>

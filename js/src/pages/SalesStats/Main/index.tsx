@@ -1,16 +1,14 @@
-import { useEffect } from 'react'
 import DashBoard from './DashBoard'
 import Table from './Table'
 import { postId } from '@/utils'
 import { useAjaxGetOrders } from '@/pages/SalesStats/hooks/useAjaxGetOrders'
-import { TOrderData, defaultOrderData } from '@/pages/SalesStats/types'
+import { TOrderData } from '@/pages/SalesStats/types'
 import {
-	orderDataAtom,
 	paginationAtom,
 	filterAtom,
 	isAdminAtom,
 } from '@/pages/SalesStats/atom'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 import ReportPassword from './ReportPassword'
 
 // import DownloadExcel from './DownloadExcel'
@@ -32,14 +30,14 @@ const Main = () => {
 	// const isError = mutation?.isError ?? false
 	// const isSuccess = mutation?.isSuccess ?? false
 
-	const setOrderData = useSetAtom(orderDataAtom)
+	// const setOrderData = useSetAtom(orderDataAtom)
 
-	useEffect(() => {
-		if (!isLoading) {
-			const orderData = mutation?.orderData ?? defaultOrderData
-			setOrderData(orderData)
-		}
-	}, [isLoading])
+	// useEffect(() => {
+	// 	if (!isLoading) {
+	// 		const orderData = mutation?.orderData ?? defaultOrderData
+	// 		setOrderData(orderData)
+	// 	}
+	// }, [isLoading])
 
 	return (
 		<div className="py-4">

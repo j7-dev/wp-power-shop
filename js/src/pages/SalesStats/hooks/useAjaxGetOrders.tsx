@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAjax, useAjaxNonce } from '@/hooks'
 import { Dayjs } from 'dayjs'
+import { orderDataAtom } from '@/pages/SalesStats/atom'
+import { useAtom } from 'jotai'
 
 type TProps = {
 	post_id: string
@@ -14,10 +16,8 @@ type TProps = {
 
 export function useAjaxGetOrders<T>(props?: TProps) {
 	const ajaxNonce = useAjaxNonce()
-	const [
-		orderData,
-		setOrderData,
-	] = useState<T | undefined>(undefined)
+
+	const [orderData, setOrderData] = useAtom(orderDataAtom)
 	const post_id = props?.post_id || '0'
 	const paged = props?.paged || 1
 	const limit = props?.limit || 10
