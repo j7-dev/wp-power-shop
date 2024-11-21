@@ -71,3 +71,28 @@ export const getStockQty = (
 
 	return stockQuantity ?? Infinity
 }
+
+/**
+ * 過濾物件的鍵值
+ * 例如: 把一個深層物件 value 為 undefined 的 key 過濾掉
+ *
+ * @param obj
+ * @param filterValues
+ */
+export const filterObjKeys = (
+	obj: object,
+	filterValues: (string | number | boolean | undefined | null)[] = [undefined],
+) => {
+	for (const key in obj) {
+		if (filterValues.includes(obj[key as keyof typeof obj])) {
+			delete obj[key as keyof typeof obj]
+		} else if (typeof obj[key as keyof typeof obj] === 'object') {
+			filterObjKeys(obj[key as keyof typeof obj]) // 递归处理嵌套对象
+			if (Object.keys(obj[key as keyof typeof obj]).length === 0) {
+				delete obj[key as keyof typeof obj]
+			}
+		}
+	}
+
+	return obj
+}

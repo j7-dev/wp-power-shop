@@ -1,5 +1,5 @@
 import { axios } from '@/api'
-import { apiUrl, getDataProviderUrlParams } from '@/utils'
+import { apiUrl, getDataProviderUrlParams, filterObjKeys } from '@/utils'
 import { TDataProvider } from '@/types'
 import { AxiosRequestConfig } from 'axios'
 
@@ -19,10 +19,11 @@ export const getResource = async ({
 	config?: AxiosRequestConfig<{ [key: string]: any }> | undefined
 }) => {
 	const dataProviderUrlParams = getDataProviderUrlParams(dataProvider)
+	const filteredArgs = filterObjKeys(args)
 	const getResult = await axios.get(
 		`${apiUrl}/${dataProviderUrlParams}${resource}/${pathParams.join(
 			'/',
-		)}?${new URLSearchParams(args).toString()}`,
+		)}?${new URLSearchParams(filteredArgs as URLSearchParams).toString()}`,
 		config,
 	)
 
@@ -45,10 +46,11 @@ export const getResources = async ({
 	config?: AxiosRequestConfig<{ [key: string]: any }> | undefined
 }) => {
 	const dataProviderUrlParams = getDataProviderUrlParams(dataProvider)
+	const filteredArgs = filterObjKeys(args)
 	const getResult = await axios.get(
 		`${apiUrl}/${dataProviderUrlParams}${resource}/${pathParams.join(
 			'/',
-		)}?${new URLSearchParams(args).toString()}`,
+		)}?${new URLSearchParams(filteredArgs as URLSearchParams).toString()}`,
 		config,
 	)
 

@@ -1,9 +1,15 @@
 <?php
+/**
+ * Api
+ */
 
 declare(strict_types=1);
 
 namespace J7\PowerShop;
 
+/**
+ * Api
+ */
 final class Api {
 	use \J7\WpUtils\Traits\SingletonTrait;
 
@@ -12,19 +18,39 @@ final class Api {
 	const PURGE_KINSTA_CACHE_ENDPOINT = 'purge_kinsta_cache';
 	const PRODUCT_CATEGORY_ENDPOINT   = 'product_categories';
 
-	function __construct() {
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
 		foreach ( [ self::POSTMETA_API_ENDPOINT, self::AJAX_NONCE_ENDPOINT, self::PURGE_KINSTA_CACHE_ENDPOINT, self::PRODUCT_CATEGORY_ENDPOINT ] as $action ) {
 			\add_action( 'rest_api_init', [ $this, "register_{$action}_api" ] );
 		}
 	}
 
-	public function product_categories_callback() {
-		$product_categories = \get_terms(
-			[
-				'taxonomy'   => 'product_cat',
-				'hide_empty' => false,
-			]
+	/**
+	 * Product categories callback
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 * @return \WP_REST_Response
+	 */
+	public function product_categories_callback( $request ) {
+		$params = $request->get_params();
+
+		if (\class_exists('J7\WpUtils\Classes\WP')) {
+			$params = \J7\WpUtils\Classes\WP::sanitize_text_field_deep( $params, false );
+		}
+
+		$default_args = [
+			'taxonomy'   => 'product_cat',
+			'hide_empty' => false,
+		];
+
+		$args = \wp_parse_args(
+			$params,
+			$default_args,
 		);
+
+		$product_categories = \get_terms($args);
 
 		$formatted_product_categories = \array_map(
 			function ( $product_category ) {

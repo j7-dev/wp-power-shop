@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, memo, useEffect } from 'react'
 import { Select, Button, Typography, Form } from 'antd'
 import { useMany } from '@/hooks'
 import { TProduct, TProductCat } from '@/types/wcRestApi'
 import { renderHTML, getProductImageSrc } from '@/utils'
 import { addedProductsAtom, isChangeAtom } from './atoms'
 import { useAtom, useSetAtom } from 'jotai'
+import { debounce } from 'lodash-es'
 
 const { Paragraph } = Typography
 
@@ -49,6 +50,8 @@ const Add = () => {
 		dataProvider: 'power-shop',
 	})
 
+	const [search, setSearch] = useState<string | undefined>(undefined)
+
 	const productCats: TProductCat[] = productCatsResult?.data?.data ?? []
 
 	const productCartItems = productCats.map((cat) => ({
@@ -70,6 +73,7 @@ const Add = () => {
 			category: selectedCatId,
 			orderby: 'title',
 			order: 'asc',
+			search,
 		},
 		queryOptions: {
 			enabled: !!selectedCatId,
@@ -147,6 +151,10 @@ const Add = () => {
 		!selectedProductId ||
 		addedProducts.some((addedProduct) => addedProduct?.id === selectedProductId)
 
+	useEffect(() => {
+		setSearch(undefined)
+	}, [selectedCatId])
+
 	return (
 		<div className="mb-8">
 			<p className="mb-2 text-[1rem] font-semibold">選擇要加入的商品</p>
@@ -184,16 +192,25 @@ const Add = () => {
 					placeholder="選擇產品"
 					optionFilterProp="children"
 					options={productItems}
+					onSearch={(value) => {
+						if ('' !== value) {
+							debounce(() => {
+								setSearch(value)
+							}, 1000)()
+						}
+					}}
 					optionLabelProp="label"
 					onChange={handleChangeProduct}
-					filterOption={(input, option) => {
-						const id = option?.value ?? 0
-						const theProduct = products.find((product) => product.id === id)
+					filterOption={false}
 
-						return (theProduct?.name ?? '')
-							.toLowerCase()
-							.includes(input.toLowerCase())
-					}}
+					// filterOption={(input, option) => {
+					// 	const id = option?.value ?? 0
+					// 	const theProduct = products.find((product) => product.id === id)
+
+					// 	return (theProduct?.name ?? '')
+					// 		.toLowerCase()
+					// 		.includes(input.toLowerCase())
+					// }}
 				/>
 				<div className="flex gap-2">
 					<Button
@@ -220,4 +237,4 @@ const Add = () => {
 	)
 }
 
-export default Add
+export default memo(Add)
