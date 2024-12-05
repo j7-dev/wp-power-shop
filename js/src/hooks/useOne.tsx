@@ -49,7 +49,13 @@ export const useOne = (options: {
 				resource,
 				dataProvider,
 				pathParams,
-				args,
+				args:
+					resource === 'cart'
+						? {
+								args,
+								t: Date.now(),
+						  }
+						: args,
 				config,
 			}),
 		options.queryOptions || {},
