@@ -6,3 +6,7 @@
   max-width: 800px !important;
   margin: auto !important;
 }
+
+.power-shop-products * {
+	-webkit-transform: translate3d(0, 0, 0);
+}
