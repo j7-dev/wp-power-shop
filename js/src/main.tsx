@@ -48,23 +48,25 @@ const mapping = [
 	},
 ]
 
-mapping.forEach(({ el, App }) => {
-	if (!!el) {
-		ReactDOM.createRoot(el).render(
-			<React.StrictMode>
-				<QueryClientProvider client={queryClient}>
-					<ConfigProvider
-						theme={{
-							token: {
-								colorPrimary,
-							},
-						}}
-					>
-						<App />
-					</ConfigProvider>
-					<ReactQueryDevtools initialIsOpen={false} />
-				</QueryClientProvider>
-			</React.StrictMode>,
-		)
-	}
+document.addEventListener('DOMContentLoaded', () => {
+	mapping.forEach(({ el, App }) => {
+		if (!!el) {
+			ReactDOM.createRoot(el).render(
+				<React.StrictMode>
+					<QueryClientProvider client={queryClient}>
+						<ConfigProvider
+							theme={{
+								token: {
+									colorPrimary,
+								},
+							}}
+						>
+							<App />
+						</ConfigProvider>
+						<ReactQueryDevtools initialIsOpen={false} />
+					</QueryClientProvider>
+				</React.StrictMode>,
+			)
+		}
+	})
 })
