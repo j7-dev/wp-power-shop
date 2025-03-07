@@ -1,0 +1,117 @@
+.bn-container {
+	audio {
+		width: 100%;
+		display: block;
+	}
+	code {
+		padding: 0.2em 0.4em;
+		margin: 0;
+		font-size: 85%;
+		white-space: break-spaces;
+		background-color: #eee;
+		border-radius: 0.425em;
+	}
+
+	// FILE 預覽時，取消 hover 下載連結背景變色
+	// 但編輯時還是要保留
+	.bn-file-default-preview-name {
+		margin-top: 0rem !important;
+		margin-bottom: 0rem !important;
+		margin-left: 0.5rem !important;
+	}
+	.bn-file-caption:empty {
+		display: none !important;
+	}
+
+	.bn-block-content:not([contenteditable]) {
+		a:hover {
+			background-color: unset;
+		}
+	}
+
+	.bn-block-content {
+		&[data-content-type="customHTML"] {
+			> div {
+				width: 100%;
+				position: relative;
+			}
+		}
+	}
+
+	//ALERT
+
+	.alert {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-grow: 1;
+		border-radius: 4px;
+		min-height: 48px;
+		padding: 4px;
+	}
+
+	.alert[data-alert-type="warning"] {
+		background-color: #fff6e6;
+	}
+
+	.alert[data-alert-type="error"] {
+		background-color: #ffe6e6;
+	}
+
+	.alert[data-alert-type="info"] {
+		background-color: #e6ebff;
+	}
+
+	.alert[data-alert-type="success"] {
+		background-color: #e6ffe6;
+	}
+
+	[data-color-scheme="dark"] .alert[data-alert-type="warning"] {
+		background-color: #805d20;
+	}
+
+	[data-color-scheme="dark"] .alert[data-alert-type="error"] {
+		background-color: #802020;
+	}
+
+	[data-color-scheme="dark"] .alert[data-alert-type="info"] {
+		background-color: #203380;
+	}
+
+	[data-color-scheme="dark"] .alert[data-alert-type="success"] {
+		background-color: #208020;
+	}
+
+	.alert-icon-wrapper {
+		border-radius: 16px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-left: 12px;
+		margin-right: 12px;
+		height: 18px;
+		width: 18px;
+		user-select: none;
+		cursor: pointer;
+	}
+
+	.alert-icon[data-alert-icon-type="warning"] {
+		color: #e69819;
+	}
+
+	.alert-icon[data-alert-icon-type="error"] {
+		color: #d80d0d;
+	}
+
+	.alert-icon[data-alert-icon-type="info"] {
+		color: #507aff;
+	}
+
+	.alert-icon[data-alert-icon-type="success"] {
+		color: #0bc10b;
+	}
+
+	.inline-content {
+		flex-grow: 1;
+	}
+}

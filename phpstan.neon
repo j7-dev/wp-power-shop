@@ -9,6 +9,7 @@ parameters:
 		- '#Function .* not found#'
 		- '#Cannot cast mixed to .*#'
 		- '#Using nullsafe method call on non-nullable type .*#'
+		- '#Call to function is_numeric\(\) with .*#'
 	excludePaths:
 		- js/*
 		- vendor/*
@@ -16,3 +17,6 @@ parameters:
 	bootstrapFiles:
 		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+		- ../powerhouse/plugin.php
+		- ../powerhouse/vendor/autoload.php
+		- ../elementor/elementor.php

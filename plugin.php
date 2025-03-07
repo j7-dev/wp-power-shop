@@ -1,18 +1,18 @@
 <?php
 /**
- * Plugin Name:       Power Shop
- * Plugin URI:        [YOUR GITHUB URL]/power-shop
- * Description:       your description
+ * Plugin Name:       Power Shop | 讓電商管理更便利
+ * Plugin URI:        https://github.com/j7-dev/wp-power-shop.git
+ * Description:       優化 Woocommerce 操作介面，更人性化的方式管理電商平台
  * Version:           0.0.1
  * Requires at least: 5.7
  * Requires PHP:      8.0
- * Author:            Your Name
- * Author URI:        [YOUR GITHUB URL]
+ * Author:            J7
+ * Author URI:        https://github.com/j7-dev
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       power_shop
  * Domain Path:       /languages
- * Tags: your tags
+ * Tags:              woocommerce, ecommerce, power-shop
  */
 
 declare (strict_types = 1);
@@ -43,25 +43,25 @@ final class Plugin {
 		// self::$template_page_names = [ '404' ];
 
 		$this->required_plugins = [
-			// [
-			// 'name'     => 'WooCommerce',
-			// 'slug'     => 'woocommerce',
-			// 'required' => true,
-			// 'version'  => '7.6.0',
-			// ],
-			// [
-			// 'name'     => 'Powerhouse',
-			// 'slug'     => 'powerhouse',
-			// 'source'   => '[YOUR GITHUB URL]/wp-powerhouse/releases/latest/download/powerhouse.zip',
-			// 'version'  => '2.0.14',
-			// 'required' => true,
-			// ],
+			[
+				'name'     => 'WooCommerce',
+				'slug'     => 'woocommerce',
+				'required' => true,
+				'version'  => '7.6.0',
+			],
+			[
+				'name'     => 'Powerhouse',
+				'slug'     => 'powerhouse',
+				'source'   => 'https://github.com/j7-dev/wp-powerhouse/releases/latest/download/powerhouse.zip',
+				'version'  => '3.2.2',
+				'required' => true,
+			],
 		];
 
 		$this->init(
 			[
 				'app_name'    => 'Power Shop',
-				'github_repo' => '[YOUR GITHUB URL]/power-shop',
+				'github_repo' => 'https://github.com/j7-dev/wp-power-shop',
 				'callback'    => [ Bootstrap::class, 'instance' ],
 			]
 		);
