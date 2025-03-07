@@ -73,7 +73,7 @@ const DescriptionComponent = () => {
 	return (
 		<>
 			<div className="mb-12">
-				<Heading>知識庫發佈</Heading>
+				<Heading>訂單發佈</Heading>
 
 				<Item name={['slug']} label="網址">
 					<Input
@@ -102,16 +102,16 @@ const DescriptionComponent = () => {
 				/>
 			</div>
 			<div className="mb-12">
-				<Heading>知識庫描述</Heading>
+				<Heading>訂單描述</Heading>
 
 				<Item name={['id']} hidden normalize={() => undefined} />
 
 				<div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-					<Item name={['name']} label="知識庫名稱" className="xl:col-span-3">
+					<Item name={['name']} label="訂單名稱" className="xl:col-span-3">
 						<Input allowClear />
 					</Item>
-					{/* TODO: 知識庫分類 */}
-					{/* <Item name={['category_ids']} label="知識庫分類" initialValue={[]}>
+					{/* TODO: 訂單分類 */}
+					{/* <Item name={['category_ids']} label="訂單分類" initialValue={[]}>
 						<Select
 							{...defaultSelectProps}
 							options={termToOptions(product_cats)}
@@ -119,7 +119,7 @@ const DescriptionComponent = () => {
 							disabled
 						/>
 					</Item>
-					<Item name={['tag_ids']} label="知識庫標籤" initialValue={[]}>
+					<Item name={['tag_ids']} label="訂單標籤" initialValue={[]}>
 						<Select
 							{...defaultSelectProps}
 							options={termToOptions(product_tags)}
@@ -131,7 +131,7 @@ const DescriptionComponent = () => {
 				<div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 					<Item
 						name={['short_description']}
-						label="知識庫簡介"
+						label="訂單簡介"
 						className="xl:col-span-2"
 					>
 						<Input.TextArea rows={8} allowClear />
@@ -174,12 +174,12 @@ const DescriptionComponent = () => {
 					</div>
 
 					<div className="mb-8">
-						<label className="mb-3 tw-block">知識庫縮圖</label>
+						<label className="mb-3 tw-block">訂單縮圖</label>
 						<FileUpload fileList={fileList} setFileList={setFileList} />
 					</div>
 
 					<div className="mb-8 xl:col-span-2">
-						<label className="mb-3 tw-block">知識庫背景圖</label>
+						<label className="mb-3 tw-block">訂單背景圖</label>
 						<FileUpload
 							formItemProps={{
 								name: ['bg_images'],

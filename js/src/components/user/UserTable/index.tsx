@@ -188,7 +188,7 @@ const UserTableComponent = ({
 				<ActionArea>
 					<div className="flex gap-x-6 justify-between">
 						<div>
-							<label className="tw-block mb-2">批量操作</label>
+							<label className="tw-block mb-2">批次操作</label>
 							<div className="flex gap-x-4">
 								<UpdateGrantedUsers
 									user_ids={selectedRowKeys as string[]}

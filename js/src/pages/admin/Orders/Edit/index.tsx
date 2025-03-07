@@ -3,7 +3,7 @@ import { Edit, useForm } from '@refinedev/antd'
 import { Tabs, TabsProps, Form, Switch, Modal, Button } from 'antd'
 import { Description, SortablePosts } from './tabs'
 import { useAtom } from 'jotai'
-import { TDocRecord, TDocBaseRecord } from '@/pages/admin/Docs/List/types'
+import { TOrderRecord, TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
 import { useParsed } from '@refinedev/core'
 import { PostEdit } from './PostEdit'
 import { UserTable } from '@/components/user'
@@ -35,9 +35,9 @@ const EditComponent = () => {
 
 	// 初始化資料
 	const { formProps, form, saveButtonProps, query, mutation, onFinish } =
-		useForm<TDocRecord>({
+		useForm<TOrderRecord>({
 			action: 'edit',
-			resource: 'posts',
+			resource: 'orders',
 			id,
 			redirect: false,
 			successNotification: false,
@@ -58,11 +58,10 @@ const EditComponent = () => {
 		})
 
 	// 顯示
-	const watchName = Form.useWatch(['name'], form)
 	const watchId = Form.useWatch(['id'], form)
 	const watchStatus = Form.useWatch(['status'], form)
 
-	const record: TDocBaseRecord | undefined = query?.data?.data
+	const record: TOrderBaseRecord | undefined = query?.data?.data
 
 	const items = [
 		...defaultItems,
@@ -95,12 +94,7 @@ const EditComponent = () => {
 		<div className="sticky-card-actions sticky-tabs-nav">
 			<Edit
 				resource="posts"
-				title={
-					<>
-						{watchName}{' '}
-						<span className="text-gray-400 text-xs">#{watchId}</span>
-					</>
-				}
+				title={<>訂單 #{watchId}</>}
 				headerButtons={() => null}
 				saveButtonProps={{
 					...saveButtonProps,
@@ -134,7 +128,7 @@ const EditComponent = () => {
 								rel="noreferrer"
 							>
 								<Button className="ml-4" type="default">
-									前往知識庫
+									前往訂單
 								</Button>
 							</a>
 						}
@@ -180,4 +174,4 @@ const EditComponent = () => {
 	)
 }
 
-export const DocsEdit = memo(EditComponent)
+export const OrdersEdit = memo(EditComponent)

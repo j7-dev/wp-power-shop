@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react'
-import { TDocBaseRecord } from '@/pages/admin/Docs/List/types'
+import { TDocBaseRecord } from '@/pages/admin/Orders/List/types'
 import ToggleVisibility from './ToggleVisibility'
 import { ExportOutlined } from '@ant-design/icons'
 import { Tooltip, Button } from 'antd'

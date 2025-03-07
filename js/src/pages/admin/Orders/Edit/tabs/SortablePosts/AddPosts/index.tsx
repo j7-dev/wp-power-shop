@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Space, InputNumber, Button, Form } from 'antd'
 import { useCreate, useParsed } from '@refinedev/core'
-import { TDocRecord } from '@/pages/admin/Docs/List/types'
+import { TOrderRecord } from '@/pages/admin/Orders/List/types'
 import { useEnv } from 'antd-toolkit'
 
 const { Item } = Form
@@ -12,14 +12,14 @@ type TFormValues = {
 	post_parents: string[]
 }
 
-const AddPosts = ({ records }: { records: TDocRecord[] }) => {
+const AddPosts = ({ records }: { records: TOrderRecord[] }) => {
 	const { DOCS_POST_TYPE = '' } = useEnv()
 	const { id } = useParsed()
 
 	const [form] = Form.useForm<TFormValues>()
 
 	const { mutate, isLoading } = useCreate({
-		resource: 'posts',
+		resource: 'orders',
 	})
 
 	const handleCreateMany = () => {

@@ -90,8 +90,6 @@ final class Bootstrap {
 				'BUNNY_STREAM_API_KEY' => SettingsDTO::instance()->bunny_stream_api_key,
 				'NONCE'                => \wp_create_nonce( 'wp_rest' ),
 				'APP1_SELECTOR'        => Base::APP1_SELECTOR,
-				'DOCS_POST_TYPE'       => \J7\PowerDocs\Domains\Doc\CPT::POST_TYPE,
-				'BOUND_META_KEY'       => \J7\PowerDocs\Domains\Product\Api::BOUND_META_KEY,
 				'ELEMENTOR_ENABLED'    => \in_array( 'elementor/elementor.php', $active_plugins, true ), // 檢查 elementor 是否啟用
 			]
 		);

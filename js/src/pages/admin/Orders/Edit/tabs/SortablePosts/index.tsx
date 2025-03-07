@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from 'react'
 import { SortableTree, TreeData } from '@ant-design/pro-editor'
-import { TDocRecord } from '@/pages/admin/Docs/List/types'
+import { TOrderRecord } from '@/pages/admin/Orders/List/types'
 import { Form, message, Button } from 'antd'
 import NodeRender from './NodeRender'
 import { postToTreeNode, treeToParams } from './utils'
@@ -29,7 +29,7 @@ export const MAX_DEPTH = 2
 const SortablePostsComponent = ({
 	PostEdit,
 }: {
-	PostEdit: React.FC<{ record: TDocRecord }>
+	PostEdit: React.FC<{ record: TOrderRecord }>
 }) => {
 	const form = Form.useFormInstance()
 	const courseId = form?.getFieldValue('id')
@@ -42,10 +42,10 @@ const SortablePostsComponent = ({
 	const posts = postsData?.data || []
 	const [selectedPost, setSelectedPost] = useAtom(selectedPostAtom)
 
-	const [treeData, setTreeData] = useState<TreeData<TDocRecord>>([])
+	const [treeData, setTreeData] = useState<TreeData<TOrderRecord>>([])
 
 	// 原本的樹狀結構
-	const [originTree, setOriginTree] = useState<TreeData<TDocRecord>>([])
+	const [originTree, setOriginTree] = useState<TreeData<TOrderRecord>>([])
 	const invalidate = useInvalidate()
 
 	const apiUrl = useApiUrl()
@@ -72,7 +72,7 @@ const SortablePostsComponent = ({
 					acc.push(...c?.children)
 				}
 				return acc
-			}, [] as TDocRecord[])
+			}, [] as TOrderRecord[])
 
 			setSelectedPost(
 				flattenPosts.find((c) => c.id === selectedPost?.id) || null,
@@ -80,7 +80,7 @@ const SortablePostsComponent = ({
 		}
 	}, [isListFetching])
 
-	const handleSave = (data: TreeData<TDocRecord>) => {
+	const handleSave = (data: TreeData<TOrderRecord>) => {
 		const from_tree = treeToParams(originTree, courseId)
 		const to_tree = treeToParams(data, courseId)
 		const isEqual = _isEqual(from_tree, to_tree)
@@ -116,7 +116,7 @@ const SortablePostsComponent = ({
 				},
 				onSettled: () => {
 					invalidate({
-						resource: 'posts',
+						resource: 'orders',
 						invalidates: ['list'],
 					})
 				},
@@ -145,7 +145,7 @@ const SortablePostsComponent = ({
 						onConfirm: () =>
 							deleteMany(
 								{
-									resource: 'posts',
+									resource: 'orders',
 									ids: selectedIds,
 									mutationMode: 'optimistic',
 								},
@@ -162,7 +162,7 @@ const SortablePostsComponent = ({
 						className: 'relative top-1',
 						loading: isDeleteManyLoading,
 						disabled: !selectedIds.length,
-						children: `批量刪除 ${selectedIds.length ? `(${selectedIds.length})` : ''}`,
+						children: `批次刪除 ${selectedIds.length ? `(${selectedIds.length})` : ''}`,
 					}}
 				/>
 			</div>
@@ -173,7 +173,7 @@ const SortablePostsComponent = ({
 						hideAdd
 						hideRemove
 						treeData={treeData}
-						onTreeDataChange={(data: TreeData<TDocRecord>) => {
+						onTreeDataChange={(data: TreeData<TOrderRecord>) => {
 							setTreeData(data)
 							handleSave(data)
 						}}
@@ -213,7 +213,7 @@ export const SortablePosts = memo(SortablePostsComponent)
  * @param treeData 樹狀結構
  * @returns 所有 collapsed = false 的 id
  */
-function getOpenedNodeIds(treeData: TreeData<TDocRecord>) {
+function getOpenedNodeIds(treeData: TreeData<TOrderRecord>) {
 	// 遞迴取得所有 collapsed = false 的 id
 	const ids = treeData?.reduce((acc, c) => {
 		if (!c.collapsed) acc.push(c.id as string)
@@ -230,11 +230,11 @@ function getOpenedNodeIds(treeData: TreeData<TDocRecord>) {
  * @returns newTreeData 恢復原本的 collapsed 狀態
  */
 function restoreOriginCollapsedState(
-	treeData: TreeData<TDocRecord>,
+	treeData: TreeData<TOrderRecord>,
 	openedNodeIds: string[],
 ) {
 	// 遞迴恢復原本的 collapsed 狀態
-	const newTreeData: TreeData<TDocRecord> = treeData?.map((item) => {
+	const newTreeData: TreeData<TOrderRecord> = treeData?.map((item) => {
 		let newItem = item
 		if (openedNodeIds.includes(item.id as string)) {
 			newItem.collapsed = false
@@ -257,7 +257,7 @@ function restoreOriginCollapsedState(
  * @param depth 當前深度
  * @returns 最大深度
  */
-function getMaxDepth(treeData: TreeData<TDocRecord>, depth = 0) {
+function getMaxDepth(treeData: TreeData<TOrderRecord>, depth = 0) {
 	// 如果沒有資料，回傳當前深度
 	if (!treeData?.length) return depth
 

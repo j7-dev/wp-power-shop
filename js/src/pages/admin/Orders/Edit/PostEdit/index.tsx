@@ -2,20 +2,20 @@ import React, { memo, useEffect } from 'react'
 import { Form, Input, Switch, Space, Button, Typography } from 'antd'
 import { toFormData, CopyText } from 'antd-toolkit'
 import { DescriptionDrawer } from '@/components/general'
-import { TDocRecord } from '@/pages/admin/Docs/List/types'
+import { TOrderRecord } from '@/pages/admin/Orders/List/types'
 import { Edit, useForm } from '@refinedev/antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 
 const { Item } = Form
 const { Text } = Typography
 
-const PostEditComponent = ({ record }: { record: TDocRecord }) => {
+const PostEditComponent = ({ record }: { record: TOrderRecord }) => {
 	const { id, name, permalink, slug } = record
 
 	// 初始化資料
 	const { formProps, form, saveButtonProps, mutation, onFinish } = useForm({
 		action: 'edit',
-		resource: 'posts',
+		resource: 'orders',
 		id,
 		redirect: false,
 		queryOptions: {
@@ -38,7 +38,7 @@ const PostEditComponent = ({ record }: { record: TDocRecord }) => {
 	}, [record])
 
 	// 將 [] 轉為 '[]'，例如，清除原本分類時，如果空的，前端會是 undefined，轉成 formData 時會遺失
-	const handleOnFinish = (values: Partial<TDocRecord>) => {
+	const handleOnFinish = (values: Partial<TOrderRecord>) => {
 		onFinish(toFormData(values))
 	}
 
@@ -47,14 +47,14 @@ const PostEditComponent = ({ record }: { record: TDocRecord }) => {
 
 	return (
 		<Edit
-			resource="posts"
+			resource="orders"
 			recordItemId={id}
 			breadcrumb={null}
 			goBack={null}
 			headerButtons={() => null}
 			title={
 				<div className="pl-4">
-					《編輯》 {name} <span className="text-gray-400 text-xs">#{id}</span>
+					《編輯》 訂單 <span className="text-gray-400 text-xs">#{id}</span>
 				</div>
 			}
 			saveButtonProps={{

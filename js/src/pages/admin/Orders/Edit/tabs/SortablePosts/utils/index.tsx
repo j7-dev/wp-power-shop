@@ -1,21 +1,21 @@
 import { TreeData, TreeNode } from '@ant-design/pro-editor'
-import { TDocRecord } from '@/pages/admin/Docs/List/types'
+import { TOrderRecord } from '@/pages/admin/Orders/List/types'
 
 /**
- * 將章節 TDocRecord 傳換成 TreeNode<TDocRecord>
+ * 將章節 TOrderRecord 傳換成 TreeNode<TOrderRecord>
  *
- * @param {TDocRecord} post
- * @return {TreeNode<TDocRecord>}
+ * @param {TOrderRecord} post
+ * @return {TreeNode<TOrderRecord>}
  */
 
-export function postToTreeNode(post: TDocRecord): TreeNode<TDocRecord> {
+export function postToTreeNode(post: TOrderRecord): TreeNode<TOrderRecord> {
 	const { id, children, ...rest } = post
 	return {
 		id,
 		content: {
 			id,
 			...rest,
-		} as TDocRecord,
+		} as TOrderRecord,
 		children: children?.map(postToTreeNode) || [],
 		showExtra: false,
 		collapsed: true, // 預設為折疊
@@ -23,10 +23,10 @@ export function postToTreeNode(post: TDocRecord): TreeNode<TDocRecord> {
 }
 
 /**
- * 將 TreeData<TDocRecord> 轉換成 Create API 傳送的參數
+ * 將 TreeData<TOrderRecord> 轉換成 Create API 傳送的參數
  * 只抓出順序、parent_id、id
  *
- * @param {TreeData<TDocRecord>} treeData
+ * @param {TreeData<TOrderRecord>} treeData
  * @return {TParam[]}
  */
 
@@ -39,21 +39,21 @@ export type TParam = {
 }
 
 /**
- * 將 TreeData<TDocRecord> 轉換成 Create API 傳送的參數
+ * 將 TreeData<TOrderRecord> 轉換成 Create API 傳送的參數
  * 攤平 array
  *
- * @param {TreeData<TDocRecord>} treeData 樹狀結構
+ * @param {TreeData<TOrderRecord>} treeData 樹狀結構
  * @param {string}               parentId 父節點 id
  * @param {number}               depth    深度
  * @return {TParam[]}
  */
 export function treeToParams(
-	treeData: TreeData<TDocRecord>,
+	treeData: TreeData<TOrderRecord>,
 	parentId: string,
 	depth: number = 0,
 ): TParam[] {
 	function getFlatArray(
-		_treeData: TreeData<TDocRecord>,
+		_treeData: TreeData<TOrderRecord>,
 		_parentId: string,
 		_depth: number = 0,
 	): TParam[] {

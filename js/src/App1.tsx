@@ -8,8 +8,8 @@ import routerBindings, {
 } from '@refinedev/react-router-v6'
 
 import {
-	DocsList,
-	DocsEdit,
+	OrdersList,
+	OrdersEdit,
 	Users,
 	DocAccess,
 	MediaLibraryPage,
@@ -89,9 +89,9 @@ function App() {
 						}
 					>
 						<Route index element={<NavigateToResource resource="docs" />} />
-						<Route path="docs">
-							<Route index element={<DocsList />} />
-							<Route path="edit/:id" element={<DocsEdit />} />
+						<Route path="orders">
+							<Route index element={<OrdersList />} />
+							<Route path="edit/:id" element={<OrdersEdit />} />
 						</Route>
 						<Route path="users" element={<Users />} />
 						<Route path="doc-access" element={<DocAccess />} />

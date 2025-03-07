@@ -142,41 +142,6 @@ export const resources: ResourceProps[] = [
 			icon: <SettingOutlined />,
 		},
 	},
-
-	{
-		name: 'posts',
-		list: '/posts',
-		edit: '/posts/edit/:id',
-		meta: {
-			label: '文章列表',
-			hide: true,
-		},
-	},
-	{
-		name: 'docs',
-		list: '/docs',
-		edit: '/docs/edit/:id',
-		meta: {
-			label: '知識庫列表',
-			icon: <TableOutlined />,
-		},
-	},
-	{
-		name: 'users',
-		list: '/users',
-		meta: {
-			label: '學員管理',
-			icon: <PiStudent />,
-		},
-	},
-	{
-		name: 'doc-access',
-		list: '/doc-access',
-		meta: {
-			label: '知識庫權限綁定',
-			icon: <ProductOutlined />,
-		},
-	},
 	{
 		name: 'media-library',
 		list: '/media-library',

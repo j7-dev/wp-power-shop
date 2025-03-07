@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { TDocRecord } from '@/pages/admin/Docs/List/types'
+import { TOrderRecord } from '@/pages/admin/Orders/List/types'
 import { FlattenNode, useSortableTree } from '@ant-design/pro-editor'
 import { CopyButton } from '@/components/general'
 import { Checkbox, CheckboxProps } from 'antd'
@@ -10,7 +10,7 @@ import { POST_STATUS, ProductName as PostName } from 'antd-toolkit/wp'
 import { flatMapDeep } from 'lodash-es'
 
 const NodeRender: FC<{
-	node: FlattenNode<TDocRecord>
+	node: FlattenNode<TOrderRecord>
 	selectedIds: string[]
 	setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
 }> = ({ node, selectedIds, setSelectedIds }) => {
@@ -25,11 +25,13 @@ const NodeRender: FC<{
 		removeNode(node.id)
 	}
 
-	const getFlattenChildrenIds = (_node: FlattenNode<TDocRecord>): string[] => {
-		return flatMapDeep([_node], (__node: FlattenNode<TDocRecord>) => [
+	const getFlattenChildrenIds = (
+		_node: FlattenNode<TOrderRecord>,
+	): string[] => {
+		return flatMapDeep([_node], (__node: FlattenNode<TOrderRecord>) => [
 			__node?.id as string,
 			...__node?.children?.map((child) =>
-				getFlattenChildrenIds(child as FlattenNode<TDocRecord>),
+				getFlattenChildrenIds(child as FlattenNode<TOrderRecord>),
 			),
 		])
 	}
@@ -69,7 +71,7 @@ const NodeRender: FC<{
 				<CopyButton
 					id={record?.id}
 					invalidateProps={{
-						resource: 'posts',
+						resource: 'orders',
 					}}
 					tooltipProps={{ title: '複製文章' }}
 				/>

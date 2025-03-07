@@ -172,7 +172,7 @@ const Main = () => {
 							</div>
 							<div className="mb-4 flex gap-x-6">
 								<div>
-									<label className="tw-block mb-2">批量操作</label>
+									<label className="tw-block mb-2">批次操作</label>
 									<div className="flex gap-x-4">
 										<UpdateBoundItems
 											product_ids={selectedRowKeys as string[]}

@@ -6,11 +6,11 @@ import { Table, FormInstance, Spin, Button, TableProps, Card } from 'antd'
 // 	initialFilteredValues,
 // } from '@/components/product/ProductTable/Filter'
 import { HttpError, useCreate } from '@refinedev/core'
-import { TDocBaseRecord, TDocRecord } from '@/pages/admin/Docs/List/types'
+import { TOrderBaseRecord, TOrderRecord } from '@/pages/admin/Orders/List/types'
 
 // import { TFilterProps } from '@/components/product/ProductTable/types'1.3.
-import useValueLabelMapper from '@/pages/admin/Docs/List/hooks/useValueLabelMapper'
-import useColumns from '@/pages/admin/Docs/List/hooks/useColumns'
+import useValueLabelMapper from '@/pages/admin/Orders/List/hooks/useValueLabelMapper'
+import useColumns from '@/pages/admin/Orders/List/hooks/useColumns'
 import { PlusOutlined } from '@ant-design/icons'
 import DeleteButton from './DeleteButton'
 import {
@@ -25,33 +25,33 @@ const Main = () => {
 	const env = useEnv()
 	const { DOCS_POST_TYPE } = env
 	const { tableProps, searchFormProps } = useTable<
-		TDocBaseRecord,
+		TOrderBaseRecord,
 		HttpError
 
 		// TFilterProps
 	>({
-		resource: 'posts',
+		resource: 'orders',
 
 		// onSearch,
 
 		filters: {
 			// initial: getInitialFilters(initialFilteredValues),
-			permanent: objToCrudFilters({
-				post_type: DOCS_POST_TYPE,
-				meta_keys: ['need_access', 'editor'],
-			}),
+			permanent: objToCrudFilters({}),
+		},
+		pagination: {
+			pageSize: 20,
 		},
 	})
 
 	const { valueLabelMapper } = useValueLabelMapper()
 
 	const { rowSelection, selectedRowKeys, setSelectedRowKeys } =
-		useRowSelection<TDocBaseRecord>()
+		useRowSelection<TOrderBaseRecord>()
 
 	const columns = useColumns()
 
 	const { mutate: create, isLoading: isCreating } = useCreate({
-		resource: 'posts',
+		resource: 'orders',
 		invalidates: ['list'],
 		meta: {
 			headers: { 'Content-Type': 'multipart/form-data;' },
@@ -61,7 +61,7 @@ const Main = () => {
 	const createKnowledgeBase = () => {
 		create({
 			values: {
-				name: '新知識庫',
+				name: '新訂單',
 				post_type: DOCS_POST_TYPE,
 			},
 		})
@@ -98,7 +98,7 @@ const Main = () => {
 						icon={<PlusOutlined />}
 						onClick={createKnowledgeBase}
 					>
-						新增知識庫
+						新增訂單
 					</Button>
 					<DeleteButton
 						selectedRowKeys={selectedRowKeys}
@@ -106,11 +106,11 @@ const Main = () => {
 					/>
 				</div>
 				<Table
-					{...(defaultTableProps as unknown as TableProps<TDocRecord>)}
+					{...(defaultTableProps as unknown as TableProps<TOrderRecord>)}
 					{...tableProps}
 					pagination={{
 						...tableProps.pagination,
-						...getDefaultPaginationProps({ label: '知識庫' }),
+						...getDefaultPaginationProps({ label: '訂單' }),
 					}}
 					rowSelection={rowSelection}
 					columns={columns}

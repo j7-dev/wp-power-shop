@@ -1,4 +1,4 @@
-import { TDocBaseRecord } from '@/pages/admin/Docs/List/types'
+import { TDocBaseRecord } from '@/pages/admin/Orders/List/types'
 import { useItemSelect } from 'antd-toolkit/wp'
 import { useEnv } from 'antd-toolkit'
 import { objToCrudFilters } from 'antd-toolkit/refine'

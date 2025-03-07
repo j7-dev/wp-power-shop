@@ -1,4 +1,4 @@
-import { TDocRecord } from '@/pages/admin/Docs/List/types'
+import { TOrderRecord } from '@/pages/admin/Orders/List/types'
 import { useList, HttpError } from '@refinedev/core'
 import { Form } from 'antd'
 import { useAtomValue } from 'jotai'
@@ -10,8 +10,8 @@ export const usePostsList = () => {
 	const { DOCS_POST_TYPE = '' } = useEnv()
 	const form = Form.useFormInstance()
 	const parent_id = form?.getFieldValue('id')
-	const query = useList<TDocRecord, HttpError>({
-		resource: 'posts',
+	const query = useList<TOrderRecord, HttpError>({
+		resource: 'orders',
 		filters: objToCrudFilters({
 			post_parent: parent_id,
 			post_type: DOCS_POST_TYPE,
