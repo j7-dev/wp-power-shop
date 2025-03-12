@@ -1,21 +1,29 @@
 
 
+export type TOrderCustomer = {
+	id: number
+	ip_address: string
+	user_login: string
+	user_email: string
+	display_name: string
+	user_registered: string
+	user_registered_human: string
+	user_avatar_url: string
+	description: string
+	roles: string[]
+	date_last_active: string
+	date_last_order: string
+	orders_count: number
+	total_spend: number
+	avg_order_value: number
+}
+
 // List 只會拿基本的欄位
 export type TOrderBaseRecord = {
 	id: number
 	order_number: string
-	customer: {
-		id: string
-		user_login: string
-		user_email: string
-		display_name: string
-		user_registered: string
-		user_registered_human: string
-		user_avatar_url: string
-		description: string
-		roles: string[]
-		ip_address: string
-    },
+	ip_address: string
+	customer: TOrderCustomer,
 	items :{
 			id: number
 			order_id: number

@@ -48,11 +48,16 @@ const useColumns = () => {
 			title: '付款狀態',
 			align: 'center',
 			dataIndex: 'payment_complete',
-			render: (payment_complete) => {
+			render: (payment_complete, { date_paid }) => {
 				return (
-					<Tag color={payment_complete ? 'green' : 'volcano'} bordered={false}>
-						{payment_complete ? '已付款' : '未付款'}
-					</Tag>
+					<Tooltip title={`於 ${date_paid} 付款`}>
+						<Tag
+							color={payment_complete ? 'green' : 'volcano'}
+							bordered={false}
+						>
+							{payment_complete ? '已付款' : '未付款'}
+						</Tag>
+					</Tooltip>
 				)
 			},
 		},
@@ -109,12 +114,6 @@ const useColumns = () => {
 					</>
 				)
 			},
-		},
-		{
-			title: 'date_paid',
-			align: 'center',
-			dataIndex: 'date_paid',
-			width: 200,
 		},
 		{
 			title: '操作',

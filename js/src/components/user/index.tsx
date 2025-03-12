@@ -1,1 +1,2 @@
-export { UserTable } from './UserTable'
+export * from './UserTable'
+export * from './OrderCustomerTable'

@@ -1,220 +1,101 @@
-import { memo, useEffect, useState } from 'react'
-import KeyWords from './KeyWords'
-import {
-	Form,
-	Input,
-	// Select,
-	Typography,
-	Button,
-	UploadFile,
-	Radio,
-} from 'antd'
+import { memo } from 'react'
+import { Form, Tooltip, Timeline, Statistic, Button } from 'antd'
 import {
 	// termToOptions,
 	// defaultSelectProps,
 	Heading,
-	Switch,
-	CopyText,
-	useEnv,
+	renderHTML,
+	cn,
 } from 'antd-toolkit'
-import { FileUpload } from 'antd-toolkit/wp'
-
-const { Item } = Form
-const { Text } = Typography
+import { useRecord } from '../../hooks'
+import { UserOutlined, DatabaseOutlined } from '@ant-design/icons'
+import { InfoTable } from 'components/order'
+import { OrderCustomerTable } from 'components/user'
+import { UserName } from 'antd-toolkit/wp'
 
 const DescriptionComponent = () => {
 	const form = Form.useFormInstance()
-
-	// const { options, isLoading } = useOptions({ endpoint: 'courses/options' })
-	// const { product_cats = [], product_tags = [] } = {}
-	const { SITE_URL = '', DOCS_POST_TYPE = '', ELEMENTOR_ENABLED } = useEnv()
-
-	const docsUrl = `${SITE_URL}/${DOCS_POST_TYPE}/`
-	const watchSlug = Form.useWatch(['slug'], form)
-	const watchId = Form.useWatch(['id'], form)
-	const watchEditor = Form.useWatch(['editor'], form)
-	const watchNeedAccess = Form.useWatch(['need_access'], form)
-
-	// 縮圖
-	const [fileList, setFileList] = useState<UploadFile[]>([])
-	const watchImages = Form.useWatch(['images'], form)
-	const featureImageUrl = watchImages?.[0]?.url
-
-	// 背景圖
-	const [bgFileList, setBgFileList] = useState<UploadFile[]>([])
-	const watchBgImages = Form.useWatch(['bg_images'], form)
-	const bgImageUrl = watchBgImages?.[0]?.url
-
-	useEffect(() => {
-		if (watchId) {
-			if (featureImageUrl) {
-				setFileList([
-					{
-						uid: '-1',
-						name: 'feature_image_url.png',
-						status: 'done',
-						url: featureImageUrl,
-					},
-				])
-			}
-			if (bgImageUrl) {
-				setBgFileList([
-					{
-						uid: '-1',
-						name: 'bg_image_url.png',
-						status: 'done',
-						url: bgImageUrl,
-					},
-				])
-			}
-		}
-	}, [watchId])
+	const record = useRecord()
+	const { billing, shipping, payment_method_title, date_paid, customer } =
+		record
+	console.log('⭐ record:', record)
+	const items = record?.order_notes?.map(
+		({ content, date_created, customer_note, added_by }) => ({
+			children: (
+				<div
+					className={cn(
+						'p-4 relative',
+						customer_note ? 'bg-yellow-50' : 'bg-blue-50',
+					)}
+				>
+					{renderHTML(content)}
+					<p className="text-xs text-gray-400 mb-0">{date_created} 刪除備註</p>
+					<div
+						className={cn(
+							'absolute -top-2 -right-2 text-white px-2 py-1 text-xs',
+							customer_note ? 'bg-yellow-500' : 'bg-blue-500',
+						)}
+					>
+						{customer_note ? '客戶備註' : '內部備註'}
+					</div>
+				</div>
+			),
+			dot: getDot(added_by),
+		}),
+	)
 
 	return (
 		<>
-			<div className="mb-12">
-				<Heading>訂單發佈</Heading>
-
-				<Item name={['slug']} label="網址">
-					<Input
-						addonBefore={
-							<Text className="max-w-[25rem] text-left" ellipsis>
-								{docsUrl}
-							</Text>
-						}
-						addonAfter={<CopyText text={`${docsUrl}${watchSlug}`} />}
-					/>
-				</Item>
-
-				<Switch
-					formItemProps={{
-						name: ['status'],
-						label: '發佈',
-						initialValue: 'publish',
-						getValueProps: (value) => ({ value: value === 'publish' }),
-						normalize: (value) => (value ? 'publish' : 'draft'),
-						hidden: true,
-					}}
-					switchProps={{
-						checkedChildren: '發佈',
-						unCheckedChildren: '草稿',
-					}}
-				/>
-			</div>
-			<div className="mb-12">
-				<Heading>訂單描述</Heading>
-
-				<Item name={['id']} hidden normalize={() => undefined} />
-
-				<div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-					<Item name={['name']} label="訂單名稱" className="xl:col-span-3">
-						<Input allowClear />
-					</Item>
-					{/* TODO: 訂單分類 */}
-					{/* <Item name={['category_ids']} label="訂單分類" initialValue={[]}>
-						<Select
-							{...defaultSelectProps}
-							options={termToOptions(product_cats)}
-							placeholder="可多選"
-							disabled
+			<div className="mb-12 grid grid-cols-[2fr_1fr] gap-8">
+				<div>
+					<Heading className="mb-8">訂單資料</Heading>於 {date_paid} 透過{' '}
+					{payment_method_title} 付款
+					<div className="grid grid-cols-2 gap-8">
+						<div>
+							<Heading className="mb-4" size="sm">
+								帳單資訊
+							</Heading>
+							<InfoTable info={billing} />
+						</div>
+						<div>
+							<Heading className="mb-4" size="sm">
+								運送資訊
+							</Heading>
+							<InfoTable info={shipping} />
+						</div>
+					</div>
+					<Heading className="my-8">客戶資料</Heading>
+					<div className="mb-6 flex justify-between">
+						<UserName record={customer || {}} />
+						<Button type="default" size="small">
+							更換客戶
+						</Button>
+					</div>
+					<div className="grid grid-cols-[1fr_1fr_1fr_3fr] gap-8">
+						<Statistic
+							className="mt-4"
+							title="總消費金額"
+							value={customer?.total_spend}
 						/>
-					</Item>
-					<Item name={['tag_ids']} label="訂單標籤" initialValue={[]}>
-						<Select
-							{...defaultSelectProps}
-							options={termToOptions(product_tags)}
-							placeholder="可多選"
-							disabled
+						<Statistic
+							className="mt-4"
+							title="總訂單數"
+							value={customer?.orders_count}
 						/>
-					</Item> */}
+						<Statistic
+							className="mt-4"
+							title="平均每筆訂單消費"
+							value={customer?.avg_order_value}
+							precision={2}
+						/>
+						<div className="mt-4">
+							<OrderCustomerTable customer={customer} />
+						</div>
+					</div>
 				</div>
-				<div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-					<Item
-						name={['short_description']}
-						label="訂單簡介"
-						className="xl:col-span-2"
-					>
-						<Input.TextArea rows={8} allowClear />
-					</Item>
-
-					<div>
-						<Item
-							name={['editor']}
-							label="模板"
-							initialValue={''}
-							help={
-								watchEditor === 'elementor'
-									? '請先儲存之後就可以使用 Elementor 編輯'
-									: undefined
-							}
-						>
-							<Radio.Group
-								options={[
-									{ label: '預設模板', value: '' },
-									{
-										label: 'Elementor',
-										value: 'elementor',
-										disabled: !ELEMENTOR_ENABLED,
-									},
-								]}
-								optionType="button"
-								buttonStyle="solid"
-							/>
-						</Item>
-						{watchEditor === 'elementor' && (
-							<Button
-								className="mt-7 w-fit"
-								href={`${SITE_URL}/wp-admin/post.php?post=${watchId}&action=elementor`}
-								target="_blank"
-								rel="noreferrer"
-							>
-								使用 Elementor 編輯版面
-							</Button>
-						)}
-					</div>
-
-					<div className="mb-8">
-						<label className="mb-3 tw-block">訂單縮圖</label>
-						<FileUpload fileList={fileList} setFileList={setFileList} />
-					</div>
-
-					<div className="mb-8 xl:col-span-2">
-						<label className="mb-3 tw-block">訂單背景圖</label>
-						<FileUpload
-							formItemProps={{
-								name: ['bg_images'],
-							}}
-							fileList={bgFileList}
-							setFileList={setBgFileList}
-							aspect={5}
-						/>
-						<p className="text-sm text-gray-500">手機版縮放後比例接近正方形</p>
-					</div>
-
-					<div>
-						<Switch
-							formItemProps={{
-								name: ['need_access'],
-								label: '購買才能觀看',
-							}}
-							switchProps={{
-								checkedChildren: '需授權',
-								unCheckedChildren: '免費',
-							}}
-						/>
-
-						{watchNeedAccess === 'yes' && (
-							<Item
-								name={['unauthorized_redirect_url']}
-								label="當用戶沒有權限觀看時，將用戶導向指定網址"
-								tooltip="例如，針對沒有權限的用戶，將用戶導到商品頁面下單購買，訂單完成會自動授權"
-							>
-								<Input placeholder={`請輸入完整網址，例如 ${SITE_URL}/404`} />
-							</Item>
-						)}
-					</div>
-
-					<KeyWords />
+				<div>
+					<Heading className="mb-8">訂單備註</Heading>
+					<Timeline items={items} />
 				</div>
 			</div>
 		</>
@@ -222,3 +103,19 @@ const DescriptionComponent = () => {
 }
 
 export const Description = memo(DescriptionComponent)
+
+function getDot(added_by: string) {
+	if ('system' === added_by) {
+		return (
+			<Tooltip title="系統備註">
+				<DatabaseOutlined />
+			</Tooltip>
+		)
+	}
+
+	return (
+		<Tooltip title={`由 ${added_by} 添加`}>
+			<UserOutlined />
+		</Tooltip>
+	)
+}

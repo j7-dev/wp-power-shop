@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useState, createContext, useMemo } from 'react'
 import { Edit, useForm } from '@refinedev/antd'
 import { Tabs, TabsProps, Form, Switch, Modal, Button } from 'antd'
 import { Description, SortablePosts } from './tabs'
@@ -15,7 +15,7 @@ import {
 } from 'antd-toolkit/refine'
 
 // TAB items
-const defaultItems: TabsProps['items'] = [
+const items: TabsProps['items'] = [
 	{
 		key: 'Description',
 		forceRender: true,
@@ -30,6 +30,8 @@ const defaultItems: TabsProps['items'] = [
 	},
 ]
 
+export const RecordContext = createContext<TOrderRecord | undefined>(undefined)
+
 const EditComponent = () => {
 	const { id } = useParsed()
 
@@ -42,135 +44,77 @@ const EditComponent = () => {
 			redirect: false,
 			successNotification: false,
 			errorNotification: false,
-			queryMeta: {
-				variables: {
-					with_description: 'true',
-					meta_keys: [
-						'need_access',
-						'bg_images',
-						'editor',
-						'pd_keywords',
-						'pd_keywords_label',
-						'unauthorized_redirect_url',
-					], // 額外暴露的欄位
-				},
-			},
 		})
 
 	// 顯示
 	const watchId = Form.useWatch(['id'], form)
-	const watchStatus = Form.useWatch(['status'], form)
 
-	const record: TOrderBaseRecord | undefined = query?.data?.data
+	const record: TOrderBaseRecord | undefined = useMemo(
+		() => query?.data?.data,
+		[query?.isFetching],
+	)
 
-	const items = [
-		...defaultItems,
-		{
-			key: 'Users',
-			forceRender: false,
-			label: '權限管理',
-			disabled: record?.need_access !== 'yes',
-			children: (
-				<UserTable
-					canGrantCourseAccess={true}
-					cardProps={{
-						showCard: false,
-					}}
-					initialValues={{
-						granted_docs: [watchId],
-					}}
-				/>
-			),
-		},
-	]
-
-	// 處理 media library
 	// 處理 media library
 	const [mediaLibrary, setMediaLibrary] = useAtom(mediaLibraryAtom)
 	const { modalProps } = mediaLibrary
 	const [selectedVideos, setSelectedVideos] = useState<TBunnyVideo[]>([])
 
 	return (
-		<div className="sticky-card-actions sticky-tabs-nav">
-			<Edit
-				resource="posts"
-				title={<>訂單 #{watchId}</>}
-				headerButtons={() => null}
-				saveButtonProps={{
-					...saveButtonProps,
-					children: '儲存',
-					icon: null,
-					loading: mutation?.isLoading,
-				}}
-				footerButtons={({ defaultButtons }) => (
-					<>
-						<Switch
-							className="mr-4"
-							checkedChildren="發佈"
-							unCheckedChildren="草稿"
-							value={watchStatus === 'publish'}
-							onChange={(checked) => {
-								form.setFieldValue(['status'], checked ? 'publish' : 'draft')
+		<RecordContext.Provider value={record}>
+			<div className="sticky-card-actions sticky-tabs-nav">
+				<Edit
+					resource="posts"
+					title={<>訂單 #{watchId}</>}
+					headerButtons={() => null}
+					saveButtonProps={{
+						...saveButtonProps,
+						children: '儲存',
+						icon: null,
+						loading: mutation?.isLoading,
+					}}
+					isLoading={query?.isLoading}
+				>
+					<Form {...formProps} layout="vertical">
+						<Tabs items={items} />
+					</Form>
+				</Edit>
+
+				<Modal
+					{...modalProps}
+					onCancel={() => {
+						setMediaLibrary((prev) => ({
+							...prev,
+							modalProps: {
+								...prev.modalProps,
+								open: false,
+							},
+						}))
+					}}
+				>
+					<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
+						<MediaLibrary
+							mediaLibraryProps={{
+								selectedVideos,
+								setSelectedVideos,
+								limit: 1,
+								selectButtonProps: {
+									onClick: () => {
+										setMediaLibrary((prev) => ({
+											...prev,
+											modalProps: {
+												...prev.modalProps,
+												open: false,
+											},
+											confirmedSelectedVideos: selectedVideos,
+										}))
+									},
+								},
 							}}
 						/>
-						{defaultButtons}
-					</>
-				)}
-				isLoading={query?.isLoading}
-			>
-				<Form {...formProps} layout="vertical">
-					<Tabs
-						items={items}
-						tabBarExtraContent={
-							<a
-								href={query?.data?.data?.permalink}
-								target="_blank"
-								rel="noreferrer"
-							>
-								<Button className="ml-4" type="default">
-									前往訂單
-								</Button>
-							</a>
-						}
-					/>
-				</Form>
-			</Edit>
-
-			<Modal
-				{...modalProps}
-				onCancel={() => {
-					setMediaLibrary((prev) => ({
-						...prev,
-						modalProps: {
-							...prev.modalProps,
-							open: false,
-						},
-					}))
-				}}
-			>
-				<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
-					<MediaLibrary
-						mediaLibraryProps={{
-							selectedVideos,
-							setSelectedVideos,
-							limit: 1,
-							selectButtonProps: {
-								onClick: () => {
-									setMediaLibrary((prev) => ({
-										...prev,
-										modalProps: {
-											...prev.modalProps,
-											open: false,
-										},
-										confirmedSelectedVideos: selectedVideos,
-									}))
-								},
-							},
-						}}
-					/>
-				</div>
-			</Modal>
-		</div>
+					</div>
+				</Modal>
+			</div>
+		</RecordContext.Provider>
 	)
 }
 
