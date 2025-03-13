@@ -1,18 +1,21 @@
 import { memo } from 'react'
-import { Form, Tooltip, Timeline, Statistic, Button } from 'antd'
+import { Form, Tooltip, Statistic, Button } from 'antd'
 import { DEFAULT_IMAGE } from '@/utils'
 import {
 	// termToOptions,
 	// defaultSelectProps,
 	Heading,
-	renderHTML,
-	cn,
 } from 'antd-toolkit'
 import { useRecord } from '@/pages/admin/Orders/Edit/hooks'
-import { UserOutlined, DatabaseOutlined } from '@ant-design/icons'
-import { InfoTable } from 'components/order'
+import { InfoTable, OrderNotes } from 'components/order'
 import { UserName } from 'antd-toolkit/wp'
-import { CreditCardOutlined, TruckOutlined } from '@ant-design/icons'
+import {
+	CreditCardOutlined,
+	TruckOutlined,
+	SwapOutlined,
+} from '@ant-design/icons'
+
+const SYMBOL = 'NT$'
 
 const DetailComponent = () => {
 	const form = Form.useFormInstance()
@@ -25,32 +28,14 @@ const DetailComponent = () => {
 		date_paid,
 		customer,
 		items,
+		subtotal,
+		shipping_total,
+		total_discount,
+		total_fees,
+		total_tax,
+		total,
 	} = record
 	console.log('⭐ record:', record)
-	const order_notes = record?.order_notes?.map(
-		({ content, date_created, customer_note, added_by }) => ({
-			children: (
-				<div
-					className={cn(
-						'p-4 relative',
-						customer_note ? 'bg-yellow-50' : 'bg-blue-50',
-					)}
-				>
-					{renderHTML(content)}
-					<p className="text-xs text-gray-400 mb-0">{date_created} 刪除備註</p>
-					<div
-						className={cn(
-							'absolute -top-2 -right-2 text-white px-2 py-1 text-xs',
-							customer_note ? 'bg-yellow-500' : 'bg-blue-500',
-						)}
-					>
-						{customer_note ? '客戶備註' : '內部備註'}
-					</div>
-				</div>
-			),
-			dot: getDot(added_by),
-		}),
-	)
 
 	return (
 		<>
@@ -100,7 +85,9 @@ const DetailComponent = () => {
 							<tr>
 								<td></td>
 								<td>項目小計</td>
-								<td colSpan={2}>NT$ 36</td>
+								<td colSpan={2}>
+									{SYMBOL} {subtotal}
+								</td>
 							</tr>
 							<tr>
 								<td className="flex justify-start items-center gap-x-2 w-full">
@@ -111,7 +98,9 @@ const DetailComponent = () => {
 									</Tooltip>
 								</td>
 								<td>運費</td>
-								<td colSpan={2}>NT$ 98</td>
+								<td colSpan={2}>
+									{SYMBOL} {shipping_total}
+								</td>
 							</tr>
 							<tr>
 								<td className="flex justify-start items-center gap-x-2 w-full">
@@ -124,7 +113,9 @@ const DetailComponent = () => {
 									</Tooltip>
 								</td>
 								<td>訂單總額</td>
-								<td colSpan={2}>NT$ 134</td>
+								<td colSpan={2}>
+									{SYMBOL} {total}
+								</td>
 							</tr>
 						</tfoot>
 					</table>
@@ -145,7 +136,7 @@ const DetailComponent = () => {
 					<Heading className="mb-8 mt-20">客戶資料</Heading>
 					<div className="mb-6 flex justify-between">
 						<UserName record={customer || {}} />
-						<Button type="default" size="small">
+						<Button type="default" size="small" icon={<SwapOutlined />}>
 							更換客戶
 						</Button>
 					</div>
@@ -154,6 +145,7 @@ const DetailComponent = () => {
 							className="mt-4"
 							title="總消費金額"
 							value={customer?.total_spend}
+							prefix={SYMBOL}
 						/>
 						<Statistic
 							className="mt-4"
@@ -165,6 +157,7 @@ const DetailComponent = () => {
 							title="平均每筆訂單消費"
 							value={customer?.avg_order_value}
 							precision={2}
+							prefix={SYMBOL}
 						/>
 						<Statistic
 							className="mt-4"
@@ -188,7 +181,8 @@ const DetailComponent = () => {
 				</div>
 				<div>
 					<Heading className="mb-8">訂單備註</Heading>
-					<Timeline items={order_notes} />
+
+					<OrderNotes record={record} />
 
 					{/* <Heading className="mb-8">開立發票</Heading> */}
 				</div>
@@ -198,19 +192,3 @@ const DetailComponent = () => {
 }
 
 export const Detail = memo(DetailComponent)
-
-function getDot(added_by: string) {
-	if ('system' === added_by) {
-		return (
-			<Tooltip title="系統備註">
-				<DatabaseOutlined />
-			</Tooltip>
-		)
-	}
-
-	return (
-		<Tooltip title={`由 ${added_by} 添加`}>
-			<UserOutlined />
-		</Tooltip>
-	)
-}

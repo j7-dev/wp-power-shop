@@ -5,13 +5,11 @@ import { Detail } from './Detail'
 import { TOrderRecord, TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
 import { useParsed } from '@refinedev/core'
 
-import { useEnv } from 'antd-toolkit'
 import { ORDER_STATUS } from 'antd-toolkit/wp'
 
 export const RecordContext = createContext<TOrderRecord | undefined>(undefined)
 
 const EditComponent = () => {
-	const { SITE_URL } = useEnv()
 	const { id } = useParsed()
 
 	// 初始化資料
@@ -62,7 +60,7 @@ const EditComponent = () => {
 							<Button
 								type="default"
 								target="_blank"
-								href={`${SITE_URL}/wp-admin/post.php?post=${record?.id}&action=edit`}
+								href={record?.edit_order_url}
 							>
 								前往 WordPress 訂單介面
 							</Button>
