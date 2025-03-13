@@ -17,14 +17,14 @@ const useColumns = () => {
 		},
 		{
 			title: '總金額',
-			dataIndex: 'total',
+			dataIndex: 'formatted_order_total',
 			align: 'right',
-			render: (total, { payment_method_title }) => {
+			render: (formatted_order_total, { payment_method_title }) => {
 				return (
 					<Tooltip title={`經由 ${payment_method_title}`}>
 						<ProductPrice
 							record={{
-								price_html: total,
+								price_html: formatted_order_total,
 							}}
 						/>{' '}
 					</Tooltip>

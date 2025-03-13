@@ -16,7 +16,7 @@
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"module": "ES2020",
-		"moduleResolution": "Node",
+		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
 		"noUnusedLocals": true,
 		"outDir": "dist",

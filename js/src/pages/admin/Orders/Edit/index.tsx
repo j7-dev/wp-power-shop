@@ -1,70 +1,53 @@
-import { memo, useState, createContext, useMemo } from 'react'
+import { memo, createContext, useMemo } from 'react'
 import { Edit, useForm } from '@refinedev/antd'
-import { Tabs, TabsProps, Form, Switch, Modal, Button } from 'antd'
-import { Description, SortablePosts } from './tabs'
-import { useAtom } from 'jotai'
+import { Form, Tag, Button } from 'antd'
+import { Detail } from './Detail'
 import { TOrderRecord, TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
 import { useParsed } from '@refinedev/core'
-import { PostEdit } from './PostEdit'
-import { UserTable } from '@/components/user'
 
-import {
-	mediaLibraryAtom,
-	MediaLibrary,
-	TBunnyVideo,
-} from 'antd-toolkit/refine'
-
-// TAB items
-const items: TabsProps['items'] = [
-	{
-		key: 'Description',
-		forceRender: true,
-		label: '描述',
-		children: <Description />,
-	},
-	{
-		key: 'SortablePosts',
-		forceRender: false,
-		label: '文章管理',
-		children: <SortablePosts PostEdit={PostEdit} />,
-	},
-]
+import { useEnv } from 'antd-toolkit'
+import { ORDER_STATUS } from 'antd-toolkit/wp'
 
 export const RecordContext = createContext<TOrderRecord | undefined>(undefined)
 
 const EditComponent = () => {
+	const { SITE_URL } = useEnv()
 	const { id } = useParsed()
 
 	// 初始化資料
-	const { formProps, form, saveButtonProps, query, mutation, onFinish } =
-		useForm<TOrderRecord>({
+	const { formProps, saveButtonProps, query, mutation } = useForm<TOrderRecord>(
+		{
 			action: 'edit',
 			resource: 'orders',
 			id,
 			redirect: false,
 			successNotification: false,
 			errorNotification: false,
-		})
-
-	// 顯示
-	const watchId = Form.useWatch(['id'], form)
+		},
+	)
 
 	const record: TOrderBaseRecord | undefined = useMemo(
 		() => query?.data?.data,
 		[query?.isFetching],
 	)
 
-	// 處理 media library
-	const [mediaLibrary, setMediaLibrary] = useAtom(mediaLibraryAtom)
-	const { modalProps } = mediaLibrary
-	const [selectedVideos, setSelectedVideos] = useState<TBunnyVideo[]>([])
+	const status = ORDER_STATUS.find(
+		(order_status) => order_status.value === record?.status,
+	)
 
 	return (
 		<RecordContext.Provider value={record}>
 			<div className="sticky-card-actions sticky-tabs-nav">
 				<Edit
 					resource="posts"
-					title={<>訂單 #{watchId}</>}
+					title={
+						<>
+							訂單 #{record?.id}{' '}
+							<Tag color={status?.color} bordered={false}>
+								{status?.label}
+							</Tag>
+						</>
+					}
 					headerButtons={() => null}
 					saveButtonProps={{
 						...saveButtonProps,
@@ -75,44 +58,18 @@ const EditComponent = () => {
 					isLoading={query?.isLoading}
 				>
 					<Form {...formProps} layout="vertical">
-						<Tabs items={items} />
+						<div className="flex justify-end">
+							<Button
+								type="default"
+								target="_blank"
+								href={`${SITE_URL}/wp-admin/post.php?post=${record?.id}&action=edit`}
+							>
+								前往 WordPress 訂單介面
+							</Button>
+						</div>
+						<Detail />
 					</Form>
 				</Edit>
-
-				<Modal
-					{...modalProps}
-					onCancel={() => {
-						setMediaLibrary((prev) => ({
-							...prev,
-							modalProps: {
-								...prev.modalProps,
-								open: false,
-							},
-						}))
-					}}
-				>
-					<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
-						<MediaLibrary
-							mediaLibraryProps={{
-								selectedVideos,
-								setSelectedVideos,
-								limit: 1,
-								selectButtonProps: {
-									onClick: () => {
-										setMediaLibrary((prev) => ({
-											...prev,
-											modalProps: {
-												...prev.modalProps,
-												open: false,
-											},
-											confirmedSelectedVideos: selectedVideos,
-										}))
-									},
-								},
-							}}
-						/>
-					</div>
-				</Modal>
 			</div>
 		</RecordContext.Provider>
 	)
