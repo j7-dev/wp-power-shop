@@ -1,7 +1,7 @@
 
 
 export type TOrderCustomer = {
-	id: number
+	id: string
 	ip_address: string
 	user_login: string
 	user_email: string
@@ -18,11 +18,28 @@ export type TOrderCustomer = {
 	avg_order_value: number
 }
 
+export type TOrderNote = {
+	id: number,
+	date_created: string,
+	content: string,
+	customer_note: boolean,
+	added_by: string,
+	order_id: number
+}
+
+export type TOrderInfo = {
+	full_name: string,
+	email: string,
+	phone: string,
+	full_address: string,
+	company: string
+}
+
+
 // List 只會拿基本的欄位
 export type TOrderBaseRecord = {
-	id: number
+	id: string
 	order_number: string
-	ip_address: string
 	customer: TOrderCustomer,
 	items :{
 			id: number
@@ -49,12 +66,27 @@ export type TOrderBaseRecord = {
 		date_created: string
 		date_modified: string
 		status: string
-		total: string
-		total_discount: number
-		payment_method_title: string
-		payment_complete: boolean
+		formatted_order_total:string
+		payment_method_title:string
+		payment_complete:boolean
+		date_paid:string
 		created_via: string
+		edit_order_url:string
+		shipping_total:number
+		shipping_method:string
+		subtotal:number
+		total_discount:number
+		total_fees:number
+		total_tax:number
+		total: number
+		order_notes:TOrderNote[]
+		billing:TOrderInfo
+		shipping:TOrderInfo
 	}
+
+
+
+
 
 // Edit, Show, Create 會拿全部的欄位
 export type TOrderRecord = TOrderBaseRecord & {

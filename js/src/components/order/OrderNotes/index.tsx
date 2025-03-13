@@ -20,11 +20,10 @@ export const OrderNotes: FC<{
 		resource: 'order-notes',
 	})
 	const groupedItems = groupItemsByDate(record?.order_notes)
-	console.log('⭐ Object.keys(groupedItems):', Object.keys(groupedItems || {}))
 	const items = Object.keys(groupedItems || {})?.map((date) => {
-		const items = groupedItems[date]
+		const orderNotes = groupedItems[date]
 		return {
-			children: items.map(
+			children: orderNotes?.map(
 				({
 					content,
 					date_created,
