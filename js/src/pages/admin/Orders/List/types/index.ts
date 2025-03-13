@@ -90,5 +90,4 @@ export type TOrderBaseRecord = {
 
 // Edit, Show, Create 會拿全部的欄位
 export type TOrderRecord = TOrderBaseRecord & {
-
 }

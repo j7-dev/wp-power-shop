@@ -58,12 +58,9 @@ const Main = () => {
 		},
 	})
 
-	const createKnowledgeBase = () => {
+	const createOrder = () => {
 		create({
-			values: {
-				name: '新訂單',
-				post_type: DOCS_POST_TYPE,
-			},
+			values: {},
 		})
 	}
 
@@ -96,7 +93,7 @@ const Main = () => {
 						loading={isCreating}
 						type="primary"
 						icon={<PlusOutlined />}
-						onClick={createKnowledgeBase}
+						onClick={createOrder}
 					>
 						新增訂單
 					</Button>

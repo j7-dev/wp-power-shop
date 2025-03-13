@@ -26,7 +26,7 @@ const DetailComponent = () => {
 		shipping_method,
 		payment_method_title,
 		date_paid,
-		customer,
+		customer = {},
 		items,
 		subtotal,
 		shipping_total,
@@ -35,6 +35,20 @@ const DetailComponent = () => {
 		total_tax,
 		total,
 	} = record
+	const {
+		ip_address,
+		display_name,
+		user_email,
+		id,
+		user_avatar_url,
+		total_spend,
+		orders_count,
+		avg_order_value,
+		date_last_active,
+		date_last_order,
+		user_registered,
+		user_registered_human,
+	} = customer
 	console.log('⭐ record:', record)
 
 	return (
@@ -107,7 +121,7 @@ const DetailComponent = () => {
 										<CreditCardOutlined className="mr-2" />
 										<span>
 											於 {date_paid} 透過 {payment_method_title} 付款，IP:{' '}
-											{customer?.ip_address}
+											{ip_address}
 										</span>
 									</Tooltip>
 								</td>
@@ -143,35 +157,31 @@ const DetailComponent = () => {
 						<Statistic
 							className="mt-4"
 							title="總消費金額"
-							value={customer?.total_spend}
+							value={total_spend}
 							prefix={SYMBOL}
 						/>
-						<Statistic
-							className="mt-4"
-							title="總訂單數"
-							value={customer?.orders_count}
-						/>
+						<Statistic className="mt-4" title="總訂單數" value={orders_count} />
 						<Statistic
 							className="mt-4"
 							title="平均每筆訂單消費"
-							value={customer?.avg_order_value}
+							value={avg_order_value}
 							precision={2}
 							prefix={SYMBOL}
 						/>
 						<Statistic
 							className="mt-4"
 							title="上次登入帳號"
-							value={customer?.date_last_active}
+							value={date_last_active}
 						/>
 						<Statistic
 							className="mt-4"
 							title="上次下單時間"
-							value={customer?.date_last_order}
+							value={date_last_order}
 						/>
 						<Statistic
 							className="mt-4"
-							title={`註冊時間 ( ${customer?.user_registered_human} )`}
-							value={customer?.user_registered}
+							title={`註冊時間 ${user_registered_human ? `( ${user_registered_human} )` : ''}`}
+							value={user_registered}
 						/>
 					</div>
 
