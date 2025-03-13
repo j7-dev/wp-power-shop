@@ -1,8 +1,10 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { Timeline, Tooltip, Input, Form, Switch, Button } from 'antd'
 import { cn, renderHTML } from 'antd-toolkit'
 import { TOrderRecord } from '@/pages/admin/Orders/List/types'
+import { useCreate, useInvalidate } from '@refinedev/core'
 import dayjs from 'dayjs'
+
 const { TextArea } = Input
 const { Item } = Form
 
@@ -11,12 +13,15 @@ export const OrderNotes: FC<{
 	canDelete?: boolean
 	canCreate?: boolean
 }> = ({ record, canDelete = true, canCreate = true }) => {
-	const [isCustomerNote, setIsCustomerNote] = useState(false)
+	const [form] = Form.useForm()
+	const invalidate = useInvalidate()
+	const { mutate: create, isLoading } = useCreate({
+		resource: 'order-notes',
+	})
 	const groupedItems = groupItemsByDate(record?.order_notes)
 	console.log('⭐ Object.keys(groupedItems):', Object.keys(groupedItems || {}))
 	const items = Object.keys(groupedItems || {})?.map((date) => {
 		const items = groupedItems[date]
-
 		return {
 			children: items.map(
 				({ content, date_created, customer_note, added_by }) => (
@@ -52,6 +57,31 @@ export const OrderNotes: FC<{
 			),
 		}
 	})
+	const watchIsCustomerNote = Form.useWatch(['is_customer_note'], form)
+
+	const handleCreate = () => {
+		const values = form.getFieldsValue()
+
+		create(
+			{
+				values: {
+					order_id: record?.id,
+					note: values?.note,
+					is_customer_note: values?.is_customer_note ? 1 : 0,
+				},
+			},
+			{
+				onSuccess: () => {
+					invalidate({
+						resource: 'orders',
+						invalidates: ['detail'],
+						id: record?.id,
+					})
+				},
+			},
+		)
+	}
+
 	return (
 		<>
 			<div className="pl-10">
@@ -59,26 +89,34 @@ export const OrderNotes: FC<{
 					items={[
 						{
 							children: (
-								<div className="mb-8">
-									<Item className="mb-2" label="">
-										<TextArea rows={4} />
+								<Form form={form} className="mb-8">
+									<Item name={['note']} noStyle>
+										<TextArea className="mb-2" rows={4} />
 									</Item>
 									<div className="flex justify-between items-center">
 										<div className="flex items-center">
-											<Switch
-												value={isCustomerNote}
-												onChange={() => setIsCustomerNote(!isCustomerNote)}
-												size="small"
-											/>
+											<Item
+												name={['is_customer_note']}
+												initialValue={false}
+												noStyle
+											>
+												<Switch size="small" />
+											</Item>
 											<span className="ml-2 text-sm text-gray-400">
-												{isCustomerNote
+												{watchIsCustomerNote
 													? '客戶備註，客戶將會看到此備註'
 													: '內部備註'}
 											</span>
 										</div>
-										<Button type="primary">新增</Button>
+										<Button
+											type="primary"
+											loading={isLoading}
+											onClick={handleCreate}
+										>
+											新增
+										</Button>
 									</div>
-								</div>
+								</Form>
 							),
 							dot: (
 								<p className="text-xs text-right mb-0 relative right-[1rem] text-gray-400">

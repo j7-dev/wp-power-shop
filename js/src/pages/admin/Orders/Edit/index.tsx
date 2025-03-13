@@ -62,7 +62,7 @@ const EditComponent = () => {
 								target="_blank"
 								href={record?.edit_order_url}
 							>
-								前往 WordPress 訂單介面
+								前往傳統訂單介面
 							</Button>
 						</div>
 						<Detail />

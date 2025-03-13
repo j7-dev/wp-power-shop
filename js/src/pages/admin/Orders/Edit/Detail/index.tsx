@@ -93,8 +93,7 @@ const DetailComponent = () => {
 								<td className="flex justify-start items-center gap-x-2 w-full">
 									<Tooltip placement="right" title="運送方式">
 										<TruckOutlined className="mr-2" />
-
-										<span>{shipping_method}</span>
+										<span>{shipping_method || '無運送方式'}</span>
 									</Tooltip>
 								</td>
 								<td>運費</td>
