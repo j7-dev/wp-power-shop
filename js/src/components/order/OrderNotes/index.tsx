@@ -3,6 +3,7 @@ import { Timeline, Tooltip, Input, Form, Switch, Button } from 'antd'
 import { cn, renderHTML } from 'antd-toolkit'
 import { TOrderRecord } from '@/pages/admin/Orders/List/types'
 import { useCreate, useInvalidate } from '@refinedev/core'
+import { DeleteButton } from '@refinedev/antd'
 import dayjs from 'dayjs'
 
 const { TextArea } = Input
@@ -24,7 +25,13 @@ export const OrderNotes: FC<{
 		const items = groupedItems[date]
 		return {
 			children: items.map(
-				({ content, date_created, customer_note, added_by }) => (
+				({
+					content,
+					date_created,
+					customer_note,
+					added_by,
+					id: orderNoteId,
+				}) => (
 					<div
 						className={cn(
 							'p-4 relative mb-4',
@@ -32,8 +39,25 @@ export const OrderNotes: FC<{
 						)}
 					>
 						{renderHTML(content)}
-						<p className="text-xs text-gray-400 mb-0">
-							{date_created} 刪除備註
+						<p className="text-xs text-gray-400 mb-0 flex items-center justify-between">
+							{date_created}{' '}
+							<DeleteButton
+								resource="order-notes"
+								recordItemId={orderNoteId}
+								type="link"
+								size="small"
+								hideText
+								confirmTitle="確認刪除此備註?"
+								confirmOkText="確認"
+								confirmCancelText="取消"
+								onSuccess={() => {
+									invalidate({
+										resource: 'orders',
+										invalidates: ['detail'],
+										id: record?.id,
+									})
+								}}
+							/>
 						</p>
 						<Tooltip
 							title={`由 ${added_by === 'system' ? '系統' : added_by} 添加`}
@@ -59,6 +83,7 @@ export const OrderNotes: FC<{
 	})
 	const watchIsCustomerNote = Form.useWatch(['is_customer_note'], form)
 
+	// 創建 order note
 	const handleCreate = () => {
 		const values = form.getFieldsValue()
 
