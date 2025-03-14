@@ -172,37 +172,43 @@ const DetailComponent = () => {
 							</Item>
 						</Space.Compact>
 					</div>
-					<div className="grid grid-cols-3 gap-8">
-						<Statistic
-							className="mt-4"
-							title="總消費金額"
-							value={total_spend}
-							prefix={SYMBOL}
-						/>
-						<Statistic className="mt-4" title="總訂單數" value={orders_count} />
-						<Statistic
-							className="mt-4"
-							title="平均每筆訂單消費"
-							value={avg_order_value}
-							precision={2}
-							prefix={SYMBOL}
-						/>
-						<Statistic
-							className="mt-4"
-							title="上次登入帳號"
-							value={date_last_active}
-						/>
-						<Statistic
-							className="mt-4"
-							title="上次下單時間"
-							value={date_last_order}
-						/>
-						<Statistic
-							className="mt-4"
-							title={`註冊時間 ${user_registered_human ? `( ${user_registered_human} )` : ''}`}
-							value={user_registered}
-						/>
-					</div>
+					{customer?.id && (
+						<div className="grid grid-cols-3 gap-8">
+							<Statistic
+								className="mt-4"
+								title="總消費金額"
+								value={total_spend}
+								prefix={SYMBOL}
+							/>
+							<Statistic
+								className="mt-4"
+								title="總訂單數"
+								value={orders_count}
+							/>
+							<Statistic
+								className="mt-4"
+								title="平均每筆訂單消費"
+								value={avg_order_value}
+								precision={2}
+								prefix={SYMBOL}
+							/>
+							<Statistic
+								className="mt-4"
+								title="上次登入帳號"
+								value={date_last_active}
+							/>
+							<Statistic
+								className="mt-4"
+								title="上次下單時間"
+								value={date_last_order}
+							/>
+							<Statistic
+								className="mt-4"
+								title={`註冊時間 ${user_registered_human ? `( ${user_registered_human} )` : ''}`}
+								value={user_registered}
+							/>
+						</div>
+					)}
 
 					{/* <Heading className="mb-8">自訂欄位</Heading>
 					<Heading className="mb-8">物流資訊</Heading> */}
