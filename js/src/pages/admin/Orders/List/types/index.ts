@@ -28,11 +28,17 @@ export type TOrderNote = {
 }
 
 export type TOrderInfo = {
-	full_name: string,
+	first_name: string,
+	last_name: string,
 	email: string,
 	phone: string,
-	full_address: string,
 	company: string
+	postcode: string,
+	country: string,
+	state: string,
+	city: string,
+	address_1: string,
+	address_2: string,
 }
 
 

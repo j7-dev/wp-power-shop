@@ -1,21 +1,23 @@
 import { memo } from 'react'
-import { Form, Tooltip, Statistic, Button } from 'antd'
+import { Form, Tooltip, Statistic, Button, Select, Space } from 'antd'
 import { DEFAULT_IMAGE } from '@/utils'
-import {
-	// termToOptions,
-	// defaultSelectProps,
-	Heading,
-} from 'antd-toolkit'
+import { useSelect } from '@refinedev/antd'
 import { useRecord } from '@/pages/admin/Orders/Edit/hooks'
 import { InfoTable, OrderNotes } from 'components/order'
-import { UserName } from 'antd-toolkit/wp'
 import {
 	CreditCardOutlined,
 	TruckOutlined,
 	SwapOutlined,
 } from '@ant-design/icons'
+import {
+	// termToOptions,
+	defaultSelectProps,
+	Heading,
+} from 'antd-toolkit'
+import { UserName } from 'antd-toolkit/wp'
 
 const SYMBOL = 'NT$'
+const { Item } = Form
 
 const DetailComponent = () => {
 	const form = Form.useFormInstance()
@@ -50,6 +52,12 @@ const DetailComponent = () => {
 		user_registered_human,
 	} = customer
 	console.log('⭐ record:', record)
+
+	const { selectProps } = useSelect({
+		resource: 'users',
+		optionLabel: 'display_name',
+		optionValue: 'id',
+	})
 
 	return (
 		<>
@@ -137,21 +145,32 @@ const DetailComponent = () => {
 							<Heading className="mb-4" size="sm" hideIcon>
 								帳單資訊
 							</Heading>
-							<InfoTable info={billing} />
+							<InfoTable type="billing" />
 						</div>
 						<div>
 							<Heading className="mb-4" size="sm" hideIcon>
 								運送資訊
 							</Heading>
-							<InfoTable info={shipping} />
+							<InfoTable type="shipping" />
 						</div>
 					</div>
 					<Heading className="mb-8 mt-20">客戶資料</Heading>
 					<div className="mb-6 flex justify-between">
 						<UserName record={customer || {}} />
-						<Button type="default" size="small" icon={<SwapOutlined />}>
-							更換客戶
-						</Button>
+						<Space.Compact>
+							<Button type="default" size="small" icon={<SwapOutlined />}>
+								更換客戶
+							</Button>
+							<Item name={['customer_id']} noStyle>
+								<Select
+									{...defaultSelectProps}
+									{...selectProps}
+									size="small"
+									className="w-40"
+									mode={undefined}
+								/>
+							</Item>
+						</Space.Compact>
 					</div>
 					<div className="grid grid-cols-3 gap-8">
 						<Statistic
