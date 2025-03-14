@@ -12,6 +12,7 @@ import {
 	OrdersEdit,
 	Users,
 	DocAccess,
+	Analytics,
 	MediaLibraryPage,
 } from '@/pages/admin'
 import { HashRouter, Outlet, Route, Routes } from 'react-router-dom'
@@ -95,6 +96,9 @@ function App() {
 						</Route>
 						<Route path="users" element={<Users />} />
 						<Route path="doc-access" element={<DocAccess />} />
+
+						<Route path="analytics" element={<Analytics />} />
+
 						<Route path="media-library" element={<MediaLibraryPage />} />
 
 						<Route path="*" element={<ErrorComponent />} />
