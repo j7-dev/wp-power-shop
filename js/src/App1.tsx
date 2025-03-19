@@ -47,7 +47,7 @@ function App() {
 				routerProvider={routerBindings}
 				resources={resources}
 				options={{
-					syncWithLocation: false,
+					syncWithLocation: true,
 					warnWhenUnsavedChanges: true,
 					projectId: 'power-shop',
 					reactQuery: {

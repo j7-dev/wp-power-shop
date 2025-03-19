@@ -1,7 +1,8 @@
 import React, { memo, useEffect } from 'react'
 import { useTable } from '@refinedev/antd'
 import { TUserRecord } from '@/pages/admin/Users/types'
-import { Table, TableProps, FormInstance, CardProps } from 'antd'
+import { Table, TableProps, FormInstance, CardProps, Button } from 'antd'
+import { DeleteOutlined, MailOutlined } from '@ant-design/icons'
 import useColumns from './hooks/useColumns'
 import { useGCDItems } from '@/hooks'
 import Filter, { TFilterValues } from './Filter'
@@ -19,27 +20,17 @@ import {
 	useEnv,
 } from 'antd-toolkit'
 
-import {
-	FilterTags,
-	GrantUsers,
-	UpdateGrantedUsers,
-	RevokeUsers,
-	objToCrudFilters,
-	ActionArea,
-} from 'antd-toolkit/refine'
+import { FilterTags, objToCrudFilters, ActionArea } from 'antd-toolkit/refine'
 
 const UserTableComponent = ({
-	canGrantCourseAccess = false,
 	tableProps: overrideTableProps,
 	cardProps,
 	initialValues = {},
 }: {
-	canGrantCourseAccess?: boolean
 	tableProps?: TableProps<TUserRecord>
 	cardProps?: CardProps & { showCard?: boolean }
 	initialValues?: TFilterValues
 }) => {
-	const { DOCS_POST_TYPE } = useEnv()
 	const [selectedUserIds, setSelectedUserIds] = useAtom(selectedUserIdsAtom)
 
 	const { searchFormProps, tableProps, filters } = useTable<
@@ -48,15 +39,12 @@ const UserTableComponent = ({
 		TFilterValues
 	>({
 		resource: 'users',
-		dataProviderName: 'power-shop',
 		pagination: {
 			pageSize: 20,
 		},
 		filters: {
-			permanent: objToCrudFilters({
-				meta_keys: ['granted_docs'],
-			}),
 			initial: objToCrudFilters(initialValues),
+			defaultBehavior: 'replace',
 		},
 		onSearch: (values) => objToCrudFilters(values),
 	})
@@ -141,36 +129,14 @@ const UserTableComponent = ({
 
 	return (
 		<>
-			<Card title="篩選" bordered={false} className="mb-4" {...cardProps}>
+			<Card title="篩選" variant="borderless" className="mb-4" {...cardProps}>
 				<Filter formProps={searchFormProps} initialValues={initialValues} />
 				<FilterTags<TFilterValues>
 					form={{ ...searchFormProps?.form } as FormInstance<TFilterValues>}
 					keyLabelMapper={keyLabelMapper}
 				/>
 			</Card>
-			<Card bordered={false} {...cardProps}>
-				{canGrantCourseAccess && (
-					<>
-						<div className="mt-4">
-							<GrantUsers
-								user_ids={selectedRowKeys as string[]}
-								label="開通知識庫權限"
-								useSelectProps={{
-									resource: 'posts',
-									filters: objToCrudFilters({
-										post_type: DOCS_POST_TYPE,
-										meta_key: 'need_access',
-										meta_value: 'yes',
-									}),
-								}}
-								useInvalidateProp={{
-									dataProviderName: 'power-shop',
-								}}
-							/>
-						</div>
-					</>
-				)}
-
+			<Card variant="borderless" {...cardProps}>
 				<Table
 					{...(defaultTableProps as unknown as TableProps<TUserRecord>)}
 					{...tableProps}
@@ -189,27 +155,20 @@ const UserTableComponent = ({
 					<div className="flex gap-x-6 justify-between">
 						<div>
 							<label className="tw-block mb-2">批次操作</label>
-							<div className="flex gap-x-4">
-								<UpdateGrantedUsers
-									user_ids={selectedRowKeys as string[]}
-									item_ids={selectedGCDs}
-									onSettled={() => {
-										setSelectedGCDs([])
-									}}
-									useInvalidateProp={{
-										dataProviderName: 'power-shop',
-									}}
-								/>
-								<RevokeUsers
-									user_ids={selectedRowKeys}
-									item_ids={selectedGCDs}
-									onSettled={() => {
-										setSelectedGCDs([])
-									}}
-									useInvalidateProp={{
-										dataProviderName: 'power-shop',
-									}}
-								/>
+							<div className="flex gap-x-2">
+								<Button type="primary" icon={<MailOutlined />} className="mr-2">
+									批次傳送密碼重設連結
+									{selectedUserIds.length ? ` (${selectedUserIds.length})` : ''}
+								</Button>
+								<Button
+									type="primary"
+									danger
+									icon={<DeleteOutlined />}
+									// onClick={show}
+								>
+									批次刪除用戶
+									{selectedUserIds.length ? ` (${selectedUserIds.length})` : ''}
+								</Button>
 							</div>
 						</div>
 						{!!gcdItems.length && (

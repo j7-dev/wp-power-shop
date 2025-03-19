@@ -1,6 +1,12 @@
 import React from 'react'
 import { TOrderCustomer } from '@/pages/admin/Orders/List/types'
 
+/**
+ * 訂單客戶詳細資訊表格
+ * 目前沒有使用到
+ * @param param0
+ * @returns
+ */
 export const OrderCustomerTable = ({
 	customer,
 }: {

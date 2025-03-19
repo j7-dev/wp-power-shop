@@ -21,7 +21,6 @@ final class Bootstrap {
 
 	/** Constructor */
 	public function __construct() {
-		FrontEnd\Entry::instance();
 		Admin\Entry::instance();
 		// Admin\CPT::instance();
 

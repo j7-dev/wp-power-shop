@@ -1,46 +1,61 @@
 import { TableProps } from 'antd'
 import { TUserRecord } from '@/pages/admin/Users/types'
-import { UserName } from 'antd-toolkit/wp'
-import { WatchStatusTag, getWatchStatusTagTooltip, NameId } from 'antd-toolkit'
-import { TGrantedDoc } from '@/types'
+import { UserName, UserRole } from 'antd-toolkit/wp'
+import { Price } from '@/components/general'
 
-type TUseColumnsParams = {
-	onClick?: (_record: TUserRecord | undefined) => () => void
-}
-
-const useColumns = (params?: TUseColumnsParams) => {
-	const handleClick = params?.onClick
+const useColumns = () => {
 	const columns: TableProps<TUserRecord>['columns'] = [
 		{
 			title: '會員',
 			dataIndex: 'id',
-			width: 180,
-			render: (_, record) => <UserName record={record} onClick={handleClick} />,
+			width: 300,
+			render: (_, record) => <UserName record={record} />,
 		},
 		{
-			title: '已開通知識庫',
-			dataIndex: 'granted_docs',
-			width: 240,
-			render: (granted_docs: TGrantedDoc[], { id: user_id, display_name }) => {
-				return granted_docs?.map(({ id, name, expire_date }) => (
-					<div key={id} className="grid grid-cols-[1fr_4rem_12rem] gap-1 my-1">
-						<NameId name={name} id={id} />
-
-						<div className="text-center">
-							<WatchStatusTag expireDate={expire_date} />
-						</div>
-
-						<div className="text-left">
-							{getWatchStatusTagTooltip(expire_date)}
-						</div>
-					</div>
-				))
-			},
+			title: '角色',
+			dataIndex: 'roles',
+			width: 120,
+			render: (roles: string[]) =>
+				roles?.map((role) => <UserRole key={role} role={role} />),
 		},
+		{
+			title: '手機',
+			dataIndex: 'billing_phone',
+			width: 180,
+		},
+		{
+			title: '生日',
+			dataIndex: 'birthday',
+			width: 180,
+		},
+		{
+			title: '總訂單數',
+			dataIndex: 'orders_count',
+			align: 'right',
+			width: 120,
+		},
+		{
+			title: '總消費金額',
+			dataIndex: 'total_spend',
+			align: 'right',
+			width: 180,
+			render: (total_spend) => <Price amount={total_spend} />,
+		},
+		{
+			title: '平均每筆訂單消費',
+			dataIndex: 'avg_order_value',
+			align: 'right',
+			width: 180,
+			render: (avg_order_value) => (
+				<Price amount={avg_order_value} precision={2} />
+			),
+		},
+
 		{
 			title: '註冊時間',
 			dataIndex: 'user_registered',
 			width: 180,
+			align: 'right',
 			render: (user_registered, record) => (
 				<>
 					<p className="m-0">已註冊 {record?.user_registered_human}</p>
