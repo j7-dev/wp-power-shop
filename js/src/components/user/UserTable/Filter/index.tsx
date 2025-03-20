@@ -11,12 +11,13 @@ import {
 import { UndoOutlined, SearchOutlined } from '@ant-design/icons'
 import { useOptions } from '../hooks/useOptions'
 import { defaultSelectProps } from 'antd-toolkit'
+import dayjs from 'dayjs'
 
 export type TFilterValues = {
 	search?: string
 	role__in?: string[]
 	billing_phone?: string
-	birthday?: any[]
+	pc_birthday?: any[]
 	include?: string[]
 }
 
@@ -49,7 +50,18 @@ const Filter = ({
 					<Item name={['billing_phone']} label="手機">
 						<Input placeholder="輸入手機號碼" allowClear />
 					</Item>
-					<Item name={['birthday']} label="生日">
+					<Item
+						name={['pc_birthday']}
+						label="生日"
+						getValueProps={(value) => {
+							if (value?.every((v: number) => typeof v === 'number')) {
+								return {
+									value: value?.map((v: number) => dayjs.unix(v)),
+								}
+							}
+							return value
+						}}
+					>
 						<RangePicker
 							placeholder={['開始日期', '結束日期']}
 							className="w-full"

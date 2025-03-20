@@ -4,7 +4,6 @@ import { TUserRecord } from '@/pages/admin/Users/types'
 import { Table, TableProps, FormInstance, CardProps, Button } from 'antd'
 import { DeleteOutlined, MailOutlined } from '@ant-design/icons'
 import useColumns from './hooks/useColumns'
-import { useGCDItems } from '@/hooks'
 import Filter, { TFilterValues } from './Filter'
 import { HttpError } from '@refinedev/core'
 import { keyLabelMapper } from './utils'
@@ -12,14 +11,12 @@ import { selectedUserIdsAtom } from './atom'
 import { useAtom } from 'jotai'
 import SelectedUser from './SelectedUser'
 import Card from './Card'
-import { TGrantedDoc } from '@/types'
 import {
 	useRowSelection,
 	getDefaultPaginationProps,
 	defaultTableProps,
-	useEnv,
 } from 'antd-toolkit'
-
+import { Dayjs } from 'dayjs'
 import { FilterTags, objToCrudFilters, ActionArea } from 'antd-toolkit/refine'
 
 const UserTableComponent = ({
@@ -46,44 +43,52 @@ const UserTableComponent = ({
 			initial: objToCrudFilters(initialValues),
 			defaultBehavior: 'replace',
 		},
-		onSearch: (values) => objToCrudFilters(values),
+		onSearch: (values) => {
+			if (values?.pc_birthday) {
+				return objToCrudFilters({
+					...values,
+					pc_birthday: values?.pc_birthday?.map((v: Dayjs) => v.unix()),
+				})
+			}
+
+			return objToCrudFilters(values)
+		},
 	})
 
 	const currentAllKeys =
 		tableProps?.dataSource?.map((record) => record?.id.toString()) || []
 
 	// 多選
-	const { rowSelection, setSelectedRowKeys, selectedRowKeys } =
-		useRowSelection<TUserRecord>({
-			onChange: (currentSelectedRowKeys: React.Key[]) => {
-				setSelectedRowKeys(currentSelectedRowKeys)
+	const { rowSelection, setSelectedRowKeys } = useRowSelection<TUserRecord>({
+		onChange: (currentSelectedRowKeys: React.Key[]) => {
+			setSelectedRowKeys(currentSelectedRowKeys)
 
-				/**
-				 * 不在這頁的已選擇用戶
-				 * @type string[]
-				 */
-				const setSelectedUserIdsNotInCurrentPage = selectedUserIds.filter(
-					(selectedUserId) => !currentAllKeys.includes(selectedUserId),
-				)
+			/**
+			 * 不在這頁的已選擇用戶
+			 * @type string[]
+			 */
+			const setSelectedUserIdsNotInCurrentPage = selectedUserIds.filter(
+				(selectedUserId) => !currentAllKeys.includes(selectedUserId),
+			)
 
-				/**
-				 * 在這頁的已選擇用戶
-				 * @type string[]
-				 */
-				const currentSelectedRowKeysStringify = currentSelectedRowKeys.map(
-					(key) => key.toString(),
-				)
+			/**
+			 * 在這頁的已選擇用戶
+			 * @type string[]
+			 */
+			const currentSelectedRowKeysStringify = currentSelectedRowKeys.map(
+				(key) => key.toString(),
+			)
 
-				setSelectedUserIds(() => {
-					// 把這頁的已選用戶加上 不在這頁的已選用戶
-					const newKeys = new Set([
-						...setSelectedUserIdsNotInCurrentPage,
-						...currentSelectedRowKeysStringify,
-					])
-					return [...newKeys]
-				})
-			},
-		})
+			setSelectedUserIds(() => {
+				// 把這頁的已選用戶加上 不在這頁的已選用戶
+				const newKeys = new Set([
+					...setSelectedUserIdsNotInCurrentPage,
+					...currentSelectedRowKeysStringify,
+				])
+				return [...newKeys]
+			})
+		},
+	})
 
 	/*
 	 * 換頁時，將已加入的商品全局狀態同步到當前頁面的 selectedRowKeys 狀態
@@ -113,19 +118,6 @@ const UserTableComponent = ({
 	}, [])
 
 	const columns = useColumns()
-
-	const selectedAllAVLCourses = selectedRowKeys
-		.map((key) => {
-			return tableProps?.dataSource?.find((user) => user.id === key)
-				?.granted_docs
-		})
-		.filter((courses) => courses !== undefined)
-
-	// 取得最大公約數的課程
-	const { GcdItemsTags, selectedGCDs, setSelectedGCDs, gcdItems } =
-		useGCDItems<TGrantedDoc>({
-			allItems: selectedAllAVLCourses,
-		})
 
 	return (
 		<>
@@ -171,12 +163,6 @@ const UserTableComponent = ({
 								</Button>
 							</div>
 						</div>
-						{!!gcdItems.length && (
-							<div className="flex-1">
-								<label className="tw-block mb-2">選擇知識庫</label>
-								<GcdItemsTags />
-							</div>
-						)}
 					</div>
 					<SelectedUser
 						user_ids={selectedUserIds}

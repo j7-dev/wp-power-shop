@@ -2,6 +2,7 @@ import { TableProps } from 'antd'
 import { TUserRecord } from '@/pages/admin/Users/types'
 import { UserName, UserRole } from 'antd-toolkit/wp'
 import { Price } from '@/components/general'
+import dayjs from 'dayjs'
 
 const useColumns = () => {
 	const columns: TableProps<TUserRecord>['columns'] = [
@@ -25,8 +26,10 @@ const useColumns = () => {
 		},
 		{
 			title: '生日',
-			dataIndex: 'birthday',
+			dataIndex: 'pc_birthday',
 			width: 180,
+			render: (pc_birthday) =>
+				pc_birthday ? dayjs.unix(pc_birthday).format('YYYY-MM-DD') : '',
 		},
 		{
 			title: '總訂單數',
