@@ -10,7 +10,8 @@ import routerBindings, {
 import {
 	OrdersList,
 	OrdersEdit,
-	Users,
+	UsersList,
+	UsersEdit,
 	DocAccess,
 	Analytics,
 	MediaLibraryPage,
@@ -94,7 +95,10 @@ function App() {
 							<Route index element={<OrdersList />} />
 							<Route path="edit/:id" element={<OrdersEdit />} />
 						</Route>
-						<Route path="users" element={<Users />} />
+						<Route path="users">
+							<Route index element={<UsersList />} />
+							<Route path="edit/:id" element={<UsersEdit />} />
+						</Route>
 						<Route path="doc-access" element={<DocAccess />} />
 
 						<Route path="analytics" element={<Analytics />} />

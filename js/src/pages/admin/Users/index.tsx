@@ -1,5 +1,2 @@
-import { UserTable } from '@/components/user'
-
-export const Users = () => {
-	return <UserTable />
-}
+export * from './List'
+export * from './Edit'
