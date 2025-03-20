@@ -158,7 +158,10 @@ const UserTableComponent = ({
 						onSelected={() => {
 							const searchForm = searchFormProps?.form
 							if (!searchForm) return
-							searchForm.setFieldValue(['include'], selectedUserIds)
+							searchForm.resetFields()
+							searchForm.setFieldsValue({
+								include: selectedUserIds,
+							})
 							searchForm.submit()
 						}}
 					/>
