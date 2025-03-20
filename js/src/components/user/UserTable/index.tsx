@@ -1,8 +1,7 @@
 import React, { memo, useEffect } from 'react'
 import { useTable } from '@refinedev/antd'
 import { TUserRecord } from '@/pages/admin/Users/types'
-import { Table, TableProps, FormInstance, CardProps, Button } from 'antd'
-import { DeleteOutlined, MailOutlined } from '@ant-design/icons'
+import { Table, TableProps, FormInstance, CardProps } from 'antd'
 import useColumns from './hooks/useColumns'
 import Filter, { TFilterValues } from './Filter'
 import { HttpError } from '@refinedev/core'
@@ -11,12 +10,13 @@ import { selectedUserIdsAtom } from './atom'
 import { useAtom } from 'jotai'
 import SelectedUser from './SelectedUser'
 import Card from './Card'
+import { Dayjs } from 'dayjs'
+import BulkAction from './BulkAction'
 import {
 	useRowSelection,
 	getDefaultPaginationProps,
 	defaultTableProps,
 } from 'antd-toolkit'
-import { Dayjs } from 'dayjs'
 import { FilterTags, objToCrudFilters, ActionArea } from 'antd-toolkit/refine'
 
 const UserTableComponent = ({
@@ -147,21 +147,7 @@ const UserTableComponent = ({
 					<div className="flex gap-x-6 justify-between">
 						<div>
 							<label className="tw-block mb-2">批次操作</label>
-							<div className="flex gap-x-2">
-								<Button type="primary" icon={<MailOutlined />} className="mr-2">
-									批次傳送密碼重設連結
-									{selectedUserIds.length ? ` (${selectedUserIds.length})` : ''}
-								</Button>
-								<Button
-									type="primary"
-									danger
-									icon={<DeleteOutlined />}
-									// onClick={show}
-								>
-									批次刪除用戶
-									{selectedUserIds.length ? ` (${selectedUserIds.length})` : ''}
-								</Button>
-							</div>
+							<BulkAction />
 						</div>
 					</div>
 					<SelectedUser
