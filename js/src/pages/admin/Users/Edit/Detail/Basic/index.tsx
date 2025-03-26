@@ -8,17 +8,23 @@ const { TextArea } = Input
 const Basic = () => {
 	const isEditing = useIsEditing()
 	const record = useRecord()
-	const { first_name, last_name, display_name, description, user_email } =
-		record
+	const {
+		first_name,
+		last_name,
+		display_name,
+		description,
+		user_email,
+		user_birthday,
+	} = record
 
 	return (
 		<div className="grid grid-cols-2 gap-8">
-			<table className="table table-vertical table-xs text-xs [&_th]:!w-20">
+			<table className="table table-vertical table-sm text-xs [&_th]:!w-20">
 				<tbody>
 					<tr>
 						<th>姓名</th>
 						<td className="gap-x-1">
-							{!isEditing && `${first_name} ${last_name}`}
+							{!isEditing && `${last_name} ${first_name}`}
 							{[
 								'last_name',
 								'first_name',
@@ -66,11 +72,20 @@ const Basic = () => {
 						</td>
 					</tr>
 					<tr>
+						<th>生日</th>
+						<td>
+							{!isEditing && user_birthday}
+							<Item name={['user_birthday']} noStyle hidden={!isEditing}>
+								<Input size="small" className="text-right text-xs" />
+							</Item>
+						</td>
+					</tr>
+					<tr>
 						<th>簡介</th>
 						<td>
 							{!isEditing && description}
 							<Item name={['description']} noStyle hidden={!isEditing}>
-								<TextArea rows={4} className="text-xs" />
+								<TextArea rows={6} className="text-xs" />
 							</Item>
 						</td>
 					</tr>

@@ -32,7 +32,7 @@ export type TOrderInfo = {
 	last_name: string,
 	email: string,
 	phone: string,
-	company: string
+	company?: string
 	postcode: string,
 	country: string,
 	state: string,

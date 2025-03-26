@@ -29,7 +29,7 @@ export const OrderCustomerTable = ({
 	return (
 		<>
 			<p className="text-sm text-[rgba(0,0,0,0.45)]">詳細資訊</p>
-			<table className="table table-vertical table-xs text-xs">
+			<table className="table table-vertical table-sm text-xs">
 				<tbody>
 					<tr>
 						<th>ID</th>

@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Form, Tooltip, Statistic, Button, Select, Space } from 'antd'
 import { DEFAULT_IMAGE } from '@/utils'
 import { useSelect } from '@refinedev/antd'
-import { useRecord } from '@/pages/admin/Orders/Edit/hooks'
+import { useIsEditing, useRecord } from '@/pages/admin/Orders/Edit/hooks'
 import { InfoTable, OrderNotes } from '@/components/order'
 import {
 	CreditCardOutlined,
@@ -21,6 +21,7 @@ const { Item } = Form
 
 const DetailComponent = () => {
 	const form = Form.useFormInstance()
+	const isEditing = useIsEditing()
 	const record = useRecord()
 	const {
 		billing,
@@ -145,13 +146,13 @@ const DetailComponent = () => {
 							<Heading className="mb-4" size="sm" hideIcon>
 								帳單資訊
 							</Heading>
-							<InfoTable type="billing" />
+							<InfoTable isEditing={isEditing} type="billing" {...billing} />
 						</div>
 						<div>
 							<Heading className="mb-4" size="sm" hideIcon>
 								運送資訊
 							</Heading>
-							<InfoTable type="shipping" />
+							<InfoTable isEditing={isEditing} type="shipping" {...shipping} />
 						</div>
 					</div>
 					<Heading className="mb-8 mt-20">客戶資料</Heading>

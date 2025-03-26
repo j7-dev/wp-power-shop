@@ -1,49 +1,41 @@
 import { Form, Input, Space } from 'antd'
 import { TOrderInfo } from '@/pages/admin/Orders/List/types'
-import { useIsEditing, useRecord } from '@/pages/admin/Orders/Edit/hooks'
 import { INFO_LABEL_MAPPER } from '@/utils'
-
-const defaultInfo: TOrderInfo = {
-	email: '',
-	phone: '',
-	company: '',
-	country: '',
-	state: '',
-	postcode: '',
-	city: '',
-	address_1: '',
-	address_2: '',
-}
 
 const { Item } = Form
 
+/**
+ * Shipping, Billing 資料欄位
+ * TODO 國家應該使用下選單
+ * ENHANCE 手機加上國碼
+ * @param param0
+ * @returns
+ */
 export const InfoTable = ({
 	type = 'billing',
+	isEditing = false,
+	first_name = '',
+	last_name = '',
+	email = '',
+	phone = '',
+	company = '',
+	state = '',
+	postcode = '',
+	city = '',
+	address_1 = '',
+	address_2 = '',
+	country = '',
 }: {
 	type: 'billing' | 'shipping'
-}) => {
-	const record = useRecord()
-	const {
-		first_name,
-		last_name,
-		email,
-		phone,
-		company,
-		state,
-		postcode,
-		city,
-		address_1,
-		address_2,
-		country,
-	} = record?.[type] || defaultInfo
-	const isEditing = useIsEditing()
+	isEditing: boolean
+} & TOrderInfo) => {
 	return (
-		<table className="table table-vertical table-xs text-xs [&_th]:!w-20">
+		<table className="table table-vertical table-sm text-xs [&_th]:!w-20">
 			<tbody>
 				<tr>
 					<th>姓名</th>
 					<td className="gap-x-1">
-						{!isEditing && `${first_name} ${last_name}`}
+						{!isEditing && `${last_name}${first_name}`}
 						{[
 							'last_name',
 							'first_name',
@@ -80,8 +72,10 @@ export const InfoTable = ({
 				<tr>
 					<th>地址</th>
 					<td className="flex flex-col items-end gap-1 text-xs">
-						{!isEditing && `${postcode}${state}${city}${address_1}${address_2}`}
+						{!isEditing &&
+							`${country} ${postcode}${state}${city}${address_1}${address_2}`}
 						{[
+							'country',
 							'postcode',
 							'state',
 							'city',

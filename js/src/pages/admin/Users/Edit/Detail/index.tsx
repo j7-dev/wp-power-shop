@@ -18,6 +18,7 @@ import {
 	CreditCardOutlined,
 	TruckOutlined,
 	SwapOutlined,
+	ShoppingCartOutlined,
 } from '@ant-design/icons'
 import {
 	// termToOptions,
@@ -28,6 +29,8 @@ import { UserName } from 'antd-toolkit/wp'
 import Basic from './Basic'
 import AutoFill from './AutoFill'
 import Meta from './Meta'
+import Cart from './Cart'
+import RecentOrders from './RecentOrders'
 
 const SYMBOL = 'NT$'
 const { Item } = Form
@@ -115,9 +118,13 @@ const DetailComponent = () => {
 					<Tabs items={items} />
 				</div>
 				<div>
-					<Heading className="mb-8">最近訂單</Heading>
+					<Heading>購物車</Heading>
 
-					{/* <OrderNotes record={record} /> */}
+					<Cart />
+
+					<Heading>最近訂單</Heading>
+
+					<RecentOrders />
 
 					<Heading className="mb-8">聯絡註記</Heading>
 
