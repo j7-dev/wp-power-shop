@@ -3,7 +3,7 @@ import { Form, Tooltip, Statistic, Button, Select, Space } from 'antd'
 import { DEFAULT_IMAGE } from '@/utils'
 import { useSelect } from '@refinedev/antd'
 import { useRecord } from '@/pages/admin/Orders/Edit/hooks'
-import { InfoTable, OrderNotes } from 'components/order'
+import { InfoTable, OrderNotes } from '@/components/order'
 import {
 	CreditCardOutlined,
 	TruckOutlined,

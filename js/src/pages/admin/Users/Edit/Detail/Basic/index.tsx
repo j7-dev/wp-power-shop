@@ -1,0 +1,84 @@
+import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
+import { Form, Input, Space } from 'antd'
+import { INFO_LABEL_MAPPER } from '@/utils'
+
+const { Item } = Form
+const { TextArea } = Input
+
+const Basic = () => {
+	const isEditing = useIsEditing()
+	const record = useRecord()
+	const { first_name, last_name, display_name, description, user_email } =
+		record
+
+	return (
+		<div className="grid grid-cols-2 gap-8">
+			<table className="table table-vertical table-xs text-xs [&_th]:!w-20">
+				<tbody>
+					<tr>
+						<th>姓名</th>
+						<td className="gap-x-1">
+							{!isEditing && `${first_name} ${last_name}`}
+							{[
+								'last_name',
+								'first_name',
+							].map((field) => (
+								<Space.Compact
+									key={field}
+									block
+									className={isEditing ? '' : 'tw-hidden'}
+								>
+									<div className="text-xs bg-gray-50 border-l border-y border-r-0 border-solid border-gray-300 w-20 rounded-l-[0.25rem] px-2 text-left">
+										{
+											INFO_LABEL_MAPPER?.[
+												field as keyof typeof INFO_LABEL_MAPPER
+											]
+										}
+									</div>
+									<Item
+										name={[field]}
+										noStyle
+										label={field}
+										hidden={!isEditing}
+									>
+										<Input size="small" className="text-right text-xs flex-1" />
+									</Item>
+								</Space.Compact>
+							))}
+						</td>
+					</tr>
+					<tr>
+						<th>顯示名稱</th>
+						<td>
+							{!isEditing && display_name}
+							<Item name={['display_name']} noStyle hidden={!isEditing}>
+								<Input size="small" className="text-right text-xs" />
+							</Item>
+						</td>
+					</tr>
+					<tr>
+						<th>Email</th>
+						<td>
+							{!isEditing && user_email}
+							<Item name={['user_email']} noStyle hidden={!isEditing}>
+								<Input size="small" className="text-right text-xs" />
+							</Item>
+						</td>
+					</tr>
+					<tr>
+						<th>簡介</th>
+						<td>
+							{!isEditing && description}
+							<Item name={['description']} noStyle hidden={!isEditing}>
+								<TextArea rows={4} className="text-xs" />
+							</Item>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div></div>
+		</div>
+	)
+}
+
+export default Basic

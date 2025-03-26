@@ -3,14 +3,18 @@ import { TUserRecord } from '@/pages/admin/Users/types'
 import { UserName, UserRole } from 'antd-toolkit/wp'
 import { Price } from '@/components/general'
 import dayjs from 'dayjs'
+import { useNavigation } from '@refinedev/core'
 
 const useColumns = () => {
+	const { edit } = useNavigation()
 	const columns: TableProps<TUserRecord>['columns'] = [
 		{
 			title: '會員',
 			dataIndex: 'id',
 			width: 300,
-			render: (_, record) => <UserName record={record} />,
+			render: (id, record) => (
+				<UserName record={record} onClick={() => edit('users', id)} />
+			),
 		},
 		{
 			title: '角色',

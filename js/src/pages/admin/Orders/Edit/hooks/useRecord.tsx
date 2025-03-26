@@ -1,6 +1,7 @@
-import { useContext } from 'react'
-import { RecordContext } from '../index'
+import { useContext, createContext } from 'react'
 import { TOrderRecord } from '@/pages/admin/Orders/List/types'
+
+export const RecordContext = createContext<TOrderRecord | undefined>(undefined)
 
 export const useRecord = () => {
 	const record = useContext(RecordContext)

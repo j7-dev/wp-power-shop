@@ -1,6 +1,11 @@
 import { TUserBaseRecord } from 'antd-toolkit/wp'
-import { TGrantedItemBase } from 'antd-toolkit/refine'
 
-export type TGrantedDoc = TGrantedItemBase
-
+/** List 用 */
 export type TUserRecord = TUserBaseRecord & {}
+
+/** Edit 用 */
+export type TUserDetails = TUserRecord & {
+	first_name: string
+	last_name: string
+	description: string
+}

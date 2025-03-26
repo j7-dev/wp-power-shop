@@ -1,9 +1,9 @@
 import { Form, Input, Space } from 'antd'
-import { TOrderInfo } from '@/pages/admin/Orders/List/types'
-import { useIsEditing, useRecord } from '@/pages/admin/Orders/Edit/hooks'
+import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
 import { INFO_LABEL_MAPPER } from '@/utils'
 
-const defaultInfo: TOrderInfo = {
+const defaultInfo: any = {
+	full_name: '',
 	email: '',
 	phone: '',
 	company: '',

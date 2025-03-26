@@ -1,4 +1,4 @@
-import { memo, createContext, useMemo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Edit, useForm } from '@refinedev/antd'
 import { Form, Tag, Button, Space } from 'antd'
 import { Detail } from './Detail'
@@ -6,9 +6,7 @@ import { TOrderRecord, TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
 import { useParsed } from '@refinedev/core'
 import { EditOutlined } from '@ant-design/icons'
 import { ORDER_STATUS } from 'antd-toolkit/wp'
-
-export const RecordContext = createContext<TOrderRecord | undefined>(undefined)
-export const IsEditingContext = createContext<boolean>(false)
+import { IsEditingContext, RecordContext } from './hooks'
 
 const EditComponent = () => {
 	const { id } = useParsed()
@@ -82,11 +80,7 @@ const EditComponent = () => {
 					>
 						<Form {...formProps} layout="vertical">
 							<div className="flex justify-end">
-								<Button
-									type="default"
-									target="_blank"
-									href={record?.edit_order_url}
-								>
+								<Button type="default" target="_blank" href={record?.edit_url}>
 									前往傳統訂單介面
 								</Button>
 							</div>

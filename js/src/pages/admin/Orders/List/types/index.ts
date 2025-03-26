@@ -77,7 +77,7 @@ export type TOrderBaseRecord = {
 		payment_complete:boolean
 		date_paid:string
 		created_via: string
-		edit_order_url:string
+		edit_url:string
 		shipping_total:number
 		shipping_method:string
 		subtotal:number
