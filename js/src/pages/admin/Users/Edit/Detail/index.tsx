@@ -31,6 +31,7 @@ import AutoFill from './AutoFill'
 import Meta from './Meta'
 import Cart from './Cart'
 import RecentOrders from './RecentOrders'
+import { ContactRemarks } from '@/components/user'
 
 const SYMBOL = 'NT$'
 const { Item } = Form
@@ -127,6 +128,8 @@ const DetailComponent = () => {
 					<RecentOrders />
 
 					<Heading className="mb-8">聯絡註記</Heading>
+
+					<ContactRemarks record={record} />
 
 					{/* <Heading className="mb-8">開立發票</Heading> */}
 				</div>

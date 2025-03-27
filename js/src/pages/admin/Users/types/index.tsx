@@ -1,5 +1,5 @@
 import { TUserBaseRecord } from 'antd-toolkit/wp'
-import { TOrderInfo } from '@/pages/admin/Orders/List/types'
+import { TOrderInfo, TOrderNote } from '@/pages/admin/Orders/List/types'
 
 /** List 用 */
 export type TUserRecord = TUserBaseRecord & {}
@@ -9,8 +9,6 @@ export type TUserDetails = TUserRecord & {
 	first_name: string
 	last_name: string
 	description: string
-	shipping: TOrderInfo
-	billing: TOrderInfo
 	cart: TUserCartItem[]
 	recent_orders: {
 		order_id: string
@@ -19,6 +17,16 @@ export type TUserDetails = TUserRecord & {
 		order_status: string
 		order_items: TUserCartItem[]
 	}[]
+	shipping: TOrderInfo
+	billing: TOrderInfo
+	contact_remarks: TUserContactRemark[]
+	other_meta_data: {
+		[key: string]: any
+	}[]
+}
+
+export type TUserContactRemark = Omit<TOrderNote, 'order_id'> & {
+	user_id: string
 }
 
 /** 用戶購物車內的 items */
