@@ -8,7 +8,7 @@ const AutoFill = () => {
 	const { billing, shipping } = record
 
 	return (
-		<div className="grid grid-cols-2 gap-8">
+		<div className="grid grid-cols-1 gap-y-8">
 			<div>
 				<Heading className="mb-4" size="sm" hideIcon>
 					帳單資訊

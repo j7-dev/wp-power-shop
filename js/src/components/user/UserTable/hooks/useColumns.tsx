@@ -15,13 +15,13 @@ const useColumns = () => {
 			render: (id, record) => (
 				<UserName record={record} onClick={() => edit('users', id)} />
 			),
+			fixed: 'left',
 		},
 		{
 			title: '角色',
-			dataIndex: 'roles',
+			dataIndex: 'role',
 			width: 120,
-			render: (roles: string[]) =>
-				roles?.map((role) => <UserRole key={role} role={role} />),
+			render: (role: string) => <UserRole role={role} />,
 		},
 		{
 			title: '手機',

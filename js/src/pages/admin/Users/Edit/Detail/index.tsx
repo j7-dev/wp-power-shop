@@ -71,14 +71,11 @@ const DetailComponent = () => {
 
 	return (
 		<>
-			<div className="mb-12 grid grid-cols-[2fr_1fr] gap-20">
+			<div className="mb-12 grid grid-cols-1 lg:grid-cols-2 gap-20">
 				<div>
-					<Heading className="mb-8">客戶資料</Heading>
-					<div className="mb-6 flex justify-between">
-						<UserName record={record} />
-					</div>
+					<Heading className="mb-8">消費數據</Heading>
 					{record?.id && (
-						<div className="grid grid-cols-3 gap-8">
+						<div className="grid grid-cols-2 gap-8">
 							<Statistic
 								className="mt-4"
 								title="總消費金額"
@@ -118,20 +115,23 @@ const DetailComponent = () => {
 					<Heading className="mb-8 mt-20">用戶資料</Heading>
 					<Tabs items={items} />
 				</div>
-				<div>
-					<Heading>購物車</Heading>
+				<div className="grid grid-cols-2 gap-12">
+					<div>
+						<Heading className="mb-8">聯絡註記</Heading>
 
-					<Cart />
+						<ContactRemarks record={record} />
+					</div>
+					<div>
+						<Heading>購物車</Heading>
 
-					<Heading>最近訂單</Heading>
+						<Cart />
 
-					<RecentOrders />
+						<Heading>最近訂單</Heading>
 
-					<Heading className="mb-8">聯絡註記</Heading>
+						<RecentOrders />
 
-					<ContactRemarks record={record} />
-
-					{/* <Heading className="mb-8">開立發票</Heading> */}
+						{/* <Heading className="mb-8">開立發票</Heading> */}
+					</div>
 				</div>
 			</div>
 		</>

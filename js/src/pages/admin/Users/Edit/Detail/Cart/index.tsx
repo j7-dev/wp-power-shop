@@ -10,7 +10,11 @@ const RecentOrders = () => {
 		<div className="rounded-lg border border-gray-200 border-solid p-3 mb-12">
 			<h3 className="text-xs font-medium mb-2">用戶當前購物車包含：</h3>
 			{!cart?.length && (
-				<Empty className="text-xs" description="用戶購物車空空如也" />
+				<Empty
+					className="text-xs"
+					description="用戶購物車空空如也"
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+				/>
 			)}
 
 			{!!cart?.length &&

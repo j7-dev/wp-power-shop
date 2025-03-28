@@ -139,6 +139,9 @@ const UserTableComponent = ({
 						...tableProps.pagination,
 						...getDefaultPaginationProps({ label: '用戶' }),
 					}}
+					scroll={{
+						x: 1400,
+					}}
 					{...overrideTableProps}
 				/>
 			</Card>

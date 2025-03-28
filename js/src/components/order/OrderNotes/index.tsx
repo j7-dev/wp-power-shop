@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Timeline, Tooltip, Input, Form, Switch, Button } from 'antd'
+import { Timeline, Input, Form, Switch, Button, Badge } from 'antd'
 import { cn, renderHTML } from 'antd-toolkit'
 import { TOrderRecord, TOrderNote } from '@/pages/admin/Orders/List/types'
 import { useCreate, useInvalidate } from '@refinedev/core'
@@ -23,6 +23,7 @@ export const OrderNotes: FC<{
 	const items = Object.keys(groupedItems || {})?.map((date) => {
 		const orderNotes = groupedItems[date]
 		return {
+			key: date,
 			children: orderNotes?.map(
 				({
 					content,
@@ -31,48 +32,44 @@ export const OrderNotes: FC<{
 					added_by,
 					id: orderNoteId,
 				}) => (
-					<div
-						className={cn(
-							'p-4 relative mb-4',
-							customer_note ? 'bg-yellow-50' : 'bg-blue-50',
-						)}
+					<Badge.Ribbon
+						key={orderNoteId}
+						className="-top-2"
+						text={customer_note ? '客戶備註' : '內部備註'}
+						color={customer_note ? 'yellow' : 'blue'}
 					>
-						{renderHTML(content)}
-						<p className="text-xs text-gray-400 mb-0 flex items-center justify-between">
-							{date_created}{' '}
-							{canDelete && (
-								<DeleteButton
-									resource="order-notes"
-									recordItemId={orderNoteId}
-									type="link"
-									size="small"
-									hideText
-									confirmTitle="確認刪除此備註?"
-									confirmOkText="確認"
-									confirmCancelText="取消"
-									onSuccess={() => {
-										invalidate({
-											resource: 'orders',
-											invalidates: ['detail'],
-											id: record?.id,
-										})
-									}}
-								/>
+						<div
+							className={cn(
+								'p-4 relative mb-4',
+								customer_note ? 'bg-yellow-50' : 'bg-blue-50',
 							)}
-						</p>
-						<Tooltip
-							title={`由 ${added_by === 'system' ? '系統' : added_by} 添加`}
 						>
-							<div
-								className={cn(
-									'absolute -top-2 -right-2 text-white px-2 py-1 text-xs',
-									customer_note ? 'bg-yellow-500' : 'bg-blue-500',
+							{renderHTML(content)}
+							<p className="text-xs text-gray-400 mb-0 flex items-center justify-between">
+								{date_created}
+								{`由 ${added_by === 'system' ? '系統' : added_by} 添加`}
+								{canDelete && (
+									<DeleteButton
+										resource="order-notes"
+										recordItemId={orderNoteId}
+										type="link"
+										size="small"
+										hideText
+										confirmTitle="確認刪除此備註?"
+										confirmOkText="確認"
+										confirmCancelText="取消"
+										onSuccess={() => {
+											invalidate({
+												resource: 'orders',
+												invalidates: ['detail'],
+												id: record?.id,
+											})
+										}}
+									/>
 								)}
-							>
-								{customer_note ? '客戶備註' : '內部備註'}
-							</div>
-						</Tooltip>
-					</div>
+							</p>
+						</div>
+					</Badge.Ribbon>
 				),
 			),
 			dot: (
@@ -111,6 +108,7 @@ export const OrderNotes: FC<{
 	const formattedItems = canCreate
 		? [
 				{
+					key: 'create',
 					children: (
 						<Form form={form} className="mb-8">
 							<Item name={['note']} noStyle>
@@ -158,6 +156,7 @@ export const OrderNotes: FC<{
 					items={[
 						...formattedItems,
 						{
+							key: 'empty',
 							children: '',
 							dot: <></>,
 						},

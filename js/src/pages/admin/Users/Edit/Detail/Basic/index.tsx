@@ -1,5 +1,6 @@
 import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
-import { Form, Input, Space } from 'antd'
+import { useOptions } from '@/pages/admin/Users/List/hooks'
+import { Form, Input, Space, Select } from 'antd'
 import { INFO_LABEL_MAPPER } from '@/utils'
 
 const { Item } = Form
@@ -8,6 +9,7 @@ const { TextArea } = Input
 const Basic = () => {
 	const isEditing = useIsEditing()
 	const record = useRecord()
+	const { roles: roleOptions } = useOptions()
 	const {
 		first_name,
 		last_name,
@@ -15,10 +17,11 @@ const Basic = () => {
 		description,
 		user_email,
 		user_birthday,
+		role,
 	} = record
 
 	return (
-		<div className="grid grid-cols-2 gap-8">
+		<div className="grid grid-cols-1 gap-8">
 			<table className="table table-vertical table-sm text-xs [&_th]:!w-20">
 				<tbody>
 					<tr>
@@ -68,6 +71,22 @@ const Basic = () => {
 							{!isEditing && user_email}
 							<Item name={['user_email']} noStyle hidden={!isEditing}>
 								<Input size="small" className="text-right text-xs" />
+							</Item>
+						</td>
+					</tr>
+					<tr>
+						<th>角色</th>
+						<td>
+							{!isEditing &&
+								(roleOptions?.find(({ value }) => value === role)?.label ||
+									role)}
+							<Item name={['role']} noStyle hidden={!isEditing}>
+								<Select
+									size="small"
+									className="text-right text-xs w-full h-4"
+									options={roleOptions}
+									allowClear
+								/>
 							</Item>
 						</td>
 					</tr>

@@ -27,6 +27,7 @@ export type TUserDetails = TUserRecord & {
 
 export type TUserContactRemark = Omit<TOrderNote, 'order_id'> & {
 	user_id: string
+	commented_user_id: string // 被留言的用戶 id
 }
 
 /** 用戶購物車內的 items */

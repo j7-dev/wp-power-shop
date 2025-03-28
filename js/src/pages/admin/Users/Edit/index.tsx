@@ -5,8 +5,9 @@ import { Detail } from './Detail'
 import { TUserDetails } from '@/pages/admin/Users/types'
 import { useParsed } from '@refinedev/core'
 import { EditOutlined } from '@ant-design/icons'
-import { NameId } from 'antd-toolkit'
 import { IsEditingContext, RecordContext } from './hooks'
+import { UserName } from 'antd-toolkit/wp'
+import { NameId } from 'antd-toolkit'
 
 const EditComponent = () => {
 	const { id } = useParsed()
@@ -68,7 +69,8 @@ const EditComponent = () => {
 						)}
 					>
 						<Form {...formProps} layout="vertical">
-							<div className="flex justify-end">
+							<div className="flex justify-between pc-nav py-2">
+								<div>{record && <UserName record={record} />}</div>
 								<Button type="default" target="_blank" href={record?.edit_url}>
 									前往傳統用戶編輯介面
 								</Button>
