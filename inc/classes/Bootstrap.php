@@ -97,7 +97,8 @@ final class Bootstrap {
 			Plugin::$kebab,
 			Plugin::$snake . '_data',
 			[
-				'env' => $encrypt_env,
+				'env'         => $encrypt_env,
+				'WOOCOMMERCE' => Base::get_woocommerce_settings(), // WooCommerce 設定
 			]
 		);
 	}

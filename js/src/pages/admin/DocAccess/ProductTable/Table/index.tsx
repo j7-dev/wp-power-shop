@@ -11,13 +11,12 @@ import useValueLabelMapper from '../hooks/useValueLabelMapper'
 // 	UnbindCourses,
 // } from '@/components/product'
 import useColumns from '../hooks/useColumns'
-import { useGCDItems, useProductsOptions } from '@/hooks'
+import { useGCDItems, useProductsOptions, useEnv } from '@/hooks'
 import {
 	useRowSelection,
 	Limit,
 	defaultTableProps,
 	getDefaultPaginationProps,
-	useEnv,
 } from 'antd-toolkit'
 import { productKeyLabelMapper } from 'antd-toolkit/wp'
 import {

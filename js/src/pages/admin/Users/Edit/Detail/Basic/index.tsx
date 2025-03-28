@@ -92,7 +92,7 @@ const Basic = () => {
 								<Item name={['role']} noStyle hidden={!isEditing}>
 									<Select
 										size="small"
-										className="text-right text-xs w-full h-4"
+										className="text-right [&_.ant-select-selection-item]:!text-xs w-full h-[1.125rem]"
 										options={roleOptions}
 										allowClear
 									/>

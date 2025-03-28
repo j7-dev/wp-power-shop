@@ -1,12 +1,13 @@
 import { Form, Input, Space } from 'antd'
+import { useCountries } from '@/hooks'
 import { TOrderInfo } from '@/pages/admin/Orders/List/types'
 import { INFO_LABEL_MAPPER } from '@/utils'
+import AddressInput from './AddressInput'
 
 const { Item } = Form
 
 /**
  * Shipping, Billing 資料欄位
- * TODO 國家應該使用下選單
  * ENHANCE 手機加上國碼
  * @param param0
  * @returns
@@ -29,6 +30,7 @@ export const InfoTable = ({
 	type: 'billing' | 'shipping'
 	isEditing: boolean
 } & TOrderInfo) => {
+	const COUNTRIES = useCountries()
 	return (
 		<table className="table table-vertical table-sm text-xs [&_th]:!w-20 [&_td]:break-all">
 			<tbody>
@@ -80,7 +82,7 @@ export const InfoTable = ({
 					<th>地址</th>
 					<td className="flex flex-col items-end gap-1 text-xs">
 						{!isEditing &&
-							`${country} ${postcode}${state}${city}${address_1}${address_2}`}
+							`${COUNTRIES?.[country] || ''} ${postcode}${state}${city}${address_1}${address_2}`}
 						{isEditing &&
 							[
 								'country',
@@ -102,14 +104,11 @@ export const InfoTable = ({
 											]
 										}
 									</div>
-									<Item
-										name={[type, field]}
-										noStyle
-										label={field}
-										hidden={!isEditing}
-									>
-										<Input size="small" className="text-right text-xs flex-1" />
-									</Item>
+									<AddressInput
+										isEditing={isEditing}
+										type={type}
+										field={field}
+									/>
 								</Space.Compact>
 							))}
 					</td>

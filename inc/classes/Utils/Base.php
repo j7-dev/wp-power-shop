@@ -16,4 +16,28 @@ abstract class Base {
 	const APP2_SELECTOR = '#power_shop_metabox';
 	const API_TIMEOUT   = '30000';
 	const DEFAULT_IMAGE = 'http://1.gravatar.com/avatar/1c39955b5fe5ae1bf51a77642f052848?s=96&d=mm&r=g';
+
+	/**
+	 * Get WooCommerce settings
+	 *
+	 * @return array{
+	 *  countries: array<string, string>,
+	 *  currency: array{slug: string, symbol: string},
+	 * }
+	 */
+	public static function get_woocommerce_settings(): array {
+		if ( ! function_exists( '\WC' ) ) {
+			return [];
+		}
+
+		$countries = \WC()->countries->get_countries();
+		$currency  = \get_option( 'woocommerce_currency', 'TWD' );
+		return [
+			'countries' => $countries,
+			'currency'  => [
+				'slug'   => $currency,
+				'symbol' => html_entity_decode( \get_woocommerce_currency_symbol($currency) ),
+			],
+		];
+	}
 }

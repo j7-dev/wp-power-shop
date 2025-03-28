@@ -20,7 +20,7 @@ import { HashRouter, Outlet, Route, Routes } from 'react-router-dom'
 import { resources } from '@/resources'
 import { ConfigProvider } from 'antd'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { useEnv } from 'antd-toolkit'
+import { useEnv } from '@/hooks'
 import { BackToWpAdmin } from 'antd-toolkit/wp'
 import {
 	dataProvider,

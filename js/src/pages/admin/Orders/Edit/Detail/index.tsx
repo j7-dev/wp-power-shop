@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { Form, Tooltip, Statistic, Button, Select, Space } from 'antd'
 import { DEFAULT_IMAGE } from '@/utils'
+import { useWoocommerce } from '@/hooks'
 import { useSelect } from '@refinedev/antd'
 import { useIsEditing, useRecord } from '@/pages/admin/Orders/Edit/hooks'
 import { InfoTable, OrderNotes } from '@/components/order'
@@ -16,11 +17,12 @@ import {
 } from 'antd-toolkit'
 import { UserName } from 'antd-toolkit/wp'
 
-const SYMBOL = 'NT$'
 const { Item } = Form
 
 const DetailComponent = () => {
 	const form = Form.useFormInstance()
+	const { currency } = useWoocommerce()
+	const { symbol } = currency
 	const isEditing = useIsEditing()
 	const record = useRecord()
 	const {
@@ -109,7 +111,7 @@ const DetailComponent = () => {
 								<td></td>
 								<td>項目小計</td>
 								<td colSpan={2}>
-									{SYMBOL} {subtotal}
+									{symbol} {subtotal}
 								</td>
 							</tr>
 							<tr>
@@ -121,7 +123,7 @@ const DetailComponent = () => {
 								</td>
 								<td>運費</td>
 								<td colSpan={2}>
-									{SYMBOL} {shipping_total}
+									{symbol} {shipping_total}
 								</td>
 							</tr>
 							<tr>
@@ -136,7 +138,7 @@ const DetailComponent = () => {
 								</td>
 								<td>訂單總額</td>
 								<td colSpan={2}>
-									{SYMBOL} {total}
+									{symbol} {total}
 								</td>
 							</tr>
 						</tfoot>
@@ -179,7 +181,7 @@ const DetailComponent = () => {
 								className="mt-4"
 								title="總消費金額"
 								value={total_spend}
-								prefix={SYMBOL}
+								prefix={symbol}
 							/>
 							<Statistic
 								className="mt-4"
@@ -191,7 +193,7 @@ const DetailComponent = () => {
 								title="平均每筆訂單消費"
 								value={avg_order_value}
 								precision={2}
-								prefix={SYMBOL}
+								prefix={symbol}
 							/>
 							<Statistic
 								className="mt-4"

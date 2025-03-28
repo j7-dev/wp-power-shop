@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { useWoocommerce } from '@/hooks'
 import {
 	Form,
 	Tooltip,
@@ -33,7 +34,6 @@ import Cart from './Cart'
 import RecentOrders from './RecentOrders'
 import { ContactRemarks } from '@/components/user'
 
-const SYMBOL = 'NT$'
 const { Item } = Form
 
 const items: TabsProps['items'] = [
@@ -55,6 +55,8 @@ const items: TabsProps['items'] = [
 ]
 
 const DetailComponent = () => {
+	const { currency } = useWoocommerce()
+	const { symbol } = currency
 	const form = Form.useFormInstance()
 	const record = useRecord()
 	const {
@@ -80,7 +82,7 @@ const DetailComponent = () => {
 								className="mt-4"
 								title="總消費金額"
 								value={total_spend || 0}
-								prefix={SYMBOL}
+								prefix={symbol}
 							/>
 							<Statistic
 								className="mt-4"
@@ -92,7 +94,7 @@ const DetailComponent = () => {
 								title="平均每筆訂單消費"
 								value={avg_order_value || 0}
 								precision={2}
-								prefix={SYMBOL}
+								prefix={symbol}
 							/>
 							<Statistic
 								className="mt-4"
