@@ -21,7 +21,9 @@ export type TUserDetails = TUserRecord & {
 	billing: TOrderInfo
 	contact_remarks: TUserContactRemark[]
 	other_meta_data: {
-		[key: string]: any
+		umeta_id: string
+		meta_key: string
+		meta_value: string
 	}[]
 }
 

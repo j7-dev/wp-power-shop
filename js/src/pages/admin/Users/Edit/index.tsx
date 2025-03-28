@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useMemo, useState, useEffect } from 'react'
 import { Edit, useForm } from '@refinedev/antd'
 import { Form, Button, Space } from 'antd'
 import { Detail } from './Detail'
@@ -14,21 +14,48 @@ const EditComponent = () => {
 	const [isEditing, setIsEditing] = useState(false)
 
 	// 初始化資料
-	const { formProps, saveButtonProps, query, mutation } = useForm<TUserDetails>(
-		{
+	const { formProps, saveButtonProps, query, mutation, onFinish } =
+		useForm<TUserDetails>({
 			action: 'edit',
 			resource: 'users',
 			id,
 			redirect: false,
 			successNotification: false,
 			errorNotification: false,
-		},
-	)
+		})
 
 	const record: TUserDetails | undefined = useMemo(
 		() => query?.data?.data,
 		[query?.isFetching],
 	)
+
+	useEffect(() => {
+		if (isEditing) {
+			formProps?.form?.resetFields()
+		}
+	}, [isEditing])
+
+	const handleOnFinish = (values: TUserDetails) => {
+		// 傳給後端前將 billing 和 shipping 的資料轉換為 billing_{field} 和 shipping_{field}， 並刪除原本的 billing 和 shipping 資料
+		const billing_or_shipping = ['billing', 'shipping']
+		let newValues = values
+		billing_or_shipping.forEach((type) => {
+			if (newValues?.[type as keyof TUserDetails]) {
+				const renamedInfo = Object.fromEntries(
+					Object.entries(newValues?.[type]).map(([key, value]) => {
+						return [`${type}_${key}`, value]
+					}),
+				)
+				newValues = {
+					...newValues,
+					...renamedInfo,
+				}
+				delete newValues[type as keyof TUserDetails]
+			}
+		})
+
+		onFinish(newValues)
+	}
 
 	return (
 		<IsEditingContext.Provider value={isEditing}>
@@ -68,7 +95,7 @@ const EditComponent = () => {
 							</>
 						)}
 					>
-						<Form {...formProps} layout="vertical">
+						<Form {...formProps} onFinish={handleOnFinish} layout="vertical">
 							<div className="flex justify-between pc-nav py-2">
 								<div>{record && <UserName record={record} />}</div>
 								<Button type="default" target="_blank" href={record?.edit_url}>

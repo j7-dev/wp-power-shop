@@ -22,56 +22,64 @@ const Basic = () => {
 
 	return (
 		<div className="grid grid-cols-1 gap-8">
-			<table className="table table-vertical table-sm text-xs [&_th]:!w-20">
+			<table className="table table-vertical table-sm text-xs [&_th]:!w-20 [&_td]:break-all">
 				<tbody>
 					<tr>
 						<th>姓名</th>
 						<td className="gap-x-1">
 							{!isEditing && `${last_name} ${first_name}`}
-							{[
-								'last_name',
-								'first_name',
-							].map((field) => (
-								<Space.Compact
-									key={field}
-									block
-									className={isEditing ? '' : 'tw-hidden'}
-								>
-									<div className="text-xs bg-gray-50 border-l border-y border-r-0 border-solid border-gray-300 w-20 rounded-l-[0.25rem] px-2 text-left">
-										{
-											INFO_LABEL_MAPPER?.[
-												field as keyof typeof INFO_LABEL_MAPPER
-											]
-										}
-									</div>
-									<Item
-										name={[field]}
-										noStyle
-										label={field}
-										hidden={!isEditing}
+							{isEditing &&
+								[
+									'last_name',
+									'first_name',
+								].map((field) => (
+									<Space.Compact
+										key={field}
+										block
+										className={isEditing ? '' : 'tw-hidden'}
 									>
-										<Input size="small" className="text-right text-xs flex-1" />
-									</Item>
-								</Space.Compact>
-							))}
+										<div className="text-xs bg-gray-50 border-l border-y border-r-0 border-solid border-gray-300 w-20 rounded-l-[0.25rem] px-2 text-left">
+											{
+												INFO_LABEL_MAPPER?.[
+													field as keyof typeof INFO_LABEL_MAPPER
+												]
+											}
+										</div>
+										<Item
+											name={[field]}
+											noStyle
+											label={field}
+											hidden={!isEditing}
+										>
+											<Input
+												size="small"
+												className="text-right text-xs flex-1"
+											/>
+										</Item>
+									</Space.Compact>
+								))}
 						</td>
 					</tr>
 					<tr>
 						<th>顯示名稱</th>
 						<td>
 							{!isEditing && display_name}
-							<Item name={['display_name']} noStyle hidden={!isEditing}>
-								<Input size="small" className="text-right text-xs" />
-							</Item>
+							{isEditing && (
+								<Item name={['display_name']} noStyle hidden={!isEditing}>
+									<Input size="small" className="text-right text-xs" />
+								</Item>
+							)}
 						</td>
 					</tr>
 					<tr>
 						<th>Email</th>
 						<td>
 							{!isEditing && user_email}
-							<Item name={['user_email']} noStyle hidden={!isEditing}>
-								<Input size="small" className="text-right text-xs" />
-							</Item>
+							{isEditing && (
+								<Item name={['user_email']} noStyle hidden={!isEditing}>
+									<Input size="small" className="text-right text-xs" />
+								</Item>
+							)}
 						</td>
 					</tr>
 					<tr>
@@ -80,37 +88,42 @@ const Basic = () => {
 							{!isEditing &&
 								(roleOptions?.find(({ value }) => value === role)?.label ||
 									role)}
-							<Item name={['role']} noStyle hidden={!isEditing}>
-								<Select
-									size="small"
-									className="text-right text-xs w-full h-4"
-									options={roleOptions}
-									allowClear
-								/>
-							</Item>
+							{isEditing && (
+								<Item name={['role']} noStyle hidden={!isEditing}>
+									<Select
+										size="small"
+										className="text-right text-xs w-full h-4"
+										options={roleOptions}
+										allowClear
+									/>
+								</Item>
+							)}
 						</td>
 					</tr>
 					<tr>
 						<th>生日</th>
 						<td>
 							{!isEditing && user_birthday}
-							<Item name={['user_birthday']} noStyle hidden={!isEditing}>
-								<Input size="small" className="text-right text-xs" />
-							</Item>
+							{isEditing && (
+								<Item name={['user_birthday']} noStyle hidden={!isEditing}>
+									<Input size="small" className="text-right text-xs" />
+								</Item>
+							)}
 						</td>
 					</tr>
 					<tr>
 						<th>簡介</th>
 						<td>
 							{!isEditing && description}
-							<Item name={['description']} noStyle hidden={!isEditing}>
-								<TextArea rows={6} className="text-xs" />
-							</Item>
+							{isEditing && (
+								<Item name={['description']} noStyle hidden={!isEditing}>
+									<TextArea rows={6} className="text-xs" />
+								</Item>
+							)}
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<div></div>
 		</div>
 	)
 }
