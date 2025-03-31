@@ -1,16 +1,22 @@
+import { useState, useEffect } from 'react'
 import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
 import { useOptions } from '@/pages/admin/Users/List/hooks'
-import { Form, Input, Space, Select } from 'antd'
+import ResetPassButton from '@/components/user/UserTable/BulkAction/ResetPassButton'
+import { Form, Input, Space, Select, Button } from 'antd'
+import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons'
 import { INFO_LABEL_MAPPER } from '@/utils'
+import { Heading } from 'antd-toolkit'
 
 const { Item } = Form
 const { TextArea } = Input
 
 const Basic = () => {
 	const isEditing = useIsEditing()
+	const [confirmEditingPassword, setConfirmEditingPassword] = useState(false)
 	const record = useRecord()
 	const { roles: roleOptions } = useOptions()
 	const {
+		id,
 		first_name,
 		last_name,
 		display_name,
@@ -20,8 +26,14 @@ const Basic = () => {
 		role,
 	} = record
 
+	const canEditPassword = isEditing && confirmEditingPassword
+
+	useEffect(() => {
+		setConfirmEditingPassword(false)
+	}, [isEditing])
+
 	return (
-		<div className="grid grid-cols-1 gap-8">
+		<div className="grid grid-cols-1 gap-y-2">
 			<table className="table table-vertical table-sm text-xs [&_th]:!w-20 [&_td]:break-all">
 				<tbody>
 					<tr>
@@ -118,6 +130,53 @@ const Basic = () => {
 							{isEditing && (
 								<Item name={['description']} noStyle hidden={!isEditing}>
 									<TextArea rows={6} className="text-xs" />
+								</Item>
+							)}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<Heading className="mb-4" size="sm" hideIcon>
+				密碼
+			</Heading>
+
+			<table className="table table-vertical table-sm text-xs [&_th]:!w-20 [&_td]:break-all">
+				<tbody>
+					<tr>
+						<th>修改密碼</th>
+						<td>
+							{!canEditPassword && (
+								<>
+									<ResetPassButton
+										user_ids={[id]}
+										size="small"
+										variant="filled"
+										className="w-fit px-4"
+									/>
+									{isEditing && (
+										<Button
+											size="small"
+											color="primary"
+											variant="solid"
+											className="w-fit px-4 ml-2"
+											onClick={() => setConfirmEditingPassword(true)}
+										>
+											直接修改密碼
+										</Button>
+									)}
+								</>
+							)}
+							{canEditPassword && (
+								<Item name={['user_pass']} noStyle hidden={!canEditPassword}>
+									<Input.Password
+										size="small"
+										className="text-right text-xs"
+										placeholder="請輸入新密碼"
+										iconRender={(visible) =>
+											visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+										}
+									/>
 								</Item>
 							)}
 						</td>

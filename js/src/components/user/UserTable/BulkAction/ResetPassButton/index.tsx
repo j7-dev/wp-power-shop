@@ -1,11 +1,15 @@
 import { MailOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
-import { useAtomValue } from 'jotai'
-import { selectedUserIdsAtom } from '@/components/user/UserTable/atom'
+import { Button, ButtonProps } from 'antd'
 import { useCustomMutation, useApiUrl } from '@refinedev/core'
 
-const ResetPassButton = () => {
-	const selectedUserIds = useAtomValue(selectedUserIdsAtom)
+const ResetPassButton = ({
+	user_ids,
+	mode = undefined,
+	...buttonProps
+}: ButtonProps & {
+	user_ids?: string[]
+	mode?: 'multiple' | undefined
+}) => {
 	const { mutate: resetPass, isLoading } = useCustomMutation()
 	const apiUrl = useApiUrl()
 
@@ -14,27 +18,32 @@ const ResetPassButton = () => {
 			url: `${apiUrl}/users/resetpassword`,
 			method: 'post',
 			values: {
-				ids: selectedUserIds,
+				ids: user_ids,
 			},
 			successNotification: (data, ids, resource) => {
 				return {
-					message: `用戶 ${selectedUserIds?.map((id: string) => `#${id}`).join(', ')} 已發送重設密碼信件`,
+					message: `用戶 ${user_ids?.map((id: string) => `#${id}`).join(', ')} 已發送重設密碼信件`,
 					type: 'success',
 				}
 			},
 		})
 	}
 
+	const btnText =
+		mode === 'multiple'
+			? `批次傳送密碼重設連結 ${user_ids?.length ? ` (${user_ids?.length})` : ''}`
+			: '傳送密碼重設連結'
+
 	return (
 		<Button
-			type="primary"
+			color="primary"
+			variant="solid"
 			icon={<MailOutlined />}
-			className="mr-2"
+			{...buttonProps}
 			loading={isLoading}
 			onClick={handleResetPass}
 		>
-			批次傳送密碼重設連結
-			{selectedUserIds.length ? ` (${selectedUserIds.length})` : ''}
+			{btnText}
 		</Button>
 	)
 }
