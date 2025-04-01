@@ -16,6 +16,7 @@ import {
 	Analytics,
 	MediaLibraryPage,
 	ProductList,
+	Summary,
 } from '@/pages/admin'
 import { HashRouter, Outlet, Route, Routes } from 'react-router-dom'
 import { resources } from '@/resources'
@@ -93,6 +94,9 @@ function App() {
 						}
 					>
 						<Route index element={<NavigateToResource resource="docs" />} />
+						<Route path="dashboard">
+							<Route index element={<Summary />} />
+						</Route>
 						<Route path="orders">
 							<Route index element={<OrdersList />} />
 							<Route path="edit/:id" element={<OrdersEdit />} />

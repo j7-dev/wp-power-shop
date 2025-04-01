@@ -9,6 +9,11 @@ import { defineConfig } from 'vite'
 import { v4wp } from '@kucrut/vite-for-wp'
 
 export default defineConfig({
+	server: {
+		cors: {
+			origin: '*',
+		},
+	},
 	plugins: [
 		alias(),
 		react(),
