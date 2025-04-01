@@ -2,10 +2,11 @@
 // @ts-nocheck
 
 import { simpleDecrypt } from 'antd-toolkit'
+import { TWoocommerce } from '@/hooks'
 
 const encryptedEnv = window?.power_shop_data?.env
 export const env = simpleDecrypt(encryptedEnv)
-export const WOOCOMMERCE = window?.power_shop_data?.WOOCOMMERCE
+export const WOOCOMMERCE: TWoocommerce = window?.power_shop_data?.WOOCOMMERCE
 
 export const API_URL = env?.API_URL || '/wp-json'
 export const APP1_SELECTOR = env?.APP1_SELECTOR || 'power_docs'

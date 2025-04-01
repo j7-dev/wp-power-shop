@@ -1,6 +1,5 @@
 import {
 	RadarChartOutlined,
-	TableOutlined,
 	LineChartOutlined,
 	ProductOutlined,
 	SettingOutlined,
@@ -9,10 +8,26 @@ import {
 	TagsOutlined,
 } from '@ant-design/icons'
 import { FaPhotoVideo } from 'react-icons/fa'
-import { PiStudent } from 'react-icons/pi'
 import { ResourceProps } from '@refinedev/core'
 import { LiaClipboardListSolid } from 'react-icons/lia'
 import { BsBox2 } from 'react-icons/bs'
+import { WOOCOMMERCE } from '@/utils'
+import { TWoocommerce } from '@/types'
+
+const product_taxonomies: TWoocommerce['product_taxonomies'] =
+	WOOCOMMERCE?.product_taxonomies || []
+
+const product_taxonomies_resources = product_taxonomies.map(
+	({ value, label }) => ({
+		parentName: 'product-management',
+		name: value,
+		list: `/${value}`,
+		// edit: `/${value}/edit/:id`,
+		meta: {
+			label,
+		},
+	}),
+)
 
 export const resources: ResourceProps[] = [
 	{
@@ -65,15 +80,7 @@ export const resources: ResourceProps[] = [
 			label: '商品列表',
 		},
 	},
-	{
-		parentName: 'product-management',
-		name: 'product_cat',
-		list: '/product_cat',
-		edit: '/product_cat/edit/:id',
-		meta: {
-			label: '商品分類',
-		},
-	},
+	...product_taxonomies_resources,
 	{
 		name: 'stock',
 		list: '/stock',

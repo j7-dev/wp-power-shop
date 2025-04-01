@@ -1,15 +1,6 @@
 import { WOOCOMMERCE } from '@/utils/env'
 import { SelectProps } from 'antd'
-
-type TWoocommerce = {
-	countries: {
-		[key: string]: string
-	}
-	currency: {
-		slug: string
-		symbol: string
-	}
-}
+import { TWoocommerce } from '@/types'
 
 /**
  * 取得 WooCommerce 的設定
@@ -37,4 +28,12 @@ export const useCountryOptions = (): SelectProps['options'] => {
 		label: value as string,
 		value: key,
 	}))
+}
+
+/**
+ * 取得所有商品的 taxonomy 選項
+ * @returns SelectProps['options']
+ */
+export const useProductTaxonomies = (): SelectProps['options'] => {
+	return WOOCOMMERCE.product_taxonomies || []
 }

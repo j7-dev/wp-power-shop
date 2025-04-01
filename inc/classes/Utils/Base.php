@@ -7,6 +7,8 @@ declare (strict_types = 1);
 
 namespace J7\PowerShop\Utils;
 
+use J7\Powerhouse\Utils\Base as PowerhouseUtils;
+
 /**
  * Class Utils
  */
@@ -33,11 +35,12 @@ abstract class Base {
 		$countries = \WC()->countries->get_countries();
 		$currency  = \get_option( 'woocommerce_currency', 'TWD' );
 		return [
-			'countries' => $countries,
-			'currency'  => [
+			'countries'          => $countries,
+			'currency'           => [
 				'slug'   => $currency,
 				'symbol' => html_entity_decode( \get_woocommerce_currency_symbol($currency) ),
 			],
+			'product_taxonomies' => PowerhouseUtils::get_taxonomy_options(),
 		];
 	}
 }
