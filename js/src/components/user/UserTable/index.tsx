@@ -43,16 +43,7 @@ const UserTableComponent = ({
 			initial: objToCrudFilters(initialValues),
 			defaultBehavior: 'replace',
 		},
-		onSearch: (values) => {
-			if (values?.pc_birthday) {
-				return objToCrudFilters({
-					...values,
-					pc_birthday: values?.pc_birthday?.map((v: Dayjs) => v.unix()),
-				})
-			}
-
-			return objToCrudFilters(values)
-		},
+		onSearch: (values) => objToCrudFilters(values),
 	})
 
 	const currentAllKeys =

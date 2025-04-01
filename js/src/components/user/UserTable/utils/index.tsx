@@ -6,7 +6,7 @@ export const keyLabelMapper = (key: string | number | symbol): string => {
 			return '角色'
 		case 'billing_phone':
 			return '手機'
-		case 'pc_birthday':
+		case 'user_birthday':
 			return '生日'
 		default:
 			return key as string

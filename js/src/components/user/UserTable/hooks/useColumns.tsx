@@ -30,10 +30,8 @@ const useColumns = () => {
 		},
 		{
 			title: '生日',
-			dataIndex: 'pc_birthday',
+			dataIndex: 'user_birthday',
 			width: 180,
-			render: (pc_birthday) =>
-				pc_birthday ? dayjs.unix(pc_birthday).format('YYYY-MM-DD') : '',
 		},
 		{
 			title: '總訂單數',

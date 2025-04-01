@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
 import { useOptions } from '@/pages/admin/Users/List/hooks'
 import ResetPassButton from '@/components/user/UserTable/BulkAction/ResetPassButton'
-import { Form, Input, Space, Select, Button } from 'antd'
+import { Form, Input, Space, Select, Button, DatePicker } from 'antd'
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons'
 import { INFO_LABEL_MAPPER } from '@/utils'
+import dayjs, { Dayjs } from 'dayjs'
 import { Heading } from 'antd-toolkit'
 
 const { Item } = Form
@@ -117,8 +118,29 @@ const Basic = () => {
 						<td>
 							{!isEditing && user_birthday}
 							{isEditing && (
-								<Item name={['user_birthday']} noStyle hidden={!isEditing}>
-									<Input size="small" className="text-right text-xs" />
+								<Item
+									name={['user_birthday']}
+									noStyle
+									hidden={!isEditing}
+									getValueProps={(value: string | null | undefined) => {
+										// 用 regex 判斷是否為 YYYY-MM-DD
+										if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) {
+											return {
+												value: undefined,
+											}
+										}
+										return {
+											value: dayjs(value, 'YYYY-MM-DD'),
+										}
+									}}
+									normalize={(value: Dayjs) => value.format('YYYY-MM-DD')}
+								>
+									<DatePicker
+										className="w-full"
+										placeholder="選擇日期"
+										size="small"
+										allowClear
+									/>
 								</Item>
 							)}
 						</td>

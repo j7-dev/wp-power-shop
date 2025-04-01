@@ -17,7 +17,7 @@ export type TFilterValues = {
 	search?: string
 	role__in?: string[]
 	billing_phone?: string
-	pc_birthday?: any[]
+	user_birthday?: string
 	include?: string[]
 }
 
@@ -50,21 +50,14 @@ const Filter = ({
 					<Item name={['billing_phone']} label="手機">
 						<Input placeholder="輸入手機號碼" allowClear />
 					</Item>
-					<Item
-						name={['pc_birthday']}
-						label="生日"
-						getValueProps={(value) => {
-							if (value?.every((v: number) => typeof v === 'number')) {
-								return {
-									value: value?.map((v: number) => dayjs.unix(v)),
-								}
-							}
-							return value
-						}}
-					>
-						<RangePicker
-							placeholder={['開始日期', '結束日期']}
-							className="w-full"
+					<Item name={['user_birthday']} label="選擇指定月份生日的用戶">
+						<Select
+							placeholder="選擇月份"
+							options={Array.from({ length: 12 }, (_, i) => ({
+								label: `${i + 1} 月`,
+								value: (i + 1).toString().padStart(2, '0'), // 固定為 2 位文字，ex: '01', '02', '03', ...
+							}))}
+							allowClear
 						/>
 					</Item>
 
