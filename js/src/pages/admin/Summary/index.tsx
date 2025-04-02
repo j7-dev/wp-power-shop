@@ -224,8 +224,6 @@ const RecentTopSaleProducts = () => {
 		pagination: { mode: 'off' },
 	})
 
-	console.log("data", response?.data)
-
 	const columns = [
 		{
 			title: '商品名稱',
@@ -236,12 +234,15 @@ const RecentTopSaleProducts = () => {
 			title: '銷售數量',
 			dataIndex: 'quantity',
 			key: 'quantity',
+			render: (value: number) => value.toLocaleString(),
+			sorter: (a: any, b: any) => a.quantity - b.quantity,
 		},
 		{
 			title: '總金額',
 			dataIndex: 'total_amount',
 			key: 'total_amount',
 			render: (value: number) => `$${value.toLocaleString()}`,
+			sorter: (a: any, b: any) => a.total_amount - b.total_amount,
 		},
 	]
     
@@ -268,8 +269,6 @@ const RecentTopSaleProducts = () => {
 		})
 		return acc
 	}, []) || []
-
-	console.log("productData", productData)
 
 	// 按销售金额排序
 	const sortedProductData = [...productData].sort((a, b) => b.total_amount - a.total_amount)
