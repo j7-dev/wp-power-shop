@@ -34,6 +34,14 @@ const SummaryCards = () => {
     const { colorSuccess, colorError } = useColor()
     const today = dayjs().startOf('day')
     const yesterday = today.subtract(1, 'day')
+
+	const { data: orders, isLoading: isLoadingOrders } = useList({
+		resource: 'orders',
+		filters: [
+			{ field: 'date_created', operator: 'gte', value: today.toISOString() },
+		],
+		pagination: { mode: 'off' },
+	})
     
     const { data: todayOrders, isLoading: isLoadingToday } = useList({
         resource: 'orders',
@@ -59,7 +67,23 @@ const SummaryCards = () => {
         pagination: { mode: 'off' }
     })
 
-    const calculateTotal = (orders: any[] = []) => {
+	const { data: todayUsers, isLoading: isLoadingTodayUsers } = useList({
+		resource: 'users',
+		filters: [
+			{ field: 'date_created', operator: 'gte', value: today.toISOString() },
+		],
+		pagination: { mode: 'off' },
+	})
+
+	const { data: yesterdayUsers, isLoading: isLoadingYesterdayUsers } = useList({
+		resource: 'users',
+		filters: [
+			{ field: 'date_created', operator: 'gte', value: yesterday.toISOString() },
+		],
+		pagination: { mode: 'off' },
+	})
+
+    const calculateTotal = (orders: any[] = []): number => {
         return orders.reduce((sum, order) => sum + parseFloat(order.total || 0), 0)
     }
 
@@ -70,7 +94,25 @@ const SummaryCards = () => {
     // 计算增长率
     const growthRate = yesterdayTotal ? ((todayTotal - yesterdayTotal) / yesterdayTotal) * 100 : 0
 
-    if (isLoadingToday || isLoadingYesterday) return <div>載入中...</div>
+	// 計算未出貨訂單數量
+	const unshippedOrders = orders?.data?.filter((order) => order.status === 'unshipped').length || 0
+	const todayUnshippedOrders = todayOrders?.data?.filter((order) => order.status === 'unshipped').length || 0
+	const yesterdayUnshippedOrders = yesterdayOrders?.data?.filter((order) => order.status === 'unshipped').length || 0
+	const unshippedGrowthRate = yesterdayUnshippedOrders ? ((todayUnshippedOrders - yesterdayUnshippedOrders) / yesterdayUnshippedOrders) * 100 : 0
+
+	// 計算今日和昨日新增用戶數量
+	const todayNewUsers = todayUsers?.data?.length || 0
+	const yesterdayNewUsers = yesterdayUsers?.data?.length || 0
+	const newUserGrowthRate = yesterdayNewUsers ? ((todayNewUsers - yesterdayNewUsers) / yesterdayNewUsers) * 100 : 0
+
+	// 計算所有未付款訂單金額
+	const unpaidTotal = orders?.data?.filter((order) => order.status === 'unpaid').reduce((sum, order) => sum + parseFloat(order.total || 0), 0)
+	const todayUnpaidTotal = todayOrders?.data?.filter((order) => order.status === 'unpaid').reduce((sum, order) => sum + parseFloat(order.total || 0), 0) || 0
+	const yesterdayUnpaidTotal = yesterdayOrders?.data?.filter((order) => order.status === 'unpaid').reduce((sum, order) => sum + parseFloat(order.total || 0), 0) || 0
+	const unpaidGrowthRate = yesterdayUnpaidTotal ? ((todayUnpaidTotal - yesterdayUnpaidTotal) / yesterdayUnpaidTotal) * 100 : 0
+
+	
+    if (isLoadingOrders || isLoadingToday || isLoadingYesterday || isLoadingTodayUsers || isLoadingYesterdayUsers) return <div>載入中...</div>
 
     return (
         <Row gutter={[16, 16]} className="w-full">
@@ -109,9 +151,9 @@ const SummaryCards = () => {
                             className="h-full w-11/12"
                         >
                             <div className="font-bold text-md">今日新增用戶</div>
-                            <div className="font-bold text-2xl">4,567</div>
-                            <div className="font-bold text-md" style={{ color: colorSuccess }}>
-                                +8.5% 相比昨天
+                            <div className="font-bold text-2xl">{todayNewUsers}</div>
+                            <div className="font-bold text-md" style={{ color: newUserGrowthRate >= 0 ? colorSuccess : colorError }}>
+                                {newUserGrowthRate >= 0 ? '+' : '-'} {newUserGrowthRate.toFixed(2)}% 相比昨天
                             </div>
                         </Flex>
                         <div className="w-1/12">
@@ -131,9 +173,9 @@ const SummaryCards = () => {
                             className="h-full w-11/12"
                         >
                             <div className="font-bold text-md">訂單未出貨</div>
-                            <div className="font-bold text-2xl">67</div>
-                            <div className="font-bold text-md" style={{ color: colorSuccess }}>
-                                +5.5% 相比昨天
+                            <div className="font-bold text-2xl">{unshippedOrders}</div>
+                            <div className="font-bold text-md" style={{ color: unshippedGrowthRate >= 0 ? colorSuccess : colorError }}>
+                                {unshippedGrowthRate >= 0 ? '+' : '-'} {unshippedGrowthRate.toFixed(2)}% 相比昨天
                             </div>
                         </Flex>
                         <div className="w-1/12">
@@ -153,9 +195,9 @@ const SummaryCards = () => {
                             className="h-full w-11/12"
                         >
                             <div className="font-bold text-md">訂單未付款</div>
-                            <div className="font-bold text-2xl">$34,567</div>
-                            <div className="font-bold text-md" style={{ color: colorError }}>
-                                -12.5% 相比昨天
+                            <div className="font-bold text-2xl">${unpaidTotal?.toLocaleString()}</div>
+                            <div className="font-bold text-md" style={{ color: unpaidGrowthRate >= 0 ? colorSuccess : colorError }}>
+                                {unpaidGrowthRate >= 0 ? '+' : '-'} {unpaidGrowthRate.toFixed(2)}% 相比昨天
                             </div>
                         </Flex>
                         <div className="w-1/12">
@@ -179,13 +221,16 @@ const RecentTopSaleProducts = () => {
 				value: weekStart.toISOString(),
 			},
 		],
+		pagination: { mode: 'off' },
 	})
+
+	console.log("data", response?.data)
 
 	const columns = [
 		{
 			title: '商品名稱',
-			dataIndex: ['product', 'name'],
-			key: 'product_name',
+			dataIndex: 'name',
+			key: 'name',
 		},
 		{
 			title: '銷售數量',
@@ -200,27 +245,34 @@ const RecentTopSaleProducts = () => {
 		},
 	]
     
+	// 统计商品销售数据
 	const productData = response?.data?.reduce((acc: any[], order: any) => {
-		if (!order?.product?.id) return acc;
-		
-		const productId = order.product.id
-		const existingProduct = acc.find(
-			(item) => item.product?.id === productId,
-		)
+		// 遍历订单中的每个商品
+		order.items?.forEach((item: any) => {
+			const productId = item?.product_id
+			if (!productId) return
 
-		if (existingProduct) {
-			existingProduct.quantity += order.quantity || 0
-			existingProduct.total_amount += parseFloat(order.total || 0)
-		} else {
-			acc.push({
-				key: productId,
-				product: order.product,
-				quantity: order.quantity || 0,
-				total_amount: parseFloat(order.total || 0),
-			})
-		}
+			const existingProduct = acc.find(p => p.product_id === productId)
+			if (existingProduct) {
+				existingProduct.quantity += item.quantity || 0
+				existingProduct.total_amount += parseFloat(item.total || 0)
+			} else {
+				acc.push({
+					key: productId,
+					product_id: productId,
+					name: item?.name || '未知商品',
+					quantity: item.quantity || 0,
+					total_amount: parseFloat(item.total || 0),
+				})
+			}
+		})
 		return acc
 	}, []) || []
+
+	console.log("productData", productData)
+
+	// 按销售金额排序
+	const sortedProductData = [...productData].sort((a, b) => b.total_amount - a.total_amount)
 
 	if (isLoading) return <div>載入中...</div>
 	return (
@@ -229,7 +281,7 @@ const RecentTopSaleProducts = () => {
 			<p>本週銷售最多的商品</p>
 			<Table
 				columns={columns}
-				dataSource={productData}
+				dataSource={sortedProductData}
 				pagination={false}
 				size="small"
 			/>
