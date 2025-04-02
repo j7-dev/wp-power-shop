@@ -24,7 +24,7 @@ const Welcome = () => {
 	const { display_name: userName } = response?.data || {}
 
 	return (
-		<div>
+		<div className='self-start h-6 pl-2'>
 			<h2>歡迎回來，{userName}</h2>
 		</div>
 	)
@@ -579,11 +579,11 @@ const RecentMonthlySales = () => {
 
 export const Summary = () => {
 	return (
-		<Flex vertical gap="middle">
+		<Flex vertical gap="middle" className="w-full" align='center'>
 			<Welcome />
 			<SummaryCards />
 			<RecentSales />
-            <RecentMonthlySales />
+			<RecentMonthlySales />
 		</Flex>
 	)
 }
