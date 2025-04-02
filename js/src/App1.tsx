@@ -15,12 +15,14 @@ import {
 	DocAccess,
 	Analytics,
 	MediaLibraryPage,
+	ProductList,
 } from '@/pages/admin'
 import { HashRouter, Outlet, Route, Routes } from 'react-router-dom'
 import { resources } from '@/resources'
 import { ConfigProvider } from 'antd'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useEnv } from '@/hooks'
+import axios from 'axios'
 import { BackToWpAdmin } from 'antd-toolkit/wp'
 import {
 	dataProvider,
@@ -31,7 +33,7 @@ import {
 
 function App() {
 	const { bunny_data_provider_result } = useBunny()
-	const { KEBAB, API_URL, AXIOS_INSTANCE } = useEnv()
+	const { KEBAB, API_URL, AXIOS_INSTANCE = axios.create() } = useEnv()
 
 	return (
 		<HashRouter>
@@ -98,6 +100,10 @@ function App() {
 						<Route path="users">
 							<Route index element={<UsersList />} />
 							<Route path="edit/:id" element={<UsersEdit />} />
+						</Route>
+						<Route path="products">
+							<Route index element={<ProductList />} />
+							{/* <Route path="edit/:id" element={<UsersEdit />} /> */}
 						</Route>
 						<Route path="doc-access" element={<DocAccess />} />
 
