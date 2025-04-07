@@ -10,6 +10,7 @@ use Automattic\WooCommerce\Admin\API\Leaderboards;
 use J7\Powerhouse\Domains;
 use J7\Powerhouse\Utils\Compare;
 use J7\Powerhouse\Domains\Report\Revenue\Core\V2Api as RevenueV2Api;
+use J7\PowerShop\Domains\Report\LeaderBoards\DTO\Row;
 
 
 /**
@@ -134,8 +135,8 @@ final class V2Api extends ApiBase {
 				// 前 N 時間區間訂單未付款
 				'orders_count_unpaid_compared'    => Domains\Order\Utils\CRUD::get_order_count_in_range( $compare->after_compared, $compare->before_compared, [ 'pending', 'on-hold' ] ),
 
-				'products'                        => $products,
-				'customers'                       => $customers,
+				'products'                        => self::format_leaderboards( $products ), // phpstan-ignore-line
+				'customers'                       => self::format_leaderboards( $customers ), // phpstan-ignore-line
 				'intervals'                       => self::get_intervals_in_range( $compare->after, $compare->before ),
 			],
 		]
@@ -178,5 +179,39 @@ final class V2Api extends ApiBase {
 		}
 
 		return $intervals_data;
+	}
+
+	/**
+	 * 格式化排行榜
+	 *
+	 * @param \WP_Error|\WP_REST_Response $leaderboards 排行榜
+	 * @return array<array{name: string, count: int, total: float}>
+	 * @throws \Exception 如果排行榜為 WP_Error
+	 */
+	private static function format_leaderboards( $leaderboards ): array {
+
+		if ( \is_wp_error( $leaderboards ) ) {
+			throw new \Exception( $leaderboards->get_error_message() );
+		}
+
+		$leaderboards = $leaderboards->get_data();
+		if ( ! $leaderboards || !is_array( $leaderboards ) ) {
+			return [];
+		}
+
+		$rows = reset( $leaderboards );
+		$rows = $rows['rows'] ?? [];
+
+		if ( ! $rows || !is_array( $rows ) ) {
+			return [];
+		}
+
+		$formatted_leaderboards = [];
+		foreach ( $rows as $row ) {
+			$row_dto                  = new Row( $row );
+			$formatted_leaderboards[] = $row_dto->to_array();
+		}
+
+		return $formatted_leaderboards;
 	}
 }
