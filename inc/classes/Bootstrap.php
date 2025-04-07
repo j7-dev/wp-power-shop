@@ -22,7 +22,7 @@ final class Bootstrap {
 	/** Constructor */
 	public function __construct() {
 		Admin\Entry::instance();
-		// Admin\CPT::instance();
+		Domains\Loader::instance();
 
 		\add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_script' ] );
 		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'frontend_enqueue_script' ]);
