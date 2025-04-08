@@ -30,7 +30,7 @@ export type TQuery = {
 	after: string
 	before: string
 	per_page: number
-	compare_type: 'day'  | 'month' | 'year'
+	compare_type: 'day' | 'week' | 'month' | 'year'
 	compare_value: number
 }
 

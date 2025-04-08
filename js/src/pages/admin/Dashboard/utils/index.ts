@@ -115,3 +115,56 @@ export function getGreetings(
 	// 從 array 中隨機選擇一個
 	return greetings[Math.floor(Math.random() * greetings.length)]
 }
+
+
+export function getLabels(type: 'day' | 'week' | 'month' | 'year'){
+	switch(type){
+		case 'day':
+			return {
+				label: '今日',
+				compareLabel: '相比昨天',
+			}
+			case 'week':
+			return {
+				label: '本週',
+				compareLabel: '相比上週',
+			}
+		case 'month':
+			return {
+				label: '本月',
+				compareLabel: '相比上月',
+			}
+		case 'year':
+			return {
+				label: '今年',
+				compareLabel: '相比去年',
+			}
+		default:
+			return {
+				label: '今日',
+				compareLabel: '相比昨天',
+			}
+	}
+}
+
+
+
+
+export function getLeaderBoardLabels(type: 'products' | 'customers'){
+	switch(type){
+		case 'products':
+			return {
+				title: '商品熱銷',
+				nameLabel: '商品名稱',
+				countLabel: '銷售數量',
+				totalLabel: '總金額',
+			}
+		default:
+			return {
+				title: '顧客消費',
+				nameLabel: '顧客姓名',
+				countLabel: '訂單數量',
+				totalLabel: '總金額',
+			}
+	}
+}

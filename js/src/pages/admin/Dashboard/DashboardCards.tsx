@@ -5,11 +5,12 @@ import { RiMoneyDollarCircleLine } from 'react-icons/ri'
 import { Card, Row, Col, Statistic, StatisticProps } from 'antd'
 import CountUp from 'react-countup'
 import { useDashboard } from '@/pages/admin/Dashboard/hooks'
+import { getLabels } from '@/pages/admin/Dashboard/utils'
 import { useColor, TrendIndicator, cn } from 'antd-toolkit'
 
 const DashboardCards = () => {
 	const { colorPrimary } = useColor()
-	const { dashboard, isFetching } = useDashboard()
+	const { dashboard, isFetching, query } = useDashboard()
 	const {
 		total_sales = 0,
 		total_sales_compared = 0,
@@ -25,12 +26,7 @@ const DashboardCards = () => {
 		<CountUp end={value as number} separator="," />
 	)
 
-	const labels = {
-		label: '今日',
-		compareLabel: '相比昨天',
-	}
-
-	const { label, compareLabel } = labels
+	const { label, compareLabel } = getLabels(query.compare_type)
 
 	const cardData = [
 		{
@@ -73,7 +69,7 @@ const DashboardCards = () => {
 				<Col key={title} xs={24} sm={12} md={12} xl={6}>
 					<Card
 						className={cn(
-							'w-full relative overflow-hidden',
+							'w-full h-full relative overflow-hidden',
 							isFetching ? 'animate-pulse grayscale' : '',
 						)}
 						variant="borderless"

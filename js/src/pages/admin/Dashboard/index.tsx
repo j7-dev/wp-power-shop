@@ -1,5 +1,5 @@
 import { useState, createContext } from 'react'
-import { Flex } from 'antd'
+import { Flex, Row, Col } from 'antd'
 import Welcome from './Welcome'
 import DashboardCards from './DashboardCards'
 import LeaderBoard from './LeaderBoard'
@@ -49,7 +49,14 @@ export const Summary = () => {
 			<Flex vertical gap="middle" className="w-full" align="center">
 				<Welcome />
 				<DashboardCards />
-				<LeaderBoard />
+				<Row gutter={[16, 16]} className="w-full">
+					<Col xs={24} sm={24} md={24} xl={14}>
+						<LeaderBoard type="products" />
+					</Col>
+					<Col xs={24} sm={24} md={24} xl={10}>
+						<LeaderBoard type="customers" />
+					</Col>
+				</Row>
 				<IntervalChart />
 			</Flex>
 		</DashboardContext.Provider>
