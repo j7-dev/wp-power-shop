@@ -108,8 +108,8 @@ final class V2Api extends ApiBase {
 
 		return new \WP_REST_Response(
 		[
-			'status'  => 'success',
-			'message' => 'Hello World',
+			'code'    => 'get_reports_dashboard_stats_callback',
+			'message' => 'success',
 			'data'    => [
 				// 營收
 				'total_sales'                     => Domains\Order\Utils\CRUD::get_order_total_in_range( $compare->after, $compare->before ),

@@ -5,11 +5,8 @@ import dayjs from 'dayjs'
 import { TTotals, TViewTypeProps } from '../types'
 import { cards, tickFilter } from '../index'
 import { round } from 'lodash-es'
-import {
-	CaretUpOutlined,
-	CaretDownOutlined,
-	QuestionCircleOutlined,
-} from '@ant-design/icons'
+import { QuestionCircleOutlined } from '@ant-design/icons'
+import { TrendIndicator } from 'antd-toolkit'
 
 const Default = ({
 	revenueData,
@@ -68,11 +65,6 @@ const Default = ({
 							] as number) || 0
 						: 0
 
-					const isGreater = total > lastYearTotal
-					const percentage = lastYearTotal
-						? round(((total - lastYearTotal) / lastYearTotal) * 100, 2)
-						: '∞'
-
 					const thisYear = revenueData?.intervals?.[0]?.interval?.slice(0, 4)
 					const lastYear = Number(thisYear) - 1
 					return (
@@ -91,20 +83,13 @@ const Default = ({
 							extra={
 								<span className="text-sm text-gray-400">
 									{isLastYear && (
-										<Tooltip
-											title={`${lastYear}年共 ${lastYearTotal.toLocaleString()} ${card.unit}`}
-										>
-											<span
-												className={`inline-flex items-center mr-2 gap-x-1 ${isGreater ? 'text-red-500' : 'text-green-500'}`}
-											>
-												{isGreater ? (
-													<CaretUpOutlined />
-												) : (
-													<CaretDownOutlined />
-												)}
-												{percentage}%
-											</span>
-										</Tooltip>
+										<TrendIndicator
+											tooltipProps={{
+												title: `${lastYear}年共 ${lastYearTotal.toLocaleString()} ${card.unit}`,
+											}}
+											value={total}
+											compareValue={lastYearTotal}
+										/>
 									)}
 									共
 									<Tooltip
@@ -117,7 +102,7 @@ const Default = ({
 									{card.unit}
 								</span>
 							}
-							bordered={false}
+							variant="borderless"
 						>
 							<Line
 								{...config}
