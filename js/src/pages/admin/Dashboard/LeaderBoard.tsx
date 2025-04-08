@@ -1,11 +1,15 @@
 import { Card, Table } from 'antd'
 import { useDashboard } from '@/pages/admin/Dashboard/hooks'
 import { getLabels, getLeaderBoardLabels } from '@/pages/admin/Dashboard/utils'
+import { useWoocommerce } from '@/hooks'
 
 const LeaderBoard = ({ type }: { type: 'products' | 'customers' }) => {
+	const {
+		currency: { symbol },
+	} = useWoocommerce()
 	const { query, dashboard, isFetching } = useDashboard()
 	const { products, customers } = dashboard
-	const { label } = getLabels(query.compare_type)
+	const { label } = getLabels(query)
 	const { title, nameLabel, countLabel, totalLabel } =
 		getLeaderBoardLabels(type)
 
@@ -22,12 +26,12 @@ const LeaderBoard = ({ type }: { type: 'products' | 'customers' }) => {
 		{
 			title: totalLabel,
 			dataIndex: 'total',
-			render: (value: number) => `$${value.toLocaleString()}`,
+			render: (value: number) => `${symbol} ${value.toLocaleString()}`,
 		},
 	]
 
 	return (
-		<Card className="w-full h-full">
+		<Card className="w-full h-full" variant="borderless">
 			<h3 className="text-sm text-gray-400 mb-2">
 				{label}
 				{title}排行榜

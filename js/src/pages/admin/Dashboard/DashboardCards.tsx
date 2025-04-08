@@ -6,9 +6,13 @@ import { Card, Row, Col, Statistic, StatisticProps } from 'antd'
 import CountUp from 'react-countup'
 import { useDashboard } from '@/pages/admin/Dashboard/hooks'
 import { getLabels } from '@/pages/admin/Dashboard/utils'
+import { useWoocommerce } from '@/hooks'
 import { useColor, TrendIndicator, cn } from 'antd-toolkit'
 
 const DashboardCards = () => {
+	const {
+		currency: { symbol },
+	} = useWoocommerce()
 	const { colorPrimary } = useColor()
 	const { dashboard, isFetching, query } = useDashboard()
 	const {
@@ -26,7 +30,7 @@ const DashboardCards = () => {
 		<CountUp end={value as number} separator="," />
 	)
 
-	const { label, compareLabel } = getLabels(query.compare_type)
+	const { label, compareLabel } = getLabels(query)
 
 	const cardData = [
 		{
@@ -82,15 +86,20 @@ const DashboardCards = () => {
 							valueStyle={{ color: colorPrimary }}
 							formatter={formatter}
 							prefix={
-								<div className="text-base mr-2 relative top-0.5">
-									<TrendIndicator
-										tooltipProps={{
-											title: compareLabel,
-										}}
-										value={value}
-										compareValue={compareValue}
-									/>
-								</div>
+								<>
+									<div className="text-base mr-2 relative top-0.5 inline-block">
+										<TrendIndicator
+											tooltipProps={{
+												title: compareLabel,
+											}}
+											value={value}
+											compareValue={compareValue}
+										/>
+									</div>
+									{'營收' === title && (
+										<span className="text-sm text-gray-400">{symbol}</span>
+									)}
+								</>
 							}
 							suffix={<span className="text-sm text-gray-400">{unit}</span>}
 						/>
