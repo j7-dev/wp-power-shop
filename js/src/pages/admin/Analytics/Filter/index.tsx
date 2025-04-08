@@ -1,14 +1,12 @@
 import React from 'react'
 import {
 	DatePicker,
-	TimeRangePickerProps,
 	Button,
 	Select,
 	Form,
 	Checkbox,
 	Tooltip,
 	FormInstance,
-	DatePickerProps,
 	Tag,
 } from 'antd'
 import { useSelect } from '@refinedev/antd'
@@ -19,56 +17,10 @@ import { TQuery } from '../hooks/useRevenue'
 import { AreaChartOutlined, LineChartOutlined } from '@ant-design/icons'
 import { EViewType } from '../types'
 import { defaultSelectProps } from 'antd-toolkit'
+import { RANGE_PRESETS, maxDateRange } from '../utils'
 
 const { RangePicker } = DatePicker
 const { Item } = Form
-
-const RANGE_PRESETS: TimeRangePickerProps['presets'] = [
-	{
-		label: '最近 7 天',
-		value: [dayjs().add(-7, 'd').startOf('day'), dayjs().endOf('day')],
-	},
-	{
-		label: '最近 14 天',
-		value: [dayjs().add(-14, 'd').startOf('day'), dayjs().endOf('day')],
-	},
-	{
-		label: '最近 30 天',
-		value: [dayjs().add(-30, 'd').startOf('day'), dayjs().endOf('day')],
-	},
-	{
-		label: '最近 90 天',
-		value: [dayjs().add(-90, 'd').startOf('day'), dayjs().endOf('day')],
-	},
-	{
-		label: '最近 180 天',
-		value: [dayjs().add(-180, 'd').startOf('day'), dayjs().endOf('day')],
-	},
-	{
-		label: '最近 365 天',
-		value: [dayjs().add(-365, 'd').startOf('day'), dayjs().endOf('day')],
-	},
-	{
-		label: '月初至今',
-		value: [dayjs().startOf('month'), dayjs().endOf('day')],
-	},
-	{ label: '年初至今', value: [dayjs().startOf('year'), dayjs().endOf('day')] },
-]
-
-// Disabled 732 days from the selected date
-const maxDateRange: DatePickerProps['disabledDate'] = (
-	current,
-	{ from, type },
-) => {
-	if (current && current > dayjs().endOf('day')) {
-		return true
-	}
-	if (from) {
-		return Math.abs(current.diff(from, 'days')) >= 366
-	}
-
-	return false
-}
 
 export type TFilterProps = {
 	isFetching: boolean
@@ -144,7 +96,7 @@ const index = ({
 					]}
 				>
 					<RangePicker
-						presets={RANGE_PRESETS}
+						presets={RANGE_PRESETS?.filter(({ label }) => '今天' !== label)}
 						disabledDate={maxDateRange}
 						placeholder={['開始日期', '結束日期']}
 						allowClear={false}

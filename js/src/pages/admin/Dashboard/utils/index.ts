@@ -1,3 +1,7 @@
+import { TQuery } from '../types'
+import dayjs from 'dayjs'
+import { FORMAT } from '@/pages/admin/Analytics/utils'
+
 type TTimeSegment = {
 	key: 'Dawn' | 'Morning' | 'Afternoon' | 'Evening'
 	label: '凌晨' | '上午' | '下午' | '晚上'
@@ -117,33 +121,39 @@ export function getGreetings(
 }
 
 
-export function getLabels(type: 'day' | 'week' | 'month' | 'year'){
-	switch(type){
+export function getLabels(query: TQuery){
+	let compareLabel = ''
+	switch(query.compare_type){
 		case 'day':
-			return {
-				label: '今日',
-				compareLabel: '相比昨天',
-			}
-			case 'week':
-			return {
-				label: '本週',
-				compareLabel: '相比上週',
-			}
+			compareLabel = '相比昨天'
+			break
+		case 'week':
+			compareLabel = '相比上週'
+			break
 		case 'month':
-			return {
-				label: '本月',
-				compareLabel: '相比上月',
-			}
+			compareLabel = '相比上月'
+			break
 		case 'year':
-			return {
-				label: '今年',
-				compareLabel: '相比去年',
-			}
+			compareLabel = '相比去年'
+			break
 		default:
-			return {
-				label: '今日',
-				compareLabel: '相比昨天',
-			}
+			compareLabel = '相比去年'
+	}
+
+
+
+	const before = dayjs(query.before, FORMAT)
+	const after = dayjs(query.after, FORMAT)
+	const startOfDay = dayjs().startOf('day')
+
+	let label = ''
+	if(before.isSame(startOfDay, 'day') && after.isSame(startOfDay, 'day')){
+		label = '今日'
+	}
+
+	return {
+		label,
+		compareLabel,
 	}
 }
 
