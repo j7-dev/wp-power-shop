@@ -94,6 +94,9 @@ const IntervalChart = () => {
 						fontWeight: 'bold',
 					},
 					position: 'right',
+					splitLine: {
+						show: false,
+					},
 				},
 			],
 			series: [
