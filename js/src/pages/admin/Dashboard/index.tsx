@@ -119,10 +119,10 @@ export const Summary = () => {
 				</div>
 				<DashboardCards />
 				<Row gutter={[16, 16]} className="w-full">
-					<Col xs={24} sm={24} md={24} xl={14}>
+					<Col xs={24} sm={24} md={24} xl={12}>
 						<LeaderBoard type="products" />
 					</Col>
-					<Col xs={24} sm={24} md={24} xl={10}>
+					<Col xs={24} sm={24} md={24} xl={12}>
 						<LeaderBoard type="customers" />
 					</Col>
 				</Row>

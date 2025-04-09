@@ -185,6 +185,7 @@ final class V2Api extends ApiBase {
 
 	/**
 	 * 格式化排行榜
+	 * TODO 因為 WC 預設的 get_items 組好的資料沒有 id, 或其他想要的資料 未來可以可以自己實現 get_items 方法
 	 *
 	 * @param \WP_Error|\WP_REST_Response $leaderboards 排行榜
 	 * @return array<array{name: string, count: int, total: float}>

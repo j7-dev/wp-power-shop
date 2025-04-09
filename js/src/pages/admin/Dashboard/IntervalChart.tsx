@@ -1,4 +1,4 @@
-import { Card, Row, Col } from 'antd'
+import { Card, Row, Col, Spin } from 'antd'
 import * as echarts from 'echarts'
 import { useRef, useEffect } from 'react'
 import { useDashboard } from '@/pages/admin/Dashboard/hooks'
@@ -15,7 +15,7 @@ const IntervalChart = () => {
 	const { dashboard, isFetching, query } = useDashboard()
 	const { intervals } = dashboard
 	const { label } = getLabels(query)
-	const { colorPrimary, colorSuccess } = useColor()
+	const { colorPrimary } = useColor()
 	const chartRef = useRef<HTMLDivElement>(null)
 	const chartInstance = useRef<echarts.ECharts>()
 	const { width } = useWindowSize()
@@ -156,7 +156,9 @@ const IntervalChart = () => {
 			<Col xs={24} sm={24} md={24} xl={24}>
 				<Card className="w-full h-full" variant="borderless">
 					<h3 className="text-sm text-gray-400 mb-2">{label}銷售趨勢</h3>
-					<div ref={chartRef} className="w-full h-[35rem]" />
+					<Spin spinning={isFetching}>
+						<div ref={chartRef} className="w-full h-[35rem]" />
+					</Spin>
 				</Card>
 			</Col>
 		</Row>
