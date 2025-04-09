@@ -12,7 +12,6 @@ import {
 	OrdersEdit,
 	UsersList,
 	UsersEdit,
-	DocAccess,
 	Analytics,
 	MediaLibraryPage,
 	ProductList,
@@ -112,7 +111,6 @@ function App() {
 							<Route index element={<ProductList />} />
 							{/* <Route path="edit/:id" element={<UsersEdit />} /> */}
 						</Route>
-						<Route path="doc-access" element={<DocAccess />} />
 
 						<Route path="analytics" element={<Analytics />} />
 
