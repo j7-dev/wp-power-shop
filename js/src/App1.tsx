@@ -93,7 +93,10 @@ function App() {
 							</ConfigProvider>
 						}
 					>
-						<Route index element={<NavigateToResource resource="docs" />} />
+						<Route
+							index
+							element={<NavigateToResource resource="dashboard" />}
+						/>
 						<Route path="dashboard">
 							<Route index element={<Summary />} />
 						</Route>
