@@ -8,7 +8,6 @@ import { HttpError } from '@refinedev/core'
 import { keyLabelMapper } from './utils'
 import { selectedUserIdsAtom } from './atom'
 import { useAtom } from 'jotai'
-import SelectedUser from './SelectedUser'
 import BulkAction from './BulkAction'
 import {
 	useRowSelection,
@@ -16,7 +15,12 @@ import {
 	defaultTableProps,
 	Card,
 } from 'antd-toolkit'
-import { FilterTags, objToCrudFilters, ActionArea } from 'antd-toolkit/refine'
+import {
+	FilterTags,
+	objToCrudFilters,
+	ActionArea,
+	SelectedItem,
+} from 'antd-toolkit/refine'
 
 const UserTableComponent = ({
 	tableProps: overrideTableProps,
@@ -53,18 +57,12 @@ const UserTableComponent = ({
 		onChange: (currentSelectedRowKeys: React.Key[]) => {
 			setSelectedRowKeys(currentSelectedRowKeys)
 
-			/**
-			 * 不在這頁的已選擇用戶
-			 * @type string[]
-			 */
-			const setSelectedUserIdsNotInCurrentPage = selectedUserIds.filter(
+			/** @type string[] 不在這頁的已選擇用戶 */
+			const selectedUserIdsNotInCurrentPage = selectedUserIds.filter(
 				(selectedUserId) => !currentAllKeys.includes(selectedUserId),
 			)
 
-			/**
-			 * 在這頁的已選擇用戶
-			 * @type string[]
-			 */
+			/** @type string[] 在這頁的已選擇用戶 */
 			const currentSelectedRowKeysStringify = currentSelectedRowKeys.map(
 				(key) => key.toString(),
 			)
@@ -72,7 +70,7 @@ const UserTableComponent = ({
 			setSelectedUserIds(() => {
 				// 把這頁的已選用戶加上 不在這頁的已選用戶
 				const newKeys = new Set([
-					...setSelectedUserIdsNotInCurrentPage,
+					...selectedUserIdsNotInCurrentPage,
 					...currentSelectedRowKeysStringify,
 				])
 				return [...newKeys]
@@ -80,9 +78,7 @@ const UserTableComponent = ({
 		},
 	})
 
-	/*
-	 * 換頁時，將已加入的商品全局狀態同步到當前頁面的 selectedRowKeys 狀態
-	 */
+	// 換頁時，將已加入的用戶全局狀態同步到當前頁面的 selectedRowKeys 狀態
 	useEffect(() => {
 		if (!tableProps?.loading) {
 			const filteredKey =
@@ -143,8 +139,9 @@ const UserTableComponent = ({
 							<BulkAction />
 						</div>
 					</div>
-					<SelectedUser
-						user_ids={selectedUserIds}
+					<SelectedItem
+						ids={selectedUserIds}
+						label="用戶"
 						onClear={() => {
 							setSelectedUserIds([])
 						}}
@@ -166,4 +163,3 @@ const UserTableComponent = ({
 
 export const UserTable = memo(UserTableComponent)
 export * from './atom'
-export { default as SelectedUser } from './SelectedUser'
