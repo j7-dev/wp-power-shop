@@ -9,13 +9,12 @@ import { keyLabelMapper } from './utils'
 import { selectedUserIdsAtom } from './atom'
 import { useAtom } from 'jotai'
 import SelectedUser from './SelectedUser'
-import Card from './Card'
-import { Dayjs } from 'dayjs'
 import BulkAction from './BulkAction'
 import {
 	useRowSelection,
 	getDefaultPaginationProps,
 	defaultTableProps,
+	Card,
 } from 'antd-toolkit'
 import { FilterTags, objToCrudFilters, ActionArea } from 'antd-toolkit/refine'
 
