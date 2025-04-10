@@ -1,11 +1,12 @@
 import { useProductsOptions } from '@/hooks'
 import {
-	backordersOptions,
-	stockStatusOptions,
-	statusOptions,
-	dateRelatedFields,
-} from '@/utils'
+	PRODUCT_STATUS,
+	PRODUCT_DATE_FIELDS,
+	BACKORDERS,
+	PRODUCT_STOCK_STATUS,
+} from 'antd-toolkit/wp'
 
+/** 額外 key-value 映射 */
 const extraMapper = {}
 
 const formattedExtraMapper = [
@@ -13,10 +14,10 @@ const formattedExtraMapper = [
 		value: key,
 		label: value,
 	})),
-	...backordersOptions,
-	...stockStatusOptions,
-	...statusOptions,
-	...dateRelatedFields,
+	...BACKORDERS,
+	...PRODUCT_STOCK_STATUS,
+	...PRODUCT_STATUS,
+	...PRODUCT_DATE_FIELDS,
 ]
 
 export const useValueLabelMapper = () => {

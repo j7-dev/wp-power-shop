@@ -1,17 +1,8 @@
 import { memo } from 'react'
-import {
-	FormProps,
-	Form,
-	Input,
-	Button,
-	FormInstance,
-	Select,
-	DatePicker,
-} from 'antd'
+import { FormProps, Form, Input, Button, FormInstance, Select } from 'antd'
 import { UndoOutlined, SearchOutlined } from '@ant-design/icons'
 import { useOptions } from '@/pages/admin/Users/List/hooks'
 import { defaultSelectProps } from 'antd-toolkit'
-import dayjs from 'dayjs'
 
 export type TFilterValues = {
 	search?: string
@@ -23,7 +14,6 @@ export type TFilterValues = {
 
 const { Item } = Form
 
-const { RangePicker } = DatePicker
 const Filter = ({
 	formProps,
 	initialValues,

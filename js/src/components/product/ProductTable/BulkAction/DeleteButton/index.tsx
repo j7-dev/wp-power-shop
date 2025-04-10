@@ -5,12 +5,12 @@ import { DeleteOutlined } from '@ant-design/icons'
 import { trim } from 'lodash-es'
 import { useDeleteMany } from '@refinedev/core'
 import { useAtom } from 'jotai'
-import { selectedUserIdsAtom } from '@/components/user/UserTable/atom'
+import { selectedProductIdsAtom } from '@/components/product/ProductTable/atom'
 
-const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪用戶'
+const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪商品'
 
 const DeleteButton = () => {
-	const [selectedUserIds, setSelectedUserIds] = useAtom(selectedUserIdsAtom)
+	const [ids, setIds] = useAtom(selectedProductIdsAtom)
 	const { show, modalProps, close } = useModal()
 	const [value, setValue] = useState('')
 	const { mutate: deleteMany, isLoading: isDeleting } = useDeleteMany()
@@ -22,16 +22,16 @@ const DeleteButton = () => {
 				danger
 				icon={<DeleteOutlined />}
 				onClick={show}
-				disabled={!selectedUserIds.length}
+				disabled={!ids.length}
 				className="m-0"
 			>
-				批次刪除用戶
-				{selectedUserIds.length ? ` (${selectedUserIds.length})` : ''}
+				批次刪除商品
+				{ids.length ? ` (${ids.length})` : ''}
 			</Button>
 
 			<Modal
 				{...modalProps}
-				title={`刪除用戶 ${selectedUserIds.map((id) => `#${id}`).join(', ')}`}
+				title={`刪除商品 ${ids.map((id) => `#${id}`).join(', ')}`}
 				centered
 				okButtonProps={{
 					danger: true,
@@ -42,12 +42,12 @@ const DeleteButton = () => {
 				onOk={() => {
 					deleteMany(
 						{
-							resource: 'users',
-							ids: selectedUserIds as string[],
+							resource: 'products',
+							ids,
 							mutationMode: 'optimistic',
 							successNotification: (data, ids, resource) => {
 								return {
-									message: `用戶 ${ids?.map((id) => `#${id}`).join(', ')} 已刪除成功`,
+									message: `商品 ${ids?.map((id) => `#${id}`).join(', ')} 已刪除成功`,
 									type: 'success',
 								}
 							},
@@ -55,7 +55,7 @@ const DeleteButton = () => {
 						{
 							onSuccess: () => {
 								close()
-								setSelectedUserIds([])
+								setIds([])
 							},
 						},
 					)
@@ -67,10 +67,9 @@ const DeleteButton = () => {
 					className="mb-2"
 					description={
 						<>
-							<p>刪除用戶影響範圍包含:</p>
+							<p>刪除商品影響範圍包含:</p>
 							<ol className="pl-6">
-								<li>該用戶的訂單會變為訪客訂單</li>
-								<li>第三方外掛，可能會因為找不到用戶而報錯</li>
+								<li>第三方外掛，可能會因為找不到商品而報錯</li>
 							</ol>
 						</>
 					}

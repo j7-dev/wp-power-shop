@@ -1,3 +1,3 @@
 import { atom } from 'jotai'
 
-export const productIdsAtom = atom<string[]>([])
+export const selectedProductIdsAtom = atom<string[]>([])

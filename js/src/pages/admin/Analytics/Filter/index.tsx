@@ -12,12 +12,12 @@ import {
 import { useSelect } from '@refinedev/antd'
 import dayjs from 'dayjs'
 import { TProductSelectOption } from '../types'
-import { productTypes } from '@/utils'
 import { TQuery } from '../hooks/useRevenue'
 import { AreaChartOutlined, LineChartOutlined } from '@ant-design/icons'
 import { EViewType } from '../types'
-import { defaultSelectProps } from 'antd-toolkit'
 import { RANGE_PRESETS, maxDateRange } from '../utils'
+import { defaultSelectProps } from 'antd-toolkit'
+import { PRODUCT_TYPES } from 'antd-toolkit/wp'
 
 const { RangePicker } = DatePicker
 const { Item } = Form
@@ -113,7 +113,7 @@ const index = ({
 							const option = productSelectOptions.find(
 								(productOption) => productOption?.id === value,
 							)
-							const productType = productTypes.find(
+							const productType = PRODUCT_TYPES.find(
 								(pt) => pt?.value === option?.type,
 							)
 							return (

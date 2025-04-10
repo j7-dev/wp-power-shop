@@ -8,14 +8,13 @@ import {
 	useColumns,
 } from '@/components/product/ProductTable/hooks'
 import { useProductsOptions } from '@/hooks'
-import { productIdsAtom } from '@/components/product/ProductTable/atom'
+import { selectedProductIdsAtom } from '@/components/product/ProductTable/atom'
 import { useAtom } from 'jotai'
 import BulkAction from '@/components/product/ProductTable/BulkAction'
 import {
 	useRowSelection,
 	defaultTableProps,
 	getDefaultPaginationProps,
-	useEnv,
 	Card,
 } from 'antd-toolkit'
 import { productKeyLabelMapper } from 'antd-toolkit/wp'
@@ -35,8 +34,9 @@ const ProductTableComponent = ({
 }: {
 	cardProps?: CardProps & { showCard?: boolean }
 }) => {
-	const { BOUND_META_KEY } = useEnv()
-	const [selectedProductIds, setSelectedProductIds] = useAtom(productIdsAtom)
+	const [selectedProductIds, setSelectedProductIds] = useAtom(
+		selectedProductIdsAtom,
+	)
 
 	const { searchFormProps, tableProps, filters } = useTable<
 		TProductRecord,
@@ -48,7 +48,7 @@ const ProductTableComponent = ({
 		filters: {
 			initial: objToCrudFilters(initialFilteredValues),
 			permanent: objToCrudFilters({
-				meta_keys: [BOUND_META_KEY],
+				meta_keys: [],
 			}),
 			defaultBehavior: 'replace',
 		},
