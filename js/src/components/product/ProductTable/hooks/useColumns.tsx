@@ -1,6 +1,7 @@
 import { Table, TableProps, Tag } from 'antd'
 import { TProductRecord, TProductVariation } from '@/pages/admin/Product/types'
 import { useWindowSize } from '@uidotdev/usehooks'
+import { ProductActions } from '@/components/product/ProductTable/ProductActions'
 import {
 	ProductName,
 	ProductPrice,
@@ -9,6 +10,7 @@ import {
 	ProductType,
 	ProductStock,
 	POST_STATUS,
+	isVariation,
 } from 'antd-toolkit/wp'
 
 export const useColumns = () => {
@@ -76,6 +78,16 @@ export const useColumns = () => {
 			title: '商品分類 / 商品標籤',
 			dataIndex: 'category_ids',
 			render: (_, record) => <ProductCat record={record} />,
+		},
+		{
+			title: '操作',
+			dataIndex: '_actions',
+			align: 'center',
+			width: 100,
+			render: (_, record) =>
+				!isVariation(record?.type as string) && (
+					<ProductActions record={record} />
+				),
 		},
 	]
 
