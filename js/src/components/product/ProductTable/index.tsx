@@ -17,7 +17,7 @@ import {
 	getDefaultPaginationProps,
 	Card,
 } from 'antd-toolkit'
-import { productKeyLabelMapper } from 'antd-toolkit/wp'
+import { productKeyLabelMapper, isVariation } from 'antd-toolkit/wp'
 import {
 	ProductFilter,
 	TProductFilterProps,
@@ -66,7 +66,7 @@ const ProductTableComponent = ({
 	const { rowSelection, setSelectedRowKeys } = useRowSelection<TProductRecord>({
 		getCheckboxProps: (record) => {
 			// 只有可變商品可選，變體不可選
-			const isVariationProduct = record?.type?.includes('variation')
+			const isVariationProduct = isVariation(record?.type)
 			return {
 				disabled: !!isVariationProduct,
 				className: isVariationProduct ? 'tw-hidden' : '',
