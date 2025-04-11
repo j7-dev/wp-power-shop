@@ -5,12 +5,13 @@ import { DeleteOutlined } from '@ant-design/icons'
 import { trim } from 'lodash-es'
 import { useDeleteMany } from '@refinedev/core'
 import { useAtom } from 'jotai'
-import { selectedProductIdsAtom } from '@/components/product/ProductTable/atom'
+import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 
 const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪商品'
 
 const DeleteButton = () => {
-	const [ids, setIds] = useAtom(selectedProductIdsAtom)
+	const [products, setProducts] = useAtom(selectedProductsAtom)
+	const ids = products.map((product) => product.id)
 	const { show, modalProps, close } = useModal()
 	const [value, setValue] = useState('')
 	const { mutate: deleteMany, isLoading: isDeleting } = useDeleteMany()
@@ -55,7 +56,7 @@ const DeleteButton = () => {
 						{
 							onSuccess: () => {
 								close()
-								setIds([])
+								setProducts([])
 							},
 						},
 					)

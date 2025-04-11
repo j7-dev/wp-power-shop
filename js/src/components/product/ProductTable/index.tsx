@@ -8,7 +8,7 @@ import {
 	useColumns,
 } from '@/components/product/ProductTable/hooks'
 import { useProductsOptions } from '@/hooks'
-import { selectedProductIdsAtom } from '@/components/product/ProductTable/atom'
+import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 import { useAtom } from 'jotai'
 import BulkAction from '@/components/product/ProductTable/BulkAction'
 import {
@@ -34,9 +34,8 @@ const ProductTableComponent = ({
 }: {
 	cardProps?: CardProps & { showCard?: boolean }
 }) => {
-	const [selectedProductIds, setSelectedProductIds] = useAtom(
-		selectedProductIdsAtom,
-	)
+	const [selectedProducts, setSelectedProducts] = useAtom(selectedProductsAtom)
+	const selectedProductIds = selectedProducts.map((product) => product.id)
 
 	const { searchFormProps, tableProps, filters } = useTable<
 		TProductRecord,
@@ -66,7 +65,7 @@ const ProductTableComponent = ({
 	const { rowSelection, setSelectedRowKeys } = useRowSelection<TProductRecord>({
 		getCheckboxProps: (record) => {
 			// 只有可變商品可選，變體不可選
-			const isVariationProduct = isVariation(record?.type)
+			const isVariationProduct = isVariation(record?.type as string)
 			return {
 				disabled: !!isVariationProduct,
 				className: isVariationProduct ? 'tw-hidden' : '',
@@ -75,21 +74,29 @@ const ProductTableComponent = ({
 		onChange: (currentSelectedRowKeys: React.Key[]) => {
 			setSelectedRowKeys(currentSelectedRowKeys)
 
-			/** @type string[] 不在這頁的已選擇商品 */
-			const selectedProductIdsNotInCurrentPage = selectedProductIds.filter(
-				(selectedProductId) => !currentAllKeys.includes(selectedProductId),
+			/** @type TProductRecord[] 不在這頁的已選擇商品 */
+			const selectedProductsNotInCurrentPage = selectedProducts.filter(
+				({ id }) => !currentAllKeys.includes(id),
 			)
 
-			/** @type string[] 在這頁的已選擇商品 */
-			const currentSelectedRowKeysStringify = currentSelectedRowKeys.map(
+			/** @type string[] 在這頁的已選擇商品 ids */
+			const selectedProductIdsInCurrentPage = currentSelectedRowKeys.map(
 				(key) => key.toString(),
 			)
 
-			setSelectedProductIds(() => {
+			const selectedProductsInCurrentPage =
+				tableProps?.dataSource?.reduce((acc, record) => {
+					if (selectedProductIdsInCurrentPage.includes(record.id)) {
+						acc.push(record)
+					}
+					return acc
+				}, [] as TProductRecord[]) || []
+
+			setSelectedProducts(() => {
 				// 把這頁的已選商品加上 不在這頁的已選商品
 				const newKeys = new Set([
-					...selectedProductIdsNotInCurrentPage,
-					...currentSelectedRowKeysStringify,
+					...selectedProductsNotInCurrentPage,
+					...selectedProductsInCurrentPage,
 				])
 				return [...newKeys]
 			})
@@ -111,14 +118,14 @@ const ProductTableComponent = ({
 
 	useEffect(() => {
 		// 如果清空已選擇的用戶，連帶清空 selectedRowKeys (畫面上的打勾)
-		if (selectedProductIds.length === 0) {
+		if (selectedProducts.length === 0) {
 			setSelectedRowKeys([])
 		}
-	}, [selectedProductIds.length])
+	}, [selectedProducts.length])
 
 	useEffect(() => {
 		// 剛載入組件時，清空已選擇的用戶
-		setSelectedProductIds([])
+		setSelectedProducts([])
 	}, [])
 
 	const columns = useColumns()
@@ -159,27 +166,21 @@ const ProductTableComponent = ({
 					}}
 				/>
 			</Card>
-			{!!selectedProductIds.length && (
+			{!!selectedProducts.length && (
 				<ActionArea>
-					<div className="flex gap-x-6 justify-between">
-						<div>
-							<label className="tw-block mb-2">批次操作</label>
-							<BulkAction />
-						</div>
-					</div>
+					<BulkAction />
 					<SelectedItem
 						ids={selectedProductIds}
 						label="商品"
 						onClear={() => {
-							setSelectedProductIds([])
+							setSelectedProducts([])
 						}}
 						onSelected={() => {
 							const searchForm = searchFormProps?.form
 							if (!searchForm) return
 							searchForm.resetFields()
 							searchForm.setFieldsValue({
-								// TODO
-								// include: selectedProductIds,
+								include: selectedProductIds,
 							})
 							searchForm.submit()
 						}}

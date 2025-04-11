@@ -1,13 +1,11 @@
 <?php
-/**
- * Base
- */
 
 declare (strict_types = 1);
 
 namespace J7\PowerShop\Utils;
 
 use J7\Powerhouse\Utils\Base as PowerhouseUtils;
+use J7\Powerhouse\Domains\Option\Core\WC_Settings;
 
 /**
  * Class Utils
@@ -24,6 +22,10 @@ abstract class Base {
 	 * @return array{
 	 *  countries: array<string, string>,
 	 *  currency: array{slug: string, symbol: string},
+	 *  product_taxonomies: array<array{value:string, label:string}>,
+	 *  notify_low_stock_amount: int,
+	 *  dimension_unit: string,
+	 *  weight_unit: string,
 	 * }
 	 */
 	public static function get_woocommerce_settings(): array {
@@ -33,13 +35,19 @@ abstract class Base {
 
 		$countries = \WC()->countries->get_countries();
 		$currency  = \get_option( 'woocommerce_currency', 'TWD' );
+
+		$wc_settings = WC_Settings::instance();
+
 		return [
-			'countries'          => $countries,
-			'currency'           => [
+			'countries'               => $countries,
+			'currency'                => [
 				'slug'   => $currency,
 				'symbol' => html_entity_decode( \get_woocommerce_currency_symbol($currency) ),
 			],
-			'product_taxonomies' => PowerhouseUtils::get_taxonomy_options(),
+			'product_taxonomies'      => PowerhouseUtils::get_taxonomy_options(),
+			'notify_low_stock_amount' => (int) $wc_settings->notify_low_stock_amount,
+			'dimension_unit'          => $wc_settings->dimension_unit,
+			'weight_unit'             => $wc_settings->weight_unit,
 		];
 	}
 }

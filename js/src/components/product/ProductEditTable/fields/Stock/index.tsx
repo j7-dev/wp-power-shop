@@ -1,0 +1,63 @@
+import { Form, InputNumber, Select, Input } from 'antd'
+import { useWoocommerce } from '@/hooks'
+import { Switch } from 'antd-toolkit'
+import { BOOLEAN_OPTIONS, PRODUCT_STOCK_STATUS } from 'antd-toolkit/wp'
+
+const { Item } = Form
+
+export const Stock = ({ index }: { index: number }) => {
+	const { notify_low_stock_amount } = useWoocommerce()
+	const form = Form.useFormInstance()
+	const watchManageStock = Form.useWatch([index, 'manage_stock'], form)
+	const enableStockManagement = watchManageStock === 'yes'
+	return (
+		<div className="grid grid-cols-2 gap-x-2">
+			<Item name={[index, 'backorders']} label="允許無庫存下單">
+				<Select
+					size="small"
+					className="w-full"
+					options={[
+						{ label: '是，且通知顧客', value: 'notify' },
+						...BOOLEAN_OPTIONS,
+					]}
+					allowClear
+				/>
+			</Item>
+			<Item name={[index, 'stock_status']} label="庫存狀態">
+				<Select
+					size="small"
+					className="w-full"
+					options={PRODUCT_STOCK_STATUS}
+					allowClear
+				/>
+			</Item>
+			<Item name={[index, 'sku']} label="貨號">
+				<Input className="w-full" size="small" allowClear />
+			</Item>
+			<Switch
+				formItemProps={{
+					name: [index, 'manage_stock'],
+					label: '管理庫存',
+				}}
+				switchProps={{
+					size: 'small',
+				}}
+			/>
+
+			{enableStockManagement && (
+				<>
+					<Item name={[index, 'stock_quantity']} label="庫存數量">
+						<InputNumber size="small" className="w-full" />
+					</Item>
+					<Item name={[index, 'low_stock_amount']} label="低庫存臨界值">
+						<InputNumber
+							size="small"
+							placeholder={`全店門檻(${notify_low_stock_amount})`}
+							className="w-full"
+						/>
+					</Item>
+				</>
+			)}
+		</div>
+	)
+}

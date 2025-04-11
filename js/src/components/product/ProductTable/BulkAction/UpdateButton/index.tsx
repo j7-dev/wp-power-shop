@@ -1,20 +1,24 @@
 import { useState } from 'react'
 import { Button, Space, Select, Form } from 'antd'
 import { useUpdateMany } from '@refinedev/core'
-import { useAtom } from 'jotai'
-import { selectedProductIdsAtom } from '@/components/product/ProductTable/atom'
-import { PRODUCT_STATUS } from 'antd-toolkit/wp'
-
+import { useModal } from '@refinedev/antd'
+import { useAtomValue } from 'jotai'
+import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
+import ModalForm from '@/components/product/ProductTable/BulkAction/UpdateButton/ModalForm'
+import { PRODUCT_STATUS, PRODUCT_CATALOG_VISIBILITIES } from 'antd-toolkit/wp'
 const { Item } = Form
 
-type TFormValues = {
-	status?: string
+type TSimpleFormValues = {
+	catalog_visibility?: (typeof PRODUCT_CATALOG_VISIBILITIES)[number]['value']
+	status?: (typeof PRODUCT_STATUS)[number]['value']
 }
 
 const UpdateButton = () => {
-	const [form] = Form.useForm<TFormValues>()
-	const [ids, setIds] = useAtom(selectedProductIdsAtom)
+	const [form] = Form.useForm<TSimpleFormValues>()
+	const products = useAtomValue(selectedProductsAtom)
+	const ids = products.map((product) => product.id)
 	const [canUpdate, setCanUpdate] = useState(false)
+	const { show, modalProps } = useModal()
 
 	const { mutate, isLoading } = useUpdateMany({
 		resource: 'products',
@@ -34,38 +38,59 @@ const UpdateButton = () => {
 		})
 	}
 
+	// 用來判斷是否可以按下修改按鈕
 	const handleValuesChange = (
-		changedValues: TFormValues,
-		allValues: TFormValues,
+		changedValues: TSimpleFormValues,
+		allValues: TSimpleFormValues,
 	) => {
 		const keys = Object.keys(allValues).filter(
-			(key) => !!allValues[key as keyof TFormValues],
+			(key) => !!allValues[key as keyof TSimpleFormValues],
 		)
 		setCanUpdate(keys.length > 0)
 	}
 
 	return (
-		<Form form={form} onValuesChange={handleValuesChange}>
-			<Space.Compact>
-				<Item name={['status']} noStyle>
-					<Select
-						placeholder="發佈狀態"
-						className="w-40"
-						options={PRODUCT_STATUS}
-						allowClear
-					/>
-				</Item>
-				<Button
-					color="primary"
-					variant="solid"
-					loading={isLoading}
-					onClick={handleUpdate}
-					disabled={!canUpdate}
-				>
-					批量修改
-				</Button>
-			</Space.Compact>
-		</Form>
+		<>
+			<Form layout="vertical" form={form} onValuesChange={handleValuesChange}>
+				<div className="flex gap-x-2">
+					<Space.Compact block>
+						<Item
+							name={['catalog_visibility']}
+							label="商品可見度"
+							className="mb-0"
+						>
+							<Select
+								className="w-48"
+								options={PRODUCT_CATALOG_VISIBILITIES}
+								allowClear
+							/>
+						</Item>
+						<Item name={['status']} label="發佈狀態" className="mb-0">
+							<Select className="w-32" options={PRODUCT_STATUS} allowClear />
+						</Item>
+					</Space.Compact>
+					<Space.Compact>
+						<Item label=" " className="mb-0">
+							<Button
+								color="primary"
+								variant="solid"
+								loading={isLoading}
+								onClick={handleUpdate}
+								disabled={!canUpdate}
+							>
+								快速修改
+							</Button>
+						</Item>
+						<Item label=" " className="mb-0">
+							<Button color="primary" variant="filled" onClick={show}>
+								批量修改
+							</Button>
+						</Item>
+					</Space.Compact>
+				</div>
+			</Form>
+			<ModalForm modalProps={modalProps} />
+		</>
 	)
 }
 

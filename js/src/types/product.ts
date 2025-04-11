@@ -11,4 +11,7 @@ export type TWoocommerce = {
 		value: string
 		label: string
 	}[]
+	notify_low_stock_amount: number
+	dimension_unit: string
+	weight_unit: string
 }
