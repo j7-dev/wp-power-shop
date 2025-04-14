@@ -3,10 +3,10 @@ import { PRODUCT_STATUS } from 'antd-toolkit/wp'
 
 const { Item } = Form
 
-export const Status = ({ index }: { index: number }) => {
+export const Status = ({ id }: { id: string }) => {
 	return (
 		<>
-			<Item name={[index, 'status']} label="發佈狀態">
+			<Item name={[id, 'status']} label="發佈狀態">
 				<Select
 					size="small"
 					className="w-full"
@@ -14,7 +14,7 @@ export const Status = ({ index }: { index: number }) => {
 					allowClear
 				/>
 			</Item>
-			<Item name={[index, 'catalog_visibility']} label="可見度">
+			<Item name={[id, 'catalog_visibility']} label="可見度">
 				<Select
 					size="small"
 					className="w-full"

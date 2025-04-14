@@ -5,14 +5,14 @@ import { BOOLEAN_OPTIONS, PRODUCT_STOCK_STATUS } from 'antd-toolkit/wp'
 
 const { Item } = Form
 
-export const Stock = ({ index }: { index: number }) => {
+export const Stock = ({ id }: { id: string }) => {
 	const { notify_low_stock_amount } = useWoocommerce()
 	const form = Form.useFormInstance()
-	const watchManageStock = Form.useWatch([index, 'manage_stock'], form)
+	const watchManageStock = Form.useWatch([id, 'manage_stock'], form)
 	const enableStockManagement = watchManageStock === 'yes'
 	return (
 		<div className="grid grid-cols-2 gap-x-2">
-			<Item name={[index, 'backorders']} label="允許無庫存下單">
+			<Item name={[id, 'backorders']} label="允許無庫存下單">
 				<Select
 					size="small"
 					className="w-full"
@@ -23,7 +23,7 @@ export const Stock = ({ index }: { index: number }) => {
 					allowClear
 				/>
 			</Item>
-			<Item name={[index, 'stock_status']} label="庫存狀態">
+			<Item name={[id, 'stock_status']} label="庫存狀態">
 				<Select
 					size="small"
 					className="w-full"
@@ -31,12 +31,12 @@ export const Stock = ({ index }: { index: number }) => {
 					allowClear
 				/>
 			</Item>
-			<Item name={[index, 'sku']} label="貨號">
+			<Item name={[id, 'sku']} label="貨號">
 				<Input className="w-full" size="small" allowClear />
 			</Item>
 			<Switch
 				formItemProps={{
-					name: [index, 'manage_stock'],
+					name: [id, 'manage_stock'],
 					label: '管理庫存',
 				}}
 				switchProps={{
@@ -46,10 +46,10 @@ export const Stock = ({ index }: { index: number }) => {
 
 			{enableStockManagement && (
 				<>
-					<Item name={[index, 'stock_quantity']} label="庫存數量">
+					<Item name={[id, 'stock_quantity']} label="庫存數量">
 						<InputNumber size="small" className="w-full" />
 					</Item>
-					<Item name={[index, 'low_stock_amount']} label="低庫存臨界值">
+					<Item name={[id, 'low_stock_amount']} label="低庫存臨界值">
 						<InputNumber
 							size="small"
 							placeholder={`全店門檻(${notify_low_stock_amount})`}

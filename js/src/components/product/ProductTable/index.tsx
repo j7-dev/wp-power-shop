@@ -47,7 +47,7 @@ const ProductTableComponent = ({
 		filters: {
 			initial: objToCrudFilters(initialFilteredValues),
 			permanent: objToCrudFilters({
-				meta_keys: [],
+				meta_keys: ['_variation_description'],
 			}),
 			defaultBehavior: 'replace',
 		},

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button, Space, Select, Form } from 'antd'
+import { ArrowsAltOutlined } from '@ant-design/icons'
 import { useUpdateMany } from '@refinedev/core'
 import { useModal } from '@refinedev/antd'
 import { useAtomValue } from 'jotai'
@@ -68,8 +69,6 @@ const UpdateButton = () => {
 						<Item name={['status']} label="發佈狀態" className="mb-0">
 							<Select className="w-32" options={PRODUCT_STATUS} allowClear />
 						</Item>
-					</Space.Compact>
-					<Space.Compact>
 						<Item label=" " className="mb-0">
 							<Button
 								color="primary"
@@ -81,12 +80,17 @@ const UpdateButton = () => {
 								快速修改
 							</Button>
 						</Item>
-						<Item label=" " className="mb-0">
-							<Button color="primary" variant="filled" onClick={show}>
-								批量修改
-							</Button>
-						</Item>
 					</Space.Compact>
+					<Item label=" " className="mb-0">
+						<Button
+							color="primary"
+							variant="filled"
+							onClick={show}
+							icon={<ArrowsAltOutlined />}
+						>
+							批量修改
+						</Button>
+					</Item>
 				</div>
 			</Form>
 			<ModalForm modalProps={modalProps} />

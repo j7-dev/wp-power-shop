@@ -4,12 +4,8 @@ import { useAtomValue } from 'jotai'
 import { useUpdateMany } from '@refinedev/core'
 import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 import { ProductEditTable } from '@/components/product'
-import { PRODUCT_STATUS, PRODUCT_CATALOG_VISIBILITIES } from 'antd-toolkit/wp'
-
-type TFormValues = {
-	catalog_visibility?: (typeof PRODUCT_CATALOG_VISIBILITIES)[number]['value']
-	status?: (typeof PRODUCT_STATUS)[number]['value']
-}
+import { TFormValues } from '@/components/product/ProductEditTable/types'
+import { TProductRecord } from '@/pages/admin/Product/types'
 
 const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
 	const products = useAtomValue(selectedProductsAtom)
@@ -17,22 +13,26 @@ const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
 	const [form] = Form.useForm<TFormValues>()
 	const [showTable, setShowTable] = useState(false)
 
+	// 虛擬欄位，因為 Table 組件使用虛擬列表，只會 render 部分的欄位，如果用 form.getFieldsValue() 會抓不到所有欄位值，因此使用這個欄位紀錄變化值
+	const [virtualFields, setVirtualFields] = useState<TProductRecord[]>([])
+
 	const { mutate, isLoading } = useUpdateMany({
 		resource: 'products',
 	})
 
 	const handleUpdate = () => {
-		const values = form.getFieldsValue()
-		mutate({
-			ids,
-			values,
-			successNotification: (data) => {
-				return {
-					message: `商品 ${ids?.map((id: string) => `#${id}`).join(', ')} 已修改成功`,
-					type: 'success',
-				}
-			},
-		})
+		console.log('⭐ virtualFields:', virtualFields)
+
+		// mutate({
+		// 	ids,
+		// 	values,
+		// 	successNotification: (data) => {
+		// 		return {
+		// 			message: `商品 ${ids?.map((id: string) => `#${id}`).join(', ')} 已修改成功`,
+		// 			type: 'success',
+		// 		}
+		// 	},
+		// })
 	}
 
 	// 用來判斷是否可以按下修改按鈕
@@ -49,6 +49,7 @@ const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
 	useEffect(() => {
 		const delay = setTimeout(() => {
 			setShowTable(!!modalProps.open)
+			setVirtualFields(products)
 		}, 500)
 		return () => clearTimeout(delay)
 	}, [modalProps.open])
@@ -65,7 +66,13 @@ const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
 			confirmLoading={isLoading}
 		>
 			{!showTable && <div>資料準備中...</div>}
-			{showTable && <ProductEditTable products={products} />}
+			{showTable && (
+				<ProductEditTable
+					form={form}
+					virtualFields={virtualFields}
+					setVirtualFields={setVirtualFields}
+				/>
+			)}
 		</Modal>
 	)
 }
