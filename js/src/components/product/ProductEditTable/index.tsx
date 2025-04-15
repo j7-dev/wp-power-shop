@@ -136,9 +136,12 @@ const ProductEditTableComponent = ({
 					value={syncModeEnabled}
 					onChange={setSyncModeEnabled}
 					size="small"
+					className="[&.ant-switch-checked]:bg-red-500 [&.ant-switch-checked]:hover:bg-red-400"
 				/>
 				{!syncModeEnabled && (
-					<label>啟用同步修改，所有欄位修改，將套用至所有已選取的商品</label>
+					<label>
+						啟用同步修改模式，所有欄位修改，將套用至所有已選取的商品
+					</label>
 				)}
 				{syncModeEnabled && (
 					<label className="text-red-500 font-bold">
