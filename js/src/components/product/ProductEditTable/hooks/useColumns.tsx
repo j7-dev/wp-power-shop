@@ -9,6 +9,7 @@ import {
 	Stock,
 	PurchaseNote,
 	Other,
+	Taxonomy,
 } from '@/components/product/ProductEditTable/fields'
 import {
 	ProductName,
@@ -31,7 +32,7 @@ export const useColumns = () => {
 		{
 			title: '商品名稱',
 			dataIndex: 'name',
-			width: 100,
+			width: 160,
 			fixed: (width || 400) > 768 ? 'left' : undefined,
 			render: (_, record) => (
 				<>
@@ -79,6 +80,13 @@ export const useColumns = () => {
 			render: (_, { id }) => <Size id={id} />,
 		},
 		{
+			title: '分類/標籤',
+			dataIndex: 'category_ids',
+			width: 120,
+			render: (_, { id, type }) =>
+				isVariation(type as string) ? null : <Taxonomy id={id} />,
+		},
+		{
 			title: '購買備註',
 			dataIndex: 'note',
 			width: 100,
@@ -92,7 +100,7 @@ export const useColumns = () => {
 		{
 			title: '其他',
 			dataIndex: 'other',
-			width: 100,
+			width: 80,
 			render: (_, { id, type }) => (
 				<Other id={id} type={type as TProductType} />
 			),

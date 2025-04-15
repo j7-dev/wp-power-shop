@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Power Shop | 讓電商管理更便利
- * Plugin URI:        https://github.com/j7-dev/wp-power-shop.git
+ * Plugin URI:        https://powerhouse.cloud/power-shop/
  * Description:       優化 Woocommerce 操作介面，更人性化的方式管理電商平台
  * Version:           0.0.1
  * Requires at least: 5.7
@@ -63,7 +63,7 @@ final class Plugin {
 				'app_name'    => 'Power Shop',
 				'github_repo' => 'https://github.com/j7-dev/wp-power-shop',
 				'callback'    => [ Bootstrap::class, 'instance' ],
-				'lc' => false,
+				'lc'          => false,
 			]
 		);
 	}

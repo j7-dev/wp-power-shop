@@ -1,4 +1,4 @@
-import { Form, InputNumber, Select, Input } from 'antd'
+import { Form, InputNumber, Select } from 'antd'
 import { useWoocommerce } from '@/hooks'
 import { Switch } from 'antd-toolkit'
 import { BOOLEAN_OPTIONS, PRODUCT_STOCK_STATUS } from 'antd-toolkit/wp'
@@ -30,9 +30,6 @@ export const Stock = ({ id }: { id: string }) => {
 					options={PRODUCT_STOCK_STATUS}
 					allowClear
 				/>
-			</Item>
-			<Item name={[id, 'sku']} label="貨號">
-				<Input className="w-full" size="small" allowClear />
 			</Item>
 			<Switch
 				formItemProps={{

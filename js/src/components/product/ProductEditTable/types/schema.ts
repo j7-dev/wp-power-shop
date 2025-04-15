@@ -8,27 +8,47 @@ export const ZFormValues = z.object({
 	id: z.string(),
 	type: z.enum(PRODUCT_TYPES.map(type => type.value) as [string, ...string[]]),
 	parent_id: z.string(),
-  backorders: ZBackorders.optional(),
-  catalog_visibility: z.enum(PRODUCT_CATALOG_VISIBILITIES.map(visibility => visibility.value) as [string, ...string[]]),
-  featured: ZYesNo.optional(),
-  height: z.string().optional(),
-  length: z.string().optional(),
-  manage_stock: ZYesNo.optional(),
-  purchase_note: z.string().optional(),
-  regular_price: z.string().optional(),
-  reviews_allowed: ZYesNo.optional(),
-  sale_date_range: z.tuple([
-    z.number().refine(val => val.toString().length === 10, { message: "開始時間必須是10位的時間戳" }),
-    z.number().refine(val => val.toString().length === 10, { message: "結束時間必須是10位的時間戳" })
-  ]).optional(),
-  sale_price: z.string().optional(),
-  shipping_class_id: z.string().optional(),
-  sku: z.string().optional(),
-  sold_individually: ZYesNo.optional(),
-  status: z.enum(PRODUCT_STATUS.map(status => status.value) as [string, ...string[]]),
-  stock_status: z.enum(PRODUCT_STOCK_STATUS.map(status => status.value) as [string, ...string[]]),
-  virtual: ZYesNo.optional(),
-  weight: z.string().optional(),
-  width: z.string().optional(),
 
+	// Other
+  virtual: ZYesNo.optional(),
+	downloadable: ZYesNo.optional(),
+  featured: ZYesNo.optional(),
+  sold_individually: ZYesNo.optional(),
+  reviews_allowed: ZYesNo.optional(),
+
+	// Price
+	regular_price: z.string().optional(),
+  sale_price: z.string().optional(),
+  sale_date_range: z.tuple([
+    z.number().refine(val => val.toString().length === 10, { message: "開始時間必須是10位的時間戳" }).optional(),
+    z.number().refine(val => val.toString().length === 10, { message: "結束時間必須是10位的時間戳" }).optional()
+  ]).optional(),
+
+	// PurchaseNote
+  purchase_note: z.string().optional(),
+	_variation_description: z.string().optional(),
+
+	// Size
+	sku: z.string().optional(),
+	_global_unique_id: z.string().optional(),
+  length: z.string().optional(),
+	width: z.string().optional(),
+	height: z.string().optional(),
+  weight: z.string().optional(),
+  shipping_class_id: z.string().optional(),
+
+	// Status
+	status: z.enum(PRODUCT_STATUS.map(status => status.value) as [string, ...string[]]),
+  catalog_visibility: z.enum(PRODUCT_CATALOG_VISIBILITIES.map(visibility => visibility.value) as [string, ...string[]]),
+
+	// Stock
+  backorders: ZBackorders.optional(),
+  stock_status: z.enum(PRODUCT_STOCK_STATUS.map(status => status.value) as [string, ...string[]]),
+  manage_stock: ZYesNo.optional(),
+	stock_quantity: z.number().optional().nullable(),
+	low_stock_amount: z.string().optional(),
+
+// Taxonomy
+	category_ids: z.array(z.string()).optional(),
+	tag_ids: z.array(z.string()).optional(),
 })

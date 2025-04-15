@@ -11,6 +11,7 @@ import { useProductsOptions } from '@/hooks'
 import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 import { useAtom } from 'jotai'
 import BulkAction from '@/components/product/ProductTable/BulkAction'
+import CreateButton from '@/components/product/ProductTable/Create'
 import {
 	useRowSelection,
 	defaultTableProps,
@@ -152,6 +153,7 @@ const ProductTableComponent = ({
 				</div>
 			</Card>
 			<Card>
+				<CreateButton className="mb-4" />
 				<Table
 					{...(defaultTableProps as unknown as TableProps<TProductRecord>)}
 					{...tableProps}

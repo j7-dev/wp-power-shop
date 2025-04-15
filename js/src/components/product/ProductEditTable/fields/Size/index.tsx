@@ -1,11 +1,19 @@
-import { Form, InputNumber, Select } from 'antd'
+import { Form, InputNumber, Select, Input } from 'antd'
+import { useProductsOptions } from '@/hooks'
 
 const { Item } = Form
 
 export const Size = ({ id }: { id: string }) => {
+	const { product_shipping_classes = [] } = useProductsOptions()
 	return (
 		<>
 			<div className="grid grid-cols-2 gap-x-2">
+				<Item name={[id, 'sku']} label="貨號">
+					<Input className="w-full" size="small" allowClear />
+				</Item>
+				<Item name={[id, '_global_unique_id']} label="GTIN、UPC、EAN 或 ISBN">
+					<Input className="w-full" size="small" allowClear />
+				</Item>
 				<Item name={[id, 'length']} label="長">
 					<InputNumber size="small" className="w-full" />
 				</Item>
@@ -19,7 +27,12 @@ export const Size = ({ id }: { id: string }) => {
 					<InputNumber size="small" className="w-full" />
 				</Item>
 				<Item name={[id, 'shipping_class_id']} label="運送類別">
-					<Select size="small" className="w-full" options={[]} allowClear />
+					<Select
+						size="small"
+						className="w-full"
+						options={product_shipping_classes}
+						allowClear
+					/>
 				</Item>
 			</div>
 		</>

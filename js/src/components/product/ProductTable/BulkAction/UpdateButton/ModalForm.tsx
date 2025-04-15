@@ -4,8 +4,13 @@ import { useAtomValue } from 'jotai'
 import { useUpdateMany } from '@refinedev/core'
 import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 import { ProductEditTable } from '@/components/product'
-import { TFormValues } from '@/components/product/ProductEditTable/types'
+import {
+	TFormValues,
+	ZFormValues,
+} from '@/components/product/ProductEditTable/types'
 import { TProductRecord } from '@/pages/admin/Product/types'
+
+import { productsToFields } from '@/components/product/ProductEditTable/utils'
 
 const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
 	const products = useAtomValue(selectedProductsAtom)
@@ -21,7 +26,10 @@ const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
 	})
 
 	const handleUpdate = () => {
-		console.log('⭐ virtualFields:', virtualFields)
+		// 取得 values
+		const fields = productsToFields(virtualFields)
+		const values = ZFormValues.array().safeParse(Object.values(fields))
+		console.log('⭐ values:', values)
 
 		// mutate({
 		// 	ids,
