@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { Space, InputNumber, Button, Form } from 'antd'
 import { useCreate, useParsed } from '@refinedev/core'
-import { TDocRecord } from '@/pages/admin/Docs/List/types'
-import { useEnv } from 'antd-toolkit'
+import { TTerm } from '@/components/term/types'
+import { useTaxonomy } from '@/components/term/SortableTree/hooks'
 
 const { Item } = Form
 
@@ -12,14 +12,13 @@ type TFormValues = {
 	post_parents: string[]
 }
 
-const Create = ({ records }: { records: TDocRecord[] }) => {
-	const { DOCS_POST_TYPE = '' } = useEnv()
+const Create = ({ records }: { records: TTerm[] }) => {
 	const { id } = useParsed()
-
+	const { value: taxonomySlug, label: taxonomyLabel } = useTaxonomy()
 	const [form] = Form.useForm<TFormValues>()
 
 	const { mutate, isLoading } = useCreate({
-		resource: 'posts',
+		resource: 'terms',
 	})
 
 	const handleCreateMany = () => {
@@ -37,12 +36,13 @@ const Create = ({ records }: { records: TDocRecord[] }) => {
 					新增
 				</Button>
 
-				<Item name={['qty']}>
+				<Item name={['qty']} noStyle>
 					<InputNumber className="w-40" addonAfter="個" />
 				</Item>
 			</Space.Compact>
-			<Item name={['post_parent']} initialValue={id} hidden />
-			<Item name={['post_type']} initialValue={DOCS_POST_TYPE} hidden />
+			<Item name={['term']} initialValue="new-" hidden />
+			<Item name={['name']} initialValue={`新${taxonomyLabel}`} hidden />
+			<Item name={['taxonomy']} initialValue={taxonomySlug} hidden />
 		</Form>
 	)
 }

@@ -2,10 +2,10 @@ import { TreeData, TreeNode } from '@ant-design/pro-editor'
 import { TTerm } from '@/components/term/types'
 
 /**
- * 將章節 TDocRecord 傳換成 TreeNode<TDocRecord>
+ * 將章節 TTerm 傳換成 TreeNode<TTerm>
  *
- * @param {TDocRecord} post
- * @return {TreeNode<TDocRecord>}
+ * @param {TTerm} term
+ * @return {TreeNode<TTerm>}
  */
 
 export function termToTreeNode(term: TTerm): TreeNode<TTerm> {
@@ -39,17 +39,17 @@ export type TParam = {
 }
 
 /**
- * 將 TreeData<TDocRecord> 轉換成 Create API 傳送的參數
+ * 將 TreeData<TTerm> 轉換成 Create API 傳送的參數
  * 攤平 array
  *
- * @param {TreeData<TDocRecord>} treeData 樹狀結構
+ * @param {TreeData<TTerm>} treeData 樹狀結構
  * @param {string}               parentId 父節點 id
  * @param {number}               depth    深度
  * @return {TParam[]}
  */
 export function treeToParams(
 	treeData: TreeData<TTerm>,
-	parentId: string,
+	parentId: string = '',
 	depth: number = 0,
 ): TParam[] {
 	function getFlatArray(

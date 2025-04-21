@@ -5,8 +5,11 @@ import {
 } from '@ant-design/pro-editor'
 import { TTerm } from '@/components/term/types'
 import { Form, message, Button } from 'antd'
-import NodeRender from './NodeRender'
-import { termToTreeNode, treeToParams } from './utils'
+import NodeRender from '@/components/term/SortableTree/NodeRender'
+import {
+	termToTreeNode,
+	treeToParams,
+} from '@/components/term/SortableTree/utils'
 import {
 	useCustomMutation,
 	useApiUrl,
@@ -14,11 +17,15 @@ import {
 	useDeleteMany,
 } from '@refinedev/core'
 import { isEqual as _isEqual } from 'lodash-es'
-import { useTermsList } from './hooks'
+import { useTermsList } from '@/components/term/SortableTree/hooks'
 import { useAtom } from 'jotai'
-import { selectedTermAtom, selectedIdsAtom } from './atom'
-import Create from './Create'
-import Loading from './Loading'
+import {
+	selectedTermAtom,
+	selectedIdsAtom,
+	TaxonomyContext,
+} from '@/components/term/SortableTree/atom'
+import Create from '@/components/term/SortableTree/Create'
+import Loading from '@/components/term/SortableTree/Loading'
 import { TTaxonomy } from '@/types/product'
 import { PopconfirmDelete } from 'antd-toolkit'
 
@@ -37,8 +44,6 @@ const SortableTreeComponent = ({
 	taxonomy: TTaxonomy
 	Edit?: React.FC<{ record: TTerm }>
 }) => {
-	const courseId = 0 //DELETE
-
 	const {
 		data: termsData,
 		isFetching: isListFetching,
@@ -48,6 +53,7 @@ const SortableTreeComponent = ({
 	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
 
 	const [treeData, setTreeData] = useState<TreeData<TTerm>>([])
+	console.log('⭐ treeData:', treeData)
 
 	// 原本的樹狀結構
 	const [originTree, setOriginTree] = useState<TreeData<TTerm>>([])
@@ -86,42 +92,43 @@ const SortableTreeComponent = ({
 	}, [isListFetching])
 
 	const handleSave = (data: TreeData<TTerm>) => {
-		const from_tree = treeToParams(originTree, courseId)
-		const to_tree = treeToParams(data, courseId)
+		const from_tree = treeToParams(originTree)
+		const to_tree = treeToParams(data)
 		const isEqual = _isEqual(from_tree, to_tree)
 
 		if (isEqual) return
 		// 這個儲存只存新增，不存章節的細部資料
 		message.loading({
 			content: '排序儲存中...',
-			key: 'posts-sorting',
+			key: 'terms-sorting',
 		})
 
 		mutate(
 			{
-				url: `${apiUrl}/posts/sort`,
+				url: `${apiUrl}/terms/sort`,
 				method: 'post',
 				values: {
 					from_tree,
 					to_tree,
+					taxonomy: taxonomy.value,
 				},
 			},
 			{
 				onSuccess: () => {
 					message.success({
 						content: '排序儲存成功',
-						key: 'posts-sorting',
+						key: 'terms-sorting',
 					})
 				},
 				onError: () => {
 					message.loading({
 						content: '排序儲存失敗',
-						key: 'posts-sorting',
+						key: 'terms-sorting',
 					})
 				},
 				onSettled: () => {
 					invalidate({
-						resource: 'posts',
+						resource: 'terms',
 						invalidates: ['list'],
 					})
 				},
@@ -134,7 +141,7 @@ const SortableTreeComponent = ({
 	const { mutate: deleteMany, isLoading: isDeleteManyLoading } = useDeleteMany()
 
 	return (
-		<>
+		<TaxonomyContext.Provider value={taxonomy}>
 			<div className="mb-8 flex gap-x-4 justify-between items-center">
 				<Create records={terms} />
 				<Button
@@ -153,6 +160,9 @@ const SortableTreeComponent = ({
 									resource: 'terms',
 									ids: selectedIds,
 									mutationMode: 'optimistic',
+									values: {
+										taxonomy: taxonomy.value,
+									},
 								},
 								{
 									onSuccess: () => {
@@ -206,7 +216,7 @@ const SortableTreeComponent = ({
 
 				{selectedTerm && Edit && <Edit record={selectedTerm} />}
 			</div>
-		</>
+		</TaxonomyContext.Provider>
 	)
 }
 
