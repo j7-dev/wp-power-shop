@@ -3,6 +3,7 @@ export type TTerm = {
 	name: string
 	slug: string
 	permalink: string
+	edit_url: string
 	term_taxonomy_id: string
 	taxonomy: string
 	description: string
@@ -19,6 +20,7 @@ export const  DEFAULT: TTerm = {
 	name: '',
 	slug: '',
 	permalink: '',
+	edit_url: '',
 	term_taxonomy_id: '',
 	taxonomy: '',
 	description: '',

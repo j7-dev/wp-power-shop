@@ -3,8 +3,8 @@ import {
 	SortableTree as SortableTreeAntd,
 	TreeData,
 } from '@ant-design/pro-editor'
-import { TTerm } from '@/components/term/types'
-import { Form, message, Button } from 'antd'
+import { TTerm, DEFAULT } from '@/components/term/types'
+import { message, Button } from 'antd'
 import NodeRender from '@/components/term/SortableTree/NodeRender'
 import {
 	termToTreeNode,
@@ -24,7 +24,6 @@ import {
 	selectedIdsAtom,
 	TaxonomyContext,
 } from '@/components/term/SortableTree/atom'
-import Create from '@/components/term/SortableTree/Create'
 import Loading from '@/components/term/SortableTree/Loading'
 import { TTaxonomy } from '@/types/product'
 import { PopconfirmDelete } from 'antd-toolkit'
@@ -53,7 +52,6 @@ const SortableTreeComponent = ({
 	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
 
 	const [treeData, setTreeData] = useState<TreeData<TTerm>>([])
-	console.log('⭐ treeData:', treeData)
 
 	// 原本的樹狀結構
 	const [originTree, setOriginTree] = useState<TreeData<TTerm>>([])
@@ -143,7 +141,11 @@ const SortableTreeComponent = ({
 	return (
 		<TaxonomyContext.Provider value={taxonomy}>
 			<div className="mb-8 flex gap-x-4 justify-between items-center">
-				<Create records={terms} />
+				<div className="w-full">
+					<Button type="primary" onClick={() => setSelectedTerm(DEFAULT)}>
+						新增
+					</Button>
+				</div>
 				<Button
 					type="default"
 					className="relative top-1"

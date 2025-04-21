@@ -22,19 +22,11 @@ export function termToTreeNode(term: TTerm): TreeNode<TTerm> {
 	}
 }
 
-/**
- * 將 TreeData<TTerm> 轉換成 Create API 傳送的參數
- * 只抓出順序、parent_id、id
- *
- * @param {TreeData<TTerm>} treeData
- * @return {TParam[]}
- */
-
 export type TParam = {
 	id: string
 	depth: number
-	menu_order: number
-	parent_id?: string
+	order: number
+	parent?: string
 	name?: string
 }
 
@@ -61,9 +53,9 @@ export function treeToParams(
 			acc.push({
 				id: node.id as string,
 				depth: _depth,
-				menu_order: index,
+				order: index,
 				name: node?.content?.name,
-				parent_id: _parentId,
+				parent: _parentId,
 			})
 
 			const hasChildren = !!node?.children?.length

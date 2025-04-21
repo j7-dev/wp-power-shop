@@ -1,22 +1,33 @@
 import { memo, useEffect, useState } from 'react'
-import { Form, Input, Space, Button, Typography, UploadFile } from 'antd'
-import { toFormData, CopyText } from 'antd-toolkit'
+import { Form, Input, Space, Button, UploadFile } from 'antd'
+import { toFormData } from 'antd-toolkit'
 import { TTerm } from '@/components/term/types'
 import { Edit, useForm } from '@refinedev/antd'
 import { useTaxonomy } from '@/components/term/SortableTree/hooks'
 import { FileUpload } from 'antd-toolkit/wp'
 
 const { Item } = Form
-const { Text } = Typography
 const { TextArea } = Input
 
+/**
+ * 編輯表單元件
+ *
+ * 用於編輯或新增分類項目（term）的表單元件。
+ *
+ * @param {Object} props - 元件屬性
+ * @param {TTerm} props.record - 要編輯的分類項目資料，如果是新增則傳入預設值
+ * @returns {React.FC} 編輯表單元件
+ */
+
 const EditFormComponent = ({ record }: { record: TTerm }) => {
-	const { id, name, permalink, slug } = record
+	// 如果傳入的 record 是 DEFAULT 那就是代表是新增
+	const { id, name, permalink, edit_url } = record
 	const { label = '', value: taxonomy = '' } = useTaxonomy()
+	const isCreate = !record?.id
 
 	// 初始化資料
 	const { formProps, form, saveButtonProps, mutation, onFinish } = useForm({
-		action: 'edit',
+		action: isCreate ? 'create' : 'edit',
 		resource: 'terms',
 		id,
 		redirect: false,
@@ -25,15 +36,22 @@ const EditFormComponent = ({ record }: { record: TTerm }) => {
 		},
 		invalidates: ['list', 'detail'],
 		warnWhenUnsavedChanges: true,
-		successNotification: false,
-		errorNotification: false,
+		successNotification: (data, values) => {
+			return {
+				message: data?.data?.message || '儲存成功',
+				type: 'success',
+			}
+		},
+		errorNotification: (data, values) => {
+			return {
+				message: data?.message || '儲存失敗',
+				type: 'error',
+			}
+		},
 	})
 
 	// 縮圖
 	const [fileList, setFileList] = useState<UploadFile[]>([])
-
-	// 取得課程深度，用來判斷是否為子章節
-	const watchSlug = Form.useWatch(['slug'], form)
 
 	useEffect(() => {
 		form.setFieldsValue(record)
@@ -53,11 +71,13 @@ const EditFormComponent = ({ record }: { record: TTerm }) => {
 
 	// 將 [] 轉為 '[]'，例如，清除原本分類時，如果空的，前端會是 undefined，轉成 formData 時會遺失
 	const handleOnFinish = (values: Partial<TTerm>) => {
-		onFinish(toFormData(values))
+		onFinish(
+			toFormData({
+				...values,
+				taxonomy,
+			}),
+		)
 	}
-
-	// 將 permalink 找出 slug 以外的剩餘字串
-	const baseUrl = permalink.replace(`${slug}/`, '')
 
 	return (
 		<Edit
@@ -68,31 +88,49 @@ const EditFormComponent = ({ record }: { record: TTerm }) => {
 			headerButtons={() => null}
 			title={
 				<div className="pl-4">
-					《編輯》 {name} <span className="text-gray-400 text-xs">#{id}</span>
+					{isCreate ? (
+						<>《新增{label}》</>
+					) : (
+						<>
+							《編輯》 {name}{' '}
+							<span className="text-gray-400 text-xs">#{id}</span>
+						</>
+					)}
 				</div>
 			}
 			saveButtonProps={{
 				...saveButtonProps,
-				children: `儲存${label}`,
+				children: isCreate ? `新增${label}` : `儲存${label}`,
 				icon: null,
 				loading: mutation?.isLoading,
 			}}
-			footerButtons={({ defaultButtons }) => (
-				<>
-					<Space.Compact>
+			footerButtons={({ defaultButtons }) =>
+				isCreate ? (
+					defaultButtons
+				) : (
+					<>
 						<Button
-							color="default"
-							variant="filled"
-							href={permalink}
 							target="_blank"
-							className="!inline-flex"
+							href={edit_url}
+							className="place-content-center mr-4"
 						>
-							預覽
+							前往傳統編輯介面
 						</Button>
-						{defaultButtons}
-					</Space.Compact>
-				</>
-			)}
+						<Space.Compact block>
+							<Button
+								color="default"
+								variant="filled"
+								href={permalink}
+								target="_blank"
+								className="!inline-flex"
+							>
+								預覽
+							</Button>
+							{defaultButtons}
+						</Space.Compact>
+					</>
+				)
+			}
 			wrapperProps={{
 				style: {
 					boxShadow: '0px 0px 16px 0px #ddd',
@@ -102,7 +140,7 @@ const EditFormComponent = ({ record }: { record: TTerm }) => {
 			}}
 		>
 			<Form {...formProps} onFinish={handleOnFinish} layout="vertical">
-				<Item name={['name']} label={'名稱'}>
+				<Item name={['name']} label={'名稱'} required={true}>
 					<Input allowClear />
 				</Item>
 
@@ -111,15 +149,7 @@ const EditFormComponent = ({ record }: { record: TTerm }) => {
 					label="代稱"
 					tooltip="代稱的英文原文為 Slug，是用於網址中的易記名稱，通常由小寫英文字母、數字及連字號 - 組成。"
 				>
-					<Input
-						allowClear
-						addonBefore={
-							<Text className="max-w-[25rem] text-left" ellipsis>
-								{baseUrl}
-							</Text>
-						}
-						addonAfter={<CopyText text={`${baseUrl}${watchSlug}`} />}
-					/>
+					<Input allowClear />
 				</Item>
 				<Item
 					name={['description']}
@@ -137,8 +167,6 @@ const EditFormComponent = ({ record }: { record: TTerm }) => {
 						formItemProps={{ name: ['thumbnail_id'] }}
 					/>
 				</div>
-
-				<Item name={['taxonomy']} initialValue={taxonomy} hidden />
 			</Form>
 		</Edit>
 	)
