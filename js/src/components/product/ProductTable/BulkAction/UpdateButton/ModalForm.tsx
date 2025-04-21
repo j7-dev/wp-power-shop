@@ -8,7 +8,7 @@ import {
 	TFormValues,
 	ZFormValues,
 } from '@/components/product/ProductEditTable/types'
-import { TProductRecord } from '@/pages/admin/Product/types'
+import { TProductRecord } from '@/components/product/types'
 
 import { productsToFields } from '@/components/product/ProductEditTable/utils'
 

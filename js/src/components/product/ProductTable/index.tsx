@@ -2,7 +2,7 @@ import { memo, useEffect } from 'react'
 import { useTable } from '@refinedev/antd'
 import { Table, FormInstance, TableProps, CardProps } from 'antd'
 import { HttpError } from '@refinedev/core'
-import { TProductRecord } from '@/pages/admin/Product/types'
+import { TProductRecord } from '@/components/product/types'
 import {
 	useValueLabelMapper,
 	useColumns,
@@ -60,7 +60,7 @@ const ProductTableComponent = ({
 	const { valueLabelMapper } = useValueLabelMapper()
 
 	const currentAllKeys =
-		tableProps?.dataSource?.map((record) => record?.id.toString()) || []
+		tableProps?.dataSource?.map((record) => record?.id?.toString()) || []
 
 	// 多選
 	const { rowSelection, setSelectedRowKeys } = useRowSelection<TProductRecord>({

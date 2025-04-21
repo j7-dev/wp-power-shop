@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Timeline, Input, Form, Switch, Button, Badge } from 'antd'
 import { cn, renderHTML } from 'antd-toolkit'
-import { TUserDetails, TUserContactRemark } from '@/pages/admin/Users/types'
+import { TUserDetails, TUserContactRemark } from '@/components/user/types'
 import { useCreate, useInvalidate } from '@refinedev/core'
 import { DeleteButton } from '@refinedev/antd'
 import dayjs from 'dayjs'

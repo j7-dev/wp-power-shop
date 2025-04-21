@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react'
-import { TProductRecord, TProductVariation } from '@/pages/admin/Product/types'
+import { TProductRecord, TProductVariation } from '@/components/product/types'
 import { ExportOutlined } from '@ant-design/icons'
 import { Tooltip, Button } from 'antd'
 import { CopyButton } from '@/components/general'

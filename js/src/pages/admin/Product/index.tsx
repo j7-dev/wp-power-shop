@@ -1,1 +1,3 @@
-export { default as ProductList } from './List'
+export * from './List'
+export * from './Edit'
+export * from './Taxonomies'

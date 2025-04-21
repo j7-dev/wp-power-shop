@@ -1,7 +1,7 @@
 import { useEffect, useState, memo } from 'react'
 import { Table, TableProps, Form, Switch, FormInstance } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
-import { TProductRecord } from '@/pages/admin/Product/types'
+import { TProductRecord } from '@/components/product/types'
 import { TFormValues } from '@/components/product/ProductEditTable/types'
 import { useColumns } from '@/components/product/ProductEditTable/hooks'
 import { useWindowSize } from '@uidotdev/usehooks'

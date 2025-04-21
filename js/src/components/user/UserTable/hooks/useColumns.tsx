@@ -1,8 +1,7 @@
 import { TableProps } from 'antd'
-import { TUserRecord } from '@/pages/admin/Users/types'
+import { TUserRecord } from '@/components/user/types'
 import { UserName, UserRole } from 'antd-toolkit/wp'
 import { Price } from '@/components/general'
-import dayjs from 'dayjs'
 import { useNavigation } from '@refinedev/core'
 
 const useColumns = () => {

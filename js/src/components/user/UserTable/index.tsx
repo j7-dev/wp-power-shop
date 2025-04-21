@@ -1,6 +1,6 @@
 import React, { memo, useEffect } from 'react'
 import { useTable } from '@refinedev/antd'
-import { TUserRecord } from '@/pages/admin/Users/types'
+import { TUserRecord } from '@/components/user/types'
 import { Table, TableProps, FormInstance, CardProps } from 'antd'
 import useColumns from './hooks/useColumns'
 import Filter, { TFilterValues } from './Filter'

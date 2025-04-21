@@ -15,6 +15,8 @@ import {
 	Analytics,
 	MediaLibraryPage,
 	ProductList,
+	ProductEdit,
+	ProductTaxonomies,
 	Summary,
 } from '@/pages/admin'
 import { HashRouter, Outlet, Route, Routes } from 'react-router-dom'
@@ -109,7 +111,8 @@ function App() {
 						</Route>
 						<Route path="products">
 							<Route index element={<ProductList />} />
-							{/* <Route path="edit/:id" element={<UsersEdit />} /> */}
+							<Route path="edit/:id" element={<ProductEdit />} />
+							<Route path="taxonomies" element={<ProductTaxonomies />} />
 						</Route>
 
 						<Route path="analytics" element={<Analytics />} />

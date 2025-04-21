@@ -1,5 +1,6 @@
 import { Table, TableProps, Tag } from 'antd'
-import { TProductRecord, TProductVariation } from '@/pages/admin/Product/types'
+import { useNavigation } from '@refinedev/core'
+import { TProductRecord, TProductVariation } from '@/components/product/types'
 import { useWindowSize } from '@uidotdev/usehooks'
 import { useProductsOptions } from '@/hooks'
 import { ProductActions } from '@/components/product/ProductTable/ProductActions'
@@ -16,6 +17,7 @@ import {
 
 export const useColumns = () => {
 	const { width } = useWindowSize()
+	const { edit } = useNavigation()
 	const { product_cats = [], product_tags = [] } = useProductsOptions()
 	const columns: TableProps<TProductRecord | TProductVariation>['columns'] = [
 		Table.SELECTION_COLUMN,
@@ -28,13 +30,7 @@ export const useColumns = () => {
 			render: (_, record) => (
 				<ProductName<TProductRecord>
 					record={record}
-					onClick={
-						'variation' === record?.type
-							? undefined
-							: () => {
-									window.open(`${record.permalink}`, '_blank')
-								}
-					}
+					onClick={() => edit('products', record.id)}
 				/>
 			),
 		},

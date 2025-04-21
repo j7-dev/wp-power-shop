@@ -1,4 +1,4 @@
 import { atom } from 'jotai'
-import { TProductRecord } from '@/pages/admin/Product/types'
+import { TProductRecord } from '@/components/product/types'
 
 export const selectedProductsAtom = atom<TProductRecord[]>([])

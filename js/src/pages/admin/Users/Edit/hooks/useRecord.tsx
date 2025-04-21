@@ -1,5 +1,5 @@
 import { useContext, createContext } from 'react'
-import { TUserDetails } from '@/pages/admin/Users/types'
+import { TUserDetails } from '@/components/user/types'
 
 export const RecordContext = createContext<TUserDetails | undefined>(undefined)
 

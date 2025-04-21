@@ -1,5 +1,5 @@
 import { Table, TableProps, Form } from 'antd'
-import { TProductRecord, TProductVariation } from '@/pages/admin/Product/types'
+import { TProductRecord, TProductVariation } from '@/components/product/types'
 import { useWindowSize } from '@uidotdev/usehooks'
 import { useWoocommerce } from '@/hooks'
 import {

@@ -1,7 +1,5 @@
 import { ProductTable } from '@/components/product'
 
-const List = () => {
+export const ProductList = () => {
 	return <ProductTable />
 }
-
-export default List

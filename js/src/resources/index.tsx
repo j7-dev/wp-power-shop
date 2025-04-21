@@ -11,23 +11,6 @@ import { FaPhotoVideo } from 'react-icons/fa'
 import { ResourceProps } from '@refinedev/core'
 import { LiaClipboardListSolid } from 'react-icons/lia'
 import { BsBox2 } from 'react-icons/bs'
-import { WOOCOMMERCE } from '@/utils'
-import { TWoocommerce } from '@/types'
-
-const product_taxonomies: TWoocommerce['product_taxonomies'] =
-	WOOCOMMERCE?.product_taxonomies || []
-
-const product_taxonomies_resources = product_taxonomies.map(
-	({ value, label }) => ({
-		parentName: 'product-management',
-		name: value,
-		list: `/${value}`,
-		// edit: `/${value}/edit/:id`,
-		meta: {
-			label,
-		},
-	}),
-)
 
 export const resources: ResourceProps[] = [
 	{
@@ -80,7 +63,22 @@ export const resources: ResourceProps[] = [
 			label: '商品列表',
 		},
 	},
-	...product_taxonomies_resources,
+	{
+		parentName: 'product-management',
+		name: 'taxonomies',
+		list: '/products/taxonomies',
+		meta: {
+			label: '商品分類',
+		},
+	},
+	{
+		parentName: 'product-management',
+		name: 'attributes',
+		list: '/products/attributes',
+		meta: {
+			label: '商品屬性',
+		},
+	},
 	{
 		name: 'stock',
 		list: '/stock',

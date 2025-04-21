@@ -38,13 +38,29 @@ abstract class Base {
 
 		$wc_settings = WC_Settings::instance();
 
+		$product_taxonomies = PowerhouseUtils::get_taxonomy_options();
+
+		$all_product_taxonomies = PowerhouseUtils::get_taxonomy_options(
+			[
+				'object_type' => [ 'product' ],
+				'public'      => false,
+			]
+			);
+		$product_attributes     = [];
+		foreach ( $all_product_taxonomies as $taxonomy ) {
+			if ( \str_starts_with( $taxonomy['value'], 'pa_' )) {
+				$product_attributes[] = $taxonomy;
+			}
+		}
+
 		return [
 			'countries'               => $countries,
 			'currency'                => [
 				'slug'   => $currency,
 				'symbol' => html_entity_decode( \get_woocommerce_currency_symbol($currency) ),
 			],
-			'product_taxonomies'      => PowerhouseUtils::get_taxonomy_options(),
+			'product_taxonomies'      => $product_taxonomies,
+			'product_attributes'      => $product_attributes,
 			'notify_low_stock_amount' => (int) $wc_settings->notify_low_stock_amount,
 			'dimension_unit'          => $wc_settings->dimension_unit,
 			'weight_unit'             => $wc_settings->weight_unit,

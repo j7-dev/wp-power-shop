@@ -1,6 +1,6 @@
 import { useOne } from '@refinedev/core'
 import { useEnv } from 'antd-toolkit'
-import { TUserDetails } from '@/pages/admin/Users/types'
+import { TUserDetails } from '@/components/user/types'
 import { getCurrentTimeSegment, getGreetings } from './utils'
 const Welcome = () => {
 	const { CURRENT_USER_ID } = useEnv()
