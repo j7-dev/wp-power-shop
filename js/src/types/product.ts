@@ -2,6 +2,7 @@ export type TTaxonomy = {
 	value: string
 	label: string
 	hierarchical: boolean
+	publicly_queryable: boolean
 }
 
 export type TWoocommerce = {

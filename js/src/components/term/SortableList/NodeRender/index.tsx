@@ -15,7 +15,11 @@ const NodeRender: FC<{
 	setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
 }> = ({ record, selectedIds, setSelectedIds }) => {
 	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
-	const { label: taxonomyLabel = '', value: taxonomy } = useTaxonomy()
+	const {
+		label: taxonomyLabel = '',
+		value: taxonomy,
+		publicly_queryable,
+	} = useTaxonomy()
 	const { id, permalink, count } = record
 	const { mutate: deleteTerm, isLoading: isDeleting } = useDelete()
 
@@ -62,15 +66,18 @@ const NodeRender: FC<{
 			<div className="text-xs text-gray-400">
 				<Tooltip title={`${taxonomyLabel}項目數量`}>{count}</Tooltip>
 			</div>
-			<div className="flex gap-2">
-				<Tooltip title="檢視">
-					<Button
-						type="link"
-						target="_blank"
-						href={permalink}
-						icon={<ExportOutlined />}
-					/>
-				</Tooltip>
+			<div className="flex gap-2 justify-end">
+				{publicly_queryable && (
+					<Tooltip title="檢視">
+						<Button
+							type="link"
+							target="_blank"
+							href={permalink}
+							icon={<ExportOutlined />}
+						/>
+					</Tooltip>
+				)}
+
 				<PopconfirmDelete
 					buttonProps={{
 						className: 'mr-0',
