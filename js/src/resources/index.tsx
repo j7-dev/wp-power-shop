@@ -80,15 +80,6 @@ export const resources: ResourceProps[] = [
 		},
 	},
 	{
-		name: 'stock',
-		list: '/stock',
-		edit: '/stock/edit/:id',
-		meta: {
-			label: '庫存',
-			icon: <BsBox2 />,
-		},
-	},
-	{
 		name: 'users',
 		list: '/users',
 		edit: '/users/edit/:id',

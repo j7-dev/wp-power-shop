@@ -2,13 +2,13 @@ import { Tabs, TabsProps, Card } from 'antd'
 import { useWoocommerce } from '@/hooks'
 import { SortableTree, SortableList, EditForm } from '@/components/term'
 
-export const ProductTaxonomies = () => {
-	const { product_taxonomies = [] } = useWoocommerce()
+export const ProductAttributes = () => {
+	const { product_attributes = [] } = useWoocommerce()
 	return (
-		<Card title="商品分類 / 標籤">
+		<Card title="全局商品屬性">
 			<Tabs
 				items={
-					product_taxonomies?.map((taxonomy) => {
+					product_attributes?.map((taxonomy) => {
 						const { value, label, hierarchical } = taxonomy
 						return {
 							key: value,
