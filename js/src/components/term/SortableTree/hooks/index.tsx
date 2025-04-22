@@ -7,13 +7,18 @@ import {
 	TaxonomyContext,
 } from '@/components/term/SortableTree/atom'
 
-/** 取得 taxonomy 的 terms List */
+/**
+ * 取得 taxonomy 的 terms List
+ * TODO 分頁
+ * 做分頁儲存時，需考慮到 order
+ * ex 第二頁的第 0 筆 order 應該加上 pageSize 的值
+ * */
 export const useTermsList = (taxonomy: string) => {
 	const query = useList<TTerm, HttpError>({
 		resource: `terms/${taxonomy}`,
 		pagination: {
 			current: 1,
-			pageSize: 50,
+			pageSize: -1,
 		},
 	})
 

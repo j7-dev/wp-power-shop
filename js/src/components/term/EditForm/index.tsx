@@ -3,7 +3,7 @@ import { Form, Input, Space, Button, UploadFile } from 'antd'
 import { toFormData } from 'antd-toolkit'
 import { TTerm } from '@/components/term/types'
 import { Edit, useForm } from '@refinedev/antd'
-import { useTaxonomy } from '@/components/term/SortableTree/hooks'
+import { TTaxonomy } from '@/types/product'
 import { FileUpload } from 'antd-toolkit/wp'
 
 const { Item } = Form
@@ -19,16 +19,22 @@ const { TextArea } = Input
  * @returns {React.FC} 編輯表單元件
  */
 
-const EditFormComponent = ({ record }: { record: TTerm }) => {
+const EditFormComponent = ({
+	record,
+	taxonomy,
+}: {
+	record: TTerm
+	taxonomy: TTaxonomy
+}) => {
 	// 如果傳入的 record 是 DEFAULT 那就是代表是新增
 	const { id, name, permalink, edit_url } = record
-	const { label = '', value: taxonomy = '' } = useTaxonomy()
+	const { label = '' } = taxonomy
 	const isCreate = !record?.id
 
 	// 初始化資料
 	const { formProps, form, saveButtonProps, mutation, onFinish } = useForm({
 		action: isCreate ? 'create' : 'edit',
-		resource: `terms/${taxonomy}`,
+		resource: `terms/${taxonomy.value}`,
 		id,
 		redirect: false,
 		queryOptions: {
@@ -74,14 +80,14 @@ const EditFormComponent = ({ record }: { record: TTerm }) => {
 		onFinish(
 			toFormData({
 				...values,
-				taxonomy,
+				taxonomy: taxonomy.value,
 			}),
 		)
 	}
 
 	return (
 		<Edit
-			resource={`terms/${taxonomy}`}
+			resource={`terms/${taxonomy.value}`}
 			recordItemId={id}
 			breadcrumb={null}
 			goBack={null}

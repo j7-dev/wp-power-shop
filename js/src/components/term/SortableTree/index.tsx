@@ -41,7 +41,7 @@ const SortableTreeComponent = ({
 	Edit,
 }: {
 	taxonomy: TTaxonomy
-	Edit?: React.FC<{ record: TTerm }>
+	Edit?: React.FC<{ record: TTerm; taxonomy: TTaxonomy }>
 }) => {
 	const {
 		data: termsData,
@@ -108,7 +108,6 @@ const SortableTreeComponent = ({
 				values: {
 					from_tree,
 					to_tree,
-					taxonomy: taxonomy.value,
 				},
 			},
 			{
@@ -165,6 +164,19 @@ const SortableTreeComponent = ({
 									values: {
 										taxonomy: taxonomy.value,
 									},
+									successNotification: (data, values) => {
+										return {
+											// @ts-ignore
+											message: data?.data?.message || '儲存成功',
+											type: 'success',
+										}
+									},
+									errorNotification: (data, values) => {
+										return {
+											message: data?.message || '儲存失敗',
+											type: 'error',
+										}
+									},
 								},
 								{
 									onSuccess: () => {
@@ -216,7 +228,9 @@ const SortableTreeComponent = ({
 					/>
 				)}
 
-				{selectedTerm && Edit && <Edit record={selectedTerm} />}
+				{selectedTerm && Edit && (
+					<Edit record={selectedTerm} taxonomy={taxonomy} />
+				)}
 			</div>
 		</TaxonomyContext.Provider>
 	)

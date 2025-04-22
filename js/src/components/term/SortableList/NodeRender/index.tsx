@@ -23,6 +23,18 @@ const NodeRender: FC<{
 		deleteTerm({
 			resource: `terms/${taxonomy}`,
 			id,
+			successNotification: (data, values) => {
+				return {
+					message: data?.data?.message || '儲存成功',
+					type: 'success',
+				}
+			},
+			errorNotification: (data, values) => {
+				return {
+					message: data?.message || '儲存失敗',
+					type: 'error',
+				}
+			},
 		})
 	}
 

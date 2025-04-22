@@ -1,8 +1,5 @@
 import { useEffect, memo } from 'react'
-import {
-	SortableList as SortableListAntd,
-	TreeData,
-} from '@ant-design/pro-editor'
+import { SortableList as SortableListAntd } from '@ant-design/pro-editor'
 import { TTerm, DEFAULT } from '@/components/term/types'
 import { message, Button } from 'antd'
 import NodeRender from '@/components/term/SortableList/NodeRender'
@@ -14,6 +11,7 @@ import {
 } from '@refinedev/core'
 import { isEqual as _isEqual } from 'lodash-es'
 import { useTermsList } from '@/components/term/SortableList/hooks'
+import { toParams } from '@/components/term/SortableList/utils'
 import { useAtom } from 'jotai'
 import {
 	selectedTermAtom,
@@ -34,7 +32,7 @@ const SortableListComponent = ({
 	Edit,
 }: {
 	taxonomy: TTaxonomy
-	Edit?: React.FC<{ record: TTerm }>
+	Edit?: React.FC<{ record: TTerm; taxonomy: TTaxonomy }>
 }) => {
 	const {
 		data: termsData,
@@ -56,12 +54,14 @@ const SortableListComponent = ({
 		}
 	}, [isListFetching])
 
-	const handleSave = (data: TreeData<TTerm>) => {
-		const from_tree = []
-		const to_tree = data
-		const isEqual = _isEqual(from_tree, to_tree)
+	const handleSave = (data: TTerm[]) => {
+		const isEqual = _isEqual(terms, data)
 
 		if (isEqual) return
+
+		const from_tree = toParams(terms)
+		const to_tree = toParams(data)
+
 		// 這個儲存只存新增，不存章節的細部資料
 		message.loading({
 			content: '排序儲存中...',
@@ -75,7 +75,6 @@ const SortableListComponent = ({
 				values: {
 					from_tree,
 					to_tree,
-					taxonomy: taxonomy.value,
 				},
 			},
 			{
@@ -132,6 +131,19 @@ const SortableListComponent = ({
 									values: {
 										taxonomy: taxonomy.value,
 									},
+									successNotification: (data, values) => {
+										return {
+											// @ts-ignore
+											message: data?.data?.message || '儲存成功',
+											type: 'success',
+										}
+									},
+									errorNotification: (data, values) => {
+										return {
+											message: data?.message || '儲存失敗',
+											type: 'error',
+										}
+									},
 								},
 								{
 									onSuccess: () => {
@@ -156,9 +168,7 @@ const SortableListComponent = ({
 					<SortableListAntd<TTerm>
 						hideRemove
 						value={terms}
-						onChange={(value, event) => {
-							console.log('⭐ value:', value)
-						}}
+						onChange={handleSave}
 						renderContent={(item, index) => (
 							<NodeRender
 								record={item}
@@ -169,7 +179,9 @@ const SortableListComponent = ({
 					/>
 				)}
 
-				{selectedTerm && Edit && <Edit record={selectedTerm} />}
+				{selectedTerm && Edit && (
+					<Edit record={selectedTerm} taxonomy={taxonomy} />
+				)}
 			</div>
 		</TaxonomyContext.Provider>
 	)
