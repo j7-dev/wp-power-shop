@@ -1,7 +1,7 @@
 import { useEffect, memo } from 'react'
 import { SortableList as SortableListAntd } from '@ant-design/pro-editor'
 import { TTerm, DEFAULT } from '@/components/term/types'
-import { message, Button } from 'antd'
+import { message, Button, Pagination } from 'antd'
 import NodeRender from '@/components/term/SortableList/NodeRender'
 import {
 	useCustomMutation,
@@ -38,7 +38,9 @@ const SortableListComponent = ({
 		data: termsData,
 		isFetching: isListFetching,
 		isLoading: isListLoading,
-	} = useTermsList(taxonomy.value)
+		paginationProps,
+		setPaginationProps,
+	} = useTermsList(taxonomy)
 	const terms = termsData?.data || []
 	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
 
@@ -59,8 +61,8 @@ const SortableListComponent = ({
 
 		if (isEqual) return
 
-		const from_tree = toParams(terms)
-		const to_tree = toParams(data)
+		const from_tree = toParams(terms, paginationProps)
+		const to_tree = toParams(data, paginationProps)
 
 		// 這個儲存只存新增，不存章節的細部資料
 		message.loading({
@@ -165,18 +167,30 @@ const SortableListComponent = ({
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 				{isListLoading && <Loading />}
 				{!isListLoading && (
-					<SortableListAntd<TTerm>
-						hideRemove
-						value={terms}
-						onChange={handleSave}
-						renderContent={(item, index) => (
-							<NodeRender
-								record={item}
-								selectedIds={selectedIds}
-								setSelectedIds={setSelectedIds}
-							/>
-						)}
-					/>
+					<div>
+						<SortableListAntd<TTerm>
+							hideRemove
+							value={terms}
+							onChange={handleSave}
+							renderContent={(item, index) => (
+								<NodeRender
+									record={item}
+									selectedIds={selectedIds}
+									setSelectedIds={setSelectedIds}
+								/>
+							)}
+						/>
+						<Pagination
+							{...paginationProps}
+							onChange={(page, pageSize) => {
+								setPaginationProps({
+									...paginationProps,
+									current: page,
+									pageSize,
+								})
+							}}
+						/>
+					</div>
 				)}
 
 				{selectedTerm && Edit && (
