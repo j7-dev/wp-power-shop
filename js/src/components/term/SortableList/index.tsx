@@ -10,7 +10,7 @@ import {
 	useDeleteMany,
 } from '@refinedev/core'
 import { isEqual as _isEqual } from 'lodash-es'
-import { useTermsList } from '@/components/term/SortableList/hooks'
+import { useTermsList } from '@/components/term/hooks'
 import { toParams } from '@/components/term/SortableList/utils'
 import { useAtom } from 'jotai'
 import {
