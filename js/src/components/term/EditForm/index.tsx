@@ -28,7 +28,7 @@ const EditFormComponent = ({ record }: { record: TTerm }) => {
 	// 初始化資料
 	const { formProps, form, saveButtonProps, mutation, onFinish } = useForm({
 		action: isCreate ? 'create' : 'edit',
-		resource: 'terms',
+		resource: `terms/${taxonomy}`,
 		id,
 		redirect: false,
 		queryOptions: {
@@ -81,7 +81,7 @@ const EditFormComponent = ({ record }: { record: TTerm }) => {
 
 	return (
 		<Edit
-			resource="terms"
+			resource={`terms/${taxonomy}`}
 			recordItemId={id}
 			breadcrumb={null}
 			goBack={null}

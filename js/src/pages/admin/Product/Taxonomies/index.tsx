@@ -1,6 +1,6 @@
 import { Tabs, TabsProps, Card } from 'antd'
 import { useWoocommerce } from '@/hooks'
-import { SortableTree, EditForm } from '@/components/term'
+import { SortableTree, SortableList, EditForm } from '@/components/term'
 
 export const ProductTaxonomies = () => {
 	const { product_taxonomies = [] } = useWoocommerce()
@@ -13,7 +13,11 @@ export const ProductTaxonomies = () => {
 						return {
 							key: value,
 							label: label,
-							children: <SortableTree taxonomy={taxonomy} Edit={EditForm} />,
+							children: hierarchical ? (
+								<SortableTree taxonomy={taxonomy} Edit={EditForm} />
+							) : (
+								<SortableList taxonomy={taxonomy} Edit={EditForm} />
+							),
 						}
 					}) as TabsProps['items']
 				}

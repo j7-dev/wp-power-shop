@@ -103,7 +103,7 @@ const SortableTreeComponent = ({
 
 		mutate(
 			{
-				url: `${apiUrl}/terms/sort`,
+				url: `${apiUrl}/terms/${taxonomy.value}/sort`,
 				method: 'post',
 				values: {
 					from_tree,
@@ -126,7 +126,7 @@ const SortableTreeComponent = ({
 				},
 				onSettled: () => {
 					invalidate({
-						resource: 'terms',
+						resource: `terms/${taxonomy.value}`,
 						invalidates: ['list'],
 					})
 				},
@@ -159,7 +159,7 @@ const SortableTreeComponent = ({
 						onConfirm: () =>
 							deleteMany(
 								{
-									resource: 'terms',
+									resource: `terms/${taxonomy.value}`,
 									ids: selectedIds,
 									mutationMode: 'optimistic',
 									values: {

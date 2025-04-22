@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai'
 import {
 	selectedTermAtom,
 	TaxonomyContext,
-} from '@/components/term/SortableTree/atom'
+} from '@/components/term/SortableList/atom'
 
 /** 取得 taxonomy 的 terms List */
 export const useTermsList = (taxonomy: string) => {
