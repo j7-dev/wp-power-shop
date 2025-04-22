@@ -37,7 +37,6 @@ const SortableListComponent = ({
 	const {
 		data: termsData,
 		isFetching: isListFetching,
-		isLoading: isListLoading,
 		paginationProps,
 		setPaginationProps,
 	} = useTermsList(taxonomy)
@@ -165,8 +164,8 @@ const SortableListComponent = ({
 				/>
 			</div>
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-				{isListLoading && <Loading />}
-				{!isListLoading && (
+				{isListFetching && <Loading />}
+				{!isListFetching && (
 					<div>
 						<SortableListAntd<TTerm>
 							hideRemove

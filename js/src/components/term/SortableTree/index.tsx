@@ -4,7 +4,7 @@ import {
 	TreeData,
 } from '@ant-design/pro-editor'
 import { TTerm, DEFAULT } from '@/components/term/types'
-import { message, Button } from 'antd'
+import { message, Button, Pagination } from 'antd'
 import NodeRender from '@/components/term/SortableTree/NodeRender'
 import {
 	termToTreeNode,
@@ -17,7 +17,7 @@ import {
 	useDeleteMany,
 } from '@refinedev/core'
 import { isEqual as _isEqual } from 'lodash-es'
-import { useTermsList } from '@/components/term/SortableTree/hooks'
+import { useTermsList } from '@/components/term/hooks'
 import { useAtom } from 'jotai'
 import {
 	selectedTermAtom,
@@ -46,8 +46,9 @@ const SortableTreeComponent = ({
 	const {
 		data: termsData,
 		isFetching: isListFetching,
-		isLoading: isListLoading,
-	} = useTermsList(taxonomy.value)
+		paginationProps,
+		setPaginationProps,
+	} = useTermsList(taxonomy)
 	const terms = termsData?.data || []
 	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
 
@@ -87,11 +88,11 @@ const SortableTreeComponent = ({
 				flattenTerms.find((c) => c.id === selectedTerm?.id) || null,
 			)
 		}
-	}, [isListFetching])
+	}, [isListFetching, JSON.stringify(paginationProps)])
 
 	const handleSave = (data: TreeData<TTerm>) => {
-		const from_tree = treeToParams(originTree)
-		const to_tree = treeToParams(data)
+		const from_tree = treeToParams(originTree, paginationProps)
+		const to_tree = treeToParams(data, paginationProps)
 		const isEqual = _isEqual(from_tree, to_tree)
 
 		if (isEqual) return
@@ -196,36 +197,48 @@ const SortableTreeComponent = ({
 				/>
 			</div>
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-				{isListLoading && <Loading />}
-				{!isListLoading && (
-					<SortableTreeAntd
-						hideAdd
-						hideRemove
-						treeData={treeData}
-						onTreeDataChange={(data: TreeData<TTerm>) => {
-							setTreeData(data)
-							handleSave(data)
-						}}
-						renderContent={(node) => (
-							<NodeRender
-								node={node}
-								selectedIds={selectedIds}
-								setSelectedIds={setSelectedIds}
-							/>
-						)}
-						indentationWidth={48}
-						sortableRule={({ activeNode, projected }) => {
-							const nodeDepth = getMaxDepth([activeNode])
-							const maxDepth = projected?.depth + nodeDepth
+				{isListFetching && <Loading />}
+				{!isListFetching && (
+					<div>
+						<SortableTreeAntd<TTerm>
+							hideAdd
+							hideRemove
+							treeData={treeData}
+							onTreeDataChange={(data: TreeData<TTerm>) => {
+								setTreeData(data)
+								handleSave(data)
+							}}
+							renderContent={(node) => (
+								<NodeRender
+									node={node}
+									selectedIds={selectedIds}
+									setSelectedIds={setSelectedIds}
+								/>
+							)}
+							indentationWidth={48}
+							sortableRule={({ activeNode, projected }) => {
+								const nodeDepth = getMaxDepth([activeNode])
+								const maxDepth = projected?.depth + nodeDepth
 
-							// activeNode - 被拖動的節點
-							// projected - 拖動後的資訊
+								// activeNode - 被拖動的節點
+								// projected - 拖動後的資訊
 
-							const sortable = maxDepth <= MAX_DEPTH
-							if (!sortable) message.error('超過最大深度，無法執行')
-							return sortable
-						}}
-					/>
+								const sortable = maxDepth <= MAX_DEPTH
+								if (!sortable) message.error('超過最大深度，無法執行')
+								return sortable
+							}}
+						/>
+						<Pagination
+							{...paginationProps}
+							onChange={(page, pageSize) => {
+								setPaginationProps({
+									...paginationProps,
+									current: page,
+									pageSize,
+								})
+							}}
+						/>
+					</div>
 				)}
 
 				{selectedTerm && Edit && (
