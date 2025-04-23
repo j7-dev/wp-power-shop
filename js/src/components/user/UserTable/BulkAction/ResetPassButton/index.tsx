@@ -1,7 +1,7 @@
 import { MailOutlined } from '@ant-design/icons'
 import { Button, ButtonProps } from 'antd'
 import { useCustomMutation, useApiUrl } from '@refinedev/core'
-
+import { notificationProps } from 'antd-toolkit/refine'
 const ResetPassButton = ({
 	user_ids,
 	mode = undefined,
@@ -20,12 +20,7 @@ const ResetPassButton = ({
 			values: {
 				ids: user_ids,
 			},
-			successNotification: (data, ids, resource) => {
-				return {
-					message: `用戶 ${user_ids?.map((id: string) => `#${id}`).join(', ')} 已發送重設密碼信件`,
-					type: 'success',
-				}
-			},
+			...notificationProps,
 		})
 	}
 

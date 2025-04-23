@@ -6,7 +6,7 @@ import { trim } from 'lodash-es'
 import { useDeleteMany } from '@refinedev/core'
 import { useAtom } from 'jotai'
 import { selectedUserIdsAtom } from '@/components/user/UserTable/atom'
-
+import { notificationProps } from 'antd-toolkit/refine'
 const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪用戶'
 
 const DeleteButton = () => {
@@ -45,12 +45,7 @@ const DeleteButton = () => {
 							resource: 'users',
 							ids: selectedUserIds as string[],
 							mutationMode: 'optimistic',
-							successNotification: (data, ids, resource) => {
-								return {
-									message: `用戶 ${ids?.map((id) => `#${id}`).join(', ')} 已刪除成功`,
-									type: 'success',
-								}
-							},
+							...notificationProps,
 						},
 						{
 							onSuccess: () => {

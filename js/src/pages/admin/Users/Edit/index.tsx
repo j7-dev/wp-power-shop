@@ -8,6 +8,7 @@ import { EditOutlined } from '@ant-design/icons'
 import { IsEditingContext, RecordContext } from './hooks'
 import { UserName } from 'antd-toolkit/wp'
 import { NameId } from 'antd-toolkit'
+import { notificationProps } from 'antd-toolkit/refine'
 
 const EditComponent = () => {
 	const { id } = useParsed()
@@ -20,8 +21,7 @@ const EditComponent = () => {
 			resource: 'users',
 			id,
 			redirect: false,
-			successNotification: false,
-			errorNotification: false,
+			...notificationProps,
 		})
 
 	const record: TUserDetails | undefined = useMemo(

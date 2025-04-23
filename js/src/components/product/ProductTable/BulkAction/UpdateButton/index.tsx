@@ -7,6 +7,8 @@ import { useAtomValue } from 'jotai'
 import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 import ModalForm from '@/components/product/ProductTable/BulkAction/UpdateButton/ModalForm'
 import { PRODUCT_STATUS, PRODUCT_CATALOG_VISIBILITIES } from 'antd-toolkit/wp'
+import { notificationProps } from 'antd-toolkit/refine'
+
 const { Item } = Form
 
 type TSimpleFormValues = {
@@ -30,12 +32,7 @@ const UpdateButton = () => {
 		mutate({
 			ids,
 			values,
-			successNotification: (data) => {
-				return {
-					message: `商品 ${ids?.map((id: string) => `#${id}`).join(', ')} 已修改成功`,
-					type: 'success',
-				}
-			},
+			...notificationProps,
 		})
 	}
 

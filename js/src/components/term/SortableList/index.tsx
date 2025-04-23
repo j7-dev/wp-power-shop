@@ -1,7 +1,7 @@
 import { useEffect, memo } from 'react'
 import { SortableList as SortableListAntd } from '@ant-design/pro-editor'
 import { TTerm, DEFAULT } from '@/components/term/types'
-import { message, Button, Pagination } from 'antd'
+import { message, Button, Pagination, Empty } from 'antd'
 import NodeRender from '@/components/term/SortableList/NodeRender'
 import {
 	useCustomMutation,
@@ -21,6 +21,7 @@ import {
 import Loading from '@/components/term/SortableList/Loading'
 import { TTaxonomy } from '@/types/product'
 import { PopconfirmDelete } from 'antd-toolkit'
+import { notificationProps } from 'antd-toolkit/refine'
 
 /**
  * 可排序的 term
@@ -132,19 +133,7 @@ const SortableListComponent = ({
 									values: {
 										taxonomy: taxonomy.value,
 									},
-									successNotification: (data, values) => {
-										return {
-											// @ts-ignore
-											message: data?.data?.message || '儲存成功',
-											type: 'success',
-										}
-									},
-									errorNotification: (data, values) => {
-										return {
-											message: data?.message || '儲存失敗',
-											type: 'error',
-										}
-									},
+									...notificationProps,
 								},
 								{
 									onSuccess: () => {
@@ -171,6 +160,12 @@ const SortableListComponent = ({
 							hideRemove
 							value={terms}
 							onChange={handleSave}
+							renderEmpty={() => (
+								<Empty
+									image={Empty.PRESENTED_IMAGE_SIMPLE}
+									description="無資料"
+								/>
+							)}
 							renderContent={(item, index) => (
 								<NodeRender
 									record={item}

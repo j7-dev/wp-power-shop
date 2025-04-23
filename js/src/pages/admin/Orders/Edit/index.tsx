@@ -5,8 +5,9 @@ import { Detail } from './Detail'
 import { TOrderRecord, TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
 import { useParsed } from '@refinedev/core'
 import { EditOutlined } from '@ant-design/icons'
-import { ORDER_STATUS } from 'antd-toolkit/wp'
 import { IsEditingContext, RecordContext } from './hooks'
+import { ORDER_STATUS } from 'antd-toolkit/wp'
+import { notificationProps } from 'antd-toolkit/refine'
 
 const EditComponent = () => {
 	const { id } = useParsed()
@@ -19,8 +20,7 @@ const EditComponent = () => {
 			resource: 'orders',
 			id,
 			redirect: false,
-			successNotification: false,
-			errorNotification: false,
+			...notificationProps,
 		},
 	)
 

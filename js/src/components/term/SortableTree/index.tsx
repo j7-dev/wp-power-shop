@@ -4,7 +4,7 @@ import {
 	TreeData,
 } from '@ant-design/pro-editor'
 import { TTerm, DEFAULT } from '@/components/term/types'
-import { message, Button, Pagination } from 'antd'
+import { message, Button, Pagination, Empty } from 'antd'
 import NodeRender from '@/components/term/SortableTree/NodeRender'
 import {
 	termToTreeNode,
@@ -27,7 +27,7 @@ import {
 import Loading from '@/components/term/SortableTree/Loading'
 import { TTaxonomy } from '@/types/product'
 import { PopconfirmDelete } from 'antd-toolkit'
-
+import { notificationProps } from 'antd-toolkit/refine'
 // 定義最大深度
 export const MAX_DEPTH = 2
 
@@ -138,6 +138,10 @@ const SortableTreeComponent = ({
 
 	const { mutate: deleteMany, isLoading: isDeleteManyLoading } = useDeleteMany()
 
+	if (treeData?.length === 0) {
+		return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="無資料" />
+	}
+
 	return (
 		<TaxonomyContext.Provider value={taxonomy}>
 			<div className="mb-8 flex gap-x-4 justify-between items-center">
@@ -165,19 +169,7 @@ const SortableTreeComponent = ({
 									values: {
 										taxonomy: taxonomy.value,
 									},
-									successNotification: (data, values) => {
-										return {
-											// @ts-ignore
-											message: data?.data?.message || '儲存成功',
-											type: 'success',
-										}
-									},
-									errorNotification: (data, values) => {
-										return {
-											message: data?.message || '儲存失敗',
-											type: 'error',
-										}
-									},
+									...notificationProps,
 								},
 								{
 									onSuccess: () => {

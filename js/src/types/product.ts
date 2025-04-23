@@ -14,7 +14,6 @@ export type TWoocommerce = {
 		symbol: string
 	}
 	product_taxonomies: TTaxonomy[]
-	product_attributes: TTaxonomy[]
 	notify_low_stock_amount: number
 	dimension_unit: string
 	weight_unit: string

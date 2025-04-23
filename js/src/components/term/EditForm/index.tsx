@@ -5,7 +5,7 @@ import { TTerm } from '@/components/term/types'
 import { Edit, useForm } from '@refinedev/antd'
 import { TTaxonomy } from '@/types/product'
 import { FileUpload } from 'antd-toolkit/wp'
-
+import { notificationProps } from 'antd-toolkit/refine'
 const { Item } = Form
 const { TextArea } = Input
 
@@ -42,18 +42,7 @@ const EditFormComponent = ({
 		},
 		invalidates: ['list', 'detail'],
 		warnWhenUnsavedChanges: true,
-		successNotification: (data, values) => {
-			return {
-				message: data?.data?.message || '儲存成功',
-				type: 'success',
-			}
-		},
-		errorNotification: (data, values) => {
-			return {
-				message: data?.message || '儲存失敗',
-				type: 'error',
-			}
-		},
+		...notificationProps,
 	})
 
 	// 縮圖

@@ -4,6 +4,7 @@ import { Button, Alert, Modal, Input } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import { trim } from 'lodash-es'
 import { useDeleteMany } from '@refinedev/core'
+import { notificationProps } from 'antd-toolkit/refine'
 
 const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪訂單'
 
@@ -48,12 +49,7 @@ const DeleteButton = ({
 							resource: 'orders',
 							ids: selectedRowKeys as string[],
 							mutationMode: 'optimistic',
-							successNotification: (data, ids, resource) => {
-								return {
-									message: `訂單 ${ids?.map((id) => `#${id}`).join(', ')} 已刪除成功`,
-									type: 'success',
-								}
-							},
+							...notificationProps,
 						},
 						{
 							onSuccess: () => {

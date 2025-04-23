@@ -8,6 +8,7 @@ import { useTaxonomy } from '@/components/term/SortableList/hooks'
 import { useDelete } from '@refinedev/core'
 import { PopconfirmDelete } from 'antd-toolkit'
 import { ProductName as PostName } from 'antd-toolkit/wp'
+import { notificationProps } from 'antd-toolkit/refine'
 
 const NodeRender: FC<{
 	record: TTerm
@@ -27,18 +28,7 @@ const NodeRender: FC<{
 		deleteTerm({
 			resource: `terms/${taxonomy}`,
 			id,
-			successNotification: (data, values) => {
-				return {
-					message: data?.data?.message || '儲存成功',
-					type: 'success',
-				}
-			},
-			errorNotification: (data, values) => {
-				return {
-					message: data?.message || '儲存失敗',
-					type: 'error',
-				}
-			},
+			...notificationProps,
 		})
 	}
 

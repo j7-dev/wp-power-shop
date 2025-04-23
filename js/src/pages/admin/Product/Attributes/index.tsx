@@ -1,27 +1,177 @@
-import { Tabs, TabsProps, Card } from 'antd'
-import { useWoocommerce } from '@/hooks'
-import { SortableTree, SortableList, EditForm } from '@/components/term'
+import { useState, useEffect } from 'react'
+import { Tabs, TabsProps, Card, Button, Modal, Form, Spin } from 'antd'
+import { useCreate, useUpdate } from '@refinedev/core'
+import { EditOutlined } from '@ant-design/icons'
+import { useModal, DeleteButton } from '@refinedev/antd'
+import { useList } from '@refinedev/core'
+import { TTaxonomy } from '@/types/product'
+import { SortableList, EditForm } from '@/components/term'
+import AttributesForm, {
+	TFormValues,
+} from '@/pages/admin/Product/Attributes/Form'
+import { useEnv } from 'antd-toolkit'
+import { notificationProps } from 'antd-toolkit/refine'
+
+type TAttribute = {
+	id: string
+	name: string
+	slug: string
+	type: string
+	order_by: string
+	has_archives: boolean
+}
 
 export const ProductAttributes = () => {
-	const { product_attributes = [] } = useWoocommerce()
+	/** 編輯的屬性有值時，表示編輯模式，沒有就是新增 */
+	const [attribute, setAttribute] = useState<TAttribute | null>(null)
+	const { SITE_URL } = useEnv()
+	const { show, close, modalProps } = useModal()
+	const [form] = Form.useForm()
+	const { data, isLoading } = useList<TAttribute>({
+		resource: 'product-attributes',
+	})
+
+	const attributes = data?.data || []
+
+	// ID 有值為更新，沒有為新增
+	const watchId = Form.useWatch('id', form)
+
+	const { mutate: create, isLoading: isCreating } = useCreate({
+		resource: 'product-attributes',
+	})
+	const { mutate: update, isLoading: isUpdating } = useUpdate({
+		resource: 'product-attributes',
+	})
+
+	const onFinish = (formValues: TFormValues) => {
+		const { id, ...values } = formValues
+		const options = {
+			onSuccess: close,
+		}
+
+		if (watchId) {
+			update(
+				{
+					id,
+					values,
+					...notificationProps,
+				},
+				options,
+			)
+		} else {
+			create(
+				{
+					values,
+					...notificationProps,
+				},
+				options,
+			)
+		}
+	}
+
+	const handleEdit = (attribute: TAttribute) => () => {
+		setAttribute(attribute)
+		show()
+	}
+
+	const handleAdd = () => {
+		setAttribute(null)
+		show()
+	}
+
+	useEffect(() => {
+		if (attribute) {
+			form.setFieldsValue(attribute)
+		} else {
+			form.resetFields()
+		}
+	}, [attribute])
+
 	return (
-		<Card title="全局商品屬性">
-			<Tabs
-				items={
-					product_attributes?.map((taxonomy) => {
-						const { value, label, hierarchical } = taxonomy
-						return {
-							key: value,
-							label: label,
-							children: hierarchical ? (
-								<SortableTree taxonomy={taxonomy} Edit={EditForm} />
+		<Spin spinning={isLoading}>
+			<Card title="全局商品屬性">
+				<Tabs
+					tabBarExtraContent={
+						<div className="flex gap-2">
+							<Button
+								href={`${SITE_URL}/wp-admin/edit.php?post_type=product&page=product_attributes`}
+								target="_blank"
+							>
+								前往傳統介面編輯
+							</Button>
+							<Button type="primary" onClick={handleAdd}>
+								新增全局屬性
+							</Button>
+						</div>
+					}
+					items={
+						attributes?.map((attr) => {
+							const { id, name, slug, has_archives } = attr
+
+							// 重組成 TTaxonomy 格式
+							const taxonomy: TTaxonomy = {
+								value: slug,
+								label: name,
+								hierarchical: false,
+								publicly_queryable: has_archives,
+							}
+							return {
+								key: slug,
+								label: (
+									<>
+										{name}
+										<EditOutlined onClick={handleEdit(attr)} className="ml-2" />
+									</>
+								),
+								children: <SortableList taxonomy={taxonomy} Edit={EditForm} />,
+							}
+						}) as TabsProps['items']
+					}
+				/>
+				<Modal
+					{...modalProps}
+					centered
+					title={attribute ? `《編輯》 ${attribute.name}` : '《新增》全局屬性'}
+					onOk={form.submit}
+					okText={attribute ? '更新' : '新增'}
+					cancelText="取消"
+					footer={
+						<div className="flex justify-between">
+							{attribute ? (
+								<DeleteButton
+									resource="product-attributes"
+									recordItemId={attribute?.id}
+									children="刪除"
+									icon={null}
+									confirmTitle="確認刪除"
+									confirmOkText="確認"
+									confirmCancelText="取消"
+									onSuccess={close}
+									{...notificationProps}
+								/>
 							) : (
-								<SortableList taxonomy={taxonomy} Edit={EditForm} />
-							),
-						}
-					}) as TabsProps['items']
-				}
-			/>
-		</Card>
+								<div></div>
+							)}
+
+							<div className="flex gap-2">
+								<Button type="default" onClick={close} className="justify-end">
+									取消
+								</Button>
+								<Button
+									type="primary"
+									onClick={form.submit}
+									loading={isUpdating || isCreating}
+									className="justify-end"
+								>
+									{attribute ? '更新' : '新增'}
+								</Button>
+							</div>
+						</div>
+					}
+				>
+					<AttributesForm form={form} onFinish={onFinish} />
+				</Modal>
+			</Card>
+		</Spin>
 	)
 }

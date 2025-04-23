@@ -5,6 +5,7 @@ import { Tabs, TabsProps, Form, Switch, Modal, Button } from 'antd'
 import { useAtom } from 'jotai'
 import { TProductRecord } from '@/components/product/types'
 import { useParsed } from '@refinedev/core'
+import { notificationProps } from 'antd-toolkit/refine'
 // import { PostEdit } from './PostEdit'
 
 import {
@@ -15,6 +16,13 @@ import {
 
 // TAB items
 const defaultItems: TabsProps['items'] = [
+	{
+		key: 'Overview',
+		forceRender: true,
+		label: '總覽',
+		children: <>123</>,
+		// children: <Description />,
+	},
 	{
 		key: 'Description',
 		forceRender: true,
@@ -40,8 +48,7 @@ const EditComponent = () => {
 			resource: 'products',
 			id,
 			redirect: false,
-			successNotification: false,
-			errorNotification: false,
+			...notificationProps,
 			queryMeta: {
 				variables: {
 					partials: [
