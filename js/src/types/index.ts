@@ -1,2 +1,2 @@
 export * from './dataProvider'
-export * from './product'
+export * from './woocommerce'

@@ -4,7 +4,7 @@ import { useAtom } from 'jotai'
 import { useWoocommerce } from '@/hooks'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
-// import { Description, SortablePosts } from './tabs'
+import { Description } from './tabs'
 import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
 import {
@@ -17,7 +17,7 @@ import {
 	Taxonomy,
 } from '@/components/product/fields'
 // import { PostEdit } from './PostEdit'
-import { PRODUCT_TYPES } from 'antd-toolkit/wp'
+import { defaultSelectProps } from 'antd-toolkit'
 import {
 	notificationProps,
 	mediaLibraryAtom,
@@ -28,19 +28,19 @@ import {
 // TAB items
 const defaultItems: TabsProps['items'] = [
 	{
+		key: 'Description',
+		forceRender: true,
+		label: '描述',
+		children: <Description />,
+	},
+	{
 		key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
 		forceRender: true,
 		label: '總覽',
 		children: <>123</>,
 		// children: <Description />,
 	},
-	{
-		key: 'Description',
-		forceRender: true,
-		label: '描述',
-		children: <>123</>,
-		// children: <Description />,
-	},
+
 	{
 		key: 'SortablePosts',
 		forceRender: false,
@@ -127,7 +127,11 @@ const EditComponent = () => {
 				>
 					<Form {...formProps} layout="vertical">
 						<Item name="type" label="商品類型" initialValue="simple">
-							<Select />
+							<Select
+								{...defaultSelectProps}
+								options={wc?.product_types}
+								mode={undefined}
+							/>
 						</Item>
 						<Tabs
 							items={items}

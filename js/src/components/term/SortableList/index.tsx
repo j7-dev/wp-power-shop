@@ -19,7 +19,7 @@ import {
 	TaxonomyContext,
 } from '@/components/term/SortableList/atom'
 import Loading from '@/components/term/SortableList/Loading'
-import { TTaxonomy } from '@/types/product'
+import { TTaxonomy } from '@/types/woocommerce'
 import { PopconfirmDelete } from 'antd-toolkit'
 import { notificationProps } from 'antd-toolkit/refine'
 

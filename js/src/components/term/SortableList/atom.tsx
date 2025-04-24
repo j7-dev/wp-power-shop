@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import { atom } from 'jotai'
 import { TTerm } from '@/components/term/types'
-import { TTaxonomy } from '@/types/product'
+import { TTaxonomy } from '@/types/woocommerce'
 
 /** 選中要編輯的 term */
 export const selectedTermAtom = atom<TTerm | null>(null)

@@ -4,7 +4,7 @@ import { useCreate, useUpdate } from '@refinedev/core'
 import { EditOutlined } from '@ant-design/icons'
 import { useModal, DeleteButton } from '@refinedev/antd'
 import { useList } from '@refinedev/core'
-import { TTaxonomy } from '@/types/product'
+import { TTaxonomy } from '@/types/woocommerce'
 import { SortableList, EditForm } from '@/components/term'
 import AttributesForm, {
 	TFormValues,

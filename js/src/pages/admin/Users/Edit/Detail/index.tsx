@@ -1,40 +1,14 @@
 import { memo } from 'react'
 import { useWoocommerce } from '@/hooks'
-import {
-	Form,
-	Tooltip,
-	Statistic,
-	Button,
-	Select,
-	Space,
-	Tabs,
-	TabsProps,
-} from 'antd'
-import { DEFAULT_IMAGE } from '@/utils'
-import { useSelect } from '@refinedev/antd'
+import { Form, Statistic, Tabs, TabsProps } from 'antd'
 import { useRecord } from '@/pages/admin/Users/Edit/hooks'
-import { OrderNotes } from '@/components/order'
-
-import {
-	CreditCardOutlined,
-	TruckOutlined,
-	SwapOutlined,
-	ShoppingCartOutlined,
-} from '@ant-design/icons'
-import {
-	// termToOptions,
-	defaultSelectProps,
-	Heading,
-} from 'antd-toolkit'
-import { UserName } from 'antd-toolkit/wp'
+import { Heading } from 'antd-toolkit'
 import Basic from './Basic'
 import AutoFill from './AutoFill'
 import Meta from './Meta'
 import Cart from './Cart'
 import RecentOrders from './RecentOrders'
 import { ContactRemarks } from '@/components/user'
-
-const { Item } = Form
 
 const items: TabsProps['items'] = [
 	{

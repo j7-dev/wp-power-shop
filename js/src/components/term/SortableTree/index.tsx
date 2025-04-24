@@ -25,7 +25,7 @@ import {
 	TaxonomyContext,
 } from '@/components/term/SortableTree/atom'
 import Loading from '@/components/term/SortableTree/Loading'
-import { TTaxonomy } from '@/types/product'
+import { TTaxonomy } from '@/types/woocommerce'
 import { PopconfirmDelete } from 'antd-toolkit'
 import { notificationProps } from 'antd-toolkit/refine'
 // 定義最大深度

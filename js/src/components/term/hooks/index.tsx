@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { PaginationProps } from 'antd'
-import { TTaxonomy } from '@/types/product'
+import { TTaxonomy } from '@/types/woocommerce'
 import { TTerm } from '@/components/term/types'
 import { useList, HttpError } from '@refinedev/core'
 

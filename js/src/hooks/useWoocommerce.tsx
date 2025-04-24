@@ -1,26 +1,33 @@
 import { SelectProps } from 'antd'
-import { TWoocommerce } from '@/types'
+import {
+	TWoocommerce,
+	WoocommerceSchema,
+	DEFAULT_WOOCOMMERCE,
+} from '@/types/woocommerce'
 import { useCustom, useApiUrl } from '@refinedev/core'
+import { safeParse } from '@/utils'
 
 /**
  * 取得 WooCommerce 的設定
  * @returns TWoocommerce
  */
-export const useWoocommerce = (): TWoocommerce | undefined => {
+export const useWoocommerce = (): TWoocommerce => {
 	const apiUrl = useApiUrl()
 	const { data } = useCustom({
 		url: `${apiUrl}/woocommerce`,
 		method: 'get',
 	})
 
-	return data?.data?.data as TWoocommerce | undefined
+	safeParse(WoocommerceSchema, data?.data?.data)
+
+	return data?.data?.data || (DEFAULT_WOOCOMMERCE as TWoocommerce)
 }
 
 /**
  * 取得國家 key-value 組合
- * @returns TWoocommerce['countries']
+ * @returns Record<string, string> | undefined
  */
-export const useCountries = (): TWoocommerce['countries'] | undefined => {
+export const useCountries = (): Record<string, string> | undefined => {
 	const wc = useWoocommerce()
 	return wc?.countries
 }

@@ -3,7 +3,7 @@ import { Form, Input, Space, Button, UploadFile } from 'antd'
 import { toFormData } from 'antd-toolkit'
 import { TTerm } from '@/components/term/types'
 import { Edit, useForm } from '@refinedev/antd'
-import { TTaxonomy } from '@/types/product'
+import { TTaxonomy } from '@/types/woocommerce'
 import { FileUpload } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 const { Item } = Form
