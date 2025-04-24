@@ -1,21 +1,30 @@
 import { memo, useState } from 'react'
-import { Edit, useForm } from '@refinedev/antd'
 import { Tabs, TabsProps, Form, Switch, Modal, Button } from 'antd'
-// import { Description, SortablePosts } from './tabs'
 import { useAtom } from 'jotai'
-import { TProductRecord } from '@/components/product/types'
-import { useParsed } from '@refinedev/core'
-import { notificationProps } from 'antd-toolkit/refine'
-// import { PostEdit } from './PostEdit'
 
+import { Edit, useForm } from '@refinedev/antd'
+import { useParsed } from '@refinedev/core'
+// import { Description, SortablePosts } from './tabs'
+import { TProductRecord } from '@/components/product/types'
+import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
 import {
+	Status,
+	Price,
+	Size,
+	Stock,
+	PurchaseNote,
+	Other,
+	Taxonomy,
+} from '@/components/product/fields'
+// import { PostEdit } from './PostEdit'
+import {
+	notificationProps,
 	mediaLibraryAtom,
 	MediaLibrary,
 	TBunnyVideo,
 } from 'antd-toolkit/refine'
 
 // TAB items
-
 const defaultItems: TabsProps['items'] = [
 	{
 		key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
@@ -80,100 +89,103 @@ const EditComponent = () => {
 
 	return (
 		<div className="sticky-card-actions sticky-tabs-nav">
-			<Edit
-				resource="posts"
-				title={
-					<>
-						{record?.name}{' '}
-						<span className="text-gray-400 text-xs">#{record?.id}</span>
-					</>
-				}
-				headerButtons={() => null}
-				saveButtonProps={{
-					...saveButtonProps,
-					children: '儲存',
-					icon: null,
-					loading: mutation?.isLoading,
-				}}
-				footerButtons={({ defaultButtons }) => (
-					<>
-						<Switch
-							className="mr-4"
-							checkedChildren="發佈"
-							unCheckedChildren="草稿"
-							value={record?.status === 'publish'}
-							onChange={(checked) => {
-								form.setFieldValue(['status'], checked ? 'publish' : 'draft')
+			<RecordContext.Provider value={record}>
+				<Edit
+					resource="posts"
+					title={
+						<>
+							{record?.name}{' '}
+							<span className="text-gray-400 text-xs">#{record?.id}</span>
+						</>
+					}
+					headerButtons={() => null}
+					saveButtonProps={{
+						...saveButtonProps,
+						children: '儲存',
+						icon: null,
+						loading: mutation?.isLoading,
+					}}
+					footerButtons={({ defaultButtons }) => (
+						<>
+							<Switch
+								className="mr-4"
+								checkedChildren="發佈"
+								unCheckedChildren="草稿"
+								value={record?.status === 'publish'}
+								onChange={(checked) => {
+									form.setFieldValue(['status'], checked ? 'publish' : 'draft')
+								}}
+							/>
+							{defaultButtons}
+						</>
+					)}
+					isLoading={query?.isLoading}
+				>
+					<Form {...formProps} layout="vertical">
+						<Status />
+						<Tabs
+							items={items}
+							tabBarExtraContent={
+								<>
+									<Button
+										className="ml-4"
+										type="default"
+										href={record?.edit_url}
+										target="_blank"
+										rel="noreferrer"
+									>
+										前往傳統商品編輯介面
+									</Button>
+									<Button
+										className="ml-4"
+										type="default"
+										href={record?.permalink}
+										target="_blank"
+										rel="noreferrer"
+									>
+										檢視
+									</Button>
+								</>
+							}
+						/>
+					</Form>
+				</Edit>
+
+				<Modal
+					{...modalProps}
+					onCancel={() => {
+						setMediaLibrary((prev) => ({
+							...prev,
+							modalProps: {
+								...prev.modalProps,
+								open: false,
+							},
+						}))
+					}}
+				>
+					<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
+						<MediaLibrary
+							mediaLibraryProps={{
+								selectedVideos,
+								setSelectedVideos,
+								limit: 1,
+								selectButtonProps: {
+									onClick: () => {
+										setMediaLibrary((prev) => ({
+											...prev,
+											modalProps: {
+												...prev.modalProps,
+												open: false,
+											},
+											confirmedSelectedVideos: selectedVideos,
+										}))
+									},
+								},
 							}}
 						/>
-						{defaultButtons}
-					</>
-				)}
-				isLoading={query?.isLoading}
-			>
-				<Form {...formProps} layout="vertical">
-					<Tabs
-						items={items}
-						tabBarExtraContent={
-							<>
-								<Button
-									className="ml-4"
-									type="default"
-									href={record?.edit_url}
-									target="_blank"
-									rel="noreferrer"
-								>
-									前往傳統商品編輯介面
-								</Button>
-								<Button
-									className="ml-4"
-									type="default"
-									href={record?.permalink}
-									target="_blank"
-									rel="noreferrer"
-								>
-									檢視
-								</Button>
-							</>
-						}
-					/>
-				</Form>
-			</Edit>
-
-			<Modal
-				{...modalProps}
-				onCancel={() => {
-					setMediaLibrary((prev) => ({
-						...prev,
-						modalProps: {
-							...prev.modalProps,
-							open: false,
-						},
-					}))
-				}}
-			>
-				<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
-					<MediaLibrary
-						mediaLibraryProps={{
-							selectedVideos,
-							setSelectedVideos,
-							limit: 1,
-							selectButtonProps: {
-								onClick: () => {
-									setMediaLibrary((prev) => ({
-										...prev,
-										modalProps: {
-											...prev.modalProps,
-											open: false,
-										},
-										confirmedSelectedVideos: selectedVideos,
-									}))
-								},
-							},
-						}}
-					/>
-				</div>
-			</Modal>
+					</div>
+				</Modal>
+			</RecordContext.Provider>
 		</div>
 	)
 }

@@ -7,12 +7,12 @@ export const PurchaseNote = ({
 	id,
 	name = 'purchase_note',
 }: {
-	id: string
+	id?: string
 	name: string
 }) => {
 	return (
 		<>
-			<Item label="購買備註" name={[id, name]}>
+			<Item label="購買備註" name={id ? [id, name] : [name]}>
 				<TextArea className="w-full text-xs" size="small" rows={4} allowClear />
 			</Item>
 		</>
