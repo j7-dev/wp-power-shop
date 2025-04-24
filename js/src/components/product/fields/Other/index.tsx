@@ -1,12 +1,10 @@
 import { Switch } from 'antd-toolkit'
 import { TProductType, isVariation as checkIsVariation } from 'antd-toolkit/wp'
-import { Form } from 'antd'
 
 export const Other = ({ id, type }: { id: string; type: TProductType }) => {
 	const isVariation = checkIsVariation(type as string)
-	const form = Form.useFormInstance()
 	return (
-		<div className="grid grid-cols-2 gap-x-2">
+		<>
 			<Switch
 				formItemProps={{
 					name: [id, 'virtual'],
@@ -73,6 +71,6 @@ export const Other = ({ id, type }: { id: string; type: TProductType }) => {
 					/>
 				</>
 			)}
-		</div>
+		</>
 	)
 }

@@ -11,7 +11,7 @@ export const Stock = ({ id }: { id: string }) => {
 	const watchManageStock = Form.useWatch([id, 'manage_stock'], form)
 	const enableStockManagement = watchManageStock === 'yes'
 	return (
-		<div className="grid grid-cols-2 gap-x-2">
+		<>
 			<Item name={[id, 'backorders']} label="允許無庫存下單">
 				<Select
 					size="small"
@@ -55,6 +55,6 @@ export const Stock = ({ id }: { id: string }) => {
 					</Item>
 				</>
 			)}
-		</div>
+		</>
 	)
 }

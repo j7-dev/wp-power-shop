@@ -15,9 +15,10 @@ import {
 } from 'antd-toolkit/refine'
 
 // TAB items
+
 const defaultItems: TabsProps['items'] = [
 	{
-		key: 'Overview',
+		key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
 		forceRender: true,
 		label: '總覽',
 		children: <>123</>,
@@ -118,7 +119,7 @@ const EditComponent = () => {
 								<Button
 									className="ml-4"
 									type="default"
-									href={record?.permalink}
+									href={record?.edit_url}
 									target="_blank"
 									rel="noreferrer"
 								>

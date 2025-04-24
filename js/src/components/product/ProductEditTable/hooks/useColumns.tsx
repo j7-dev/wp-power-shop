@@ -10,7 +10,7 @@ import {
 	PurchaseNote,
 	Other,
 	Taxonomy,
-} from '@/components/product/ProductEditTable/fields'
+} from '@/components/product/fields'
 import {
 	ProductName,
 	isVariable,
@@ -70,14 +70,22 @@ export const useColumns = () => {
 			title: '庫存',
 			dataIndex: 'stock',
 			width: 200,
-			render: (_, { id, type }) => <Stock id={id} />,
+			render: (_, { id, type }) => (
+				<div className="grid grid-cols-2 gap-x-2">
+					<Stock id={id} />
+				</div>
+			),
 		},
 
 		{
 			title: `尺寸 (${dimension_unit}) & 重量 (${weight_unit})`,
 			dataIndex: 'size',
 			width: 160,
-			render: (_, { id }) => <Size id={id} />,
+			render: (_, { id }) => (
+				<div className="grid grid-cols-2 gap-x-2">
+					<Size id={id} />
+				</div>
+			),
 		},
 		{
 			title: '分類/標籤',
@@ -102,7 +110,9 @@ export const useColumns = () => {
 			dataIndex: 'other',
 			width: 80,
 			render: (_, { id, type }) => (
-				<Other id={id} type={type as TProductType} />
+				<div className="grid grid-cols-2 gap-x-2">
+					<Other id={id} type={type as TProductType} />
+				</div>
 			),
 		},
 	]

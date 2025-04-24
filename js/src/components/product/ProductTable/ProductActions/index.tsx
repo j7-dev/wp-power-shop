@@ -2,6 +2,7 @@ import React, { FC, memo } from 'react'
 import { TProductRecord, TProductVariation } from '@/components/product/types'
 import { ExportOutlined } from '@ant-design/icons'
 import { Tooltip, Button } from 'antd'
+import { FaWordpress } from 'react-icons/fa'
 import { CopyButton } from '@/components/general'
 import { cn } from 'antd-toolkit'
 
@@ -17,6 +18,17 @@ export const ProductActionsComponent: FC<{
 				invalidateProps={{ resource: 'products' }}
 				tooltipProps={{ title: '複製商品' }}
 			/>
+			<Tooltip title="傳統介面檢視">
+				<Button
+					disabled={isTrash}
+					type="text"
+					href={record?.edit_url}
+					target="_blank"
+					rel="noreferrer"
+					icon={<FaWordpress className="text-gray-400" />}
+					className={cn('m-0', isTrash && 'opacity-50')}
+				/>
+			</Tooltip>
 
 			{/* 如果狀態為回收桶，則不可見 */}
 			<Tooltip title="檢視">
