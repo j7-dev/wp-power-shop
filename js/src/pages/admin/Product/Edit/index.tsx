@@ -1,7 +1,7 @@
 import { memo, useState } from 'react'
-import { Tabs, TabsProps, Form, Switch, Modal, Button } from 'antd'
+import { Tabs, TabsProps, Form, Switch, Modal, Button, Select } from 'antd'
 import { useAtom } from 'jotai'
-
+import { useWoocommerce } from '@/hooks'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
 // import { Description, SortablePosts } from './tabs'
@@ -17,6 +17,7 @@ import {
 	Taxonomy,
 } from '@/components/product/fields'
 // import { PostEdit } from './PostEdit'
+import { PRODUCT_TYPES } from 'antd-toolkit/wp'
 import {
 	notificationProps,
 	mediaLibraryAtom,
@@ -48,8 +49,11 @@ const defaultItems: TabsProps['items'] = [
 	},
 ]
 
+const { Item } = Form
+
 const EditComponent = () => {
 	const { id } = useParsed()
+	const wc = useWoocommerce()
 
 	// 初始化資料
 	const { formProps, form, saveButtonProps, query, mutation, onFinish } =
@@ -122,7 +126,9 @@ const EditComponent = () => {
 					isLoading={query?.isLoading}
 				>
 					<Form {...formProps} layout="vertical">
-						<Status />
+						<Item name="type" label="商品類型" initialValue="simple">
+							<Select />
+						</Item>
 						<Tabs
 							items={items}
 							tabBarExtraContent={

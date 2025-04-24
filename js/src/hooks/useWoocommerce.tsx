@@ -1,21 +1,28 @@
-import { WOOCOMMERCE } from '@/utils/env'
 import { SelectProps } from 'antd'
 import { TWoocommerce } from '@/types'
+import { useCustom, useApiUrl } from '@refinedev/core'
 
 /**
  * 取得 WooCommerce 的設定
  * @returns TWoocommerce
  */
-export const useWoocommerce = (): TWoocommerce => {
-	return WOOCOMMERCE as TWoocommerce
+export const useWoocommerce = (): TWoocommerce | undefined => {
+	const apiUrl = useApiUrl()
+	const { data } = useCustom({
+		url: `${apiUrl}/woocommerce`,
+		method: 'get',
+	})
+
+	return data?.data?.data as TWoocommerce | undefined
 }
 
 /**
  * 取得國家 key-value 組合
  * @returns TWoocommerce['countries']
  */
-export const useCountries = (): TWoocommerce['countries'] => {
-	return WOOCOMMERCE.countries
+export const useCountries = (): TWoocommerce['countries'] | undefined => {
+	const wc = useWoocommerce()
+	return wc?.countries
 }
 
 /**
@@ -23,7 +30,8 @@ export const useCountries = (): TWoocommerce['countries'] => {
  * @returns SelectProps['options']
  */
 export const useCountryOptions = (): SelectProps['options'] => {
-	const countries = WOOCOMMERCE.countries
+	const wc = useWoocommerce()
+	const countries = wc?.countries || []
 	return Object.entries(countries).map(([key, value]) => ({
 		label: value as string,
 		value: key,
@@ -35,5 +43,6 @@ export const useCountryOptions = (): SelectProps['options'] => {
  * @returns SelectProps['options']
  */
 export const useProductTaxonomies = (): SelectProps['options'] => {
-	return WOOCOMMERCE.product_taxonomies || []
+	const wc = useWoocommerce()
+	return wc?.product_taxonomies || []
 }
