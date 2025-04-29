@@ -4,18 +4,9 @@ import { useAtom } from 'jotai'
 import { useWoocommerce } from '@/hooks'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
-import { Description } from './tabs'
+import { Description, Stock, Price } from '@/pages/admin/Product/Edit/tabs'
 import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
-import {
-	Status,
-	Price,
-	Size,
-	Stock,
-	PurchaseNote,
-	Other,
-	Taxonomy,
-} from '@/components/product/fields'
 // import { PostEdit } from './PostEdit'
 import { defaultSelectProps } from 'antd-toolkit'
 import {
@@ -34,18 +25,29 @@ const defaultItems: TabsProps['items'] = [
 		children: <Description />,
 	},
 	{
+		key: 'Price',
+		forceRender: true,
+		label: '價格',
+		children: <Price />,
+	},
+	{
+		key: 'Stock',
+		forceRender: true,
+		label: '庫存',
+		children: <Stock />,
+	},
+	{
+		key: 'Attributes',
+		forceRender: true,
+		label: '商品屬性',
+		children: <>123</>,
+	},
+	{
 		key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
 		forceRender: true,
 		label: '總覽',
 		children: <>123</>,
 		// children: <Description />,
-	},
-
-	{
-		key: 'SortablePosts',
-		forceRender: false,
-		label: '文章管理',
-		// children: <SortablePosts PostEdit={PostEdit} />,
 	},
 ]
 
@@ -126,7 +128,7 @@ const EditComponent = () => {
 					isLoading={query?.isLoading}
 				>
 					<Form {...formProps} layout="vertical">
-						<Item name="type" label="商品類型" initialValue="simple">
+						<Item name="type" label="商品類型">
 							<Select
 								{...defaultSelectProps}
 								options={wc?.product_types}

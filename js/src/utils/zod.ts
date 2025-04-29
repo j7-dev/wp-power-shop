@@ -10,6 +10,6 @@ import { ZodType } from 'zod'
 export const safeParse = (scheme: ZodType, data: any) => {
 	const { success, error } = scheme.safeParse(data)
 	if (!success) {
-		console.error(error?.issues)
+		console.warn(error?.issues)
 	}
 }

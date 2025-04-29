@@ -5,7 +5,11 @@ export const RecordContext = createContext<TProductRecord | undefined>(
 	undefined,
 )
 
-export const useProductEditContext = () => {
+/**
+ * 取得商品記錄
+ * @returns TProductRecord
+ */
+export const useRecord = () => {
 	const context = useContext(RecordContext)
 	return context
 }

@@ -1,5 +1,6 @@
 export * from './Status'
 export * from './Size'
+export * from './Sku'
 export * from './Stock'
 export * from './Price'
 export * from './Taxonomy'

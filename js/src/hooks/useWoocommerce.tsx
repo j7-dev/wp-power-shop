@@ -13,14 +13,18 @@ import { safeParse } from '@/utils'
  */
 export const useWoocommerce = (): TWoocommerce => {
 	const apiUrl = useApiUrl()
-	const { data } = useCustom({
+	const { data, isLoading } = useCustom({
 		url: `${apiUrl}/woocommerce`,
 		method: 'get',
 	})
 
-	safeParse(WoocommerceSchema, data?.data?.data)
+	const wcData = data?.data?.data || (DEFAULT_WOOCOMMERCE as TWoocommerce)
 
-	return data?.data?.data || (DEFAULT_WOOCOMMERCE as TWoocommerce)
+	if (!isLoading) {
+		safeParse(WoocommerceSchema, wcData)
+	}
+
+	return wcData
 }
 
 /**

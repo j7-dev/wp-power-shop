@@ -1,8 +1,21 @@
+import { SizeType } from 'antd/es/config-provider/SizeContext'
+import { SwitchSize } from 'antd/es/switch'
 import { Switch } from 'antd-toolkit'
 import { TProductType, isVariation as checkIsVariation } from 'antd-toolkit/wp'
 
-export const Other = ({ id, type }: { id?: string; type: TProductType }) => {
+export const Other = ({
+	id,
+	type,
+	size,
+}: {
+	id?: string
+	type: TProductType
+	size?: SizeType
+}) => {
 	const isVariation = checkIsVariation(type as string)
+	const switchSize = ['small', 'default'].includes(size || 'default')
+		? (size as SwitchSize)
+		: 'default'
 	return (
 		<>
 			<Switch
@@ -11,7 +24,7 @@ export const Other = ({ id, type }: { id?: string; type: TProductType }) => {
 					label: '虛擬商品',
 				}}
 				switchProps={{
-					size: 'small',
+					size: switchSize,
 				}}
 			/>
 			<Switch
@@ -20,7 +33,7 @@ export const Other = ({ id, type }: { id?: string; type: TProductType }) => {
 					label: '可下載',
 				}}
 				switchProps={{
-					size: 'small',
+					size: switchSize,
 				}}
 			/>
 			{!isVariation && (
@@ -31,7 +44,7 @@ export const Other = ({ id, type }: { id?: string; type: TProductType }) => {
 							label: '精選商品',
 						}}
 						switchProps={{
-							size: 'small',
+							size: switchSize,
 						}}
 					/>
 					<Switch
@@ -40,7 +53,7 @@ export const Other = ({ id, type }: { id?: string; type: TProductType }) => {
 							label: '限購一件',
 						}}
 						switchProps={{
-							size: 'small',
+							size: switchSize,
 						}}
 					/>
 					<Switch
@@ -49,7 +62,7 @@ export const Other = ({ id, type }: { id?: string; type: TProductType }) => {
 							label: '允許評論',
 						}}
 						switchProps={{
-							size: 'small',
+							size: switchSize,
 						}}
 					/>
 				</>
@@ -66,7 +79,7 @@ export const Other = ({ id, type }: { id?: string; type: TProductType }) => {
 								value === 'publish' ? { checked: true } : {},
 						}}
 						switchProps={{
-							size: 'small',
+							size: switchSize,
 						}}
 					/>
 				</>

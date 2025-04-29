@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useWoocommerce } from '@/hooks'
-import { Form, Statistic, Tabs, TabsProps } from 'antd'
+import { Statistic, Tabs, TabsProps } from 'antd'
 import { useRecord } from '@/pages/admin/Users/Edit/hooks'
 import { Heading } from 'antd-toolkit'
 import Basic from './Basic'
@@ -31,7 +31,6 @@ const items: TabsProps['items'] = [
 const DetailComponent = () => {
 	const { currency } = useWoocommerce()
 	const { symbol } = currency
-	const form = Form.useFormInstance()
 	const record = useRecord()
 	const {
 		total_spend,
@@ -42,8 +41,6 @@ const DetailComponent = () => {
 		user_registered,
 		user_registered_human,
 	} = record
-
-	console.log('⭐ record:', record)
 
 	return (
 		<>

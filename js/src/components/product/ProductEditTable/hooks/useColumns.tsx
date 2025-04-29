@@ -6,6 +6,7 @@ import {
 	Status,
 	Price,
 	Size,
+	Sku,
 	Stock,
 	PurchaseNote,
 	Other,
@@ -57,14 +58,16 @@ export const useColumns = () => {
 			dataIndex: 'status',
 			width: 100,
 			render: (_, { id, type }) =>
-				isVariation(type as string) ? null : <Status id={id} />,
+				isVariation(type as string) ? null : <Status id={id} size="small" />,
 		},
 		{
 			title: `價格 (${symbol})`,
 			dataIndex: 'regular_price',
 			width: 100,
 			render: (_, { id, type }) =>
-				isVariable(type as string) ? null : <Price id={id} />,
+				isVariable(type as string) ? null : (
+					<Price id={id} type={type as TProductType} size="small" />
+				),
 		},
 		{
 			title: '庫存',
@@ -72,7 +75,7 @@ export const useColumns = () => {
 			width: 200,
 			render: (_, { id, type }) => (
 				<div className="grid grid-cols-2 gap-x-2">
-					<Stock id={id} />
+					<Stock id={id} size="small" />
 				</div>
 			),
 		},
@@ -83,7 +86,8 @@ export const useColumns = () => {
 			width: 160,
 			render: (_, { id }) => (
 				<div className="grid grid-cols-2 gap-x-2">
-					<Size id={id} />
+					<Sku id={id} size="small" />
+					<Size id={id} size="small" />
 				</div>
 			),
 		},
@@ -92,7 +96,7 @@ export const useColumns = () => {
 			dataIndex: 'category_ids',
 			width: 120,
 			render: (_, { id, type }) =>
-				isVariation(type as string) ? null : <Taxonomy id={id} />,
+				isVariation(type as string) ? null : <Taxonomy id={id} size="small" />,
 		},
 		{
 			title: '購買備註',
@@ -102,7 +106,7 @@ export const useColumns = () => {
 				const name = isVariation(type as string)
 					? '_variation_description'
 					: 'purchase_note'
-				return <PurchaseNote id={id} name={name} />
+				return <PurchaseNote id={id} name={name} size="small" />
 			},
 		},
 		{
@@ -111,7 +115,7 @@ export const useColumns = () => {
 			width: 80,
 			render: (_, { id, type }) => (
 				<div className="grid grid-cols-2 gap-x-2">
-					<Other id={id} type={type as TProductType} />
+					<Other id={id} type={type as TProductType} size="small" />
 				</div>
 			),
 		},

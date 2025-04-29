@@ -1,5 +1,15 @@
 import { useState, useEffect } from 'react'
-import { Tabs, TabsProps, Card, Button, Modal, Form, Spin } from 'antd'
+import {
+	Tabs,
+	TabsProps,
+	Card,
+	Button,
+	Modal,
+	Form,
+	Spin,
+	Alert,
+	Tag,
+} from 'antd'
 import { useCreate, useUpdate } from '@refinedev/core'
 import { EditOutlined } from '@ant-design/icons'
 import { useModal, DeleteButton } from '@refinedev/antd'
@@ -90,6 +100,25 @@ export const ProductAttributes = () => {
 	return (
 		<Spin spinning={isLoading}>
 			<Card title="全局商品屬性">
+				<Alert
+					className="mb-4"
+					message="什麼時候該建立全局屬性？"
+					description={
+						<>
+							<p className="m-0">
+								當你想要在所有商品中使用相同的屬性時，可以使用全局屬性。
+							</p>
+							<p className="m-0">
+								例如：你商店的衣服商品都有固定尺碼 (S, M, L, XL) ，可以設定{' '}
+								<Tag color="blue">尺碼</Tag>
+								為全局屬性，這樣所有商品都會有尺碼這個屬性。
+							</p>
+						</>
+					}
+					type="info"
+					showIcon
+					closable
+				/>
 				<Tabs
 					tabBarExtraContent={
 						<div className="flex gap-2">

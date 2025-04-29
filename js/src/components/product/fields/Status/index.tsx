@@ -1,14 +1,15 @@
 import { Form, Select } from 'antd'
+import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { PRODUCT_STATUS } from 'antd-toolkit/wp'
 
 const { Item } = Form
 
-export const Status = ({ id }: { id?: string }) => {
+export const Status = ({ id, size }: { id?: string; size?: SizeType }) => {
 	return (
 		<>
 			<Item name={id ? [id, 'status'] : ['status']} label="發佈狀態">
 				<Select
-					size="small"
+					size={size}
 					className="w-full"
 					options={PRODUCT_STATUS}
 					allowClear
@@ -19,7 +20,7 @@ export const Status = ({ id }: { id?: string }) => {
 				label="可見度"
 			>
 				<Select
-					size="small"
+					size={size}
 					className="w-full"
 					options={[
 						{ label: '隱藏', value: 'hidden' },

@@ -1,14 +1,17 @@
 import { Form, InputNumber, Select } from 'antd'
+import { SizeType } from 'antd/es/config-provider/SizeContext'
+import { SwitchSize } from 'antd/es/switch'
 import { useWoocommerce } from '@/hooks'
 import { Switch } from 'antd-toolkit'
 import { BOOLEAN_OPTIONS, PRODUCT_STOCK_STATUS } from 'antd-toolkit/wp'
 
 const { Item } = Form
 
-export const Stock = ({ id }: { id?: string }) => {
+export const Stock = ({ id, size }: { id?: string; size?: SizeType }) => {
 	const { notify_low_stock_amount } = useWoocommerce()
 	const form = Form.useFormInstance()
-	const watchManageStock = Form.useWatch([id, 'manage_stock'], form)
+	const manageStockName = id ? [id, 'manage_stock'] : ['manage_stock']
+	const watchManageStock = Form.useWatch(manageStockName, form)
 	const enableStockManagement = watchManageStock === 'yes'
 	return (
 		<>
@@ -17,7 +20,7 @@ export const Stock = ({ id }: { id?: string }) => {
 				label="允許無庫存下單"
 			>
 				<Select
-					size="small"
+					size={size}
 					className="w-full"
 					options={[
 						{ label: '是，且通知顧客', value: 'notify' },
@@ -31,7 +34,7 @@ export const Stock = ({ id }: { id?: string }) => {
 				label="庫存狀態"
 			>
 				<Select
-					size="small"
+					size={size}
 					className="w-full"
 					options={PRODUCT_STOCK_STATUS}
 					allowClear
@@ -43,7 +46,9 @@ export const Stock = ({ id }: { id?: string }) => {
 					label: '管理庫存',
 				}}
 				switchProps={{
-					size: 'small',
+					size: ['small', 'default'].includes(size || 'default')
+						? (size as SwitchSize)
+						: 'default',
 				}}
 			/>
 
@@ -53,14 +58,14 @@ export const Stock = ({ id }: { id?: string }) => {
 						name={id ? [id, 'stock_quantity'] : ['stock_quantity']}
 						label="庫存數量"
 					>
-						<InputNumber size="small" className="w-full" />
+						<InputNumber size={size} className="w-full" />
 					</Item>
 					<Item
 						name={id ? [id, 'low_stock_amount'] : ['low_stock_amount']}
 						label="低庫存臨界值"
 					>
 						<InputNumber
-							size="small"
+							size={size}
 							placeholder={`全店門檻(${notify_low_stock_amount})`}
 							className="w-full"
 						/>
