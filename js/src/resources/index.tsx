@@ -146,6 +146,14 @@ export const resources: ResourceProps[] = [
 			icon: <FaPhotoVideo />,
 		},
 	},
+	{
+		name: 'wp-media-library',
+		list: '/wp-media-library',
+		meta: {
+			label: 'WordPress 媒體庫',
+			icon: <FaPhotoVideo />,
+		},
+	},
 	// {
 	// 	name: 'shortcodes',
 	// 	list: '/shortcodes',

@@ -37,7 +37,7 @@ const SortableListComponent = ({
 }) => {
 	const {
 		data: termsData,
-		isFetching: isListFetching,
+		isLoading: isListLoading,
 		paginationProps,
 		setPaginationProps,
 	} = useTermsList(taxonomy)
@@ -50,11 +50,11 @@ const SortableListComponent = ({
 	const { mutate } = useCustomMutation()
 
 	useEffect(() => {
-		if (!isListFetching) {
+		if (!isListLoading) {
 			// 每次重新排序後，重新取得章節後，重新 set 選擇的章節
 			setSelectedTerm(terms.find((c) => c.id === selectedTerm?.id) || null)
 		}
-	}, [isListFetching])
+	}, [isListLoading])
 
 	const handleSave = (data: TTerm[]) => {
 		const isEqual = _isEqual(terms, data)
@@ -153,8 +153,8 @@ const SortableListComponent = ({
 				/>
 			</div>
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-				{isListFetching && <Loading />}
-				{!isListFetching && (
+				{isListLoading && <Loading />}
+				{!isListLoading && (
 					<div>
 						<SortableListAntd<TTerm>
 							hideRemove

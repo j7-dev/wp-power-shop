@@ -13,6 +13,7 @@ import {
 	UsersList,
 	UsersEdit,
 	Analytics,
+	WPMediaLibraryPage,
 	MediaLibraryPage,
 	ProductList,
 	ProductEdit,
@@ -31,7 +32,6 @@ import {
 	dataProvider,
 	notificationProvider,
 	useBunny,
-	MediaLibraryIndicator,
 } from 'antd-toolkit/refine'
 
 function App() {
@@ -90,7 +90,6 @@ function App() {
 									<div className="pb-32">
 										<Outlet />
 									</div>
-									<MediaLibraryIndicator />
 								</ThemedLayoutV2>
 							</ConfigProvider>
 						}
@@ -120,6 +119,7 @@ function App() {
 						<Route path="analytics" element={<Analytics />} />
 
 						<Route path="media-library" element={<MediaLibraryPage />} />
+						<Route path="wp-media-library" element={<WPMediaLibraryPage />} />
 
 						<Route path="*" element={<ErrorComponent />} />
 					</Route>

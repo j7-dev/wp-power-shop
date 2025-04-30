@@ -1,6 +1,11 @@
 import React from 'react'
 import { Form, Input, Select } from 'antd'
-import { PurchaseNote, Taxonomy, Other } from '@/components/product/fields'
+import {
+	PurchaseNote,
+	Taxonomy,
+	Other,
+	Gallery,
+} from '@/components/product/fields'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import { Heading } from 'antd-toolkit'
 import { TProductType } from 'antd-toolkit/wp'
@@ -32,7 +37,7 @@ export const Description = () => {
 				</div>
 			</div>
 			<div>
-				<div>圖片、圖庫</div>
+				<Gallery />
 				<Taxonomy />
 
 				<Item name="page_template" label="頁面模板">

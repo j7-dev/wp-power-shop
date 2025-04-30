@@ -1,6 +1,7 @@
 export * from './Users'
 export * from './Orders'
 export * from './MediaLibraryPage'
+export * from './WPMediaLibraryPage'
 export * from './Analytics'
 export * from './Product'
 export * from './Dashboard'

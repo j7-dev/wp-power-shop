@@ -45,7 +45,7 @@ const SortableTreeComponent = ({
 }) => {
 	const {
 		data: termsData,
-		isFetching: isListFetching,
+		isLoading: isListLoading,
 		paginationProps,
 		setPaginationProps,
 	} = useTermsList(taxonomy)
@@ -65,7 +65,7 @@ const SortableTreeComponent = ({
 	const openedNodeIds = getOpenedNodeIds(treeData)
 
 	useEffect(() => {
-		if (!isListFetching) {
+		if (!isListLoading) {
 			const termTree = terms?.map(termToTreeNode)
 
 			setTreeData((prev) => {
@@ -88,7 +88,7 @@ const SortableTreeComponent = ({
 				flattenTerms.find((c) => c.id === selectedTerm?.id) || null,
 			)
 		}
-	}, [isListFetching, JSON.stringify(paginationProps)])
+	}, [isListLoading, JSON.stringify(paginationProps)])
 
 	const handleSave = (data: TreeData<TTerm>) => {
 		const from_tree = treeToParams(originTree, paginationProps)
@@ -189,8 +189,8 @@ const SortableTreeComponent = ({
 				/>
 			</div>
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-				{isListFetching && <Loading />}
-				{!isListFetching && (
+				{isListLoading && <Loading />}
+				{!isListLoading && (
 					<div>
 						<SortableTreeAntd<TTerm>
 							hideAdd
