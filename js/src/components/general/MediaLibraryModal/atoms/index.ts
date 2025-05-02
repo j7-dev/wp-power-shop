@@ -1,4 +1,4 @@
-import {  ModalProps, UploadFile } from 'antd'
+import {  ModalProps, UploadFile, ButtonProps } from 'antd'
 import { atom, } from 'jotai'
 import { TAttachment } from 'antd-toolkit/wp'
 
@@ -22,3 +22,6 @@ export const limitAtom = atom<number>(1)
 
 /** 上傳檔案佇列 */
 export const filesInQueueAtom = atom<UploadFile[]>([])
+
+/** 選取按鈕的 props */
+export const selectButtonPropsAtom = atom<ButtonProps>({})

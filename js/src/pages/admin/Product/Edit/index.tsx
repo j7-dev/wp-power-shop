@@ -1,6 +1,5 @@
-import { memo, useState } from 'react'
-import { Tabs, TabsProps, Form, Switch, Modal, Button, Select } from 'antd'
-import { useAtom } from 'jotai'
+import { memo } from 'react'
+import { Tabs, TabsProps, Form, Switch, Button, Select } from 'antd'
 import { useWoocommerce } from '@/hooks'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
@@ -9,12 +8,8 @@ import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
 // import { PostEdit } from './PostEdit'
 import { defaultSelectProps } from 'antd-toolkit'
-import {
-	notificationProps,
-	mediaLibraryAtom,
-	MediaLibrary,
-	TBunnyVideo,
-} from 'antd-toolkit/refine'
+import { TImage } from 'antd-toolkit/wp'
+import { notificationProps } from 'antd-toolkit/refine'
 
 // TAB items
 const defaultItems: TabsProps['items'] = [
@@ -88,10 +83,24 @@ const EditComponent = () => {
 
 	const items = defaultItems
 
-	// 處理 media library
-	const [mediaLibrary, setMediaLibrary] = useAtom(mediaLibraryAtom)
-	const { modalProps } = mediaLibrary
-	const [selectedVideos, setSelectedVideos] = useState<TBunnyVideo[]>([])
+	/**
+	 * change the form data before submitting
+	 * @see https://refine.dev/docs/ui-integrations/ant-design/hooks/use-form/#how-can-i-change-the-form-data-before-submitting-it-to-the-api
+	 * @param values @type {any}
+	 */
+	const handleOnFinish = (values: any) => {
+		// 將圖片從 images 轉成 PHP WC_Product 儲存的 key
+		const { images = [], ...rest } = values
+		const [image, ...gallery_images] = images as TImage[]
+
+		onFinish({
+			...rest,
+			image_id: image ? image?.id : 0,
+			gallery_image_ids: gallery_images?.length
+				? gallery_images?.map(({ id }) => id)
+				: '[]',
+		})
+	}
 
 	return (
 		<div className="sticky-card-actions sticky-tabs-nav">
@@ -127,7 +136,7 @@ const EditComponent = () => {
 					)}
 					isLoading={query?.isLoading}
 				>
-					<Form {...formProps} layout="vertical">
+					<Form {...formProps} onFinish={handleOnFinish} layout="vertical">
 						<Item name="type" label="商品類型">
 							<Select
 								{...defaultSelectProps}
@@ -162,41 +171,6 @@ const EditComponent = () => {
 						/>
 					</Form>
 				</Edit>
-
-				<Modal
-					{...modalProps}
-					onCancel={() => {
-						setMediaLibrary((prev) => ({
-							...prev,
-							modalProps: {
-								...prev.modalProps,
-								open: false,
-							},
-						}))
-					}}
-				>
-					<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
-						<MediaLibrary
-							mediaLibraryProps={{
-								selectedVideos,
-								setSelectedVideos,
-								limit: 1,
-								selectButtonProps: {
-									onClick: () => {
-										setMediaLibrary((prev) => ({
-											...prev,
-											modalProps: {
-												...prev.modalProps,
-												open: false,
-											},
-											confirmedSelectedVideos: selectedVideos,
-										}))
-									},
-								},
-							}}
-						/>
-					</div>
-				</Modal>
 			</RecordContext.Provider>
 		</div>
 	)

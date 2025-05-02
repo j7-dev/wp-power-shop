@@ -13,6 +13,9 @@ export const WPMediaLibraryPage = () => {
 				setSelectedItems={setSelectedItems}
 				filesInQueue={filesInQueue}
 				setFilesInQueue={setFilesInQueue}
+				selectButtonProps={{
+					className: 'tw-hidden',
+				}}
 			/>
 		</div>
 	)
