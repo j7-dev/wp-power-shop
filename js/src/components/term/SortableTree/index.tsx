@@ -88,7 +88,7 @@ const SortableTreeComponent = ({
 				flattenTerms.find((c) => c.id === selectedTerm?.id) || null,
 			)
 		}
-	}, [isListLoading, JSON.stringify(paginationProps)])
+	}, [isListLoading, terms])
 
 	const handleSave = (data: TreeData<TTerm>) => {
 		const from_tree = treeToParams(originTree, paginationProps)

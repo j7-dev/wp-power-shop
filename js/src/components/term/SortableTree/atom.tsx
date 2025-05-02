@@ -14,4 +14,5 @@ export const TaxonomyContext = createContext<TTaxonomy>({
 	value: '',
 	label: '',
 	hierarchical: false,
+	publicly_queryable: false,
 })
