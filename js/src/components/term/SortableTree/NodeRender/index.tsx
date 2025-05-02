@@ -12,9 +12,9 @@ import { ProductName as PostName } from 'antd-toolkit/wp'
 
 const NodeRender: FC<{
 	node: FlattenNode<TTerm>
-	selectedIds: string[]
-	setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
-}> = ({ node, selectedIds, setSelectedIds }) => {
+	selectedTerms: TTerm[]
+	setSelectedTerms: React.Dispatch<React.SetStateAction<TTerm[]>>
+}> = ({ node, selectedTerms, setSelectedTerms }) => {
 	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
 	const { label: taxonomyLabel = '', publicly_queryable } = useTaxonomy()
 	const { removeNode } = useSortableTree()
@@ -33,25 +33,31 @@ const NodeRender: FC<{
 		removeNode(node.id)
 	}
 
-	const getFlattenChildrenIds = (_node: FlattenNode<TTerm>): string[] => {
-		return flatMapDeep([_node], (__node: FlattenNode<TTerm>) => [
-			__node?.id as string,
-			...__node?.children?.map((child) =>
-				getFlattenChildrenIds(child as FlattenNode<TTerm>),
-			),
-		])
+	const getFlattenTerms = (_node: FlattenNode<TTerm>): TTerm[] => {
+		if (!_node?.content) {
+			return []
+		}
+		const terms: TTerm[] = [_node.content as TTerm]
+		if (_node.children) {
+			_node.children.forEach((child) => {
+				terms.push(...getFlattenTerms(child as FlattenNode<TTerm>))
+			})
+		}
+		return terms
 	}
 
 	const handleCheck: CheckboxProps['onChange'] = (e) => {
-		const flattenChildrenIds = getFlattenChildrenIds(node)
+		const flattenTerms = getFlattenTerms(node)
+		const flattenTermsIds = flattenTerms.map((c) => c.id)
 		if (e.target.checked) {
-			setSelectedIds((prev) => [...prev, ...flattenChildrenIds])
+			setSelectedTerms((prev) => [...prev, ...flattenTerms])
 		} else {
-			setSelectedIds((prev) =>
-				prev.filter((id) => !flattenChildrenIds.includes(id)),
+			setSelectedTerms((prev) =>
+				prev.filter((c) => !flattenTermsIds.includes(c.id)),
 			)
 		}
 	}
+	const selectedIds = selectedTerms.map((c) => c.id)
 	const isChecked = selectedIds.includes(node.id as string)
 	const isSelectedChapter = selectedTerm?.id === node.id
 

@@ -15,7 +15,7 @@ import { toParams } from '@/components/term/SortableList/utils'
 import { useAtom } from 'jotai'
 import {
 	selectedTermAtom,
-	selectedIdsAtom,
+	selectedTermsAtom,
 	TaxonomyContext,
 } from '@/components/term/SortableList/atom'
 import Loading from '@/components/term/SortableList/Loading'
@@ -102,7 +102,7 @@ const SortableListComponent = ({
 		)
 	}
 
-	const [selectedIds, setSelectedIds] = useAtom(selectedIdsAtom)
+	const [selectedTerms, setSelectedTerms] = useAtom(selectedTermsAtom)
 
 	const { mutate: deleteMany, isLoading: isDeleteManyLoading } = useDeleteMany()
 
@@ -117,8 +117,8 @@ const SortableListComponent = ({
 				<Button
 					type="default"
 					className="relative top-1"
-					disabled={!selectedIds.length}
-					onClick={() => setSelectedIds([])}
+					disabled={!selectedTerms.length}
+					onClick={() => setSelectedTerms([])}
 				>
 					清空選取
 				</Button>
@@ -128,7 +128,7 @@ const SortableListComponent = ({
 							deleteMany(
 								{
 									resource: `terms/${taxonomy.value}`,
-									ids: selectedIds,
+									ids: selectedTerms.map((c) => c.id),
 									mutationMode: 'optimistic',
 									values: {
 										taxonomy: taxonomy.value,
@@ -137,7 +137,7 @@ const SortableListComponent = ({
 								},
 								{
 									onSuccess: () => {
-										setSelectedIds([])
+										setSelectedTerms([])
 									},
 								},
 							),
@@ -147,8 +147,8 @@ const SortableListComponent = ({
 						danger: true,
 						className: 'relative top-1',
 						loading: isDeleteManyLoading,
-						disabled: !selectedIds.length,
-						children: `批量刪除 ${selectedIds.length ? `(${selectedIds.length})` : ''}`,
+						disabled: !selectedTerms.length,
+						children: `批量刪除 ${selectedTerms.length ? `(${selectedTerms.length})` : ''}`,
 					}}
 				/>
 			</div>
@@ -169,8 +169,8 @@ const SortableListComponent = ({
 							renderContent={(item, index) => (
 								<NodeRender
 									record={item}
-									selectedIds={selectedIds}
-									setSelectedIds={setSelectedIds}
+									selectedTerms={selectedTerms}
+									setSelectedTerms={setSelectedTerms}
 								/>
 							)}
 						/>

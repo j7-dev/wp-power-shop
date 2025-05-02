@@ -21,7 +21,7 @@ import { useTermsList } from '@/components/term/hooks'
 import { useAtom } from 'jotai'
 import {
 	selectedTermAtom,
-	selectedIdsAtom,
+	selectedTermsAtom,
 	TaxonomyContext,
 } from '@/components/term/SortableTree/atom'
 import Loading from '@/components/term/SortableTree/Loading'
@@ -134,7 +134,7 @@ const SortableTreeComponent = ({
 		)
 	}
 
-	const [selectedIds, setSelectedIds] = useAtom(selectedIdsAtom)
+	const [selectedTerms, setSelectedTerms] = useAtom(selectedTermsAtom)
 
 	const { mutate: deleteMany, isLoading: isDeleteManyLoading } = useDeleteMany()
 
@@ -153,8 +153,8 @@ const SortableTreeComponent = ({
 				<Button
 					type="default"
 					className="relative top-1"
-					disabled={!selectedIds.length}
-					onClick={() => setSelectedIds([])}
+					disabled={!selectedTerms.length}
+					onClick={() => setSelectedTerms([])}
 				>
 					清空選取
 				</Button>
@@ -164,7 +164,7 @@ const SortableTreeComponent = ({
 							deleteMany(
 								{
 									resource: `terms/${taxonomy.value}`,
-									ids: selectedIds,
+									ids: selectedTerms.map((c) => c.id),
 									mutationMode: 'optimistic',
 									values: {
 										taxonomy: taxonomy.value,
@@ -173,7 +173,7 @@ const SortableTreeComponent = ({
 								},
 								{
 									onSuccess: () => {
-										setSelectedIds([])
+										setSelectedTerms([])
 									},
 								},
 							),
@@ -183,8 +183,8 @@ const SortableTreeComponent = ({
 						danger: true,
 						className: 'relative top-1',
 						loading: isDeleteManyLoading,
-						disabled: !selectedIds.length,
-						children: `批量刪除 ${selectedIds.length ? `(${selectedIds.length})` : ''}`,
+						disabled: !selectedTerms.length,
+						children: `批量刪除 ${selectedTerms.length ? `(${selectedTerms.length})` : ''}`,
 					}}
 				/>
 			</div>
@@ -203,8 +203,8 @@ const SortableTreeComponent = ({
 							renderContent={(node) => (
 								<NodeRender
 									node={node}
-									selectedIds={selectedIds}
-									setSelectedIds={setSelectedIds}
+									selectedTerms={selectedTerms}
+									setSelectedTerms={setSelectedTerms}
 								/>
 							)}
 							indentationWidth={48}

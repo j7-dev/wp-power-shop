@@ -12,9 +12,9 @@ import { notificationProps } from 'antd-toolkit/refine'
 
 const NodeRender: FC<{
 	record: TTerm
-	selectedIds: string[]
-	setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
-}> = ({ record, selectedIds, setSelectedIds }) => {
+	selectedTerms: TTerm[]
+	setSelectedTerms: React.Dispatch<React.SetStateAction<TTerm[]>>
+}> = ({ record, selectedTerms, setSelectedTerms }) => {
 	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
 	const {
 		label: taxonomyLabel = '',
@@ -34,11 +34,12 @@ const NodeRender: FC<{
 
 	const handleCheck: CheckboxProps['onChange'] = (e) => {
 		if (e.target.checked) {
-			setSelectedIds((prev) => [...prev, id])
+			setSelectedTerms((prev) => [...prev, record])
 		} else {
-			setSelectedIds((prev) => prev.filter((selectedId) => selectedId !== id))
+			setSelectedTerms((prev) => prev.filter((c) => c.id !== id))
 		}
 	}
+	const selectedIds = selectedTerms.map((c) => c.id)
 	const isChecked = selectedIds.includes(id)
 	const isSelected = selectedTerm?.id === id
 
