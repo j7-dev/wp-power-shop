@@ -3,19 +3,19 @@ import { TTerm, DEFAULT } from '@/components/term/types'
 import { FlattenNode, useSortableTree } from '@ant-design/pro-editor'
 import { Checkbox, CheckboxProps, Tooltip, Button } from 'antd'
 import { ExportOutlined } from '@ant-design/icons'
-import { useAtom } from 'jotai'
-import { selectedTermAtom } from '@/components/term/SortableTree/atom'
-import { useTaxonomy } from '@/components/term/SortableTree/hooks'
-import { flatMapDeep } from 'lodash-es'
+import {
+	useTaxonomy,
+	useSelectedTermId,
+	useSelectedTermIds,
+} from '@/components/term/hooks'
 import { PopconfirmDelete } from 'antd-toolkit'
 import { ProductName as PostName } from 'antd-toolkit/wp'
 
 const NodeRender: FC<{
 	node: FlattenNode<TTerm>
-	selectedTerms: TTerm[]
-	setSelectedTerms: React.Dispatch<React.SetStateAction<TTerm[]>>
-}> = ({ node, selectedTerms, setSelectedTerms }) => {
-	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
+}> = ({ node }) => {
+	const { selectedTermId, setSelectedTermId } = useSelectedTermId()
+	const { selectedTermIds, setSelectedTermIds } = useSelectedTermIds()
 	const { label: taxonomyLabel = '', publicly_queryable } = useTaxonomy()
 	const { removeNode } = useSortableTree()
 	const record = node.content || DEFAULT
@@ -50,16 +50,16 @@ const NodeRender: FC<{
 		const flattenTerms = getFlattenTerms(node)
 		const flattenTermsIds = flattenTerms.map((c) => c.id)
 		if (e.target.checked) {
-			setSelectedTerms((prev) => [...prev, ...flattenTerms])
+			setSelectedTermIds((prev) => [...prev, ...flattenTermsIds])
 		} else {
-			setSelectedTerms((prev) =>
-				prev.filter((c) => !flattenTermsIds.includes(c.id)),
+			setSelectedTermIds((prev) =>
+				prev.filter((c) => !flattenTermsIds.includes(c)),
 			)
 		}
 	}
-	const selectedIds = selectedTerms.map((c) => c.id)
+	const selectedIds = selectedTermIds
 	const isChecked = selectedIds.includes(node.id as string)
-	const isSelectedChapter = selectedTerm?.id === node.id
+	const isSelectedChapter = selectedTermId === node.id
 
 	const showPlaceholder = node?.children?.length === 0
 	return (
@@ -68,7 +68,7 @@ const NodeRender: FC<{
 		>
 			<div
 				className="flex items-center overflow-hidden"
-				onClick={() => setSelectedTerm(record)}
+				onClick={() => setSelectedTermId(record?.id)}
 			>
 				{showPlaceholder && <div className="w-[28px] h-[28px]"></div>}
 				<Checkbox className="mr-2" onChange={handleCheck} checked={isChecked} />

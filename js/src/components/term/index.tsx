@@ -1,3 +1,5 @@
 export * from './EditForm'
 export * from './SortableTree'
 export * from './SortableList'
+export * from './TaxonomyModal'
+export * from './hooks'

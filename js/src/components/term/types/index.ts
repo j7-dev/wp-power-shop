@@ -1,3 +1,5 @@
+import { TTaxonomy } from '@/types/woocommerce'
+
 export type TTerm = {
 	id: string
 	name: string
@@ -31,3 +33,13 @@ export const  DEFAULT: TTerm = {
 	thumbnail_id: '',
 }
 
+
+
+export type TSortableTreeListProps = {
+	taxonomy: TTaxonomy
+	selectedTermIds: string[]
+	setSelectedTermIds: React.Dispatch<React.SetStateAction<string[]>>
+	selectedTermId: string | null
+	setSelectedTermId: React.Dispatch<React.SetStateAction<string | null>>
+	Edit?: React.FC<{ record: TTerm; taxonomy: TTaxonomy }>
+}

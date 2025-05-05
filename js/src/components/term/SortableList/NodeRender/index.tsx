@@ -2,9 +2,11 @@ import { FC } from 'react'
 import { TTerm } from '@/components/term/types'
 import { Checkbox, CheckboxProps, Tooltip, Button } from 'antd'
 import { ExportOutlined } from '@ant-design/icons'
-import { useAtom } from 'jotai'
-import { selectedTermAtom } from '@/components/term/SortableList/atom'
-import { useTaxonomy } from '@/components/term/SortableList/hooks'
+import {
+	useTaxonomy,
+	useSelectedTermId,
+	useSelectedTermIds,
+} from '@/components/term/hooks'
 import { useDelete } from '@refinedev/core'
 import { PopconfirmDelete } from 'antd-toolkit'
 import { ProductName as PostName } from 'antd-toolkit/wp'
@@ -12,10 +14,9 @@ import { notificationProps } from 'antd-toolkit/refine'
 
 const NodeRender: FC<{
 	record: TTerm
-	selectedTerms: TTerm[]
-	setSelectedTerms: React.Dispatch<React.SetStateAction<TTerm[]>>
-}> = ({ record, selectedTerms, setSelectedTerms }) => {
-	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
+}> = ({ record }) => {
+	const { selectedTermId, setSelectedTermId } = useSelectedTermId()
+	const { selectedTermIds, setSelectedTermIds } = useSelectedTermIds()
 	const {
 		label: taxonomyLabel = '',
 		value: taxonomy,
@@ -34,14 +35,14 @@ const NodeRender: FC<{
 
 	const handleCheck: CheckboxProps['onChange'] = (e) => {
 		if (e.target.checked) {
-			setSelectedTerms((prev) => [...prev, record])
+			setSelectedTermIds((prev) => [...prev, id])
 		} else {
-			setSelectedTerms((prev) => prev.filter((c) => c.id !== id))
+			setSelectedTermIds((prev) => prev.filter((c) => c !== id))
 		}
 	}
-	const selectedIds = selectedTerms.map((c) => c.id)
+	const selectedIds = selectedTermIds
 	const isChecked = selectedIds.includes(id)
-	const isSelected = selectedTerm?.id === id
+	const isSelected = selectedTermId === id
 
 	return (
 		<div
@@ -49,7 +50,7 @@ const NodeRender: FC<{
 		>
 			<div
 				className="flex items-center overflow-hidden"
-				onClick={() => setSelectedTerm(record)}
+				onClick={() => setSelectedTermId(id)}
 			>
 				<Checkbox className="mr-2" onChange={handleCheck} checked={isChecked} />
 				<PostName className="[&_.at-name]:!text-sm" hideImage record={record} />

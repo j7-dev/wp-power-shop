@@ -1,4 +1,4 @@
-import { useEffect, memo } from 'react'
+import { useEffect, memo, FC } from 'react'
 import { SortableList as SortableListAntd } from '@ant-design/pro-editor'
 import { TTerm, DEFAULT } from '@/components/term/types'
 import { message, Button, Pagination, Empty } from 'antd'
@@ -10,16 +10,15 @@ import {
 	useDeleteMany,
 } from '@refinedev/core'
 import { isEqual as _isEqual } from 'lodash-es'
-import { useTermsList } from '@/components/term/hooks'
 import { toParams } from '@/components/term/SortableList/utils'
-import { useAtom } from 'jotai'
 import {
-	selectedTermAtom,
-	selectedTermsAtom,
+	useTermsList,
 	TaxonomyContext,
-} from '@/components/term/SortableList/atom'
+	SelectedTermIdsContext,
+	SelectedTermIdContext,
+} from '@/components/term/hooks'
+import { TSortableTreeListProps } from '@/components/term/types'
 import Loading from '@/components/term/SortableList/Loading'
-import { TTaxonomy } from '@/types/woocommerce'
 import { PopconfirmDelete } from 'antd-toolkit'
 import { notificationProps } from 'antd-toolkit/refine'
 
@@ -30,11 +29,12 @@ import { notificationProps } from 'antd-toolkit/refine'
  */
 const SortableListComponent = ({
 	taxonomy,
+	selectedTermIds,
+	setSelectedTermIds,
+	selectedTermId,
+	setSelectedTermId,
 	Edit,
-}: {
-	taxonomy: TTaxonomy
-	Edit?: React.FC<{ record: TTerm; taxonomy: TTaxonomy }>
-}) => {
+}: TSortableTreeListProps) => {
 	const {
 		data: termsData,
 		isLoading: isListLoading,
@@ -42,7 +42,6 @@ const SortableListComponent = ({
 		setPaginationProps,
 	} = useTermsList(taxonomy)
 	const terms = termsData?.data || []
-	const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom)
 
 	const invalidate = useInvalidate()
 
@@ -52,7 +51,7 @@ const SortableListComponent = ({
 	useEffect(() => {
 		if (!isListLoading) {
 			// 每次重新排序後，重新取得章節後，重新 set 選擇的章節
-			setSelectedTerm(terms.find((c) => c.id === selectedTerm?.id) || null)
+			setSelectedTermId(terms.find((c) => c.id === selectedTermId)?.id || null)
 		}
 	}, [isListLoading])
 
@@ -102,97 +101,116 @@ const SortableListComponent = ({
 		)
 	}
 
-	const [selectedTerms, setSelectedTerms] = useAtom(selectedTermsAtom)
-
 	const { mutate: deleteMany, isLoading: isDeleteManyLoading } = useDeleteMany()
 
 	return (
-		<TaxonomyContext.Provider value={taxonomy}>
-			<div className="mb-8 flex gap-x-4 justify-between items-center">
-				<div className="w-full">
-					<Button type="primary" onClick={() => setSelectedTerm(DEFAULT)}>
-						新增
-					</Button>
-				</div>
-				<Button
-					type="default"
-					className="relative top-1"
-					disabled={!selectedTerms.length}
-					onClick={() => setSelectedTerms([])}
-				>
-					清空選取
-				</Button>
-				<PopconfirmDelete
-					popconfirmProps={{
-						onConfirm: () =>
-							deleteMany(
-								{
-									resource: `terms/${taxonomy.value}`,
-									ids: selectedTerms.map((c) => c.id),
-									mutationMode: 'optimistic',
-									values: {
-										taxonomy: taxonomy.value,
-									},
-									...notificationProps,
-								},
-								{
-									onSuccess: () => {
-										setSelectedTerms([])
-									},
-								},
-							),
-					}}
-					buttonProps={{
-						type: 'primary',
-						danger: true,
-						className: 'relative top-1',
-						loading: isDeleteManyLoading,
-						disabled: !selectedTerms.length,
-						children: `批量刪除 ${selectedTerms.length ? `(${selectedTerms.length})` : ''}`,
-					}}
-				/>
-			</div>
-			<div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-				{isListLoading && <Loading />}
-				{!isListLoading && (
-					<div>
-						<SortableListAntd<TTerm>
-							hideRemove
-							value={terms}
-							onChange={handleSave}
-							renderEmpty={() => (
-								<Empty
-									image={Empty.PRESENTED_IMAGE_SIMPLE}
-									description="無資料"
-								/>
-							)}
-							renderContent={(item, index) => (
-								<NodeRender
-									record={item}
-									selectedTerms={selectedTerms}
-									setSelectedTerms={setSelectedTerms}
-								/>
-							)}
-						/>
-						<Pagination
-							{...paginationProps}
-							onChange={(page, pageSize) => {
-								setPaginationProps({
-									...paginationProps,
-									current: page,
-									pageSize,
-								})
+		<SelectedTermIdContext.Provider
+			value={{ selectedTermId, setSelectedTermId }}
+		>
+			<SelectedTermIdsContext.Provider
+				value={{ selectedTermIds, setSelectedTermIds }}
+			>
+				<TaxonomyContext.Provider value={taxonomy}>
+					<div className="mb-8 flex gap-x-4 justify-between items-center">
+						<div className="w-full">
+							<Button
+								type="primary"
+								onClick={() => setSelectedTermId(DEFAULT.id)}
+							>
+								新增
+							</Button>
+						</div>
+						<Button
+							type="default"
+							className="relative top-1"
+							disabled={!selectedTermIds?.length}
+							onClick={() => setSelectedTermIds([])}
+						>
+							清空選取
+						</Button>
+						<PopconfirmDelete
+							popconfirmProps={{
+								onConfirm: () =>
+									deleteMany(
+										{
+											resource: `terms/${taxonomy.value}`,
+											ids: selectedTermIds,
+											mutationMode: 'optimistic',
+											values: {
+												taxonomy: taxonomy.value,
+											},
+											...notificationProps,
+										},
+										{
+											onSuccess: () => {
+												setSelectedTermIds([])
+											},
+										},
+									),
+							}}
+							buttonProps={{
+								type: 'primary',
+								danger: true,
+								className: 'relative top-1',
+								loading: isDeleteManyLoading,
+								disabled: !selectedTermIds?.length,
+								children: `批量刪除 ${selectedTermIds?.length ? `(${selectedTermIds?.length})` : ''}`,
 							}}
 						/>
 					</div>
-				)}
+					<div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+						{isListLoading && <Loading />}
+						{!isListLoading && (
+							<div>
+								<SortableListAntd<TTerm>
+									hideRemove
+									value={terms}
+									onChange={handleSave}
+									renderEmpty={() => (
+										<Empty
+											image={Empty.PRESENTED_IMAGE_SIMPLE}
+											description="無資料"
+										/>
+									)}
+									renderContent={(item, index) => <NodeRender record={item} />}
+								/>
+								<Pagination
+									{...paginationProps}
+									onChange={(page, pageSize) => {
+										setPaginationProps({
+											...paginationProps,
+											current: page,
+											pageSize,
+										})
+									}}
+								/>
+							</div>
+						)}
 
-				{selectedTerm && Edit && (
-					<Edit record={selectedTerm} taxonomy={taxonomy} />
-				)}
-			</div>
-		</TaxonomyContext.Provider>
+						{selectedTermId && Edit && (
+							<Edit
+								record={terms.find((c) => c.id === selectedTermId) || DEFAULT}
+								taxonomy={taxonomy}
+							/>
+						)}
+					</div>
+				</TaxonomyContext.Provider>
+			</SelectedTermIdsContext.Provider>
+		</SelectedTermIdContext.Provider>
 	)
 }
 
-export const SortableList = memo(SortableListComponent)
+/**
+ * 可排序的 term
+ * @param {TSortableTreeProps} props 屬性
+ * @param {TTaxonomy} props.taxonomy 分類
+ * @param {string[]} props.selectedTermIds 選取的 term
+ * @param {React.Dispatch<React.SetStateAction<string[]>>} props.setSelectedTermIds 設定選取的 term
+ * @param {string | null} props.selectedTermId 選取的 term
+ * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId 設定選取的 term
+ * @param {React.FC<{ record: TTerm; taxonomy: TTaxonomy }>} props.Edit 編輯的畫面由外部傳入
+ * @return {React.FC}
+ */
+export const SortableList: FC<TSortableTreeListProps> = memo(
+	SortableListComponent,
+)

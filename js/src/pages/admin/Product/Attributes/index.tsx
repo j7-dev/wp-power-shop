@@ -15,7 +15,7 @@ import { EditOutlined } from '@ant-design/icons'
 import { useModal, DeleteButton } from '@refinedev/antd'
 import { useList } from '@refinedev/core'
 import { TTaxonomy } from '@/types/woocommerce'
-import { SortableList, EditForm } from '@/components/term'
+import { SortableList, useSortableTreeList } from '@/components/term'
 import AttributesForm, {
 	TFormValues,
 } from '@/pages/admin/Product/Attributes/Form'
@@ -32,6 +32,7 @@ type TAttribute = {
 }
 
 export const ProductAttributes = () => {
+	const sortableTreeListProps = useSortableTreeList()
 	/** 編輯的屬性有值時，表示編輯模式，沒有就是新增 */
 	const [attribute, setAttribute] = useState<TAttribute | null>(null)
 	const { SITE_URL } = useEnv()
@@ -152,7 +153,12 @@ export const ProductAttributes = () => {
 										<EditOutlined onClick={handleEdit(attr)} className="ml-2" />
 									</>
 								),
-								children: <SortableList taxonomy={taxonomy} Edit={EditForm} />,
+								children: (
+									<SortableList
+										{...sortableTreeListProps}
+										taxonomy={taxonomy}
+									/>
+								),
 							}
 						}) as TabsProps['items']
 					}

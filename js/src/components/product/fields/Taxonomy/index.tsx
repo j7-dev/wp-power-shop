@@ -5,6 +5,9 @@ import { defaultSelectProps } from 'antd-toolkit'
 
 const { Item } = Form
 
+/*
+ * Select 選擇器
+ */
 export const Taxonomy = ({ id, size }: { id?: string; size?: SizeType }) => {
 	const { product_cats = [], product_tags = [] } = useProductsOptions()
 	return (
