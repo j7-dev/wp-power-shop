@@ -10,6 +10,9 @@ export const useProductsOptions = () => {
 	const result = useCustom<Omit<TProductFilterOptions, 'isLoading'>>({
 		url: `${apiUrl}/products/options`,
 		method: 'get',
+		queryOptions: {
+			queryKey: ['products-options'],
+		},
 	})
 
 	const options: Omit<TProductFilterOptions, 'isLoading'> =

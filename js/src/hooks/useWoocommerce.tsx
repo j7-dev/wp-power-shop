@@ -16,6 +16,9 @@ export const useWoocommerce = (): TWoocommerce => {
 	const { data, isLoading } = useCustom({
 		url: `${apiUrl}/woocommerce`,
 		method: 'get',
+		queryOptions: {
+			queryKey: ['woocommerce'],
+		},
 	})
 
 	const wcData = data?.data?.data || (DEFAULT_WOOCOMMERCE as TWoocommerce)

@@ -1,34 +1,34 @@
 import React, { memo, useEffect } from 'react'
-import { Modal } from 'antd'
-import { useAtom } from 'jotai'
-import {
-	SortableTree,
-	SortableList,
-	useSortableTreeList,
-} from '@/components/term'
+import { Modal, ModalProps } from 'antd'
+import { SortableTree, SortableList } from '@/components/term'
+import { TSortableTreeListProps } from '@/components/term/types'
 import { TTaxonomy } from '@/types/woocommerce'
-import { modalPropsAtom } from '@/components/term/TaxonomyModal/atoms'
 
-export * from '@/components/term/TaxonomyModal/atoms'
+export * from '@/components/term/TaxonomyModal/hooks'
 
-const TaxonomyModalComponent = ({ taxonomy }: { taxonomy: TTaxonomy }) => {
-	const [modalProps, setModalProps] = useAtom(modalPropsAtom)
-	const sortableTreeListProps = useSortableTreeList()
-	const { selectedTermIds, setSelectedTermIds } = sortableTreeListProps
+export type TTaxonomyModalProps = {
+	taxonomy: TTaxonomy
+	initialValue: string[]
+	sortableTreeListProps: Omit<TSortableTreeListProps, 'taxonomy'>
+	modalProps: ModalProps
+	setModalProps: React.Dispatch<React.SetStateAction<ModalProps>>
+}
+
+const TaxonomyModalComponent = ({
+	taxonomy,
+	initialValue = [],
+	sortableTreeListProps,
+	modalProps,
+	setModalProps,
+}: TTaxonomyModalProps) => {
+	const { setSelectedTermIds } = sortableTreeListProps
 
 	useEffect(() => {
-		setSelectedTermIds([
-			'100',
-			'43',
-		])
-	}, [])
+		setSelectedTermIds(initialValue)
+	}, [JSON.stringify(initialValue)])
 
 	return (
-		<Modal
-			{...modalProps}
-			title={`選擇${taxonomy?.label}`}
-			onCancel={() => setModalProps((prev) => ({ ...prev, open: false }))}
-		>
+		<Modal {...modalProps} title={`選擇${taxonomy?.label}`}>
 			<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
 				{taxonomy?.hierarchical && (
 					<SortableTree {...sortableTreeListProps} taxonomy={taxonomy} />

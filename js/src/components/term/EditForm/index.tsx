@@ -1,9 +1,10 @@
 import { memo, useEffect, useState } from 'react'
 import { Form, Input, Space, Button, UploadFile } from 'antd'
-import { toFormData } from 'antd-toolkit'
+import { useQueryClient } from '@tanstack/react-query'
 import { TTerm } from '@/components/term/types'
 import { Edit, useForm } from '@refinedev/antd'
 import { TTaxonomy } from '@/types/woocommerce'
+import { toFormData } from 'antd-toolkit'
 import { FileUpload } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 const { Item } = Form
@@ -30,6 +31,7 @@ const EditFormComponent = ({
 	const { id, name, permalink, edit_url } = record
 	const { label = '' } = taxonomy
 	const isCreate = !record?.id
+	const queryClient = useQueryClient()
 
 	// 初始化資料
 	const { formProps, form, saveButtonProps, mutation, onFinish } = useForm({
@@ -41,6 +43,9 @@ const EditFormComponent = ({
 			enabled: false,
 		},
 		invalidates: ['list', 'detail'],
+		onMutationSuccess: (data, variables, context) => {
+			queryClient.invalidateQueries(['products-options'])
+		},
 		warnWhenUnsavedChanges: true,
 		...notificationProps,
 	})

@@ -234,7 +234,7 @@ const SortableTreeComponent = ({
 							</div>
 						)}
 
-						{selectedTermId && Edit && (
+						{selectedTermId !== null && Edit && (
 							<Edit
 								record={terms.find((c) => c.id === selectedTermId) || DEFAULT}
 								taxonomy={taxonomy}

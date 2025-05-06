@@ -2,7 +2,7 @@ import React from 'react'
 import { Form, Input, Select } from 'antd'
 import {
 	PurchaseNote,
-	TaxonomyModal,
+	TaxonomyModals,
 	Other,
 	Gallery,
 } from '@/components/product/fields'
@@ -40,7 +40,7 @@ export const Description = () => {
 				</div>
 				<div>
 					<Gallery />
-					<TaxonomyModal />
+					<TaxonomyModals />
 
 					<Item name="page_template" label="頁面模板">
 						<Select options={record?.page_template_options} />
