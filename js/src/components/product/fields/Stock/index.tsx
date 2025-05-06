@@ -29,17 +29,7 @@ export const Stock = ({ id, size }: { id?: string; size?: SizeType }) => {
 					allowClear
 				/>
 			</Item>
-			<Item
-				name={id ? [id, 'stock_status'] : ['stock_status']}
-				label="庫存狀態"
-			>
-				<Select
-					size={size}
-					className="w-full"
-					options={PRODUCT_STOCK_STATUS}
-					allowClear
-				/>
-			</Item>
+
 			<Switch
 				formItemProps={{
 					name: id ? [id, 'manage_stock'] : ['manage_stock'],
@@ -51,6 +41,20 @@ export const Stock = ({ id, size }: { id?: string; size?: SizeType }) => {
 						: 'default',
 				}}
 			/>
+
+			{!enableStockManagement && (
+				<Item
+					name={id ? [id, 'stock_status'] : ['stock_status']}
+					label="庫存狀態"
+				>
+					<Select
+						size={size}
+						className="w-full"
+						options={PRODUCT_STOCK_STATUS}
+						allowClear
+					/>
+				</Item>
+			)}
 
 			{enableStockManagement && (
 				<>

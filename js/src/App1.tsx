@@ -20,7 +20,7 @@ import {
 	ProductAttributes,
 	Summary,
 } from '@/pages/admin'
-import { MediaLibraryModal } from '@/components/general'
+
 import { HashRouter, Outlet, Route, Routes } from 'react-router-dom'
 import { resources } from '@/resources'
 import { ConfigProvider } from 'antd'
@@ -90,7 +90,6 @@ function App() {
 									<div className="pb-32">
 										<Outlet />
 									</div>
-									<MediaLibraryModal />
 								</ThemedLayoutV2>
 							</ConfigProvider>
 						}
