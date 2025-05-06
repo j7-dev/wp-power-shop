@@ -1,61 +1,20 @@
-import { memo, useEffect } from 'react'
-import { Modal } from 'antd'
-import { useAtomValue, useAtom } from 'jotai'
-import {
-	modalPropsAtom,
-	selectedItemsAtom,
-	limitAtom,
-	filesInQueueAtom,
-	selectButtonPropsAtom,
-} from '@/components/general/MediaLibraryModal/atoms'
-import { MediaLibrary } from 'antd-toolkit/wp'
+import { memo } from 'react'
+import { Modal, ModalProps } from 'antd'
+import { MediaLibrary, TMediaLibraryProps } from 'antd-toolkit/wp'
 
-export * from '@/components/general/MediaLibraryModal/atoms'
-
-const MediaLibraryModalComponent = () => {
-	const [modalProps, setModalProps] = useAtom(modalPropsAtom)
-	const [selectedItems, setSelectedItems] = useAtom(selectedItemsAtom)
-	const limit = useAtomValue(limitAtom)
-	const [filesInQueue, setFilesInQueue] = useAtom(filesInQueueAtom)
-
-	const { onClick, ...restButtonProps } = useAtomValue(selectButtonPropsAtom)
-
-	/**
-	 * 按下[選取檔案]按鈕後的行為
-	 * 將 onClick 提取出來，這樣不用每次都還要寫關閉 Modal
-	 * */
-	const onSelect = (e: React.MouseEvent<HTMLButtonElement>) => {
-		setModalProps((prev) => ({ ...prev, open: false }))
-		if (onClick) {
-			onClick?.(e)
-		}
-	}
-
-	/** 每次開關 Modal 時，清除所選的項目 */
-	useEffect(() => {
-		// 開啟時，清空，避免破壞關閉後要同步到表單資料的行為
-		if (modalProps?.open) {
-			setSelectedItems([])
-		}
-	}, [modalProps?.open])
-
+const MediaLibraryModalComponent = ({
+	initialIds,
+	modalProps,
+	mediaLibraryProps,
+}: {
+	initialIds: string[]
+	modalProps: ModalProps
+	mediaLibraryProps: TMediaLibraryProps
+}) => {
 	return (
-		<Modal
-			{...modalProps}
-			onCancel={() => setModalProps((prev) => ({ ...prev, open: false }))}
-		>
+		<Modal {...modalProps}>
 			<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
-				<MediaLibrary
-					selectedItems={selectedItems}
-					setSelectedItems={setSelectedItems}
-					limit={limit}
-					filesInQueue={filesInQueue}
-					setFilesInQueue={setFilesInQueue}
-					selectButtonProps={{
-						onClick: onSelect,
-						...restButtonProps,
-					}}
-				/>
+				<MediaLibrary initialIds={initialIds} {...mediaLibraryProps} />
 			</div>
 		</Modal>
 	)

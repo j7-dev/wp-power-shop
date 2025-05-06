@@ -7,7 +7,6 @@ import {
 	Gallery,
 } from '@/components/product/fields'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
-import { MediaLibraryModal } from '@/components/general'
 import { Heading } from 'antd-toolkit'
 import { TProductType } from 'antd-toolkit/wp'
 
@@ -18,8 +17,8 @@ export const Description = () => {
 
 	return (
 		<>
-			<div className="grid grid-cols-[3fr_1fr] gap-12">
-				<div>
+			<div className="flex flex-col xl:flex-row gap-12">
+				<div className="w-full xl:flex-1">
 					<Item name="name" label="商品名稱">
 						<Input allowClear />
 					</Item>
@@ -34,11 +33,11 @@ export const Description = () => {
 					<div>編輯器</div>
 
 					<Heading>其他</Heading>
-					<div className="grid grid-cols-6 gap-x-12">
+					<div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
 						<Other type={(record?.type || 'simple') as TProductType} />
 					</div>
 				</div>
-				<div>
+				<div className="w-full xl:w-[30rem]">
 					<Gallery />
 					<TaxonomyModals />
 
@@ -47,7 +46,6 @@ export const Description = () => {
 					</Item>
 				</div>
 			</div>
-			<MediaLibraryModal />
 		</>
 	)
 }

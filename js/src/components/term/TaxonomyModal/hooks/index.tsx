@@ -17,6 +17,7 @@ export const useTaxonomyModal = (
 ): {
 	close: () => void
 	open: () => void
+	setModalProps: React.Dispatch<React.SetStateAction<ModalProps>>
 } & Omit<TTaxonomyModalProps, 'taxonomy' | 'initialValue'> => {
 	const form = Form.useFormInstance()
 	const [modalProps, setModalProps] = useState<ModalProps>(DEFAULT_MODAL_PROPS)

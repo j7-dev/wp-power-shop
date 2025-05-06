@@ -27,7 +27,7 @@ import { ConfigProvider } from 'antd'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useEnv } from '@/hooks'
 import axios from 'axios'
-import { BackToWpAdmin } from 'antd-toolkit/wp'
+import { BackToWpAdmin, MediaLibraryNotification } from 'antd-toolkit/wp'
 import {
 	dataProvider,
 	notificationProvider,
@@ -90,6 +90,7 @@ function App() {
 									<div className="pb-32">
 										<Outlet />
 									</div>
+									<MediaLibraryNotification />
 								</ThemedLayoutV2>
 							</ConfigProvider>
 						}

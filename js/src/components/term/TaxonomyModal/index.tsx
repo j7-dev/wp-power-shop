@@ -11,7 +11,6 @@ export type TTaxonomyModalProps = {
 	initialValue: string[]
 	sortableTreeListProps: Omit<TSortableTreeListProps, 'taxonomy'>
 	modalProps: ModalProps
-	setModalProps: React.Dispatch<React.SetStateAction<ModalProps>>
 }
 
 const TaxonomyModalComponent = ({
@@ -19,7 +18,6 @@ const TaxonomyModalComponent = ({
 	initialValue = [],
 	sortableTreeListProps,
 	modalProps,
-	setModalProps,
 }: TTaxonomyModalProps) => {
 	const { setSelectedTermIds } = sortableTreeListProps
 

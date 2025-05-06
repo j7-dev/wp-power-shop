@@ -26,7 +26,7 @@ export const TaxonomyModal = ({
 	const form = Form.useFormInstance()
 	const watchIds: string[] = Form.useWatch(name, form) || []
 
-	const { open, close, ...modalProps } = useTaxonomyModal(name)
+	const { open, close, setModalProps, ...modalProps } = useTaxonomyModal(name)
 
 	const { product_cats = [], product_tags = [] } = useProductsOptions()
 	const items = isCat ? product_cats : product_tags
@@ -45,12 +45,13 @@ export const TaxonomyModal = ({
 				{taxonomy.label}
 			</label>
 			<div className="flex flex-wrap gap-y-2">
-				{current_items?.map(({ label }) => (
+				{current_items?.map(({ label, value }) => (
 					<Tag
+						key={value}
 						color={isCat ? 'blue' : 'default'}
 						bordered={true}
 						closable
-						onClose={() => handleCloseItem(label)}
+						onClose={() => handleCloseItem(value)}
 					>
 						{isCat ? label : `#${label}`}
 					</Tag>
