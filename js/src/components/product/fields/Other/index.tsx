@@ -51,6 +51,12 @@ export const Other = ({
 						formItemProps={{
 							name: id ? [id, 'sold_individually'] : ['sold_individually'],
 							label: '限購一件',
+							help:
+								switchSize === 'small' ? undefined : '限制每筆訂單購買一項商品',
+							tooltip:
+								switchSize === 'small'
+									? undefined
+									: '勾選即可讓顧客在一筆訂單中僅能購買一項商品。 此功能對於限量商品非常實用，例如藝術品或手工商品。',
 						}}
 						switchProps={{
 							size: switchSize,
