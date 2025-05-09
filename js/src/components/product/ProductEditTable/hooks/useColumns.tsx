@@ -21,7 +21,7 @@ import {
 
 const { Item } = Form
 
-export const useColumns = () => {
+export const useColumns = (context?: 'detail') => {
 	const {
 		currency: { symbol },
 		dimension_unit,
@@ -79,7 +79,6 @@ export const useColumns = () => {
 				</div>
 			),
 		},
-
 		{
 			title: `尺寸 (${dimension_unit}) & 重量 (${weight_unit})`,
 			dataIndex: 'size',
@@ -120,6 +119,14 @@ export const useColumns = () => {
 			),
 		},
 	]
+
+	//  依照不同 context 回傳不同的 columns
+	if ('detail' === context) {
+		return columns?.filter((c, index) => {
+			// @ts-ignore
+			return index !== 0 && !['status', 'category_ids'].includes(c?.dataIndex)
+		})
+	}
 
 	return columns
 }

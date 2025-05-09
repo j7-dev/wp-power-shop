@@ -7,9 +7,9 @@ export const RecordContext = createContext<TProductRecord | undefined>(
 
 /**
  * 取得商品記錄
- * @returns TProductRecord
+ * @returns TProductRecord | undefined
  */
-export const useRecord = () => {
+export const useRecord = (): TProductRecord | undefined => {
 	const context = useContext(RecordContext)
 	return context
 }

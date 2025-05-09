@@ -1,25 +1,27 @@
-import { useEffect, useState } from 'react'
-import { ModalProps, Modal, Form, Skeleton } from 'antd'
-import { useAtomValue } from 'jotai'
-import { useUpdateMany } from '@refinedev/core'
-import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
+import React, { useState, useEffect } from 'react'
+import { Form, Skeleton } from 'antd'
+import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import { ProductEditTable } from '@/components/product'
+import { TProductRecord } from '@/components/product/types'
+import { useUpdateMany } from '@refinedev/core'
 import {
 	TFormValues,
 	ZFormValues,
 } from '@/components/product/ProductEditTable/types'
-import { TProductRecord } from '@/components/product/types'
-
 import { productsToFields } from '@/components/product/ProductEditTable/utils'
 
-const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
-	const products = useAtomValue(selectedProductsAtom)
-	const ids = products.map((product) => product.id)
-	const [form] = Form.useForm<TFormValues>()
+export const Variation = () => {
+	const parentProduct = useRecord()
 	const [showTable, setShowTable] = useState(false)
+	const variations = parentProduct?.children || []
+	console.log('⭐ variations:', variations)
+
+	const ids = variations.map((v) => v.id)
+	const [form] = Form.useForm<TFormValues>()
 
 	// 虛擬欄位，因為 Table 組件使用虛擬列表，只會 render 部分的欄位，如果用 form.getFieldsValue() 會抓不到所有欄位值，因此使用這個欄位紀錄變化值
-	const [virtualFields, setVirtualFields] = useState<TProductRecord[]>([])
+	const [virtualFields, setVirtualFields] =
+		useState<TProductRecord[]>(variations)
 
 	const { mutate, isLoading } = useUpdateMany({
 		resource: 'products',
@@ -43,46 +45,25 @@ const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
 		// })
 	}
 
-	// 用來判斷是否可以按下修改按鈕
-	// const handleValuesChange = (
-	// 	changedValues: TFormValues,
-	// 	allValues: TFormValues,
-	// ) => {
-	// 	const keys = Object.keys(allValues).filter(
-	// 		(key) => !!allValues[key as keyof TFormValues],
-	// 	)
-	// 	setCanUpdate(keys.length > 0)
-	// }
-
 	useEffect(() => {
 		const delay = setTimeout(() => {
-			setShowTable(!!modalProps.open)
-			setVirtualFields(products)
+			setShowTable(true)
+			setVirtualFields(variations)
 		}, 500)
 		return () => clearTimeout(delay)
-	}, [modalProps.open])
+	}, [])
 
 	return (
-		<Modal
-			{...modalProps}
-			width="100%"
-			title={`批量修改商品 ${ids.map((id) => `#${id}`).join(', ')}`}
-			centered
-			okText="批量修改"
-			cancelText="取消"
-			onOk={handleUpdate}
-			confirmLoading={isLoading}
-		>
+		<>
 			{!showTable && <Skeleton active />}
 			{showTable && (
 				<ProductEditTable
+					context="detail"
 					form={form}
 					virtualFields={virtualFields}
 					setVirtualFields={setVirtualFields}
 				/>
 			)}
-		</Modal>
+		</>
 	)
 }
-
-export default ModalForm

@@ -31,14 +31,16 @@ const ProductEditTableComponent = ({
 	form,
 	virtualFields,
 	setVirtualFields,
+	context,
 }: {
 	form: FormInstance
 	virtualFields: TProductRecord[] // 虛擬欄位，因為 Table 組件使用虛擬列表，只會 render 部分的欄位，如果用 form.getFieldsValue() 會抓不到所有欄位值，因此使用這個欄位紀錄變化值
 	setVirtualFields: React.Dispatch<React.SetStateAction<TProductRecord[]>>
+	context?: 'detail'
 }) => {
 	// 同步修改模式
 	const [syncModeEnabled, setSyncModeEnabled] = useState(false)
-	const columns = useColumns()
+	const columns = useColumns(context)
 
 	useEffect(() => {
 		// 組成表單資料

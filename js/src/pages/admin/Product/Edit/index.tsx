@@ -8,6 +8,7 @@ import {
 	Stock,
 	Price,
 	Attributes,
+	Variation,
 } from '@/pages/admin/Product/Edit/tabs'
 import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
@@ -105,10 +106,20 @@ const EditComponent = () => {
 			children: <Attributes />,
 		},
 		{
+			key: 'Variation',
+			label: '變體商品',
+			children: <Variation />,
+		},
+		{
 			key: 'Advanced',
 			label: '進階設定',
 			children: <>123</>,
 		},
+		// {// TODO
+		// 	key: 'Download',
+		// 	label: '下載管理',
+		// 	children: <>123</>,
+		// },
 		{
 			key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
 			label: '總覽',
