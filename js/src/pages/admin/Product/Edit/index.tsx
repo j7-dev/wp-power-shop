@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { Tabs, TabsProps, Form, Switch, Button, Select, FormProps } from 'antd'
 import { useWoocommerce } from '@/hooks'
 import { Edit, useForm } from '@refinedev/antd'
@@ -22,6 +22,7 @@ const { Item } = Form
 const EditComponent = () => {
 	const { id } = useParsed()
 	const { product_types } = useWoocommerce()
+	const [activeKey, setActiveKey] = useState('Description')
 
 	// 初始化資料
 	const {
@@ -146,20 +147,25 @@ const EditComponent = () => {
 						icon: null,
 						loading: mutation?.isLoading,
 					}}
-					footerButtons={({ defaultButtons }) => (
-						<>
-							<Switch
-								className="mr-4"
-								checkedChildren="發佈"
-								unCheckedChildren="草稿"
-								value={record?.status === 'publish'}
-								onChange={(checked) => {
-									form.setFieldValue(['status'], checked ? 'publish' : 'draft')
-								}}
-							/>
-							{defaultButtons}
-						</>
-					)}
+					footerButtons={({ defaultButtons }) =>
+						['Attributes', 'Variation'].includes(activeKey) ? null : (
+							<>
+								<Switch
+									className="mr-4"
+									checkedChildren="發佈"
+									unCheckedChildren="草稿"
+									value={record?.status === 'publish'}
+									onChange={(checked) => {
+										form.setFieldValue(
+											['status'],
+											checked ? 'publish' : 'draft',
+										)
+									}}
+								/>
+								{defaultButtons}
+							</>
+						)
+					}
 					isLoading={query?.isLoading}
 				>
 					<Form {...formProps}>
@@ -172,6 +178,8 @@ const EditComponent = () => {
 						</Item>
 					</Form>
 					<Tabs
+						activeKey={activeKey}
+						onChange={(key) => setActiveKey(key)}
 						items={items}
 						tabBarExtraContent={
 							<>

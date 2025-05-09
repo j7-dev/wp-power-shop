@@ -120,22 +120,24 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				<Input disabled={!!watchId} allowClear />
 			</Item>
 
-			<Segmented
-				formItemProps={{
-					name: 'is_taxonomy',
-					hidden: !showCreateFields || !isCreate,
-					label: '創建為全局屬性',
-					initialValue: 'yes',
-					help: (
-						<p className="text-orange-400 mt-0 mb-2">
-							<WarningOutlined className="mr-2" />
-							推薦創建為全局屬性
-						</p>
-					),
-					tooltip:
-						'創建為全局屬性後，下個商品可以直接套用帶入屬性，無須再次創建',
-				}}
-			/>
+			{isCreate && (
+				<Segmented
+					formItemProps={{
+						name: 'is_taxonomy',
+						hidden: !showCreateFields || !isCreate,
+						label: '創建為全局屬性',
+						initialValue: 'yes',
+						help: (
+							<p className="text-orange-400 mt-0 mb-2">
+								<WarningOutlined className="mr-2" />
+								推薦創建為全局屬性
+							</p>
+						),
+						tooltip:
+							'創建為全局屬性後，下個商品可以直接套用帶入屬性，無須再次創建',
+					}}
+				/>
+			)}
 
 			<Item
 				label="代稱"
