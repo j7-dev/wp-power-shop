@@ -89,6 +89,10 @@ const SortableListComponent = ({
 		// )
 	}
 
+	const onMutationSuccess = (data: any, variables: any, context: any) => {
+		setSelectedTermId(null)
+	}
+
 	return (
 		<SelectedTermIdContext.Provider
 			value={{ selectedTermId, setSelectedTermId }}
@@ -129,6 +133,7 @@ const SortableListComponent = ({
 								({ id, name }) => `${id}-${name}` === selectedTermId,
 							) || DEFAULT
 						}
+						onMutationSuccess={onMutationSuccess}
 					/>
 				)}
 			</div>

@@ -1,15 +1,19 @@
-import { memo, useEffect, useState } from 'react'
-import { Form, Input, UploadFile, Select } from 'antd'
-import { WarningOutlined } from '@ant-design/icons'
+import { memo, useEffect } from 'react'
+import { Form } from 'antd'
 import {
 	prepareAttributes,
 	prepareAttribute,
 } from '@/components/productAttribute/SortableList/utils'
 import AttributeTaxonomyForm from './Form'
-import { useInvalidate } from '@refinedev/core'
+import {
+	useInvalidate,
+	CreateResponse,
+	UpdateResponse,
+	BaseRecord,
+} from '@refinedev/core'
 import { Edit, useForm } from '@refinedev/antd'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
-import { toFormData, Segmented } from 'antd-toolkit'
+import { toFormData } from 'antd-toolkit'
 import { TProductAttribute } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 
@@ -26,9 +30,15 @@ import { notificationProps } from 'antd-toolkit/refine'
 const EditFormComponent = ({
 	attributes,
 	record,
+	onMutationSuccess,
 }: {
 	attributes: TProductAttribute[]
 	record: TProductAttribute
+	onMutationSuccess?: (
+		data: CreateResponse<BaseRecord> | UpdateResponse<BaseRecord>,
+		variables: any,
+		context: any,
+	) => void
 }) => {
 	// 如果傳入的 record 是 DEFAULT 那就是代表是新增
 	const product = useRecord()
@@ -53,27 +63,19 @@ const EditFormComponent = ({
 				invalidates: ['detail'],
 				id: product?.id,
 			})
+			if (onMutationSuccess) {
+				onMutationSuccess(data, variables, context)
+			}
 		},
 		warnWhenUnsavedChanges: true,
 		...notificationProps,
 	})
 
-	// 縮圖
-	const [fileList, setFileList] = useState<UploadFile[]>([])
-
 	useEffect(() => {
 		form.setFieldsValue(record)
 
-		if (record) {
-			const thumbnail = form.getFieldValue(['thumbnail_id'])
-			setFileList([
-				{
-					uid: '-1',
-					name: 'thumbnail.png',
-					status: 'done',
-					url: thumbnail,
-				},
-			])
+		if (!record?.name) {
+			form.resetFields()
 		}
 	}, [record])
 
@@ -133,15 +135,6 @@ const EditFormComponent = ({
 		>
 			<Form {...formProps} onFinish={handleOnFinish} layout="vertical">
 				<AttributeTaxonomyForm record={record} />
-
-				{/* <div className="w-40 [&_.ant-upload-text]:tw-hidden [&_.ant-upload-hint]:text-xs">
-					<label className="mb-3 tw-block">縮圖</label>
-					<FileUpload
-						fileList={fileList}
-						setFileList={setFileList}
-						formItemProps={{ name: ['thumbnail_id'] }}
-					/>
-				</div> */}
 			</Form>
 		</Edit>
 	)

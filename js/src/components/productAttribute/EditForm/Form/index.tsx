@@ -58,6 +58,16 @@ const index = ({ record }: { record: TProductAttribute }) => {
 		chosenAttributeTaxonomyOptions.map((o) => o.value).join(','),
 	])
 
+	useEffect(() => {
+		setShowCreateFields(false)
+		// 如果是新增，則不顯示創建為全局屬性
+		if (!record?.name) {
+			form.resetFields()
+		}
+	}, [record])
+
+	const showSlug = isCreate && watchIsTaxonomy && showCreateFields
+
 	return (
 		<>
 			<Item
@@ -67,7 +77,10 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				help={
 					<p
 						className="mt-0 mb-2 text-blue-500 cursor-pointer"
-						onClick={() => setShowCreateFields(true)}
+						onClick={() => {
+							setShowCreateFields(true)
+							form.resetFields()
+						}}
 					>
 						或創建新的屬性
 					</p>
@@ -89,6 +102,20 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				tooltip="屬性名稱 (在前台顯示)"
 				rules={[{ required: true, message: '請輸入名稱' }]}
 				hidden={!showCreateFields && isCreate}
+				help={
+					showCreateFields &&
+					isCreate && (
+						<p
+							className="mt-0 mb-2 text-blue-500 cursor-pointer"
+							onClick={() => {
+								setShowCreateFields(false)
+								form.resetFields()
+							}}
+						>
+							從現有的全局屬性加入
+						</p>
+					)
+				}
 			>
 				<Input disabled={!!watchId} allowClear />
 			</Item>
@@ -98,6 +125,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 					name: 'is_taxonomy',
 					hidden: !showCreateFields || !isCreate,
 					label: '創建為全局屬性',
+					initialValue: 'yes',
 					help: (
 						<p className="text-orange-400 mt-0 mb-2">
 							<WarningOutlined className="mr-2" />
@@ -112,10 +140,15 @@ const index = ({ record }: { record: TProductAttribute }) => {
 			<Item
 				label="代稱"
 				name="taxonomy"
-				hidden={!id && !isCreate}
+				hidden={!showSlug}
 				tooltip="屬性唯一的網址別名/參考; 長度需少於 28 字元。"
 				rules={[{ required: watchIsTaxonomy, message: '請輸入代稱' }]}
 				getValueProps={(rawSlug?: string) => {
+					if (!showSlug) {
+						return {
+							value: undefined,
+						}
+					}
 					const slug = rawSlug?.replace('pa_', '')
 					return {
 						value: slug,
@@ -131,17 +164,14 @@ const index = ({ record }: { record: TProductAttribute }) => {
 					label: '在商品頁面中可見',
 					initialValue: 'yes',
 				}}
-				// segmentedProps={{
-				// 	size: 'small',
-				// }}
 			/>
 
-			<Item label="選項" name="options">
+			<Item label="選項" name="options" help="輸入文字，按下 Enter 新增選項">
 				<Select
 					loading={isLoading}
 					mode="tags"
 					options={options}
-					placeholder="可以輸入文字新增"
+					placeholder="請選擇選項"
 					allowClear
 				/>
 			</Item>

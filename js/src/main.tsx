@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ConfigProvider } from 'antd'
 import { APP1_SELECTOR, env } from '@/utils'
 import { StyleProvider } from '@ant-design/cssinjs'
 import { EnvProvider } from 'antd-toolkit'
@@ -42,7 +43,22 @@ document.addEventListener('DOMContentLoaded', () => {
 										bunny_cdn_hostname={BUNNY_CDN_HOSTNAME}
 										bunny_stream_api_key={BUNNY_STREAM_API_KEY}
 									>
-										<App />
+										<ConfigProvider
+											theme={{
+												token: {
+													colorPrimary: '#1677ff',
+													borderRadius: 6,
+												},
+												components: {
+													Segmented: {
+														itemSelectedBg: '#1677ff',
+														itemSelectedColor: '#ffffff',
+													},
+												},
+											}}
+										>
+											<App />
+										</ConfigProvider>
 									</BunnyProvider>
 								</EnvProvider>
 							</StyleProvider>
