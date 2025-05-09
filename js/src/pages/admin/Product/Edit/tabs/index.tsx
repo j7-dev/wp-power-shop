@@ -1,3 +1,5 @@
 export * from './Description'
 export * from './Stock'
 export * from './Price'
+export * from './Other'
+export * from './Attributes'

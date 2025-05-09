@@ -1,4 +1,3 @@
-import React from 'react'
 import { Size, Stock as StockField, Sku } from '@/components/product/fields'
 import { Heading } from 'antd-toolkit'
 

@@ -155,7 +155,9 @@ const IntervalChart = () => {
 		<Row gutter={[16, 16]} className="w-full">
 			<Col xs={24} sm={24} md={24} xl={24}>
 				<Card className="w-full h-full" variant="borderless">
-					<h3 className="text-sm text-gray-400 mb-2">{label}銷售趨勢</h3>
+					<h3 className="text-sm text-gray-400 mb-2">
+						{label}銷售趨勢{label === '今日' ? ' (24hr) ' : ''}
+					</h3>
 					<Spin spinning={isFetching}>
 						<div ref={chartRef} className="w-full h-[35rem]" />
 					</Spin>
