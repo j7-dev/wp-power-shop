@@ -28,16 +28,12 @@ if ( \class_exists( 'J7\PowerShop\Plugin' ) ) {
 }
 require_once __DIR__ . '/vendor/autoload.php';
 
-/**
-	* Class Plugin
-	*/
+/** Class Plugin */
 final class Plugin {
 	use \J7\WpUtils\Traits\PluginTrait;
 	use \J7\WpUtils\Traits\SingletonTrait;
 
-	/**
-	 * Constructor
-	 */
+	/** Constructor */
 	public function __construct() {
 
 		// self::$template_page_names = [ '404' ];
