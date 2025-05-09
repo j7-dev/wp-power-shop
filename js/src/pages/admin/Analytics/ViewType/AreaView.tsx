@@ -78,7 +78,7 @@ const AreaView = ({ revenueData, form }: TViewTypeProps) => {
 
 	return (
 		<>
-			<Card bordered={false}>
+			<Card variant="borderless">
 				<Area
 					{...config}
 					height={720}
