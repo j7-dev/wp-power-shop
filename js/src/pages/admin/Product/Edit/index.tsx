@@ -3,7 +3,13 @@ import { Tabs, TabsProps, Form, Switch, Button, Select } from 'antd'
 import { useWoocommerce } from '@/hooks'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
-import { Description, Stock, Price } from '@/pages/admin/Product/Edit/tabs'
+import {
+	Description,
+	Stock,
+	Price,
+	Other,
+	Attributes,
+} from '@/pages/admin/Product/Edit/tabs'
 import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
 // import { PostEdit } from './PostEdit'
@@ -15,31 +21,31 @@ import { notificationProps } from 'antd-toolkit/refine'
 const defaultItems: TabsProps['items'] = [
 	{
 		key: 'Description',
-		forceRender: true,
 		label: '描述',
 		children: <Description />,
 	},
 	{
 		key: 'Price',
-		forceRender: true,
 		label: '價格',
 		children: <Price />,
 	},
 	{
 		key: 'Stock',
-		forceRender: true,
 		label: '庫存',
 		children: <Stock />,
 	},
 	{
 		key: 'Attributes',
-		forceRender: true,
 		label: '商品屬性',
-		children: <>123</>,
+		children: <Attributes />,
+	},
+	{
+		key: 'Other',
+		label: '其他設定',
+		children: <Other />,
 	},
 	{
 		key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
-		forceRender: true,
 		label: '總覽',
 		children: <>123</>,
 		// children: <Description />,

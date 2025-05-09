@@ -22,7 +22,7 @@ import AttributesForm, {
 import { useEnv } from 'antd-toolkit'
 import { notificationProps } from 'antd-toolkit/refine'
 
-type TAttribute = {
+export type TAttributeTaxonomy = {
 	id: string
 	name: string
 	slug: string
@@ -34,11 +34,11 @@ type TAttribute = {
 export const ProductAttributes = () => {
 	const sortableTreeListProps = useSortableTreeList()
 	/** 編輯的屬性有值時，表示編輯模式，沒有就是新增 */
-	const [attribute, setAttribute] = useState<TAttribute | null>(null)
+	const [attribute, setAttribute] = useState<TAttributeTaxonomy | null>(null)
 	const { SITE_URL } = useEnv()
 	const { show, close, modalProps } = useModal()
 	const [form] = Form.useForm()
-	const { data, isLoading } = useList<TAttribute>({
+	const { data, isLoading } = useList<TAttributeTaxonomy>({
 		resource: 'product-attributes',
 	})
 
@@ -80,7 +80,7 @@ export const ProductAttributes = () => {
 		}
 	}
 
-	const handleEdit = (attribute: TAttribute) => () => {
+	const handleEdit = (attribute: TAttributeTaxonomy) => () => {
 		setAttribute(attribute)
 		show()
 	}
@@ -120,20 +120,19 @@ export const ProductAttributes = () => {
 					showIcon
 					closable
 				/>
+				<div className="flex gap-2 mb-4 justify-between">
+					<Button type="primary" onClick={handleAdd}>
+						新增全局屬性
+					</Button>
+					<Button
+						href={`${SITE_URL}/wp-admin/edit.php?post_type=product&page=product_attributes`}
+						target="_blank"
+					>
+						前往傳統介面編輯
+					</Button>
+				</div>
 				<Tabs
-					tabBarExtraContent={
-						<div className="flex gap-2">
-							<Button
-								href={`${SITE_URL}/wp-admin/edit.php?post_type=product&page=product_attributes`}
-								target="_blank"
-							>
-								前往傳統介面編輯
-							</Button>
-							<Button type="primary" onClick={handleAdd}>
-								新增全局屬性
-							</Button>
-						</div>
-					}
+					tabPosition="left"
 					items={
 						attributes?.map((attr) => {
 							const { id, name, slug, has_archives } = attr
