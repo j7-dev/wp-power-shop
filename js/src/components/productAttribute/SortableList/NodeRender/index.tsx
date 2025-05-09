@@ -51,7 +51,7 @@ const NodeRender: FC<{
 
 	return (
 		<div
-			className={`grid grid-cols-[1fr_3rem_4rem] gap-4 justify-start items-center cursor-pointer ${isSelected ? 'bg-[#e6f4ff]' : ''}`}
+			className={`grid grid-cols-[1fr_6rem_4rem] gap-4 justify-start items-center cursor-pointer ${isSelected ? 'bg-[#e6f4ff]' : ''}`}
 		>
 			<div
 				className="flex items-center overflow-hidden"
@@ -60,7 +60,7 @@ const NodeRender: FC<{
 				<PostName className="[&_.at-name]:!text-sm" hideImage record={record} />
 			</div>
 			<div className="text-xs text-gray-400 text-right">
-				{id ? '全局屬性' : '屬性'}
+				{id ? '全局商品規格' : '商品規格'}
 			</div>
 			<div className="flex gap-2 justify-end">
 				<PopconfirmDelete

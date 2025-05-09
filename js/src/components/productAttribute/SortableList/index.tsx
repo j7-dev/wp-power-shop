@@ -33,9 +33,9 @@ export type TSortableListProps = {
 }
 
 /**
- * 可排序的商品屬性
+ * 可排序的商品規格
  * setSelectedTermId 一般是以 id 作為唯一符號
- * 但局部屬性 id 都是 ""，所以用 id + name 作為唯一符號
+ * 但局部商品規格 id 都是 ""，所以用 id + name 作為唯一符號
  * @param {Edit} Edit 編輯的畫面由外部傳入
  * @return {React.FC}
  */
@@ -148,8 +148,8 @@ const SortableListComponent = ({
 
 /**
  * 可排序的 term
- * @param {TSortableListProps} props 屬性
- * @param {TProductAttribute[]} props.attributes 屬性
+ * @param {TSortableListProps} props 商品規格
+ * @param {TProductAttribute[]} props.attributes 商品規格
  * @param {string | null} props.selectedTermId 選取的 term
  * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId 設定選取的 term
  * @param {React.FC<{ record: TProductAttribute }>} props.Edit 編輯的畫面由外部傳入

@@ -44,7 +44,7 @@ const AttributesForm = ({
 			<Item
 				label="名稱"
 				name="name"
-				tooltip="屬性名稱 (在前台顯示)"
+				tooltip="商品規格名稱 (在前台顯示)"
 				rules={[{ required: true, message: '請輸入名稱' }]}
 			>
 				<Input allowClear />
@@ -52,7 +52,7 @@ const AttributesForm = ({
 			<Item
 				label="代稱"
 				name="slug"
-				tooltip="屬性唯一的網址別名/參考; 長度需少於 28 字元。"
+				tooltip="商品規格唯一的網址別名/參考; 長度需少於 28 字元。"
 				rules={[{ required: true, message: '請輸入代稱' }]}
 				getValueProps={(rawSlug?: string) => {
 					const slug = rawSlug?.replace('pa_', '')

@@ -76,7 +76,7 @@ export const resources: ResourceProps[] = [
 		name: 'attributes',
 		list: '/products/attributes',
 		meta: {
-			label: '商品屬性',
+			label: '商品規格',
 		},
 	},
 	{

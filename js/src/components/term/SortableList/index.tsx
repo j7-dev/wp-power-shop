@@ -202,7 +202,7 @@ const SortableListComponent = ({
 
 /**
  * 可排序的 term
- * @param {TSortableTreeProps} props 屬性
+ * @param {TSortableTreeProps} props 商品規格
  * @param {TTaxonomy} props.taxonomy 分類
  * @param {string[]} props.selectedTermIds 選取的 term
  * @param {React.Dispatch<React.SetStateAction<string[]>>} props.setSelectedTermIds 設定選取的 term

@@ -13,7 +13,7 @@ import {
 import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
 // import { PostEdit } from './PostEdit'
-import { defaultSelectProps } from 'antd-toolkit'
+import { NameId } from 'antd-toolkit'
 import { TImage } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 
@@ -103,12 +103,12 @@ const EditComponent = () => {
 		},
 		{
 			key: 'Attributes',
-			label: '商品屬性',
+			label: '商品規格',
 			children: <Attributes />,
 		},
 		{
 			key: 'Variation',
-			label: '變體商品',
+			label: '商品款式',
 			children: <Variation />,
 		},
 		{
@@ -129,6 +129,8 @@ const EditComponent = () => {
 		},
 	]
 
+	const disableSaveButton = ['Attributes', 'Variation'].includes(activeKey)
+
 	return (
 		<div className="sticky-card-actions sticky-tabs-nav">
 			<RecordContext.Provider value={record}>
@@ -146,34 +148,32 @@ const EditComponent = () => {
 						children: '儲存',
 						icon: null,
 						loading: mutation?.isLoading,
+						disabled: disableSaveButton,
 					}}
-					footerButtons={({ defaultButtons }) =>
-						['Attributes', 'Variation'].includes(activeKey) ? null : (
-							<>
-								<Switch
-									className="mr-4"
-									checkedChildren="發佈"
-									unCheckedChildren="草稿"
-									value={record?.status === 'publish'}
-									onChange={(checked) => {
-										form.setFieldValue(
-											['status'],
-											checked ? 'publish' : 'draft',
-										)
-									}}
-								/>
-								{defaultButtons}
-							</>
-						)
-					}
+					footerButtons={({ defaultButtons }) => (
+						<>
+							<Switch
+								className="mr-4"
+								checkedChildren="發佈"
+								unCheckedChildren="草稿"
+								value={record?.status === 'publish'}
+								disabled={disableSaveButton}
+								onChange={(checked) => {
+									form.setFieldValue(['status'], checked ? 'publish' : 'draft')
+								}}
+							/>
+							{defaultButtons}
+						</>
+					)}
 					isLoading={query?.isLoading}
 				>
 					<Form {...formProps}>
 						<Item name="type" label="商品類型">
 							<Select
-								{...defaultSelectProps}
+								optionRender={(option) => (
+									<NameId name={option.label} id={option.value as string} />
+								)}
 								options={product_types}
-								mode={undefined}
 							/>
 						</Item>
 					</Form>

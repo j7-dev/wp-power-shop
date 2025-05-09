@@ -33,7 +33,7 @@ export type TAttributeTaxonomy = {
 
 export const ProductAttributes = () => {
 	const sortableTreeListProps = useSortableTreeList()
-	/** 編輯的屬性有值時，表示編輯模式，沒有就是新增 */
+	/** 編輯的商品規格有值時，表示編輯模式，沒有就是新增 */
 	const [attribute, setAttribute] = useState<TAttributeTaxonomy | null>(null)
 	const { SITE_URL } = useEnv()
 	const { show, close, modalProps } = useModal()
@@ -100,19 +100,19 @@ export const ProductAttributes = () => {
 
 	return (
 		<Spin spinning={isLoading}>
-			<Card title="全局商品屬性">
+			<Card title="全局商品規格">
 				<Alert
 					className="mb-4"
-					message="什麼時候該建立全局屬性？"
+					message="什麼時候該建立全局商品規格？"
 					description={
 						<>
 							<p className="m-0">
-								當你想要在所有商品中使用相同的屬性時，可以使用全局屬性。
+								當你想要在所有商品中使用相同的商品規格時，可以使用全局商品規格。
 							</p>
 							<p className="m-0">
 								例如：你商店的衣服商品都有固定衣服尺寸 (S, M, L, XL) ，可以設定{' '}
 								<Tag color="blue">衣服尺寸</Tag>
-								為全局屬性，這樣所有商品都會有衣服尺寸這個屬性。
+								為全局商品規格，這樣所有商品都會有衣服尺寸這個商品規格。
 							</p>
 						</>
 					}
@@ -122,7 +122,7 @@ export const ProductAttributes = () => {
 				/>
 				<div className="flex gap-2 mb-4 justify-between">
 					<Button type="primary" onClick={handleAdd}>
-						新增全局屬性
+						新增全局商品規格
 					</Button>
 					<Button
 						href={`${SITE_URL}/wp-admin/edit.php?post_type=product&page=product_attributes`}
@@ -165,7 +165,9 @@ export const ProductAttributes = () => {
 				<Modal
 					{...modalProps}
 					centered
-					title={attribute ? `《編輯》 ${attribute.name}` : '《新增》全局屬性'}
+					title={
+						attribute ? `《編輯》 ${attribute.name}` : '《新增》全局商品規格'
+					}
 					onOk={form.submit}
 					okText={attribute ? '更新' : '新增'}
 					cancelText="取消"

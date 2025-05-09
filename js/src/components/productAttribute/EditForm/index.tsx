@@ -20,7 +20,7 @@ import { notificationProps } from 'antd-toolkit/refine'
  * 用於編輯或新增分類項目（term）的表單元件。
  *
  * @param {Object} props - 元件屬性
- * @param {TProductAttribute[]} props.attributes - 屬性列表
+ * @param {TProductAttribute[]} props.attributes - 商品規格列表
  * @param {TTerm} props.record - 要編輯的分類項目資料，如果是新增則傳入預設值
  * @returns {React.FC} 編輯表單元件
  */
@@ -105,10 +105,10 @@ const EditFormComponent = ({
 			title={
 				<div className="pl-4">
 					{isCreate ? (
-						'《新增屬性》'
+						'《新增商品規格》'
 					) : (
 						<>
-							《編輯{id ? '全局' : ''}屬性》 {name}{' '}
+							《編輯商品規格》 {name}{' '}
 							{id && <span className="text-gray-400 text-xs">#{id}</span>}
 						</>
 					)}
@@ -116,7 +116,7 @@ const EditFormComponent = ({
 			}
 			saveButtonProps={{
 				...saveButtonProps,
-				children: isCreate ? `新增屬性` : `儲存屬性`,
+				children: isCreate ? `新增商品規格` : `儲存商品規格`,
 				icon: null,
 				loading: mutation?.isLoading,
 			}}

@@ -20,26 +20,26 @@ const index = ({ record }: { record: TProductAttribute }) => {
 		useState<{ label: string; value: string }[]>(initialOptions)
 	const [showCreateFields, setShowCreateFields] = useState(false)
 
-	// 從現有全局屬性挑選
+	// 從現有全局商品規格挑選
 	const { selectProps, query } = useSelect<TAttributeTaxonomy>({
 		resource: 'product-attributes',
 		optionLabel: 'name',
 		optionValue: 'id',
 	})
 
-	// 所有的全局屬性
+	// 所有的全局商品規格
 	const attributeTaxonomies = query.data?.data || []
 
-	// 已選擇的全局屬性
+	// 已選擇的全局商品規格
 	const chosenAttributeTaxonomy = attributeTaxonomies.find(
 		(a) => a.id === watchId,
 	)
 
-	// 已選擇的全局屬性選項 terms options
+	// 已選擇的全局商品規格選項 terms options
 	const { options: chosenAttributeTaxonomyOptions, isLoading } =
 		useAttributeTaxonomyOptions(chosenAttributeTaxonomy?.slug)
 
-	// 當已選擇的全局屬性變更時，更新選項
+	// 當已選擇的全局商品規格變更時，更新選項
 	useEffect(() => {
 		if (chosenAttributeTaxonomy) {
 			form.setFieldsValue({
@@ -60,7 +60,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 
 	useEffect(() => {
 		setShowCreateFields(false)
-		// 如果是新增，則不顯示創建為全局屬性
+		// 如果是新增，則不顯示創建為全局商品規格
 		if (!record?.name) {
 			form.resetFields()
 		}
@@ -72,7 +72,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 		<>
 			<Item
 				hidden={!isCreate || showCreateFields}
-				label="從現有的全局屬性加入"
+				label="從現有的全局商品規格加入"
 				name="id"
 				help={
 					<p
@@ -82,7 +82,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 							form.resetFields()
 						}}
 					>
-						或創建新的屬性
+						或創建新的商品規格
 					</p>
 				}
 			>
@@ -99,7 +99,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 			<Item
 				label="名稱"
 				name="name"
-				tooltip="屬性名稱 (在前台顯示)"
+				tooltip="商品規格名稱 (在前台顯示)"
 				rules={[{ required: true, message: '請輸入名稱' }]}
 				hidden={!showCreateFields && isCreate}
 				help={
@@ -112,7 +112,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 								form.resetFields()
 							}}
 						>
-							從現有的全局屬性加入
+							從現有的全局商品規格加入
 						</p>
 					)
 				}
@@ -120,21 +120,21 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				<Input disabled={!!watchId} allowClear />
 			</Item>
 
-			{isCreate && (
+			{isCreate && showCreateFields && (
 				<Segmented
 					formItemProps={{
 						name: 'is_taxonomy',
 						hidden: !showCreateFields || !isCreate,
-						label: '創建為全局屬性',
+						label: '創建為全局商品規格',
 						initialValue: 'yes',
 						help: (
 							<p className="text-orange-400 mt-0 mb-2">
 								<WarningOutlined className="mr-2" />
-								推薦創建為全局屬性
+								推薦創建為全局商品規格
 							</p>
 						),
 						tooltip:
-							'創建為全局屬性後，下個商品可以直接套用帶入屬性，無須再次創建',
+							'創建為全局商品規格後，下個商品可以直接套用帶入商品規格，無須再次創建',
 					}}
 				/>
 			)}
@@ -143,7 +143,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				label="代稱"
 				name="taxonomy"
 				hidden={!showSlug}
-				tooltip="屬性唯一的網址別名/參考; 長度需少於 28 字元。"
+				tooltip="商品規格唯一的網址別名/參考; 長度需少於 28 字元。"
 				rules={[
 					{ required: watchIsTaxonomy && isCreate, message: '請輸入代稱' },
 				]}
@@ -162,13 +162,24 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				<Input maxLength={28} showCount allowClear addonBefore="pa_" />
 			</Item>
 
-			<Segmented
-				formItemProps={{
-					name: 'visible',
-					label: '在商品頁面中可見',
-					initialValue: 'yes',
-				}}
-			/>
+			<div className="grid grid-cols-2 gap-x-8">
+				<Segmented
+					formItemProps={{
+						name: 'visible',
+						label: '在商品頁面中可見',
+						initialValue: 'yes',
+					}}
+				/>
+
+				<Segmented
+					formItemProps={{
+						name: 'variation',
+						label: '用於產生商品款式',
+						tooltip: '如果否，商品規格僅作顯示，不會產生款式',
+						initialValue: 'yes',
+					}}
+				/>
+			</div>
 
 			<Item label="選項" name="options" help="輸入文字，按下 Enter 新增選項">
 				<Select

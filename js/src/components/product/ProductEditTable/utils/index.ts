@@ -75,7 +75,12 @@ export function productToFields(product: TProductRecord) {
 		(acc, key) => {
 			// @ts-ignore
 			if (allowFields.includes(key)) {
+				if('shipping_class_id' === key){
+					acc[key] = product[key as keyof typeof product] || '0'
+					return acc
+				}
 				acc[key] = product[key as keyof typeof product]
+
 			}
 			return acc
 		},

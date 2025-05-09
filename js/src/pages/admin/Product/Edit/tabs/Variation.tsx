@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Skeleton } from 'antd'
+import { Form, Skeleton, Button, Popconfirm } from 'antd'
+import { safeParse } from '@/utils'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import { ProductEditTable } from '@/components/product'
 import { TProductRecord } from '@/components/product/types'
-import { useUpdateMany } from '@refinedev/core'
+import { useUpdate, useInvalidate, useCustomMutation } from '@refinedev/core'
 import {
 	TFormValues,
 	ZFormValues,
 } from '@/components/product/ProductEditTable/types'
 import { productsToFields } from '@/components/product/ProductEditTable/utils'
+import { notificationProps } from 'antd-toolkit/refine'
 
 export const Variation = () => {
 	const parentProduct = useRecord()
 	const [showTable, setShowTable] = useState(false)
 	const variations = parentProduct?.children || []
-	console.log('⭐ variations:', variations)
 
 	const ids = variations.map((v) => v.id)
 	const [form] = Form.useForm<TFormValues>()
@@ -23,15 +24,20 @@ export const Variation = () => {
 	const [virtualFields, setVirtualFields] =
 		useState<TProductRecord[]>(variations)
 
-	const { mutate, isLoading } = useUpdateMany({
+	const { mutate, isLoading } = useCustomMutation({
 		resource: 'products',
 	})
+
+	const { mutate: linkVariations, isLoading: isLinkingVariations } = useUpdate({
+		resource: 'products/link-variations',
+	})
+
+	const invalidate = useInvalidate()
 
 	const handleUpdate = () => {
 		// 取得 values
 		const fields = productsToFields(virtualFields)
-		const values = ZFormValues.array().safeParse(Object.values(fields))
-		console.log('⭐ values:', values)
+		safeParse(ZFormValues.array(), Object.values(fields))
 
 		// mutate({
 		// 	ids,
@@ -51,18 +57,59 @@ export const Variation = () => {
 			setVirtualFields(variations)
 		}, 500)
 		return () => clearTimeout(delay)
-	}, [])
+	}, [variations?.map((v) => v.id)?.join(',')])
+
+	const handleLinkVariations = () => {
+		linkVariations(
+			{
+				id: parentProduct?.id,
+				values: {},
+				...notificationProps,
+			},
+			{
+				onSuccess: () => {
+					invalidate({
+						resource: 'products',
+						invalidates: ['detail'],
+						id: parentProduct?.id,
+					})
+				},
+			},
+		)
+	}
 
 	return (
 		<>
 			{!showTable && <Skeleton active />}
 			{showTable && (
-				<ProductEditTable
-					context="detail"
-					form={form}
-					virtualFields={virtualFields}
-					setVirtualFields={setVirtualFields}
-				/>
+				<>
+					<Popconfirm
+						title="產生所有商品規格的款式"
+						onConfirm={handleLinkVariations}
+						okText="確認"
+						cancelText="取消"
+					>
+						<Button
+							color="primary"
+							variant="filled"
+							loading={isLinkingVariations}
+						>
+							產生商品款式
+						</Button>
+					</Popconfirm>
+
+					<ProductEditTable
+						context="detail"
+						form={form}
+						virtualFields={virtualFields}
+						setVirtualFields={setVirtualFields}
+					/>
+					<div className="mt-8 flex justify-end sticky bottom-[3.5rem] bg-white">
+						<Button type="primary" onClick={handleUpdate}>
+							儲存商品款式
+						</Button>
+					</div>
+				</>
 			)}
 		</>
 	)
