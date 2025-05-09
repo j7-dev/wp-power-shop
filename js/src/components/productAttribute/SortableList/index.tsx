@@ -1,21 +1,21 @@
 import { memo, FC } from 'react'
 import { SortableList as SortableListAntd } from '@ant-design/pro-editor'
 import { DEFAULT } from '@/components/productAttribute/types'
-import { message, Button, Empty } from 'antd'
+import { Button, Empty, message } from 'antd'
 import NodeRender from '@/components/productAttribute/SortableList/NodeRender'
 import {
-	useCustomMutation,
-	useApiUrl,
+	useUpdate,
 	useInvalidate,
-	useDeleteMany,
+	CreateResponse,
+	UpdateResponse,
+	BaseRecord,
 } from '@refinedev/core'
 import { isEqual as _isEqual } from 'lodash-es'
-import { toParams } from '@/components/productAttribute/SortableList/utils'
+import { prepareAttributes } from '@/components/productAttribute/SortableList/utils'
 import { SelectedTermIdContext } from '@/components/productAttribute/hooks'
-import { PopconfirmDelete } from 'antd-toolkit'
+import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import { TProductAttribute } from 'antd-toolkit/wp'
-
-import { notificationProps } from 'antd-toolkit/refine'
+import { toFormData } from 'antd-toolkit'
 
 export type TSortableListProps = {
 	attributes: TProductAttribute[]
@@ -24,6 +24,11 @@ export type TSortableListProps = {
 	Edit?: React.FC<{
 		attributes: TProductAttribute[]
 		record: TProductAttribute
+		onMutationSuccess: (
+			data: CreateResponse<BaseRecord> | UpdateResponse<BaseRecord>,
+			variables: any,
+			isCreate: boolean,
+		) => void
 	}>
 }
 
@@ -40,57 +45,57 @@ const SortableListComponent = ({
 	setSelectedTermId,
 	Edit,
 }: TSortableListProps) => {
-	const options = [] // TODO
-
+	const product = useRecord()
 	const invalidate = useInvalidate()
 
-	const apiUrl = useApiUrl()
-	const { mutate } = useCustomMutation()
+	const { mutate } = useUpdate({
+		resource: `products/attributes`,
+		successNotification: false,
+	})
 
-	const handleSave = (data: TProductAttribute[]) => {
-		// const isEqual = _isEqual(attributes, data)
-		// if (isEqual) return
-		// const from_tree = toParams(terms, paginationProps)
-		// const to_tree = toParams(data, paginationProps)
-		// // 這個儲存只存新增，不存章節的細部資料
-		// message.loading({
-		// 	content: '排序儲存中...',
-		// 	key: 'terms-sorting',
-		// })
-		// mutate(
-		// 	{
-		// 		url: `${apiUrl}/terms/${taxonomy.value}/sort`,
-		// 		method: 'post',
-		// 		values: {
-		// 			from_tree,
-		// 			to_tree,
-		// 		},
-		// 	},
-		// 	{
-		// 		onSuccess: () => {
-		// 			message.success({
-		// 				content: '排序儲存成功',
-		// 				key: 'terms-sorting',
-		// 			})
-		// 		},
-		// 		onError: () => {
-		// 			message.loading({
-		// 				content: '排序儲存失敗',
-		// 				key: 'terms-sorting',
-		// 			})
-		// 		},
-		// 		onSettled: () => {
-		// 			invalidate({
-		// 				resource: `terms/${taxonomy.value}`,
-		// 				invalidates: ['list'],
-		// 			})
-		// 		},
-		// 	},
-		// )
+	const handleSave = (attributes: TProductAttribute[]) => {
+		const prepared_attributes = prepareAttributes(attributes)
+		message.loading({
+			key: 'mutating',
+			content: '排序中...',
+		})
+		mutate(
+			{
+				id: product?.id,
+				values: toFormData({
+					new_attributes: prepared_attributes,
+				}),
+			},
+			{
+				onSuccess: () => {
+					invalidate({
+						resource: 'products',
+						invalidates: ['detail'],
+						id: product?.id,
+					})
+					message.success({
+						key: 'mutating',
+						content: '排序成功',
+					})
+				},
+				onError: () => {
+					message.error({
+						key: 'mutating',
+						content: '排序失敗',
+					})
+				},
+			},
+		)
 	}
 
-	const onMutationSuccess = (data: any, variables: any, context: any) => {
-		setSelectedTermId(null)
+	const onMutationSuccess = (
+		data: CreateResponse<BaseRecord> | UpdateResponse<BaseRecord>,
+		variables: any,
+		isCreate: boolean,
+	) => {
+		if (isCreate) {
+			setSelectedTermId(null)
+		}
 	}
 
 	return (

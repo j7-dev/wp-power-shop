@@ -142,7 +142,9 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				name="taxonomy"
 				hidden={!showSlug}
 				tooltip="屬性唯一的網址別名/參考; 長度需少於 28 字元。"
-				rules={[{ required: watchIsTaxonomy, message: '請輸入代稱' }]}
+				rules={[
+					{ required: watchIsTaxonomy && isCreate, message: '請輸入代稱' },
+				]}
 				getValueProps={(rawSlug?: string) => {
 					if (!showSlug) {
 						return {

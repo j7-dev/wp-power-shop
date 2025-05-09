@@ -1,9 +1,6 @@
 import { memo, useEffect } from 'react'
 import { Form } from 'antd'
-import {
-	prepareAttributes,
-	prepareAttribute,
-} from '@/components/productAttribute/SortableList/utils'
+import { prepareAttributes } from '@/components/productAttribute/SortableList/utils'
 import AttributeTaxonomyForm from './Form'
 import {
 	useInvalidate,
@@ -37,11 +34,11 @@ const EditFormComponent = ({
 	onMutationSuccess?: (
 		data: CreateResponse<BaseRecord> | UpdateResponse<BaseRecord>,
 		variables: any,
-		context: any,
+		isCreate: boolean,
 	) => void
 }) => {
-	// 如果傳入的 record 是 DEFAULT 那就是代表是新增
 	const product = useRecord()
+	// 如果傳入的 record 是 DEFAULT 那就是代表是新增
 	const { id = '', name = '' } = record
 	const isCreate = !id && !name
 
@@ -64,7 +61,7 @@ const EditFormComponent = ({
 				id: product?.id,
 			})
 			if (onMutationSuccess) {
-				onMutationSuccess(data, variables, context)
+				onMutationSuccess(data, variables, isCreate)
 			}
 		},
 		warnWhenUnsavedChanges: true,
@@ -81,21 +78,19 @@ const EditFormComponent = ({
 
 	// 將 [] 轉為 '[]'，例如，清除原本分類時，如果空的，前端會是 undefined，轉成 formData 時會遺失
 	const handleOnFinish = (values: Partial<TProductAttribute>) => {
-		const prepared_value = prepareAttribute(values)
-		const prepared_attributes = prepareAttributes(attributes)
-
 		const new_attributes = isCreate
-			? [...prepared_attributes, prepared_value]
-			: prepared_attributes.map((a) => {
+			? [...attributes, values]
+			: attributes.map((a) => {
 					if (`${a.id}-${a.name}` === `${id}-${name}`) {
-						return prepared_value
+						return values
 					}
 					return a
 				})
+		const prepared_new_attributes = prepareAttributes(new_attributes)
 
 		onFinish(
 			toFormData({
-				new_attributes,
+				new_attributes: prepared_new_attributes,
 			}),
 		)
 	}
