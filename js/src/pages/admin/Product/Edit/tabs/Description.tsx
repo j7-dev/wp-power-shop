@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Select } from 'antd'
+import { Form, Input, Select, FormProps } from 'antd'
 import {
 	PurchaseNote,
 	TaxonomyModals,
@@ -12,11 +12,11 @@ import { TProductType } from 'antd-toolkit/wp'
 
 const { Item } = Form
 
-export const Description = () => {
+export const Description = ({ formProps }: { formProps: FormProps }) => {
 	const record = useRecord()
 
 	return (
-		<>
+		<Form {...formProps}>
 			<div className="flex flex-col xl:flex-row gap-12">
 				<div className="w-full xl:flex-1">
 					<Item name="name" label="商品名稱">
@@ -46,6 +46,6 @@ export const Description = () => {
 					</Item>
 				</div>
 			</div>
-		</>
+		</Form>
 	)
 }

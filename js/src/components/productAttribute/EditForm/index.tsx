@@ -131,7 +131,6 @@ const EditFormComponent = ({
 				},
 			}}
 		>
-			{/* BUG 會有 form 重複宣告的警告!? */}
 			<Form {...formProps} onFinish={handleOnFinish} layout="vertical">
 				<AttributeTaxonomyForm record={record} />
 

@@ -56,38 +56,40 @@ const { Item } = Form
 
 const EditComponent = () => {
 	const { id } = useParsed()
-	const wc = useWoocommerce()
+	const { product_types } = useWoocommerce()
 
 	// 初始化資料
-	const { formProps, form, saveButtonProps, query, mutation, onFinish } =
-		useForm<TProductRecord>({
-			action: 'edit',
-			resource: 'products',
-			id,
-			redirect: false,
-			...notificationProps,
-			queryMeta: {
-				variables: {
-					partials: [
-						'basic',
-						'detail',
-						'price',
-						'stock',
-						'sales',
-						'size',
-						'subscription',
-						'taxonomy',
-						'attribute',
-						'variation',
-					],
-					meta_keys: [], // 額外暴露的欄位
-				},
+	const {
+		formProps: _formProps,
+		form,
+		saveButtonProps,
+		query,
+		mutation,
+		onFinish,
+	} = useForm<TProductRecord>({
+		action: 'edit',
+		resource: 'products',
+		id,
+		redirect: false,
+		...notificationProps,
+		queryMeta: {
+			variables: {
+				partials: [
+					'basic',
+					'detail',
+					'price',
+					'stock',
+					'sales',
+					'size',
+					'subscription',
+					'taxonomy',
+					'attribute',
+					'variation',
+				],
+				meta_keys: [], // 額外暴露的欄位
 			},
-		})
-
-	const record: TProductRecord | undefined = query?.data?.data
-
-	const items = defaultItems
+		},
+	})
 
 	/**
 	 * change the form data before submitting
@@ -107,6 +109,49 @@ const EditComponent = () => {
 				: '[]',
 		})
 	}
+
+	// 重組 formProps
+	const formProps = {
+		..._formProps,
+		layout: 'vertical',
+		onFinish: handleOnFinish,
+	}
+
+	const record: TProductRecord | undefined = query?.data?.data
+
+	const items: TabsProps['items'] = [
+		{
+			key: 'Description',
+			label: '描述',
+			children: <Description formProps={formProps} />,
+		},
+		{
+			key: 'Price',
+			label: '價格',
+			children: <Price formProps={formProps} />,
+		},
+		{
+			key: 'Stock',
+			label: '庫存',
+			children: <Stock formProps={formProps} />,
+		},
+		{
+			key: 'Attributes',
+			label: '商品屬性',
+			children: <Attributes />,
+		},
+		{
+			key: 'Other',
+			label: '其他設定',
+			children: <Other formProps={formProps} />,
+		},
+		{
+			key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
+			label: '總覽',
+			children: <>123</>,
+			// children: <Description />,
+		},
+	]
 
 	return (
 		<div className="sticky-card-actions sticky-tabs-nav">
@@ -142,40 +187,40 @@ const EditComponent = () => {
 					)}
 					isLoading={query?.isLoading}
 				>
-					<Form {...formProps} onFinish={handleOnFinish} layout="vertical">
+					<Form {...formProps}>
 						<Item name="type" label="商品類型">
 							<Select
 								{...defaultSelectProps}
-								options={wc?.product_types}
+								options={product_types}
 								mode={undefined}
 							/>
 						</Item>
-						<Tabs
-							items={items}
-							tabBarExtraContent={
-								<>
-									<Button
-										className="ml-4"
-										type="default"
-										href={record?.edit_url}
-										target="_blank"
-										rel="noreferrer"
-									>
-										前往傳統商品編輯介面
-									</Button>
-									<Button
-										className="ml-4"
-										type="default"
-										href={record?.permalink}
-										target="_blank"
-										rel="noreferrer"
-									>
-										檢視
-									</Button>
-								</>
-							}
-						/>
 					</Form>
+					<Tabs
+						items={items}
+						tabBarExtraContent={
+							<>
+								<Button
+									className="ml-4"
+									type="default"
+									href={record?.edit_url}
+									target="_blank"
+									rel="noreferrer"
+								>
+									前往傳統商品編輯介面
+								</Button>
+								<Button
+									className="ml-4"
+									type="default"
+									href={record?.permalink}
+									target="_blank"
+									rel="noreferrer"
+								>
+									檢視
+								</Button>
+							</>
+						}
+					/>
 				</Edit>
 			</RecordContext.Provider>
 		</div>

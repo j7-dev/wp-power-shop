@@ -1,13 +1,14 @@
 import React from 'react'
+import { Form, FormProps } from 'antd'
 import { Other as OtherField } from '@/components/product/fields'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import { Heading, DatePicker } from 'antd-toolkit'
 import { TProductType } from 'antd-toolkit/wp'
 
-export const Other = () => {
+export const Other = ({ formProps }: { formProps: FormProps }) => {
 	const record = useRecord()
 	return (
-		<>
+		<Form {...formProps}>
 			<Heading>其他設定</Heading>
 			<div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
 				<OtherField type={record?.type as TProductType} />
@@ -24,6 +25,6 @@ export const Other = () => {
 					}}
 				/>
 			</div>
-		</>
+		</Form>
 	)
 }
