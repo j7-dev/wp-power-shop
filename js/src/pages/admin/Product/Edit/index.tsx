@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Tabs, TabsProps, Form, Switch, Button, Select } from 'antd'
+import { Tabs, TabsProps, Form, Switch, Button, Select, FormProps } from 'antd'
 import { useWoocommerce } from '@/hooks'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
@@ -7,7 +7,6 @@ import {
 	Description,
 	Stock,
 	Price,
-	Other,
 	Attributes,
 } from '@/pages/admin/Product/Edit/tabs'
 import { TProductRecord } from '@/components/product/types'
@@ -16,41 +15,6 @@ import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
 import { defaultSelectProps } from 'antd-toolkit'
 import { TImage } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
-
-// TAB items
-const defaultItems: TabsProps['items'] = [
-	{
-		key: 'Description',
-		label: '描述',
-		children: <Description />,
-	},
-	{
-		key: 'Price',
-		label: '價格',
-		children: <Price />,
-	},
-	{
-		key: 'Stock',
-		label: '庫存',
-		children: <Stock />,
-	},
-	{
-		key: 'Attributes',
-		label: '商品屬性',
-		children: <Attributes />,
-	},
-	{
-		key: 'Other',
-		label: '其他設定',
-		children: <Other />,
-	},
-	{
-		key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
-		label: '總覽',
-		children: <>123</>,
-		// children: <Description />,
-	},
-]
 
 const { Item } = Form
 
@@ -111,7 +75,7 @@ const EditComponent = () => {
 	}
 
 	// 重組 formProps
-	const formProps = {
+	const formProps: FormProps = {
 		..._formProps,
 		layout: 'vertical',
 		onFinish: handleOnFinish,
@@ -141,9 +105,9 @@ const EditComponent = () => {
 			children: <Attributes />,
 		},
 		{
-			key: 'Other',
-			label: '其他設定',
-			children: <Other formProps={formProps} />,
+			key: 'Advanced',
+			label: '進階設定',
+			children: <>123</>,
 		},
 		{
 			key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
