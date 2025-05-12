@@ -92,7 +92,9 @@
 				"allowArrayEnd": true
 			}
 		],
-		"jsdoc/require-returns-description": "off"
+		"jsdoc/require-returns-description": "off",
+		"no-redeclare": "error",
+		"@typescript-eslint/no-redeclare": "error",
 	},
 	"overrides": [
 		{

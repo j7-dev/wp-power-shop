@@ -1,3 +1,4 @@
+import { TFormValues } from '@/components/product/ProductEditTable/types'
 import { Image, Form } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { PlusOutlined, EyeOutlined, CloseOutlined } from '@ant-design/icons'
@@ -14,25 +15,70 @@ export const Gallery = ({
 	size,
 	limit = 10,
 	wrapClassName = 'flex flex-wrap gap-2',
+	onValuesChange,
 }: {
 	id?: string
 	size?: SizeType
 	limit?: number
 	wrapClassName?: string
+	onValuesChange?: (
+		changedValues: {
+			[key: string]: Partial<TFormValues>
+		},
+		allValues: TFormValues[],
+	) => void
 }) => {
 	const imageName = id ? [id, 'images'] : ['images']
-	const { open, close, modalProps, ...mediaLibraryProps } =
-		useApiUrlMediaLibraryModal({ name: imageName, limit })
-
 	const form = Form.useFormInstance()
+
+	const { open, close, modalProps, ...mediaLibraryProps } =
+		useApiUrlMediaLibraryModal({
+			limit,
+			onConfirm: (selectedItems) => {
+				form.setFieldValue(imageName, selectedItems)
+
+				if (onValuesChange && id) {
+					const allValues = form.getFieldsValue()
+					onValuesChange?.(
+						{
+							[id]: {
+								//@ts-ignore
+								images: selectedItems,
+							},
+						} as {
+							[key: string]: Partial<TFormValues>
+						},
+						allValues,
+					)
+				}
+			},
+		})
+
 	const watchImages: TImage[] = Form.useWatch(imageName, form)
 
 	/** 移除 form 圖片 */
-	const handleRemove = (id: string) => () => {
+	const handleRemove = (_imageId: string) => () => {
 		form.setFieldValue(
 			imageName,
-			watchImages.filter(({ id: imageId }) => imageId !== id),
+			watchImages.filter(({ id: imageId }) => imageId !== _imageId),
 		)
+
+		if (onValuesChange && id) {
+			const allValues = form.getFieldsValue()
+			onValuesChange?.(
+				{
+					[id]: {
+						//@ts-ignore
+						images: watchImages.filter(
+							({ id: imageId }) => imageId !== _imageId,
+						),
+					},
+				} as {
+					[key: string]: Partial<TFormValues>
+				},
+				allValues,
+			)
+		}
 	}
 
 	/** 設定封面 */
@@ -59,38 +105,44 @@ export const Gallery = ({
 					商品圖片
 				</label>
 			)}
-			<Item name={imageName} hidden shouldUpdate />
+			<Item name={imageName} hidden />
 			<div className={wrapClassName}>
-				{watchImages?.map(({ id, url }, index) => (
-					<Image
-						key={`${id}-${nanoid(4)}`}
-						className={cn(
-							'product-image aspect-square rounded-lg object-cover',
-							imgSizeClass,
-						)}
-						preview={{
-							mask: (
-								<div className="flex flex-col items-center justify-center">
-									<div>
-										<EyeOutlined />
-										<CloseOutlined
-											className={'small' !== size ? 'ml-2' : 'ml-1'}
-											onClick={handleRemove(id)}
-										/>
-									</div>
-									{'small' !== size && (
-										<p className="m-0 text-xs" onClick={handleSetThumbnail(id)}>
-											{index === 0 ? '封面' : '設為封面'}
-										</p>
-									)}
-								</div>
-							),
-							maskClassName: 'rounded-lg',
-						}}
-						src={url || defaultImage}
-						fallback={defaultImage}
-					/>
-				))}
+				{watchImages?.map(
+					({ id: _imageId, url }, index) =>
+						index < limit && (
+							<Image
+								key={`${_imageId}-${nanoid(4)}`}
+								className={cn(
+									'product-image aspect-square rounded-lg object-cover',
+									imgSizeClass,
+								)}
+								preview={{
+									mask: (
+										<div className="flex flex-col items-center justify-center">
+											<div>
+												<EyeOutlined />
+												<CloseOutlined
+													className={'small' !== size ? 'ml-2' : 'ml-1'}
+													onClick={handleRemove(_imageId)}
+												/>
+											</div>
+											{'small' !== size && (
+												<p
+													className="m-0 text-xs"
+													onClick={handleSetThumbnail(id)}
+												>
+													{index === 0 ? '封面' : '設為封面'}
+												</p>
+											)}
+										</div>
+									),
+									maskClassName: 'rounded-lg',
+								}}
+								src={url || defaultImage}
+								fallback={defaultImage}
+							/>
+						),
+				)}
 				{watchImages?.length < limit && (
 					<div
 						className={cn(
@@ -104,7 +156,7 @@ export const Gallery = ({
 				)}
 			</div>
 			<MediaLibraryModal
-				initialIds={watchImages?.map(({ id }) => id)}
+				initialIds={watchImages?.map(({ id: _imageId }) => _imageId)}
 				modalProps={modalProps}
 				mediaLibraryProps={mediaLibraryProps}
 			/>

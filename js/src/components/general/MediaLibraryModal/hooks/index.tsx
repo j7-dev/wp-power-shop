@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ModalProps, Button, FormItemProps, Form } from 'antd'
+import { ModalProps, Button } from 'antd'
 import { TAttachment } from 'antd-toolkit/wp'
 
 const DEFAULT_MODAL_PROPS: ModalProps = {
@@ -11,13 +11,12 @@ const DEFAULT_MODAL_PROPS: ModalProps = {
 }
 
 export const useApiUrlMediaLibraryModal = ({
-	name,
 	limit,
+	onConfirm,
 }: {
-	name: FormItemProps['name']
 	limit: number
+	onConfirm?: (selectedItems: TAttachment[]) => void
 }) => {
-	const form = Form.useFormInstance()
 	const [modalProps, setModalProps] = useState<ModalProps>(DEFAULT_MODAL_PROPS)
 	const [selectedItems, setSelectedItems] = useState<TAttachment[]>([])
 
@@ -27,7 +26,7 @@ export const useApiUrlMediaLibraryModal = ({
 	/** 按下[選擇檔案]按鈕後，要把值 set 到 form 裡 */
 	const handleConfirm = () => {
 		close()
-		form.setFieldValue(name, selectedItems)
+		onConfirm?.(selectedItems)
 	}
 
 	const formattedModalProps = {

@@ -1,5 +1,6 @@
 import { Table, TableProps, Form } from 'antd'
 import { TProductRecord, TProductVariation } from '@/components/product/types'
+import { TFormValues } from '@/components/product/ProductEditTable/types'
 import { useWindowSize } from '@uidotdev/usehooks'
 import { useWoocommerce } from '@/hooks'
 import {
@@ -22,7 +23,18 @@ import {
 
 const { Item } = Form
 
-export const useColumns = (context?: 'detail') => {
+export const useColumns = ({
+	context,
+	onValuesChange,
+}: {
+	context?: 'detail'
+	onValuesChange: (
+		changedValues: {
+			[key: string]: Partial<TFormValues>
+		},
+		allValues: TFormValues[],
+	) => void
+}) => {
 	const {
 		currency: { symbol },
 		dimension_unit,
@@ -39,7 +51,12 @@ export const useColumns = (context?: 'detail') => {
 			render: (_, record) => (
 				<>
 					<div className="flex gap-x-4 items-center">
-						<Gallery id={record.id} limit={1} size="small" />
+						<Gallery
+							id={record.id}
+							limit={1}
+							size="small"
+							onValuesChange={onValuesChange}
+						/>
 						<ProductName<TProductRecord>
 							hideImage
 							record={record}

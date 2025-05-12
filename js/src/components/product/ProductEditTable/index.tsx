@@ -5,13 +5,11 @@ import { TProductRecord } from '@/components/product/types'
 import { TFormValues } from '@/components/product/ProductEditTable/types'
 import { useColumns } from '@/components/product/ProductEditTable/hooks'
 import { useWindowSize } from '@uidotdev/usehooks'
-import { produce } from 'immer'
 import {
 	productsToFields,
-	mutateProduct,
+	handleValuesChange,
 } from '@/components/product/ProductEditTable/utils'
 import { defaultTableProps } from 'antd-toolkit'
-import { isVariation } from 'antd-toolkit/wp'
 
 /**
  * 產品批量編輯表格組件
@@ -40,7 +38,24 @@ const ProductEditTableComponent = ({
 }) => {
 	// 同步修改模式
 	const [syncModeEnabled, setSyncModeEnabled] = useState(false)
-	const columns = useColumns(context)
+
+	const onValuesChange = (
+		changedValues: {
+			[key: string]: Partial<TFormValues>
+		},
+		allValues: TFormValues[],
+	) => {
+		handleValuesChange(
+			changedValues as any,
+			allValues,
+			syncModeEnabled,
+			virtualFields,
+			setVirtualFields,
+			context,
+		)
+	}
+
+	const columns = useColumns({ context, onValuesChange })
 
 	useEffect(() => {
 		// 組成表單資料
@@ -49,113 +64,6 @@ const ProductEditTableComponent = ({
 	}, [virtualFields])
 
 	const { height } = useWindowSize()
-
-	const handleValuesChange = (
-		changedValues: Partial<TFormValues>[],
-		allValues: TFormValues[],
-	) => {
-		try {
-			const changedProductId = Object.keys(changedValues)[0]
-			//@ts-ignore
-			const changedProductType = allValues?.[changedProductId]?.type
-
-			// @ts-ignore
-			const changedObj = changedValues?.[changedProductId]
-			const changedKey = Object.keys(changedObj)[0]
-			const changedValue = changedObj?.[changedKey]
-
-			const changedFields = produce(virtualFields, (draft) => {
-				if (syncModeEnabled) {
-					draft.forEach((product, index) => {
-						// 如果是改狀態
-						if ('status' === changedKey) {
-							// 且不是改變體，就只改非變體商品的狀態
-							if (!isVariation(changedProductType)) {
-								// @ts-ignore
-								product[changedKey] = changedValue
-								return
-							}
-
-							// 是變體，則只改變體商品的狀態
-							if (isVariation(changedProductType)) {
-								if (product?.children?.length) {
-									product?.children?.forEach((variation, index) => {
-										// @ts-ignore
-										product.children[index][changedKey] = changedValue
-									})
-								}
-								return
-							}
-						}
-
-						// 狀態以外就都可以改
-						// 如果修改狀態以外，則需要同步更新所有商品
-						mutateProduct({
-							changedKey,
-							changedValue,
-							product,
-						})
-
-						// 如果是可變商品，則需要同步更新所有變體
-						if (product?.children?.length) {
-							product?.children?.forEach((variation) => {
-								mutateProduct({
-									changedKey,
-									changedValue,
-									product: variation,
-								})
-							})
-						}
-					})
-				}
-
-				if (!syncModeEnabled) {
-					if (!isVariation(changedProductType) || 'detail' === context) {
-						// 非變體，直接找到 row 位置修改就好
-						const findRowIndex = virtualFields.findIndex(
-							(product) => product.id === changedProductId,
-						)
-
-						mutateProduct({
-							changedKey,
-							changedValue,
-							product: draft?.[findRowIndex],
-						})
-
-						return
-					}
-
-					// 如果是變體
-					// 是變體，要找到可變商品裡面 children 的 變體位置
-					// 先從 allValues 中找到變體，再拿出 parent_id 找到所屬的可變商品
-					// @ts-ignore
-					const parentId = allValues?.[changedProductId]?.parent_id
-					const findRowIndex = virtualFields.findIndex(
-						(product) => product.id === parentId,
-					)
-
-					// 如果找到上層可變商品
-					if (findRowIndex > 0) {
-						const findVariationIndex =
-							draft[findRowIndex]?.children?.findIndex(
-								(variation) => variation.id === changedProductId,
-							) || 0
-
-						mutateProduct({
-							changedKey,
-							changedValue,
-							product: draft?.[findRowIndex]?.children?.[findVariationIndex],
-						})
-						return
-					}
-				}
-			})
-			setVirtualFields(changedFields)
-		} catch (error) {
-			console.error('更新失敗，immer 賦值 draft 失敗')
-			console.error(error)
-		}
-	}
 
 	return (
 		<>
@@ -179,7 +87,7 @@ const ProductEditTableComponent = ({
 				)}
 			</div>
 
-			<Form form={form} layout="horizontal" onValuesChange={handleValuesChange}>
+			<Form form={form} layout="horizontal" onValuesChange={onValuesChange}>
 				<Table
 					{...(defaultTableProps as unknown as TableProps<TProductRecord>)}
 					dataSource={virtualFields}

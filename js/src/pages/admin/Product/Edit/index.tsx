@@ -73,7 +73,7 @@ const EditComponent = () => {
 
 		onFinish({
 			...rest,
-			image_id: image ? image?.id : 0,
+			image_id: image ? image?.id : '0',
 			gallery_image_ids: gallery_images?.length
 				? gallery_images?.map(({ id }) => id)
 				: '[]',

@@ -43,7 +43,7 @@ export const Variation = () => {
 	const handleUpdate = () => {
 		const default_attributes = formAttr.getFieldValue(['default_attributes'])
 		// 取得 values
-		const fields = productsToFields(virtualFields)
+		const fields = productsToFields(virtualFields, 'submit')
 		safeParse(ZFormValues.array(), Object.values(fields))
 
 		updateVariations({
