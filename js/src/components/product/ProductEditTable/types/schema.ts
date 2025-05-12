@@ -51,4 +51,10 @@ export const ZFormValues = z.object({
 // Taxonomy
 	category_ids: z.array(z.string()).optional(),
 	tag_ids: z.array(z.string()).optional(),
+
+	//Gallery
+	images: z.array(z.object({
+		id: z.string(),
+		url: z.string(),
+	})).optional(),
 })

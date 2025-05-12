@@ -3,6 +3,7 @@ import { TProductRecord, TProductVariation } from '@/components/product/types'
 import { useWindowSize } from '@uidotdev/usehooks'
 import { useWoocommerce } from '@/hooks'
 import {
+	Gallery,
 	Status,
 	Price,
 	Size,
@@ -37,16 +38,20 @@ export const useColumns = (context?: 'detail') => {
 			fixed: (width || 400) > 768 ? 'left' : undefined,
 			render: (_, record) => (
 				<>
-					<ProductName<TProductRecord>
-						record={record}
-						onClick={
-							isVariation(record?.type as string)
-								? undefined
-								: () => {
-										window.open(`${record.permalink}`, '_blank')
-									}
-						}
-					/>
+					<div className="flex gap-x-4 items-center">
+						<Gallery id={record.id} limit={1} size="small" />
+						<ProductName<TProductRecord>
+							hideImage
+							record={record}
+							onClick={
+								isVariation(record?.type as string)
+									? undefined
+									: () => {
+											window.open(`${record.permalink}`, '_blank')
+										}
+							}
+						/>
+					</div>
 					<Item name={[record.id, 'id']} hidden />
 					<Item name={[record.id, 'type']} hidden />
 					<Item name={[record.id, 'parent_id']} hidden />

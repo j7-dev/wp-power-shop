@@ -39,6 +39,7 @@ export const useApiUrlMediaLibraryModal = ({
 			</>
 		),
 		onCancel: close,
+		destroyOnHidden: true,
 		...modalProps,
 	}
 

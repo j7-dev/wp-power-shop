@@ -56,7 +56,9 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 					</div>
 				</div>
 				<div className="w-full xl:w-[30rem]">
-					<Gallery />
+					<div className="mb-6">
+						<Gallery />
+					</div>
 					<TaxonomyModals />
 
 					<Item name="page_template" label="頁面模板">
