@@ -65,7 +65,7 @@ export const useColumns = (context?: 'detail') => {
 			dataIndex: 'regular_price',
 			width: 100,
 			render: (_, { id, type }) =>
-				isVariable(type as string) ? null : (
+				isVariable(type as string) || 'grouped' === type ? null : (
 					<Price id={id} type={type as TProductType} size="small" />
 				),
 		},
@@ -73,22 +73,33 @@ export const useColumns = (context?: 'detail') => {
 			title: '庫存',
 			dataIndex: 'stock',
 			width: 200,
-			render: (_, { id, type }) => (
-				<div className="grid grid-cols-2 gap-x-2">
-					<Stock id={id} size="small" />
-				</div>
-			),
+			render: (_, { id, type }) => {
+				// 組合商品 & 外部/加盟商品不顯示庫存
+				if (['grouped', 'external'].includes(type as string)) {
+					return null
+				}
+				return (
+					<div className="grid grid-cols-2 gap-x-2">
+						<Stock id={id} size="small" />
+					</div>
+				)
+			},
 		},
 		{
 			title: `尺寸 (${dimension_unit}) & 重量 (${weight_unit})`,
 			dataIndex: 'size',
 			width: 160,
-			render: (_, { id }) => (
-				<div className="grid grid-cols-2 gap-x-2">
-					<Sku id={id} size="small" />
-					<Size id={id} size="small" />
-				</div>
-			),
+			render: (_, { id, type }) => {
+				return (
+					<div className="grid grid-cols-2 gap-x-2">
+						<Sku id={id} size="small" />
+						{/* 組合商品 & 外部/加盟商品不顯示尺寸 */}
+						{!['grouped', 'external'].includes(type as string) && (
+							<Size id={id} size="small" />
+						)}
+					</div>
+				)
+			},
 		},
 		{
 			title: '分類/標籤',
@@ -102,6 +113,10 @@ export const useColumns = (context?: 'detail') => {
 			dataIndex: 'note',
 			width: 100,
 			render: (_, { id, type }) => {
+				// 組合商品 & 外部/加盟商品不顯示購買備註
+				if (['grouped', 'external'].includes(type as string)) {
+					return null
+				}
 				const name = isVariation(type as string)
 					? '_variation_description'
 					: 'purchase_note'
@@ -121,6 +136,7 @@ export const useColumns = (context?: 'detail') => {
 	]
 
 	//  依照不同 context 回傳不同的 columns
+	// detail 頁面 Variation 的 columns 不顯示 status 和 category_ids
 	if ('detail' === context) {
 		return columns?.filter((c, index) => {
 			// @ts-ignore

@@ -110,14 +110,32 @@ const ProductEditTableComponent = ({
 				}
 
 				if (!syncModeEnabled) {
-					if (isVariation(changedProductType)) {
-						// 是變體，要找到可變商品裡面 children 的 變體位置
-						// 先從 allValues 中找到變體，再拿出 parent_id 找到所屬的可變商品
-						// @ts-ignore
-						const parentId = allValues?.[changedProductId]?.parent_id
+					if (!isVariation(changedProductType) || 'detail' === context) {
+						// 非變體，直接找到 row 位置修改就好
 						const findRowIndex = virtualFields.findIndex(
-							(product) => product.id === parentId,
+							(product) => product.id === changedProductId,
 						)
+
+						mutateProduct({
+							changedKey,
+							changedValue,
+							product: draft?.[findRowIndex],
+						})
+
+						return
+					}
+
+					// 如果是變體
+					// 是變體，要找到可變商品裡面 children 的 變體位置
+					// 先從 allValues 中找到變體，再拿出 parent_id 找到所屬的可變商品
+					// @ts-ignore
+					const parentId = allValues?.[changedProductId]?.parent_id
+					const findRowIndex = virtualFields.findIndex(
+						(product) => product.id === parentId,
+					)
+
+					// 如果找到上層可變商品
+					if (findRowIndex > 0) {
 						const findVariationIndex =
 							draft[findRowIndex]?.children?.findIndex(
 								(variation) => variation.id === changedProductId,
@@ -130,16 +148,6 @@ const ProductEditTableComponent = ({
 						})
 						return
 					}
-					// 非變體，直接找到 row 位置修改就好
-					const findRowIndex = virtualFields.findIndex(
-						(product) => product.id === changedProductId,
-					)
-
-					mutateProduct({
-						changedKey,
-						changedValue,
-						product: draft?.[findRowIndex],
-					})
 				}
 			})
 			setVirtualFields(changedFields)

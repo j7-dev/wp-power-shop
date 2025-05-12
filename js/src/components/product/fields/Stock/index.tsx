@@ -13,6 +13,7 @@ export const Stock = ({ id, size }: { id?: string; size?: SizeType }) => {
 	const manageStockName = id ? [id, 'manage_stock'] : ['manage_stock']
 	const watchManageStock = Form.useWatch(manageStockName, form)
 	const enableStockManagement = watchManageStock === 'yes'
+
 	return (
 		<>
 			<Item

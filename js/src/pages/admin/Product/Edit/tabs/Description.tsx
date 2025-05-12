@@ -8,13 +8,16 @@ import {
 } from '@/components/product/fields'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import { Heading, DatePicker } from 'antd-toolkit'
-import { TProductType } from 'antd-toolkit/wp'
+import { TProductType, isVariation } from 'antd-toolkit/wp'
 
 const { Item } = Form
 
 export const Description = ({ formProps }: { formProps: FormProps }) => {
 	const record = useRecord()
 
+	const name = isVariation(record?.type as string)
+		? '_variation_description'
+		: 'purchase_note'
 	return (
 		<Form {...formProps}>
 			<div className="flex flex-col xl:flex-row gap-12">
@@ -27,7 +30,9 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 						<Input allowClear />
 					</Item>
 
-					<PurchaseNote />
+					{!['grouped', 'external'].includes(record?.type as TProductType) && (
+						<PurchaseNote name={name} />
+					)}
 
 					<div>簡短說明</div>
 					<div>編輯器</div>

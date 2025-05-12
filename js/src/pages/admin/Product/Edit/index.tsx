@@ -9,12 +9,14 @@ import {
 	Price,
 	Attributes,
 	Variation,
+	Linked,
+	Advanced,
 } from '@/pages/admin/Product/Edit/tabs'
 import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
 // import { PostEdit } from './PostEdit'
 import { NameId } from 'antd-toolkit'
-import { TImage } from 'antd-toolkit/wp'
+import { TImage, isVariable } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 
 const { Item } = Form
@@ -56,6 +58,8 @@ const EditComponent = () => {
 			},
 		},
 	})
+
+	const watchProductType = Form.useWatch(['type'], form)
 
 	/**
 	 * change the form data before submitting
@@ -112,10 +116,15 @@ const EditComponent = () => {
 			children: <Variation />,
 		},
 		{
-			key: 'Advanced',
-			label: '進階設定',
-			children: <>123</>,
+			key: 'Linked',
+			label: '連接商品',
+			children: <Linked formProps={formProps} />,
 		},
+		// {
+		// 	key: 'Advanced',
+		// 	label: '進階設定',
+		// 	children: <Advanced formProps={formProps} />,
+		// },
 		// {// TODO
 		// 	key: 'Download',
 		// 	label: '下載管理',
@@ -127,7 +136,19 @@ const EditComponent = () => {
 			children: <>123</>,
 			// children: <Description />,
 		},
-	]
+	].filter((item) => {
+		// 合併所有條件判斷
+		const conditions = {
+			// 如果不是變體商品，移除 Variation 標籤
+			Variation: isVariable(watchProductType),
+			// 如果是組合商品，移除 Price 標籤
+			Price: watchProductType !== 'grouped',
+		}
+
+		// 如果條件為 false，則移除該標籤，不為 false 則保留
+		// @ts-ignore
+		return conditions?.[item.key] !== false
+	})
 
 	const disableSaveButton = ['Attributes', 'Variation'].includes(activeKey)
 
@@ -168,7 +189,7 @@ const EditComponent = () => {
 					isLoading={query?.isLoading}
 				>
 					<Form {...formProps}>
-						<Item name="type" label="商品類型">
+						<Item name={['type']} label="商品類型">
 							<Select
 								optionRender={(option) => (
 									<NameId name={option.label} id={option.value as string} />

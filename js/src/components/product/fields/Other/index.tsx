@@ -1,7 +1,10 @@
+import { Form, FormProps, InputNumber } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { SwitchSize } from 'antd/es/switch'
 import { Switch } from 'antd-toolkit'
 import { TProductType, isVariation as checkIsVariation } from 'antd-toolkit/wp'
+
+const { Item } = Form
 
 export const Other = ({
 	id,
@@ -71,6 +74,12 @@ export const Other = ({
 							size: switchSize,
 						}}
 					/>
+					<Item
+						name={id ? [id, 'menu_order'] : ['menu_order']}
+						label="選單順序"
+					>
+						<InputNumber className="w-full" size={size} />
+					</Item>
 				</>
 			)}
 
