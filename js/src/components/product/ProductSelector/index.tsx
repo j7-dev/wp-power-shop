@@ -12,11 +12,21 @@ export const ProductSelector = ({
 	formItemProps: FormItemProps
 }) => {
 	const { product_types } = useWoocommerce()
+	const form = Form.useFormInstance()
+	const name = formItemProps?.name
+	const ids = Form.useWatch(name, form)
 	const { selectProps: productSelectProps, query: productQuery } =
 		useSelect<TProductSelectOption>({
 			resource: 'products/select',
 			optionLabel: 'name',
 			optionValue: 'id',
+			filters: [
+				{
+					field: 'post__in',
+					operator: 'eq',
+					value: ids,
+				},
+			],
 			onSearch: (value) => [
 				{
 					field: 's',
@@ -24,7 +34,6 @@ export const ProductSelector = ({
 					value,
 				},
 			],
-			filters: [],
 		})
 
 	const productSelectOptions = productQuery?.data?.data || []

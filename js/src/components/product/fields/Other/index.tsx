@@ -74,12 +74,6 @@ export const Other = ({
 							size: switchSize,
 						}}
 					/>
-					<Item
-						name={id ? [id, 'menu_order'] : ['menu_order']}
-						label="選單順序"
-					>
-						<InputNumber className="w-full" size={size} />
-					</Item>
 				</>
 			)}
 

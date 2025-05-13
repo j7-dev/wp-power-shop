@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Select, FormProps } from 'antd'
+import { Form, Input, Select, FormProps, InputNumber } from 'antd'
 import {
 	PurchaseNote,
 	TaxonomyModals,
@@ -43,7 +43,7 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 					</div>
 
 					<Heading>發佈時間</Heading>
-					<div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
+					<div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4">
 						<DatePicker
 							formItemProps={{
 								name: ['date_created'],
@@ -53,6 +53,9 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 									'你可以透過控制發布時間，搭配短代碼，控制課程的排列順序',
 							}}
 						/>
+						<Item name={['menu_order']} label="選單順序">
+							<InputNumber className="w-full" />
+						</Item>
 					</div>
 				</div>
 				<div className="w-full xl:w-[30rem]">
