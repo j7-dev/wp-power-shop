@@ -6,10 +6,11 @@ import { TTotals } from '@/pages/admin/Analytics/types'
 import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
 import { cards, tickFilter } from '@/pages/admin/Analytics/utils'
 import { QuestionCircleOutlined } from '@ant-design/icons'
+import { nanoid } from 'nanoid'
 import { TrendIndicator } from 'antd-toolkit'
 
 const Default = () => {
-	const { viewTypeProps, form } = useRevenueContext()
+	const { viewTypeProps, form, isLoading } = useRevenueContext()
 	const { revenueData, lastYearRevenueData } = viewTypeProps
 	const isLastYear = form.getFieldValue(['compare_last_year'])
 
@@ -44,6 +45,47 @@ const Default = () => {
 				labelFilter: tickFilter,
 			},
 		},
+	}
+
+	if (isLoading) {
+		return (
+			<>
+				<div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+					{cards.map((card) => {
+						// 隨機產生 10 個 2~15 的 array
+						const randomArray = Array.from(
+							{ length: 12 },
+							() => Math.floor(Math.random() * 8) + 2,
+						)
+
+						return (
+							<Card
+								key={card.slug}
+								title={card?.title}
+								extra={
+									<span className="text-sm text-gray-400 flex items-center">
+										共{' '}
+										<span className="bg-gray-200 inline-block w-10 h-4 rounded-md animate-pulse"></span>{' '}
+										{card.unit}
+									</span>
+								}
+								variant="borderless"
+							>
+								<div className="aspect-video grid grid-cols-12 gap-x-4 items-end animate-pulse">
+									{randomArray.map((n) => (
+										<div
+											key={nanoid(4)}
+											className="w-full bg-gray-200"
+											style={{ height: `${n * 10}%` }}
+										></div>
+									))}
+								</div>
+							</Card>
+						)
+					})}
+				</div>
+			</>
+		)
 	}
 
 	return (

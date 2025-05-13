@@ -30,6 +30,8 @@ export const RevenueContext = createContext<
 				HttpError
 			> &
 				UseLoadingOvertimeReturnType
+			isFetching: boolean
+			isLoading: boolean
 			form: FormInstance
 			query: TQuery
 			setQuery: React.Dispatch<React.SetStateAction<TQuery>>

@@ -11,9 +11,8 @@ const { RangePicker } = DatePicker
 const { Item } = Form
 
 const index = () => {
-	const { viewType, setViewType, filterProps, form, setQuery, context } =
+	const { viewType, setViewType, form, setQuery, context, isFetching } =
 		useRevenueContext()
-	const { isFetching } = filterProps
 
 	const handleSubmit = () => {
 		const { date_range, product_includes = [], ...rest } = form.getFieldsValue()

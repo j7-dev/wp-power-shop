@@ -76,8 +76,6 @@ export const defaultQuery = {
 export type TQuery = typeof defaultQuery
 
 export type TFilterProps = {
-	isFetching: boolean
-	isLoading: boolean
 	totalPages: number
 	total: number
 }

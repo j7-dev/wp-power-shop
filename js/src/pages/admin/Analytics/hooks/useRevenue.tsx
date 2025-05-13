@@ -80,6 +80,12 @@ const useRevenue = ({ initialQuery, context }: TUseRevenueParams) => {
 	return {
 		result: formattedResult,
 		lastYearResult: formattedLastYearResult,
+		isLoading: compare_last_year
+			? result.isLoading || lastYearResult.isLoading
+			: result.isLoading,
+		isFetching: compare_last_year
+			? result.isFetching || lastYearResult.isFetching
+			: result.isFetching,
 		form,
 		query,
 		setQuery,
