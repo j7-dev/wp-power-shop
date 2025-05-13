@@ -129,7 +129,7 @@ export const Gallery = ({
 											{'small' !== size && (
 												<p
 													className="m-0 text-xs"
-													onClick={handleSetThumbnail(id)}
+													onClick={handleSetThumbnail(_imageId)}
 												>
 													{index === 0 ? '封面' : '設為封面'}
 												</p>
