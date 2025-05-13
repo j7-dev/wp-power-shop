@@ -2,21 +2,21 @@ import React from 'react'
 import { DatePicker, Button, Select, Form, Checkbox, Tooltip, Tag } from 'antd'
 import { useSelect } from '@refinedev/antd'
 import dayjs from 'dayjs'
-import { TProductSelectOption } from '../types'
+import { useWoocommerce } from '@/hooks'
 import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
 import { AreaChartOutlined, LineChartOutlined } from '@ant-design/icons'
-import { EViewType } from '../types'
-import { RANGE_PRESETS, maxDateRange } from '../utils'
+import { TProductSelectOption, EViewType } from '@/pages/admin/Analytics/types'
+import { RANGE_PRESETS, maxDateRange } from '@/pages/admin/Analytics/utils'
 import { defaultSelectProps } from 'antd-toolkit'
-import { PRODUCT_TYPES } from 'antd-toolkit/wp'
 
 const { RangePicker } = DatePicker
 const { Item } = Form
 
 const index = () => {
-	const { viewType, setViewType, filterProps, form, setQuery } =
+	const { viewType, setViewType, filterProps, form, setQuery, context } =
 		useRevenueContext()
 	const { isFetching } = filterProps
+	const { product_types } = useWoocommerce()
 	const { selectProps: productSelectProps, query: productQuery } =
 		useSelect<TProductSelectOption>({
 			resource: 'products/select',
@@ -75,32 +75,34 @@ const index = () => {
 					/>
 				</Item>
 
-				<Item
-					name={['product_includes']}
-					className="w-full"
-					label="查看特定商品"
-				>
-					<Select
-						{...defaultSelectProps}
-						{...productSelectProps}
-						placeholder="可多選，可搜尋關鍵字"
-						optionRender={({ value, label }) => {
-							const option = productSelectOptions.find(
-								(productOption) => productOption?.id === value,
-							)
-							const productType = PRODUCT_TYPES.find(
-								(pt) => pt?.value === option?.type,
-							)
-							return (
-								<span>
-									<span className="text-gray-400 text-xs">#{value}</span>{' '}
-									{label}{' '}
-									<Tag color={productType?.color}>{productType?.label}</Tag>
-								</span>
-							)
-						}}
-					/>
-				</Item>
+				{'detail' !== context && (
+					<Item
+						name={['product_includes']}
+						className="w-full"
+						label="查看特定商品"
+					>
+						<Select
+							{...defaultSelectProps}
+							{...productSelectProps}
+							placeholder="可多選，可搜尋關鍵字"
+							optionRender={({ value, label }) => {
+								const option = productSelectOptions.find(
+									(productOption) => productOption?.id === value,
+								)
+								const productType = product_types.find(
+									(pt) => pt?.value === option?.type,
+								)
+								return (
+									<span>
+										<span className="text-gray-400 text-xs">#{value}</span>{' '}
+										{label}{' '}
+										<Tag color={productType?.color}>{productType?.label}</Tag>
+									</span>
+								)
+							}}
+						/>
+					</Item>
+				)}
 				<Item name={['interval']} initialValue={'day'} label="時間間格">
 					<Select
 						className="w-24"

@@ -1,12 +1,12 @@
 import { z } from 'zod'
-import { PRODUCT_STATUS, PRODUCT_CATALOG_VISIBILITIES, PRODUCT_STOCK_STATUS, PRODUCT_TYPES } from 'antd-toolkit/wp'
+import { PRODUCT_STATUS, PRODUCT_CATALOG_VISIBILITIES, PRODUCT_STOCK_STATUS } from 'antd-toolkit/wp'
 
 export const ZYesNo = z.enum(['no', 'yes']);
 export const ZBackorders = z.union([ZYesNo, z.literal('notify')]);
 
 export const ZFormValues = z.object({
 	id: z.string(),
-	type: z.enum(PRODUCT_TYPES.map(type => type.value) as [string, ...string[]]),
+	type: z.array(z.string()),
 	parent_id: z.string(),
 
 	// Other
