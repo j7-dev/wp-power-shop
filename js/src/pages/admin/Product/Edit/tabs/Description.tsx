@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form, Input, Select, FormProps, InputNumber } from 'antd'
+import { useWoocommerce } from '@/hooks'
 import {
 	PurchaseNote,
 	TaxonomyModals,
@@ -7,27 +8,47 @@ import {
 	Gallery,
 } from '@/components/product/fields'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
-import { Heading, DatePicker } from 'antd-toolkit'
+import { Heading, DatePicker, NameId, useEnv, CopyText } from 'antd-toolkit'
 import { TProductType, isVariation } from 'antd-toolkit/wp'
 
 const { Item } = Form
 
 export const Description = ({ formProps }: { formProps: FormProps }) => {
 	const record = useRecord()
+	const { product_types, permalinks } = useWoocommerce()
+	const { SITE_URL } = useEnv()
 
 	const name = isVariation(record?.type as string)
 		? '_variation_description'
 		: 'purchase_note'
+
+	const product_base_url = `${SITE_URL}/${permalinks.product_base}`
+	const watchSlug = Form.useWatch(['slug'], formProps.form)
 	return (
 		<Form {...formProps}>
 			<div className="flex flex-col xl:flex-row gap-12">
 				<div className="w-full xl:flex-1">
-					<Item name="name" label="商品名稱">
+					<Item name={['type']} label="商品類型">
+						<Select
+							optionRender={(option) => (
+								<NameId name={option.label} id={option.value as string} />
+							)}
+							options={product_types}
+						/>
+					</Item>
+
+					<Item name={['name']} label="商品名稱">
 						<Input allowClear />
 					</Item>
 
-					<Item name="slug" label="永久連結">
-						<Input allowClear />
+					<Item name={['slug']} label="永久連結">
+						<Input
+							addonBefore={`${product_base_url}/`}
+							addonAfter={
+								<CopyText text={`${product_base_url}/${watchSlug}`} />
+							}
+							allowClear
+						/>
 					</Item>
 
 					{!['grouped', 'external'].includes(record?.type as TProductType) && (

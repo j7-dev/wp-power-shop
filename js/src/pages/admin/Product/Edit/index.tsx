@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
-import { Tabs, TabsProps, Form, Switch, Button, Select, FormProps } from 'antd'
 import { useWoocommerce } from '@/hooks'
+import { Tabs, TabsProps, Form, Switch, Button, FormProps } from 'antd'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
 import {
@@ -15,16 +15,13 @@ import {
 } from '@/pages/admin/Product/Edit/tabs'
 import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
-// import { PostEdit } from './PostEdit'
-import { NameId } from 'antd-toolkit'
+
 import { TImage, isVariable } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 
-const { Item } = Form
-
 const EditComponent = () => {
 	const { id } = useParsed()
-	const { product_types } = useWoocommerce()
+	const { product_types = [] } = useWoocommerce()
 	const [activeKey, setActiveKey] = useState('Description')
 
 	// 初始化資料
@@ -89,6 +86,7 @@ const EditComponent = () => {
 	}
 
 	const record: TProductRecord | undefined = query?.data?.data
+	const findType = product_types.find((type) => type.value === record?.type)
 
 	const items: TabsProps['items'] = [
 		{
@@ -162,7 +160,9 @@ const EditComponent = () => {
 					title={
 						<>
 							{record?.name}{' '}
-							<span className="text-gray-400 text-xs">#{record?.id}</span>
+							<span className="text-gray-400 text-xs">
+								{findType?.label} #{record?.id}
+							</span>
 						</>
 					}
 					headerButtons={() => null}
@@ -190,16 +190,6 @@ const EditComponent = () => {
 					)}
 					isLoading={query?.isLoading}
 				>
-					<Form {...formProps}>
-						<Item name={['type']} label="商品類型">
-							<Select
-								optionRender={(option) => (
-									<NameId name={option.label} id={option.value as string} />
-								)}
-								options={product_types}
-							/>
-						</Item>
-					</Form>
 					<Tabs
 						activeKey={activeKey}
 						onChange={(key) => setActiveKey(key)}
