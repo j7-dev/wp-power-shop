@@ -23,7 +23,7 @@ export const Variation = () => {
 
 	const [form] = Form.useForm<TFormValues>()
 	const [formAttr] = Form.useForm<{
-		default_attributes: Record<string, string>
+		default_attributes_bottom: Record<string, string>
 	}>()
 
 	// 虛擬欄位，因為 Table 組件使用虛擬列表，只會 render 部分的欄位，如果用 form.getFieldsValue() 會抓不到所有欄位值，因此使用這個欄位紀錄變化值
@@ -41,7 +41,9 @@ export const Variation = () => {
 	const invalidate = useInvalidate()
 
 	const handleUpdate = () => {
-		const default_attributes = formAttr.getFieldValue(['default_attributes'])
+		const default_attributes = formAttr.getFieldValue([
+			'default_attributes_bottom',
+		])
 		// 取得 values
 		const fields = productsToFields(virtualFields, 'submit')
 		safeParse(ZFormValues.array(), Object.values(fields))
@@ -66,8 +68,11 @@ export const Variation = () => {
 	}, [variations?.map((v) => v.id)?.join(',')])
 
 	useEffect(() => {
-		formAttr.setFieldValue(['default_attributes'], defaultAttributes)
-	}, [JSON.stringify(defaultAttributes)])
+		if (!showTable) {
+			return
+		}
+		formAttr.setFieldValue(['default_attributes_bottom'], defaultAttributes)
+	}, [JSON.stringify(defaultAttributes), showTable])
 
 	const handleCreateVariations = () => {
 		createVariations(
@@ -118,7 +123,7 @@ export const Variation = () => {
 									{attributes?.map(({ id, name, taxonomy, options }) => (
 										<Item
 											key={`${id}-${name}`}
-											name={['default_attributes', taxonomy || name]}
+											name={['default_attributes_bottom', taxonomy || name]}
 											label={name}
 											className="mb-0"
 										>

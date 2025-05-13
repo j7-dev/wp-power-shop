@@ -34,7 +34,7 @@ export const ProductSelector = ({
 			<Select
 				{...defaultSelectProps}
 				{...productSelectProps}
-				placeholder="可多選，可搜尋關鍵字"
+				placeholder="可多選，可搜尋關鍵字，輸入數字的話會搜尋商品 ID"
 				optionRender={({ value, label }) => {
 					const option = productSelectOptions.find(
 						(productOption) => productOption?.id === value,

@@ -6,7 +6,7 @@ export const ZBackorders = z.union([ZYesNo, z.literal('notify')]);
 
 export const ZFormValues = z.object({
 	id: z.string(),
-	type: z.array(z.string()),
+	type: z.string().or(z.array(z.string())),
 	parent_id: z.string(),
 
 	// Other
