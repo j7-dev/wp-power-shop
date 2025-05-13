@@ -6,9 +6,11 @@ export const Analytics = () => {
 	const record = useRecord()
 	if (!record) return null
 	return (
-		<AnalyticsPage
-			context="detail"
-			initialQuery={{ product_includes: [record.id] }}
-		/>
+		<div className="py-8">
+			<AnalyticsPage
+				context="detail"
+				initialQuery={{ product_includes: [record.id] }}
+			/>
+		</div>
 	)
 }

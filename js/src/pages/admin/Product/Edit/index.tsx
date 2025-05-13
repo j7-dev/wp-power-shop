@@ -133,9 +133,8 @@ const EditComponent = () => {
 		// },
 		{
 			key: 'Analytics', // TODO 也許之後可以讓用戶儲存預設開啟
-			label: '總覽',
+			label: '銷售數據',
 			children: <Analytics />,
-			// children: <Description />,
 		},
 	].filter((item) => {
 		// 合併所有條件判斷
@@ -151,7 +150,9 @@ const EditComponent = () => {
 		return conditions?.[item.key] !== false
 	})
 
-	const disableSaveButton = ['Attributes', 'Variation'].includes(activeKey)
+	const disableSaveButton = ['Attributes', 'Variation', 'Analytics'].includes(
+		activeKey,
+	)
 
 	return (
 		<div className="sticky-card-actions sticky-tabs-nav">
