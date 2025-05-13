@@ -41,9 +41,7 @@ export const Variation = () => {
 	const invalidate = useInvalidate()
 
 	const handleUpdate = () => {
-		const default_attributes = formAttr.getFieldValue([
-			'default_attributes_bottom',
-		])
+		const default_attributes = formAttr.getFieldValue(['default_attributes'])
 		// 取得 values
 		const fields = productsToFields(virtualFields, 'submit')
 		safeParse(ZFormValues.array(), Object.values(fields))
@@ -66,13 +64,6 @@ export const Variation = () => {
 		}, 500)
 		return () => clearTimeout(delay)
 	}, [variations?.map((v) => v.id)?.join(',')])
-
-	useEffect(() => {
-		if (!showTable) {
-			return
-		}
-		formAttr.setFieldValue(['default_attributes_bottom'], defaultAttributes)
-	}, [JSON.stringify(defaultAttributes), showTable])
 
 	const handleCreateVariations = () => {
 		createVariations(
@@ -123,9 +114,10 @@ export const Variation = () => {
 									{attributes?.map(({ id, name, taxonomy, options }) => (
 										<Item
 											key={`${id}-${name}`}
-											name={['default_attributes_bottom', taxonomy || name]}
+											name={['default_attributes', taxonomy || name]}
 											label={name}
 											className="mb-0"
+											initialValue={defaultAttributes?.[taxonomy || name]}
 										>
 											<Select
 												className="min-w-40"
