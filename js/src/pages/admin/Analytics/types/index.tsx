@@ -1,4 +1,5 @@
 import { FormInstance } from 'antd'
+import dayjs from 'dayjs'
 import { TProductType } from 'antd-toolkit/wp'
 
 export enum EViewType {
@@ -50,7 +51,6 @@ export type TFormattedRevenue = {
 export type TViewTypeProps = {
 	revenueData: TFormattedRevenue | undefined
 	lastYearRevenueData: TFormattedRevenue | undefined
-	form: FormInstance
 }
 
 export type TProductSelectOption = {
@@ -59,4 +59,25 @@ export type TProductSelectOption = {
 	name: string
 	slug: string
 	permalink: string
+}
+
+export const defaultQuery = {
+	order: 'asc',
+	interval: 'day',
+	per_page: 10000,
+	after: dayjs().add(-7, 'd').startOf('day').format('YYYY-MM-DDTHH:mm:ss'),
+	before: dayjs().endOf('day').format('YYYY-MM-DDTHH:mm:ss'),
+	_locale: 'user',
+	page: 1,
+	compare_last_year: false,
+	product_includes: [] as string[],
+}
+
+export type TQuery = typeof defaultQuery
+
+export type TFilterProps = {
+	isFetching: boolean
+	isLoading: boolean
+	totalPages: number
+	total: number
 }

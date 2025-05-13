@@ -1,8 +1,13 @@
 import React, { memo } from 'react'
 import { Card, Form } from 'antd'
 import dayjs from 'dayjs'
-import { TTotals, TViewTypeProps, TIntervalBase } from '../types'
-import { cards, tickFilter } from '../index'
+import {
+	TTotals,
+	TViewTypeProps,
+	TIntervalBase,
+} from '@/pages/admin/Analytics/types'
+import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
+import { cards, tickFilter } from '@/pages/admin/Analytics/utils'
 import { Area, AreaConfig } from '@ant-design/plots'
 
 type TData = {
@@ -44,7 +49,9 @@ function formatStackedAreaData(
 	return data
 }
 
-const AreaView = ({ revenueData, form }: TViewTypeProps) => {
+const AreaView = () => {
+	const { viewTypeProps, form } = useRevenueContext()
+	const { revenueData } = viewTypeProps
 	const intervals = revenueData?.intervals || []
 	const data = formatStackedAreaData(intervals)
 	const watchInterval = Form.useWatch(['interval'], form)

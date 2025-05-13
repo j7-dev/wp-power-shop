@@ -2,17 +2,15 @@ import { memo } from 'react'
 import { Card, Form, Tooltip } from 'antd'
 import { Line, LineConfig } from '@ant-design/plots'
 import dayjs from 'dayjs'
-import { TTotals, TViewTypeProps } from '../types'
-import { cards, tickFilter } from '../index'
-import { round } from 'lodash-es'
+import { TTotals } from '@/pages/admin/Analytics/types'
+import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
+import { cards, tickFilter } from '@/pages/admin/Analytics/utils'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { TrendIndicator } from 'antd-toolkit'
 
-const Default = ({
-	revenueData,
-	lastYearRevenueData,
-	form,
-}: TViewTypeProps) => {
+const Default = () => {
+	const { viewTypeProps, form } = useRevenueContext()
+	const { revenueData, lastYearRevenueData } = viewTypeProps
 	const isLastYear = form.getFieldValue(['compare_last_year'])
 
 	const intervals = revenueData?.intervals || []

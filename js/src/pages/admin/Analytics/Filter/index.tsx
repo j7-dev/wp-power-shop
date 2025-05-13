@@ -1,18 +1,9 @@
 import React from 'react'
-import {
-	DatePicker,
-	Button,
-	Select,
-	Form,
-	Checkbox,
-	Tooltip,
-	FormInstance,
-	Tag,
-} from 'antd'
+import { DatePicker, Button, Select, Form, Checkbox, Tooltip, Tag } from 'antd'
 import { useSelect } from '@refinedev/antd'
 import dayjs from 'dayjs'
 import { TProductSelectOption } from '../types'
-import { TQuery } from '../hooks/useRevenue'
+import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
 import { AreaChartOutlined, LineChartOutlined } from '@ant-design/icons'
 import { EViewType } from '../types'
 import { RANGE_PRESETS, maxDateRange } from '../utils'
@@ -22,25 +13,10 @@ import { PRODUCT_TYPES } from 'antd-toolkit/wp'
 const { RangePicker } = DatePicker
 const { Item } = Form
 
-export type TFilterProps = {
-	isFetching: boolean
-	isLoading: boolean
-	setQuery: React.Dispatch<React.SetStateAction<TQuery>>
-	query: TQuery
-	totalPages: number
-	total: number
-	form: FormInstance
-	viewType: EViewType
-	setViewType: React.Dispatch<React.SetStateAction<EViewType>>
-}
-
-const index = ({
-	setQuery,
-	isFetching,
-	form,
-	viewType,
-	setViewType,
-}: TFilterProps) => {
+const index = () => {
+	const { viewType, setViewType, filterProps, form, setQuery } =
+		useRevenueContext()
+	const { isFetching } = filterProps
 	const { selectProps: productSelectProps, query: productQuery } =
 		useSelect<TProductSelectOption>({
 			resource: 'products/select',
@@ -59,12 +35,7 @@ const index = ({
 	const productSelectOptions = productQuery?.data?.data || []
 
 	const handleSubmit = () => {
-		const {
-			date_range,
-			products = [],
-			bundle_products = [],
-			...rest
-		} = form.getFieldsValue()
+		const { date_range, product_includes = [], ...rest } = form.getFieldsValue()
 		const query = {
 			...rest,
 			after: date_range?.[0]?.format('YYYY-MM-DDTHH:mm:ss'),
@@ -72,7 +43,7 @@ const index = ({
 			per_page: 10000,
 			order: 'asc',
 			_locale: 'user',
-			product_includes: [...products, ...bundle_products],
+			product_includes,
 		}
 		setQuery(query)
 	}
@@ -104,7 +75,11 @@ const index = ({
 					/>
 				</Item>
 
-				<Item name={['products']} className="w-full" label="查看特定商品">
+				<Item
+					name={['product_includes']}
+					className="w-full"
+					label="查看特定商品"
+				>
 					<Select
 						{...defaultSelectProps}
 						{...productSelectProps}
