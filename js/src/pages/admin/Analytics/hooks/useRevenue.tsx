@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
 	useCustom,
 	useApiUrl,
@@ -27,10 +27,11 @@ export type TUseRevenueParams = {
 
 const useRevenue = ({ initialQuery, context }: TUseRevenueParams) => {
 	const apiUrl = useApiUrl()
-	const [query, setQuery] = useState({
+	const DEFAULT_QUERY = {
 		...defaultQuery,
 		...initialQuery,
-	})
+	}
+	const [query, setQuery] = useState(DEFAULT_QUERY)
 	const { compare_last_year } = query
 
 	const result = useCustom<TRevenue>({
@@ -71,6 +72,10 @@ const useRevenue = ({ initialQuery, context }: TUseRevenueParams) => {
 	const total = Number(result?.data?.headers?.['x-wp-total']) || 1
 
 	const [form] = Form.useForm()
+
+	useEffect(() => {
+		form.setFieldsValue(DEFAULT_QUERY)
+	}, [JSON.stringify(DEFAULT_QUERY)])
 
 	return {
 		result: formattedResult,

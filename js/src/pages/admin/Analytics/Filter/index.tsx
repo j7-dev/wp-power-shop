@@ -1,14 +1,11 @@
 import React from 'react'
-import { DatePicker, Button, Select, Form, Checkbox, Tooltip, Tag } from 'antd'
-import { useSelect } from '@refinedev/antd'
+import { DatePicker, Button, Select, Form, Checkbox, Tooltip } from 'antd'
 import { ProductSelector } from '@/components/product'
 import dayjs from 'dayjs'
-import { useWoocommerce } from '@/hooks'
 import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
 import { AreaChartOutlined, LineChartOutlined } from '@ant-design/icons'
-import { TProductSelectOption, EViewType } from '@/pages/admin/Analytics/types'
+import { EViewType } from '@/pages/admin/Analytics/types'
 import { RANGE_PRESETS, maxDateRange } from '@/pages/admin/Analytics/utils'
-import { defaultSelectProps, NameId } from 'antd-toolkit'
 
 const { RangePicker } = DatePicker
 const { Item } = Form
@@ -17,23 +14,6 @@ const index = () => {
 	const { viewType, setViewType, filterProps, form, setQuery, context } =
 		useRevenueContext()
 	const { isFetching } = filterProps
-	const { product_types } = useWoocommerce()
-	const { selectProps: productSelectProps, query: productQuery } =
-		useSelect<TProductSelectOption>({
-			resource: 'products/select',
-			optionLabel: 'name',
-			optionValue: 'id',
-			onSearch: (value) => [
-				{
-					field: 's',
-					operator: 'eq',
-					value,
-				},
-			],
-			filters: [],
-		})
-
-	const productSelectOptions = productQuery?.data?.data || []
 
 	const handleSubmit = () => {
 		const { date_range, product_includes = [], ...rest } = form.getFieldsValue()
@@ -75,15 +55,13 @@ const index = () => {
 						className="w-[16rem]"
 					/>
 				</Item>
-
-				{'detail' !== context && (
-					<ProductSelector
-						formItemProps={{
-							name: ['product_includes'],
-							label: '查看特定商品',
-						}}
-					/>
-				)}
+				<ProductSelector
+					formItemProps={{
+						name: ['product_includes'],
+						label: '查看特定商品',
+						hidden: 'detail' === context,
+					}}
+				/>
 				<Item name={['interval']} initialValue={'day'} label="時間間格">
 					<Select
 						className="w-24"
