@@ -11,6 +11,7 @@ import {
 	Variation,
 	Linked,
 	Advanced,
+	Analytics,
 } from '@/pages/admin/Product/Edit/tabs'
 import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
@@ -131,9 +132,9 @@ const EditComponent = () => {
 		// 	children: <>123</>,
 		// },
 		{
-			key: 'Overview', // TODO 也許之後可以讓用戶儲存預設開啟
+			key: 'Analytics', // TODO 也許之後可以讓用戶儲存預設開啟
 			label: '總覽',
-			children: <>123</>,
+			children: <Analytics />,
 			// children: <Description />,
 		},
 	].filter((item) => {
