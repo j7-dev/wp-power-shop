@@ -57,6 +57,7 @@ module.exports = {
 	allowedItems: [
 		'inc',
 		'js/dist',
+		'legacy',
 		'composer.json',
 		'composer.lock',
 		'index.php',
