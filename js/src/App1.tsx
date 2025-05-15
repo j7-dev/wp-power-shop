@@ -1,5 +1,5 @@
 /* eslint-disable quote-props */
-import { Refine } from '@refinedev/core'
+import { Refine, Link } from '@refinedev/core'
 import { ThemedLayoutV2, ThemedSiderV2, ErrorComponent } from '@refinedev/antd'
 import '@refinedev/antd/dist/reset.css'
 import routerBindings, {
@@ -19,6 +19,7 @@ import {
 	ProductTaxonomies,
 	ProductAttributes,
 	Summary,
+	OneShop,
 } from '@/pages/admin'
 
 import { HashRouter, Outlet, Route, Routes } from 'react-router-dom'
@@ -151,6 +152,11 @@ function App() {
 							<Route path="edit/:id" element={<ProductEdit />} />
 							<Route path="taxonomies" element={<ProductTaxonomies />} />
 							<Route path="attributes" element={<ProductAttributes />} />
+						</Route>
+
+						<Route path="marketing">
+							<Route index element={<ProductList />} />
+							<Route path="one-shop" element={<OneShop />} />
 						</Route>
 
 						<Route path="analytics" element={<Analytics />} />

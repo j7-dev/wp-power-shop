@@ -1,3 +1,4 @@
+import { Tag } from 'antd'
 import {
 	RadarChartOutlined,
 	LineChartOutlined,
@@ -98,19 +99,26 @@ export const resources: ResourceProps[] = [
 	// {
 	// 	parentName: 'marketing',
 	// 	name: 'coupons',
-	// 	list: '/coupons',
-	// 	edit: '/coupons/edit/:id',
+	// 	list: '/marketing/coupons',
+	// 	edit: '/marketing/coupons/edit/:id',
 	// 	meta: {
 	// 		label: '優惠碼',
 	// 	},
 	// },
 	{
 		parentName: 'marketing',
-		name: 'one_shop',
-		list: '/one_shop',
-		edit: '/one_shop/edit/:id',
+		name: 'one-shop',
+		list: '/marketing/one-shop',
+		// edit: '/one_shop/edit/:id',
 		meta: {
-			label: '一頁賣場',
+			label: (
+				<>
+					一頁賣場
+					<span className="bg-orange-500 text-white rounded-full px-1 ml-1 text-[0.625rem]">
+						即將更新
+					</span>
+				</>
+			),
 		},
 	},
 	{
