@@ -11,6 +11,7 @@ use J7\PowerShop\Utils\Base;
 use J7\Powerhouse\Utils\Base as PowerhouseUtils;
 use Kucrut\Vite;
 use J7\Powerhouse\Settings\DTO as SettingsDTO;
+use J7\WpUtils\Classes\General;
 
 if ( class_exists( 'J7\PowerShop\Bootstrap' ) ) {
 	return;
@@ -21,6 +22,9 @@ final class Bootstrap {
 
 	/** Constructor */
 	public function __construct() {
+
+		require_once Plugin::$dir . '/legacy/plugin.php';
+
 		Admin\Entry::instance();
 		Domains\Loader::instance();
 
@@ -58,6 +62,10 @@ final class Bootstrap {
 	 * @return void
 	 */
 	public static function enqueue_script(): void {
+
+		if ( ! General::in_url([ 'page=power-shop' ]) ) {
+			return;
+		}
 
 		Vite\enqueue_asset(
 			Plugin::$dir . '/js/dist',

@@ -1,0 +1,32 @@
+{
+  "name": "j7-dev/wp-power-shop",
+  "description": "Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-only",
+  "authors": [
+    {
+      "name": "JerryLiu",
+      "email": "j7.dev.gg@gmail.com",
+      "homepage": "https://github.com/j7-dev",
+      "role": "Developer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "J7\\PowerShopV2\\": "inc/classes/"
+    }
+  },
+  "config": {},
+  "require": {
+    "lodash-php/lodash-php": "^0.0.7"
+  },
+  "scripts": {
+    "lint": "phpcs"
+  }
+}

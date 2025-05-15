@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace J7\PowerShop\Admin;
 
+use J7\WpUtils\Classes\General;
 use J7\PowerShop\Plugin;
 use J7\PowerShop\Bootstrap;
 use J7\PowerShop\Utils\Base;
@@ -37,10 +38,7 @@ final class Entry {
 			return;
 		}
 
-		// Make sure we're on the right screen.
-		$screen = \get_current_screen();
-
-		if (Plugin::$kebab !== $screen?->id) {
+		if (!General::in_url([ 'page=power-shop' ])) {
 			return;
 		}
 
