@@ -23,6 +23,8 @@ export const ZFormValues = z.object({
     z.number().refine(val => val.toString().length === 10, { message: "開始時間必須是10位的時間戳" }).optional(),
     z.number().refine(val => val.toString().length === 10, { message: "結束時間必須是10位的時間戳" }).optional()
   ]).optional(),
+	date_on_sale_from: z.number().optional(),
+	date_on_sale_to: z.number().optional(),
 
 	// PurchaseNote
   purchase_note: z.string().optional(),

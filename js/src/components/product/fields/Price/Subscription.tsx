@@ -6,13 +6,13 @@ import { useWoocommerce } from '@/hooks'
 const { Item } = Form
 
 export enum SUBSCRIPTION {
-	PRICE = '_subscription_price', // 訂閱價格每 M 個月 [N 元] - number
-	PERIOD_INTERVAL = '_subscription_period_interval', // 訂閱價格每 [M 個] 月 N 元 - number
-	PERIOD = '_subscription_period', // 訂閱價格每 M 個 [月] N 元 - day | week | month | year
-	LENGTH = '_subscription_length', // 續訂截止日，0 = 無期限 - number
-	SIGN_UP_FEE = '_subscription_sign_up_fee', // 註冊費 - number
-	TRIAL_LENGTH = '_subscription_trial_length', // 免費試用 [N] 天 - number
-	TRIAL_PERIOD = '_subscription_trial_period', // 免費試用 N [天] - day | week | month | year
+	PRICE = 'subscription_price', // 訂閱價格每 M 個月 [N 元] - number
+	PERIOD_INTERVAL = 'subscription_period_interval', // 訂閱價格每 [M 個] 月 N 元 - number
+	PERIOD = 'subscription_period', // 訂閱價格每 M 個 [月] N 元 - day | week | month | year
+	LENGTH = 'subscription_length', // 續訂截止日，0 = 無期限 - number
+	SIGN_UP_FEE = 'subscription_sign_up_fee', // 註冊費 - number
+	TRIAL_LENGTH = 'subscription_trial_length', // 免費試用 [N] 天 - number
+	TRIAL_PERIOD = 'subscription_trial_period', // 免費試用 N [天] - day | week | month | year
 	// LIMIT = '_subscription_limit', // 續訂限制 - number
 	// ONE_TIME_SHIPPING = '_subscription_one_time_shipping', // 一次性運費 - number
 }

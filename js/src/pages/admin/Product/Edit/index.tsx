@@ -3,6 +3,7 @@ import { useWoocommerce } from '@/hooks'
 import { Tabs, TabsProps, Form, Switch, Button, FormProps } from 'antd'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
+import dayjs from 'dayjs'
 import {
 	Description,
 	Stock,
@@ -66,8 +67,15 @@ const EditComponent = () => {
 	 */
 	const handleOnFinish = (values: any) => {
 		// 將圖片從 images 轉成 PHP WC_Product 儲存的 key
-		const { images = [], ...rest } = values
+		const { images = [], sale_date_range = [], ...rest } = values
 		const [image, ...gallery_images] = images as TImage[]
+
+		const sale_dates = sale_date_range?.every(dayjs.isDayjs)
+			? {
+					date_on_sale_from: sale_date_range[0]?.unix(),
+					date_on_sale_to: sale_date_range[1]?.unix(),
+				}
+			: {}
 
 		onFinish({
 			...rest,
@@ -75,6 +83,7 @@ const EditComponent = () => {
 			gallery_image_ids: gallery_images?.length
 				? gallery_images?.map(({ id }) => id)
 				: '[]',
+			...sale_dates,
 		})
 	}
 

@@ -27,7 +27,7 @@ const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
 
 	const handleUpdate = () => {
 		// 取得 values
-		const fields = productsToFields(virtualFields)
+		const fields = productsToFields(virtualFields, 'submit')
 		const values = ZFormValues.array().safeParse(Object.values(fields))
 		console.log('⭐ values:', values)
 

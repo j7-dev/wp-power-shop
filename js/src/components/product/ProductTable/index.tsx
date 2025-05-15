@@ -76,18 +76,18 @@ const ProductTableComponent = ({
 			setSelectedRowKeys(currentSelectedRowKeys)
 
 			/** @type TProductRecord[] 不在這頁的已選擇商品 */
-			const selectedProductsNotInCurrentPage = selectedProducts.filter(
-				({ id }) => !currentAllKeys.includes(id),
+			const selectedProductsNotInCurrentPage = selectedProducts?.filter(
+				(p) => !currentAllKeys?.includes(p?.id),
 			)
 
 			/** @type string[] 在這頁的已選擇商品 ids */
-			const selectedProductIdsInCurrentPage = currentSelectedRowKeys.map(
-				(key) => key.toString(),
+			const selectedProductIdsInCurrentPage = currentSelectedRowKeys?.map(
+				(key) => key?.toString(),
 			)
 
 			const selectedProductsInCurrentPage =
 				tableProps?.dataSource?.reduce((acc, record) => {
-					if (selectedProductIdsInCurrentPage.includes(record.id)) {
+					if (selectedProductIdsInCurrentPage?.includes(record?.id)) {
 						acc.push(record)
 					}
 					return acc

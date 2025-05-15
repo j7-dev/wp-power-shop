@@ -14,11 +14,12 @@ import { TProductType, isVariation } from 'antd-toolkit/wp'
 const { Item } = Form
 
 export const Description = ({ formProps }: { formProps: FormProps }) => {
+	const watchProductType = Form.useWatch(['type'], formProps.form)
 	const record = useRecord()
 	const { product_types, permalinks } = useWoocommerce()
 	const { SITE_URL } = useEnv()
 
-	const name = isVariation(record?.type as string)
+	const name = isVariation(watchProductType as string)
 		? '_variation_description'
 		: 'purchase_note'
 
@@ -51,16 +52,16 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 						/>
 					</Item>
 
-					{!['grouped', 'external'].includes(record?.type as TProductType) && (
-						<PurchaseNote name={name} />
-					)}
+					{!['grouped', 'external'].includes(
+						watchProductType as TProductType,
+					) && <PurchaseNote name={name} />}
 
 					<div>簡短說明</div>
 					<div>編輯器</div>
 
 					<Heading>其他設定</Heading>
 					<div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
-						<Other type={record?.type as TProductType} />
+						<Other type={watchProductType as TProductType} />
 					</div>
 
 					<Heading>發佈時間</Heading>

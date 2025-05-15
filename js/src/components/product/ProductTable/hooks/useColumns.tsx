@@ -30,7 +30,7 @@ export const useColumns = () => {
 			render: (_, record) => (
 				<ProductName<TProductRecord>
 					record={record}
-					onClick={() => edit('products', record.id)}
+					onClick={() => edit('products', record?.id)}
 				/>
 			),
 		},
@@ -79,7 +79,9 @@ export const useColumns = () => {
 				const categories = product_cats.filter(({ value }) =>
 					category_ids.includes(value),
 				)
-				const tags = product_tags.filter(({ value }) => tag_ids.includes(value))
+				const tags = product_tags.filter(({ value }) =>
+					tag_ids?.includes(value),
+				)
 				return <ProductCat categories={categories} tags={tags} />
 			},
 		},

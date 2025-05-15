@@ -23,7 +23,7 @@ export const OneShop = () => {
 					是用來做 KOL賣場、團購賣場的工具
 					<br />
 					現在 Power Shop 使用更新更快的 API 以及 UI設計 <br />
-					功能即將推出，敬請期待
+					新版本的一頁賣場功能即將推出，敬請期待
 				</>
 			}
 			extra={

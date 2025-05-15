@@ -5,8 +5,17 @@ import upsell_ids_img from '@/assets/images/upsell_ids.jpg'
 import cross_sell_ids_img from '@/assets/images/cross_sell_ids.jpg'
 
 export const Linked = ({ formProps }: { formProps: FormProps }) => {
+	const watchProductType = Form.useWatch(['type'], formProps.form)
 	return (
 		<Form {...formProps}>
+			{watchProductType === 'grouped' && (
+				<ProductSelector
+					formItemProps={{
+						name: ['children'],
+						label: '組合商品',
+					}}
+				/>
+			)}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div>
 					<ProductSelector

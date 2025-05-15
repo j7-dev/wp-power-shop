@@ -115,7 +115,7 @@ export const resources: ResourceProps[] = [
 				<>
 					一頁賣場
 					<span className="bg-orange-500 text-white rounded-full px-1 ml-1 text-[0.625rem]">
-						即將更新
+						即將推出
 					</span>
 				</>
 			),
