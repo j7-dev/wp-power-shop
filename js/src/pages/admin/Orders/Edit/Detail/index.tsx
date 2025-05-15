@@ -160,7 +160,7 @@ const DetailComponent = () => {
 					<Heading className="mb-8 mt-20">客戶資料</Heading>
 					<div className="mb-6 flex justify-between">
 						<UserName record={customer || {}} />
-						<Space.Compact>
+						{/* <Space.Compact>
 							<Button type="default" size="small" icon={<SwapOutlined />}>
 								更換客戶
 							</Button>
@@ -173,7 +173,7 @@ const DetailComponent = () => {
 									mode={undefined}
 								/>
 							</Item>
-						</Space.Compact>
+						</Space.Compact> */}
 					</div>
 					{customer?.id && (
 						<div className="grid grid-cols-3 gap-8">

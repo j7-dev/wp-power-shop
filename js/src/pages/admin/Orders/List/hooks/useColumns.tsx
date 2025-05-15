@@ -1,9 +1,10 @@
 import React from 'react'
-import { Table, TableProps, Tag, Tooltip } from 'antd'
+import { Table, TableProps, Tag, Tooltip, Button } from 'antd'
 import { TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
-import { ORDER_STATUS, ProductPrice, UserName } from 'antd-toolkit/wp'
-import { PostAction } from '@/components/post'
+import { FaWordpress } from 'react-icons/fa'
 import { Link } from '@refinedev/core'
+import { ORDER_STATUS, ProductPrice, UserName } from 'antd-toolkit/wp'
+import { cn, NameId } from 'antd-toolkit'
 
 const useColumns = () => {
 	const columns: TableProps<TOrderBaseRecord>['columns'] = [
@@ -61,21 +62,21 @@ const useColumns = () => {
 				)
 			},
 		},
-		{
-			title: '送貨狀態',
-			align: 'center',
-			dataIndex: 'shipping_status',
-			render: (shipping_status) => {
-				const findStatus = ORDER_STATUS.find(
-					(item) => item.value === shipping_status,
-				)
-				return (
-					<Tag color={findStatus?.color || 'default'} bordered={false}>
-						{findStatus?.label || '未知狀態'}
-					</Tag>
-				)
-			},
-		},
+		// {
+		// 	title: '送貨狀態',
+		// 	align: 'center',
+		// 	dataIndex: 'shipping_status',
+		// 	render: (shipping_status) => {
+		// 		const findStatus = ORDER_STATUS.find(
+		// 			(item) => item.value === shipping_status,
+		// 		)
+		// 		return (
+		// 			<Tag color={findStatus?.color || 'default'} bordered={false}>
+		// 				{findStatus?.label || '未知狀態'}
+		// 			</Tag>
+		// 		)
+		// 	},
+		// },
 		{
 			title: '訂單內容',
 			dataIndex: 'items',
@@ -94,9 +95,13 @@ const useColumns = () => {
 			dataIndex: 'customer',
 			width: 200,
 			render: (customer) => {
+				if (!customer.id) {
+					return <NameId name={customer.display_name} id={customer.id} />
+				}
 				return (
 					<Link to={`/users/edit/${customer.id}`}>
-						<UserName record={customer} hideImage />
+						<NameId name={customer.display_name} id={customer.id} />
+						<p className="text-xs text-gray-400 m-0">{customer.user_email}</p>
 					</Link>
 				)
 			},
@@ -119,7 +124,22 @@ const useColumns = () => {
 			title: '操作',
 			dataIndex: '_actions',
 			width: 120,
-			render: (_, record) => <PostAction record={record} />,
+			render: (_, record) => {
+				const isTrash = 'trash' === record?.status
+				return (
+					<Tooltip title="傳統介面檢視">
+						<Button
+							disabled={isTrash}
+							type="text"
+							href={record?.edit_url}
+							target="_blank"
+							rel="noreferrer"
+							icon={<FaWordpress className="text-gray-400" />}
+							className={cn('m-0', isTrash && 'opacity-50')}
+						/>
+					</Tooltip>
+				)
+			},
 		},
 	]
 

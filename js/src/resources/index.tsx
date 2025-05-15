@@ -37,15 +37,15 @@ export const resources: ResourceProps[] = [
 			label: '訂單管理',
 		},
 	},
-	{
-		parentName: 'order-management',
-		name: 'subscriptions',
-		list: '/subscriptions',
-		edit: '/subscriptions/edit/:id',
-		meta: {
-			label: '訂閱管理',
-		},
-	},
+	// {
+	// 	parentName: 'order-management',
+	// 	name: 'subscriptions',
+	// 	list: '/subscriptions',
+	// 	edit: '/subscriptions/edit/:id',
+	// 	meta: {
+	// 		label: '訂閱管理',
+	// 	},
+	// },
 
 	{
 		name: 'product-management',
@@ -95,15 +95,15 @@ export const resources: ResourceProps[] = [
 			icon: <TagsOutlined />,
 		},
 	},
-	{
-		parentName: 'marketing',
-		name: 'coupons',
-		list: '/coupons',
-		edit: '/coupons/edit/:id',
-		meta: {
-			label: '優惠碼',
-		},
-	},
+	// {
+	// 	parentName: 'marketing',
+	// 	name: 'coupons',
+	// 	list: '/coupons',
+	// 	edit: '/coupons/edit/:id',
+	// 	meta: {
+	// 		label: '優惠碼',
+	// 	},
+	// },
 	{
 		parentName: 'marketing',
 		name: 'one_shop',
@@ -121,36 +121,36 @@ export const resources: ResourceProps[] = [
 			icon: <LineChartOutlined />,
 		},
 	},
-	{
-		name: 'emails',
-		list: '/emails',
-		edit: '/emails/edit/:id',
-		meta: {
-			label: '通知信',
-			icon: <MailOutlined />,
-		},
-	},
-	{
-		name: 'settings',
-		list: '/settings',
-		meta: {
-			label: '設定',
-			icon: <SettingOutlined />,
-		},
-	},
-	{
-		name: 'media-library',
-		list: '/media-library',
-		meta: {
-			label: 'Bunny 媒體庫',
-			icon: <FaPhotoVideo />,
-		},
-	},
+	// {
+	// 	name: 'emails',
+	// 	list: '/emails',
+	// 	edit: '/emails/edit/:id',
+	// 	meta: {
+	// 		label: '通知信',
+	// 		icon: <MailOutlined />,
+	// 	},
+	// },
+	// {
+	// 	name: 'settings',
+	// 	list: '/settings',
+	// 	meta: {
+	// 		label: '設定',
+	// 		icon: <SettingOutlined />,
+	// 	},
+	// },
+	// {
+	// 	name: 'media-library',
+	// 	list: '/media-library',
+	// 	meta: {
+	// 		label: 'Bunny 媒體庫',
+	// 		icon: <FaPhotoVideo />,
+	// 	},
+	// },
 	{
 		name: 'wp-media-library',
 		list: '/wp-media-library',
 		meta: {
-			label: 'WordPress 媒體庫',
+			label: '媒體庫',
 			icon: <FaPhotoVideo />,
 		},
 	},

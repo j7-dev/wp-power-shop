@@ -88,15 +88,15 @@ const Main = () => {
 				</div>
 			</Card> */}
 			<Card>
-				<div className="mb-4 flex justify-between">
-					<Button
+				<div className="mb-4 flex justify-end">
+					{/* <Button
 						loading={isCreating}
 						type="primary"
 						icon={<PlusOutlined />}
 						onClick={createOrder}
 					>
 						新增訂單
-					</Button>
+					</Button> */}
 					<DeleteButton
 						selectedRowKeys={selectedRowKeys}
 						setSelectedRowKeys={setSelectedRowKeys}

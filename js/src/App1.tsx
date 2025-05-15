@@ -26,7 +26,7 @@ import { resources } from '@/resources'
 import { ConfigProvider } from 'antd'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useEnv } from '@/hooks'
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import { BackToWpAdmin, MediaLibraryNotification } from 'antd-toolkit/wp'
 import {
 	dataProvider,
@@ -36,18 +36,54 @@ import {
 
 function App() {
 	const { bunny_data_provider_result } = useBunny()
-	const { KEBAB, API_URL, AXIOS_INSTANCE = axios.create() } = useEnv()
+	const { KEBAB, API_URL, AXIOS_INSTANCE = axios.create(), NONCE } = useEnv()
+
+	const axiosInstance: AxiosInstance = axios.create({
+		timeout: 30000,
+		headers: {
+			'X-WP-Nonce': NONCE,
+			'Content-Type': 'application/json',
+		},
+	})
+
+	// 添加 response 攔截器
+	axiosInstance.interceptors.response.use(
+		(response) => response,
+		(error) => {
+			// 錯誤響應的處理
+			if (error.response) {
+				// 伺服器有響應但狀態碼表示錯誤
+				switch (error.response.status) {
+					case 403:
+						console.error('沒有權限訪問此資源')
+						window.location.reload()
+						break
+					default:
+						console.error('請求失敗:', error.response.data.message)
+				}
+			} else if (error.request) {
+				// 請求已發送但沒有收到響應
+				console.error('沒有收到伺服器響應')
+			} else {
+				// 設定請求時發生錯誤
+				console.error('請求配置錯誤:', error.message)
+			}
+
+			// 返回錯誤
+			return Promise.reject(error)
+		},
+	)
 
 	return (
 		<HashRouter>
 			<Refine
 				dataProvider={{
-					default: dataProvider(`${API_URL}/v2/powerhouse`, AXIOS_INSTANCE),
-					'wp-rest': dataProvider(`${API_URL}/wp/v2`, AXIOS_INSTANCE),
-					'wc-rest': dataProvider(`${API_URL}/wc/v3`, AXIOS_INSTANCE),
-					'wc-store': dataProvider(`${API_URL}/wc/store/v1`, AXIOS_INSTANCE),
+					default: dataProvider(`${API_URL}/v2/powerhouse`, axiosInstance),
+					'wp-rest': dataProvider(`${API_URL}/wp/v2`, axiosInstance),
+					'wc-rest': dataProvider(`${API_URL}/wc/v3`, axiosInstance),
+					'wc-store': dataProvider(`${API_URL}/wc/store/v1`, axiosInstance),
 					'bunny-stream': bunny_data_provider_result,
-					'power-shop': dataProvider(`${API_URL}/${KEBAB}`, AXIOS_INSTANCE),
+					'power-shop': dataProvider(`${API_URL}/${KEBAB}`, axiosInstance),
 				}}
 				notificationProvider={notificationProvider}
 				routerProvider={routerBindings}
@@ -119,7 +155,7 @@ function App() {
 
 						<Route path="analytics" element={<Analytics />} />
 
-						<Route path="media-library" element={<MediaLibraryPage />} />
+						{/* <Route path="media-library" element={<MediaLibraryPage />} /> */}
 						<Route path="wp-media-library" element={<WPMediaLibraryPage />} />
 
 						<Route path="*" element={<ErrorComponent />} />

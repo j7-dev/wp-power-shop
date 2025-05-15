@@ -55,28 +55,33 @@ const EditComponent = () => {
 							loading: mutation?.isLoading,
 						}}
 						isLoading={query?.isLoading}
-						footerButtons={({ defaultButtons }) => (
-							<>
-								{!isEditing && (
-									<Button
-										type="default"
-										onClick={() => setIsEditing(true)}
-										icon={<EditOutlined />}
-									>
-										編輯訂單
-									</Button>
-								)}
-
-								{isEditing && (
-									<Space.Compact>
-										<Button type="default" onClick={() => setIsEditing(false)}>
-											取消
+						footerButtons={({ defaultButtons }) =>
+							true ? null : (
+								<>
+									{!isEditing && (
+										<Button
+											type="default"
+											onClick={() => setIsEditing(true)}
+											icon={<EditOutlined />}
+										>
+											編輯訂單
 										</Button>
-										{defaultButtons}
-									</Space.Compact>
-								)}
-							</>
-						)}
+									)}
+
+									{isEditing && (
+										<Space.Compact>
+											<Button
+												type="default"
+												onClick={() => setIsEditing(false)}
+											>
+												取消
+											</Button>
+											{defaultButtons}
+										</Space.Compact>
+									)}
+								</>
+							)
+						}
 					>
 						<Form {...formProps} layout="vertical">
 							<div className="flex justify-end">
