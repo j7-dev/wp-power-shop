@@ -85,7 +85,7 @@ export const useColumns = ({
 		{
 			title: `價格 (${symbol})`,
 			dataIndex: 'regular_price',
-			width: 100,
+			width: 200,
 			render: (_, { id, type }) =>
 				isVariable(type as string) || 'grouped' === type ? null : (
 					<Price id={id} type={type as TProductType} size="small" />

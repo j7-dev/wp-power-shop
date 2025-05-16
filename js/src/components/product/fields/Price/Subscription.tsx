@@ -64,8 +64,10 @@ const Subscription = ({ id, size }: { id?: string; size?: SizeType }) => {
 		<>
 			<Item name={regularPriceName} label="原價" hidden />
 
-			<div className="mb-6">
-				<label className="tw-block mb-2">訂閱價格 ({symbol})</label>
+			<div className="ant-form-item">
+				<div className="ant-form-item-label">
+					<label className="tw-block mb-2">訂閱價格 ({symbol})</label>
+				</div>
 				<Space.Compact block>
 					<Item
 						name={id ? [id, SUBSCRIPTION.PRICE] : [SUBSCRIPTION.PRICE]}
@@ -97,8 +99,10 @@ const Subscription = ({ id, size }: { id?: string; size?: SizeType }) => {
 				</Space.Compact>
 			</div>
 
-			<div className="mb-6">
-				<label className="tw-block mb-2">續訂截止日(扣款期數)</label>
+			<div className="ant-form-item">
+				<div className="ant-form-item-label">
+					<label className="tw-block mb-2">續訂截止日(扣款期數)</label>
+				</div>
 				<Space.Compact block>
 					<Item
 						name={id ? [id, SUBSCRIPTION.LENGTH] : [SUBSCRIPTION.LENGTH]}
@@ -110,7 +114,7 @@ const Subscription = ({ id, size }: { id?: string; size?: SizeType }) => {
 					</Item>
 					<Input
 						className="w-[32%] pointer-events-none"
-						addonBefore={<span className="px-[5px]">個</span>}
+						addonBefore="個"
 						value={watchPeriodLabel}
 						size={size}
 					/>
@@ -125,8 +129,10 @@ const Subscription = ({ id, size }: { id?: string; size?: SizeType }) => {
 				<InputNumber className="w-full" size={size} />
 			</Item>
 
-			<div className="mb-6">
-				<label className="tw-block mb-2">免費試用</label>
+			<div className="ant-form-item">
+				<div className="ant-form-item-label">
+					<label className="tw-block mb-2">免費試用</label>
+				</div>
 				<Space.Compact block>
 					<Item
 						name={
