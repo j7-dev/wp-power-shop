@@ -29,7 +29,11 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 		<Form {...formProps}>
 			<div className="flex flex-col xl:flex-row gap-12">
 				<div className="w-full xl:flex-1">
-					<Item name={['type']} label="商品類型">
+					<Item
+						name={['type']}
+						label="商品類型"
+						tooltip="非簡單類型商品不能轉換為其他商品類型"
+					>
 						<Select
 							optionRender={(option) => (
 								<NameId name={option.label} id={option.value as string} />
