@@ -51,13 +51,16 @@ export const useColumns = ({
 			render: (_, record) => (
 				<>
 					<div className="flex gap-x-4 items-center">
-						<Gallery
-							id={record.id}
-							limit={1}
-							size="small"
-							onValuesChange={onValuesChange}
-						/>
+						<div className="w-10 h-10">
+							<Gallery
+								id={record.id}
+								limit={1}
+								size="small"
+								onValuesChange={onValuesChange}
+							/>
+						</div>
 						<ProductName<TProductRecord>
+							className="flex-1 overflow-x-auto"
 							hideImage
 							record={record}
 							onClick={
