@@ -79,24 +79,24 @@ export function getGreetings(
 			greetings = [
 				`早安，${display_name} 今天又是元氣滿滿的一天！🌞`,
 				`早安，${display_name} 新的一天開始了！🌄`,
-				`上午好，${display_name}！希望今天的工作如陽光般明媚順利。☀️`,
+				`早安，${display_name}！希望今天的工作如陽光般明媚順利。☀️`,
 				`清晨的活力屬於你，${display_name}，今天將是高效且富有成就的一天。🌈`,
-				`上午好！${display_name}，讓我們以飽滿的精神開啟今天的工作計劃。📝`,
-				`上午好，${display_name}！願今天的工作靈感源源不斷，創意無限。💡`,
+				`早安！${display_name}，讓我們以飽滿的精神開啟今天的工作計劃。📝`,
+				`早安，${display_name}！願今天的工作靈感源源不斷，創意無限。💡`,
 				`開啟嶄新的一天，${display_name}，你的每一份努力都將綻放光彩。✨`,
-				`上午好！${display_name}，讓我們一步步實現工作目標。🎯`,
+				`早安！${display_name}，讓我們一步步實現工作目標。🎯`,
 				`美好的早晨，${display_name}，願你的工作效率如日出般穩步上升。📈`,
 			]
 			break
 		case 'Afternoon':
 			greetings = [
-				`下午好，${display_name}！希望你的工作進展順利，繼續保持良好狀態。👍`,
+				`下午安，${display_name}！希望你的工作進展順利，繼續保持良好狀態。👍`,
 				`午後時光，${display_name}，即使疲憊也不忘初心，你的堅持令人敬佩。🌻`,
-				`下午好！${display_name}，別忘了工作之餘給自己一個小小的獎勵。🎁`,
+				`下午安！${display_name}，別忘了工作之餘給自己一個小小的獎勵。🎁`,
 				`陽光正好，${display_name}，希望你的工作也像陽光一樣充滿活力。☀️`,
-				`下午好，${display_name}！半天已過，但你的熱情依然不減，真是厲害！💯`,
+				`下午安，${display_name}！半天已過，但你的熱情依然不減，真是厲害！💯`,
 				`午後的 ${display_name}，你處理問題的能力總是如此出色，值得讚賞。👏`,
-				`下午好！${display_name}，願下半天的工作如行雲流水般順暢。🌊`,
+				`下午安！${display_name}，願下半天的工作如行雲流水般順暢。🌊`,
 				`陽光漸斜，${display_name} 的工作熱情卻絲毫不減，繼續加油！🔥`,
 				`下午時分，${display_name}，調整好節奏，讓工作更有效率。⏱️`,
 				`美好的下午，${display_name}！距離目標越來越近，再接再厲。🏁`,
@@ -104,13 +104,13 @@ export function getGreetings(
 			break
 		default:
 			greetings = [
-				`晚上好，${display_name} 願今晚的時光帶給你新的靈感與思路。💫`,
-				`晚上好，${display_name}！今日的努力將成為明日的收穫。🌙`,
+				`晚安，${display_name} 願今晚的時光帶給你新的靈感與思路。💫`,
+				`晚安，${display_name}！今日的努力將成為明日的收穫。🌙`,
 				`夜晚的星空，是夢想的舞台。${display_name}，願你今晚的夢想成真。✨`,
 				`嘿，${display_name}，即使是夜晚，你的堅持也閃閃發光。🌟`,
-				`晚上好，${display_name}！工作的路上有你真好，繼續加油！👊`,
+				`晚安，${display_name}！工作的路上有你真好，繼續加油！👊`,
 				`今晚的時光屬於你，${display_name}，每一分鐘都值得珍惜。⏰`,
-				`晚上好，${display_name}，你的專注與熱情令人欽佩。🔥`,
+				`晚安，${display_name}，你的專注與熱情令人欽佩。🔥`,
 				`夜色中的 ${display_name}，你的每一步努力都在鋪就成功的道路。🛤️`,
 				`傍晚的陽光雖已散去，但 ${display_name} 的熱情依然不減，真棒！👏`,
 			]
