@@ -53,7 +53,13 @@ const AttributesForm = ({
 				label="代稱"
 				name="slug"
 				tooltip="商品規格唯一的網址別名/參考; 長度需少於 28 字元。"
-				rules={[{ required: true, message: '請輸入代稱' }]}
+				rules={[
+					{ required: true, message: '請輸入代稱' },
+					{
+						pattern: /^[A-Za-z0-9_]+$/,
+						message: '只能接受英文、數字、_',
+					},
+				]}
 				getValueProps={(rawSlug?: string) => {
 					const slug = rawSlug?.replace('pa_', '')
 					return {
@@ -64,9 +70,9 @@ const AttributesForm = ({
 				<Input maxLength={28} showCount allowClear addonBefore="pa_" />
 			</Item>
 			<Item
-				label="啟用彙整?"
+				label="建立前台頁面?"
 				name="has_archives"
-				tooltip="如果你希望商店商品的此一屬性有彙整請啟用此項"
+				tooltip="是否要產生此規格的頁面，並且可以用於篩選"
 				normalize={(value) => {
 					return value ? '1' : '0'
 				}}

@@ -148,6 +148,13 @@ const EditFormComponent = ({
 					name={['slug']}
 					label="代稱"
 					tooltip="代稱的英文原文為 Slug，是用於網址中的易記名稱，通常由小寫英文字母、數字及連字號 - 組成。"
+					rules={[
+						{ required: true, message: '請輸入代稱' },
+						{
+							pattern: /^[A-Za-z0-9_]+$/,
+							message: '只能接受英文、數字、_',
+						},
+					]}
 				>
 					<Input allowClear />
 				</Item>
