@@ -148,8 +148,8 @@ const EditComponent = () => {
 		const conditions = {
 			// 如果不是變體商品，移除 Variation 標籤
 			Variation: isVariable(watchProductType),
-			// 如果是組合商品，移除 Price 標籤
-			Price: watchProductType !== 'grouped',
+			// 如果是可變商品或組合商品，沒有自己的價格，移除 Price 標籤
+			Price: !['grouped', 'variable'].includes(watchProductType),
 		}
 
 		// 如果條件為 false，則移除該標籤，不為 false 則保留
