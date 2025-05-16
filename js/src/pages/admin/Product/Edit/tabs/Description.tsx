@@ -35,6 +35,7 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 								<NameId name={option.label} id={option.value as string} />
 							)}
 							options={product_types}
+							disabled={record?.type !== 'simple'}
 						/>
 					</Item>
 
