@@ -153,14 +153,28 @@ final class V2Api extends ApiBase {
 	private static function get_intervals_in_range( \DateTime $start_date, \DateTime $end_date ) {
 
 		// 檢查 start_date 與 end_date 差距是否超過 48 小時
-		$diff       = $start_date->diff( $end_date );
-		$diff_hours = $diff->h + ( $diff->days * 24 );
-		$show_hour  = $diff_hours <= 48;
+		$diff      = $start_date->diff( $end_date );
+		$diff_days = $diff->days ?: 1;
+
+		// 依照不同時間差調整 interval
+		$interval = 'hour';
+
+		if ($diff_days >= 3 && $diff_days < 21) {
+			$interval = 'day';
+		}
+
+		if ($diff_days >= 21 && $diff_days < 93) {
+			$interval = 'week';
+		}
+
+		if ($diff_days >= 93) {
+			$interval = 'month';
+		}
 
 		$revenue_api  = RevenueV2Api::instance();
 		$revenue_data = $revenue_api->get_reports_revenue_stats(
 			[
-				'interval' => $show_hour ? 'hour' : 'day',
+				'interval' => $interval,
 				'after'    => $start_date->format('Y-m-d\TH:i:s'),
 				'before'   => $end_date->format('Y-m-d\TH:i:s'),
 			]

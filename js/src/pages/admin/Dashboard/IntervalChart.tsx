@@ -6,6 +6,7 @@ import { getLabels } from '@/pages/admin/Dashboard/utils'
 import { useWindowSize } from '@uidotdev/usehooks'
 import { debounce } from 'lodash-es'
 import { useWoocommerce } from '@/hooks'
+import dayjs from 'dayjs'
 import { useColor } from 'antd-toolkit'
 
 const IntervalChart = () => {
@@ -13,6 +14,7 @@ const IntervalChart = () => {
 		currency: { symbol },
 	} = useWoocommerce()
 	const { dashboard, isFetching, query } = useDashboard()
+
 	const { intervals } = dashboard
 	const { label } = getLabels(query)
 	const { colorPrimary } = useColor()
@@ -134,7 +136,25 @@ const IntervalChart = () => {
 		const option = {
 			xAxis: {
 				// 時間區間 string[]
-				data: intervals.map((interval) => interval?.interval || ''),
+				data: intervals.map(({ date_start, date_end }) => {
+					const start = dayjs(date_start)
+					const end = dayjs(date_end)
+					const queryStart = dayjs(query.after)
+					const queryEnd = dayjs(query.before)
+					// 計算差異天數
+					const diffDays = queryEnd.diff(queryStart, 'day')
+					if (diffDays <= 1) {
+						// 顯示小時
+						return `${start.format('HH:mm')} - ${end.format('HH:mm')}`
+					}
+
+					if (diffDays < 3) {
+						// 顯示小時
+						return `${start.format('MM/DD HH:mm')} - ${end.format('MM/DD HH:mm')}`
+					}
+					// 只顯示天數
+					return `${start.format('MM/DD')} - ${end.format('MM/DD')}`
+				}),
 			},
 			series: [
 				{
