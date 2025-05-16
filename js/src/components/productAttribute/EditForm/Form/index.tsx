@@ -3,14 +3,16 @@ import { Form, Select, Input } from 'antd'
 import { WarningOutlined } from '@ant-design/icons'
 import { TAttributeTaxonomy } from '@/pages/admin/Product/Attributes'
 import { useSelect } from '@refinedev/antd'
+import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import { useAttributeTaxonomyOptions } from './hooks'
 import { NameId, Segmented } from 'antd-toolkit'
-import { TProductAttribute } from 'antd-toolkit/wp'
+import { isVariable, TProductAttribute } from 'antd-toolkit/wp'
 
 const { Item } = Form
 
 const index = ({ record }: { record: TProductAttribute }) => {
 	const form = Form.useFormInstance()
+	const product = useRecord()
 	const watchId = Form.useWatch('id', form)
 	const watchIsTaxonomy = Form.useWatch('is_taxonomy', form) === 'yes'
 	const { id = '', name = '', options: initialOptions = [] } = record
@@ -146,6 +148,10 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				tooltip="商品規格唯一的網址別名/參考; 長度需少於 28 字元。"
 				rules={[
 					{ required: watchIsTaxonomy && isCreate, message: '請輸入代稱' },
+					{
+						pattern: /^[A-Za-z0-9_]+$/,
+						message: '只能接受英文、數字、_',
+					},
 				]}
 				getValueProps={(rawSlug?: string) => {
 					if (!showSlug) {
@@ -171,14 +177,16 @@ const index = ({ record }: { record: TProductAttribute }) => {
 					}}
 				/>
 
-				<Segmented
-					formItemProps={{
-						name: 'variation',
-						label: '用於產生商品款式',
-						tooltip: '如果否，商品規格僅作顯示，不會產生款式',
-						initialValue: 'yes',
-					}}
-				/>
+				{isVariable(product?.type) && (
+					<Segmented
+						formItemProps={{
+							name: 'variation',
+							label: '用於產生商品款式',
+							tooltip: '如果否，商品規格僅作顯示，不會產生款式',
+							initialValue: 'yes',
+						}}
+					/>
+				)}
 			</div>
 
 			<Item label="選項" name="options" help="輸入文字，按下 Enter 新增選項">
