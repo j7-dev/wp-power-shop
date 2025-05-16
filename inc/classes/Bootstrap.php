@@ -23,6 +23,7 @@ final class Bootstrap {
 	/** Constructor */
 	public function __construct() {
 
+		// DELETE
 		require_once Plugin::$dir . '/legacy/plugin.php';
 
 		Admin\Entry::instance();
