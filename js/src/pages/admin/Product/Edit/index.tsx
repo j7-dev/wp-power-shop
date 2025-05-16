@@ -20,6 +20,8 @@ import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
 import { TImage, isVariable } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 
+const { Item } = Form
+
 const EditComponent = () => {
 	const { id } = useParsed()
 	const { product_types = [] } = useWoocommerce()
@@ -184,16 +186,27 @@ const EditComponent = () => {
 					}}
 					footerButtons={({ defaultButtons }) => (
 						<>
-							<Switch
-								className="mr-4"
-								checkedChildren="發佈"
-								unCheckedChildren="草稿"
-								value={record?.status === 'publish'}
-								disabled={disableSaveButton}
-								onChange={(checked) => {
-									form.setFieldValue(['status'], checked ? 'publish' : 'draft')
-								}}
-							/>
+							<Form {...formProps}>
+								<Item
+									noStyle
+									name={['status']}
+									getValueProps={(value) => {
+										return {
+											value: value === 'publish',
+										}
+									}}
+									normalize={(value) => {
+										return value ? 'publish' : 'draft'
+									}}
+								>
+									<Switch
+										className="mr-4"
+										checkedChildren="發佈"
+										unCheckedChildren="草稿"
+										disabled={disableSaveButton}
+									/>
+								</Item>
+							</Form>
 							{defaultButtons}
 						</>
 					)}
