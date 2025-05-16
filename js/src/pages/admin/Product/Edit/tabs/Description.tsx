@@ -61,8 +61,20 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 						watchProductType as TProductType,
 					) && <PurchaseNote name={name} />}
 
-					<div>簡短說明</div>
-					<div>編輯器</div>
+					<div className="grid grid-cols-2 gap-4 mb-8">
+						<div>
+							<label className="text-sm pb-2 inline-block">簡短說明</label>
+							<div className="h-16 w-full bg-gray-200 flex items-center justify-center">
+								編輯器開發中，預計下版推出
+							</div>
+						</div>
+						<div>
+							<label className="text-sm pb-2 inline-block">商品內容</label>
+							<div className="h-16 w-full bg-gray-200 flex items-center justify-center">
+								編輯器開發中，預計下版推出
+							</div>
+						</div>
+					</div>
 
 					<Heading>其他設定</Heading>
 					<div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
