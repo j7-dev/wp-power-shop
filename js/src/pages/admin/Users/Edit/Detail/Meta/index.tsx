@@ -60,19 +60,16 @@ const Meta = () => {
 											<>
 												<Item
 													name={['other_meta_data', index, 'umeta_id']}
-													initialValue={umeta_id}
 													hidden
 												/>
 												<Item
 													name={['other_meta_data', index, 'meta_key']}
-													initialValue={meta_key}
 													hidden
 												/>
 												<Item
 													name={['other_meta_data', index, 'meta_value']}
 													noStyle
 													hidden={!isEditing}
-													initialValue={meta_value}
 												>
 													<TextArea rows={1} className="text-xs" />
 													{/* <Input size="small" className="text-right text-xs" /> */}
