@@ -14,12 +14,12 @@ import { useCreate, useUpdate } from '@refinedev/core'
 import { EditOutlined } from '@ant-design/icons'
 import { useModal, DeleteButton } from '@refinedev/antd'
 import { useList } from '@refinedev/core'
-import { TTaxonomy } from '@/types/woocommerce'
 import { SortableList, useSortableTreeList } from '@/components/term'
 import AttributesForm, {
 	TFormValues,
 } from '@/pages/admin/Product/Attributes/Form'
 import { useEnv } from 'antd-toolkit'
+import { TTaxonomy } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 
 export type TAttributeTaxonomy = {
@@ -110,8 +110,8 @@ export const ProductAttributes = () => {
 								當你想要在所有商品中使用相同的商品規格時，可以使用全局商品規格。
 							</p>
 							<p className="m-0">
-								例如：你商店的衣服商品都有固定衣服尺寸 (S, M, L, XL) ，可以設定{' '}
-								<Tag color="blue">衣服尺寸</Tag>
+								例如：你商店的衣服商品都有固定衣服尺寸 ( S, M, L, XL )
+								，可以設定 <Tag color="blue">衣服尺寸</Tag>
 								為全局商品規格，這樣所有商品都會有衣服尺寸這個商品規格。
 							</p>
 						</>

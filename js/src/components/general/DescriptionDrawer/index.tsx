@@ -3,16 +3,9 @@ import { Button, Form, Drawer, Input, Alert, Radio } from 'antd'
 import { LoadingOutlined, ExportOutlined } from '@ant-design/icons'
 import { useEditorDrawer } from './hooks'
 import { useApiUrl } from '@refinedev/core'
-import { useBlockNote } from '@/components/general'
 import { useEnv } from '@/hooks'
 
 const { Item } = Form
-
-const BlockNote = lazy(() =>
-	import('@/components/general').then((module) => ({
-		default: module.BlockNote,
-	})),
-)
 
 type TDescriptionDrawerProps = {
 	name?: string | string[]
@@ -158,7 +151,7 @@ const DescriptionDrawerComponent: FC<TDescriptionDrawerProps | undefined> = (
 						</Button>
 					}
 				>
-					<BlockNote {...blockNoteViewProps} />
+					{/* <BlockNote {...blockNoteViewProps} /> */}
 				</Suspense>
 			</Drawer>
 		</div>

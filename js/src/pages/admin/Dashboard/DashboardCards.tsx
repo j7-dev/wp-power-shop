@@ -6,7 +6,7 @@ import { Card, Row, Col, Statistic, StatisticProps } from 'antd'
 import CountUp from 'react-countup'
 import { useDashboard } from '@/pages/admin/Dashboard/hooks'
 import { getLabels } from '@/pages/admin/Dashboard/utils'
-import { useWoocommerce } from '@/hooks'
+import { useWoocommerce } from 'antd-toolkit/wp'
 import { useColor, TrendIndicator, cn } from 'antd-toolkit'
 
 const DashboardCards = () => {

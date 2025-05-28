@@ -1,8 +1,8 @@
 import React, { memo, useEffect } from 'react'
-import { Modal, ModalProps } from 'antd'
 import { SortableTree, SortableList } from '@/components/term'
 import { TSortableTreeListProps } from '@/components/term/types'
-import { TTaxonomy } from '@/types/woocommerce'
+import { SimpleModal, TSimpleModalProps } from 'antd-toolkit'
+import { TTaxonomy } from 'antd-toolkit/wp'
 
 export * from '@/components/term/TaxonomyModal/hooks'
 
@@ -10,7 +10,7 @@ export type TTaxonomyModalProps = {
 	taxonomy: TTaxonomy
 	initialValue: string[]
 	sortableTreeListProps: Omit<TSortableTreeListProps, 'taxonomy'>
-	modalProps: ModalProps
+	modalProps: TSimpleModalProps
 }
 
 const TaxonomyModalComponent = ({
@@ -26,7 +26,7 @@ const TaxonomyModalComponent = ({
 	}, [JSON.stringify(initialValue)])
 
 	return (
-		<Modal {...modalProps} title={`選擇${taxonomy?.label}`}>
+		<SimpleModal {...modalProps} title={`選擇${taxonomy?.label}`}>
 			<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
 				{taxonomy?.hierarchical && (
 					<SortableTree {...sortableTreeListProps} taxonomy={taxonomy} />
@@ -35,7 +35,7 @@ const TaxonomyModalComponent = ({
 					<SortableList {...sortableTreeListProps} taxonomy={taxonomy} />
 				)}
 			</div>
-		</Modal>
+		</SimpleModal>
 	)
 }
 

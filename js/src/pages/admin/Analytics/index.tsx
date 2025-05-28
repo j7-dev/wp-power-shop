@@ -1,4 +1,5 @@
-import { memo, useState } from 'react'
+import { memo, useState, useEffect } from 'react'
+import { Skeleton } from 'antd'
 import Filter from '@/pages/admin/Analytics/Filter'
 import useRevenue, {
 	TUseRevenueParams,
@@ -11,6 +12,16 @@ import AreaView from '@/pages/admin/Analytics/ViewType/AreaView'
 const AnalyticsComponent = (props: TUseRevenueParams) => {
 	const [viewType, setViewType] = useState(EViewType.DEFAULT)
 	const revenueData = useRevenue(props)
+	const [show, setShow] = useState(false)
+
+	useEffect(() => {
+		const delay = setTimeout(() => {
+			setShow(true)
+		}, 500)
+		return () => clearTimeout(delay)
+	}, [])
+
+	if (!show) return <Skeleton className="my-8" active />
 
 	return (
 		<RevenueContext.Provider
@@ -21,12 +32,14 @@ const AnalyticsComponent = (props: TUseRevenueParams) => {
 				...revenueData,
 			}}
 		>
-			<div className="mb-4">
-				<Filter />
-			</div>
+			<div style={{ contain: 'layout paint style' }}>
+				<div className="mb-4">
+					<Filter />
+				</div>
 
-			{'default' === viewType && <DefaultView />}
-			{'area' === viewType && <AreaView />}
+				{'default' === viewType && <DefaultView />}
+				{'area' === viewType && <AreaView />}
+			</div>
 		</RevenueContext.Provider>
 	)
 }

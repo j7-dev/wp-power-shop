@@ -5,9 +5,9 @@ import { useDashboard } from '@/pages/admin/Dashboard/hooks'
 import { getLabels } from '@/pages/admin/Dashboard/utils'
 import { useWindowSize } from '@uidotdev/usehooks'
 import { debounce } from 'lodash-es'
-import { useWoocommerce } from '@/hooks'
 import dayjs from 'dayjs'
 import { useColor } from 'antd-toolkit'
+import { useWoocommerce } from 'antd-toolkit/wp'
 
 const IntervalChart = () => {
 	const {

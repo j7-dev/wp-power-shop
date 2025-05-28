@@ -47,7 +47,7 @@ function formatStackedAreaData(
 }
 
 const AreaView = () => {
-	const { viewTypeProps, form, isLoading } = useRevenueContext()
+	const { viewTypeProps, form, isFetching } = useRevenueContext()
 	const { revenueData } = viewTypeProps
 	const intervals = revenueData?.intervals || []
 	const data = formatStackedAreaData(intervals)
@@ -80,7 +80,7 @@ const AreaView = () => {
 		},
 	}
 
-	if (isLoading) {
+	if (isFetching) {
 		const randomArray = Array.from(
 			{ length: 12 },
 			() => Math.floor(Math.random() * 8) + 2,

@@ -1,8 +1,8 @@
 import { Select, Form, Tag, FormItemProps } from 'antd'
 import { useSelect } from '@refinedev/antd'
-import { useWoocommerce } from '@/hooks'
 import { TProductSelectOption } from '@/pages/admin/Analytics/types'
 import { defaultSelectProps, NameId } from 'antd-toolkit'
+import { useWoocommerce } from 'antd-toolkit/wp'
 
 const { Item } = Form
 

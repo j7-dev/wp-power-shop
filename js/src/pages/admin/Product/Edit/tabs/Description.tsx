@@ -1,6 +1,5 @@
 import React from 'react'
 import { Form, Input, Select, FormProps, InputNumber } from 'antd'
-import { useWoocommerce } from '@/hooks'
 import {
 	PurchaseNote,
 	TaxonomyModals,
@@ -9,7 +8,7 @@ import {
 } from '@/components/product/fields'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import { Heading, DatePicker, NameId, useEnv, CopyText } from 'antd-toolkit'
-import { TProductType, isVariation } from 'antd-toolkit/wp'
+import { TProductType, isVariation, useWoocommerce } from 'antd-toolkit/wp'
 
 const { Item } = Form
 

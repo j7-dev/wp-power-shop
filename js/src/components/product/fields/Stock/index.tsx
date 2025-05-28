@@ -1,9 +1,12 @@
 import { Form, InputNumber, Select } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { SwitchSize } from 'antd/es/switch'
-import { useWoocommerce } from '@/hooks'
 import { Switch } from 'antd-toolkit'
-import { BOOLEAN_OPTIONS, PRODUCT_STOCK_STATUS } from 'antd-toolkit/wp'
+import {
+	BOOLEAN_OPTIONS,
+	PRODUCT_STOCK_STATUS,
+	useWoocommerce,
+} from 'antd-toolkit/wp'
 
 const { Item } = Form
 

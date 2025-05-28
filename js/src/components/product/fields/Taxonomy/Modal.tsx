@@ -1,6 +1,6 @@
 import { Form, Tag } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { TTaxonomy } from '@/types/woocommerce'
+import { TTaxonomy } from 'antd-toolkit/wp'
 import { useProductsOptions } from '@/hooks'
 import {
 	TaxonomyModal as TaxonomyModalComponent,
@@ -26,7 +26,7 @@ export const TaxonomyModal = ({
 	const form = Form.useFormInstance()
 	const watchIds: string[] = Form.useWatch(name, form) || []
 
-	const { open, close, setModalProps, ...modalProps } = useTaxonomyModal(name)
+	const { show, modalProps, sortableTreeListProps } = useTaxonomyModal(name)
 
 	const { product_cats = [], product_tags = [] } = useProductsOptions()
 	const items = isCat ? product_cats : product_tags
@@ -59,15 +59,16 @@ export const TaxonomyModal = ({
 				<Tag
 					className="border-dashed cursor-pointer"
 					icon={<PlusOutlined />}
-					onClick={open}
+					onClick={show}
 				>
 					{taxonomy.label}
 				</Tag>
 			</div>
 			<TaxonomyModalComponent
-				{...modalProps}
+				modalProps={modalProps}
 				taxonomy={taxonomy}
 				initialValue={watchIds}
+				sortableTreeListProps={sortableTreeListProps}
 			/>
 			<Item name={name} hidden />
 		</div>

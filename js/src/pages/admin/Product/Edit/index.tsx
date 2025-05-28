@@ -1,5 +1,4 @@
 import { memo, useState } from 'react'
-import { useWoocommerce } from '@/hooks'
 import { Tabs, TabsProps, Form, Switch, Button, FormProps } from 'antd'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
@@ -16,8 +15,7 @@ import {
 } from '@/pages/admin/Product/Edit/tabs'
 import { TProductRecord } from '@/components/product/types'
 import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
-
-import { TImage, isVariable } from 'antd-toolkit/wp'
+import { TImage, isVariable, useWoocommerce } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 
 const { Item } = Form

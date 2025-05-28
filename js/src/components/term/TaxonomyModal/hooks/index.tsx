@@ -1,31 +1,22 @@
-import { useState } from 'react'
-import { ModalProps, Button, Form, FormItemProps } from 'antd'
+import { Button, Form, FormItemProps } from 'antd'
 import { useSortableTreeList } from '@/components/term'
-import { TTaxonomyModalProps } from '@/components/term/TaxonomyModal'
-
-const DEFAULT_MODAL_PROPS: ModalProps = {
-	title: '選擇',
-	width: 1600,
-	centered: true,
-	zIndex: 2000,
-	className: 'pc-media-library',
-}
+import { useSimpleModal, TSimpleModalProps } from 'antd-toolkit'
+import { TSortableTreeListProps } from '@/components/term/types'
 
 /** 控制媒體庫 modal 的 props */
 export const useTaxonomyModal = (
 	name: FormItemProps['name'],
 ): {
+	show: () => void
 	close: () => void
-	open: () => void
-	setModalProps: React.Dispatch<React.SetStateAction<ModalProps>>
-} & Omit<TTaxonomyModalProps, 'taxonomy' | 'initialValue'> => {
+	modalProps: TSimpleModalProps
+	setModalProps: React.Dispatch<React.SetStateAction<TSimpleModalProps>>
+	sortableTreeListProps: Omit<TSortableTreeListProps, 'taxonomy'>
+} => {
 	const form = Form.useFormInstance()
-	const [modalProps, setModalProps] = useState<ModalProps>(DEFAULT_MODAL_PROPS)
+	const { show, close, modalProps, setModalProps } = useSimpleModal()
 	const sortableTreeListProps = useSortableTreeList()
 	const { selectedTermIds } = sortableTreeListProps
-
-	const close = () => setModalProps((prev) => ({ ...prev, open: false }))
-	const open = () => setModalProps((prev) => ({ ...prev, open: true }))
 
 	const handleConfirm = () => {
 		close()
@@ -33,6 +24,8 @@ export const useTaxonomyModal = (
 	}
 
 	const formattedModalProps = {
+		title: '選擇',
+		className: 'pc-media-library',
 		footer: (
 			<>
 				<Button type="primary" onClick={handleConfirm}>
@@ -46,7 +39,7 @@ export const useTaxonomyModal = (
 
 	return {
 		close,
-		open,
+		show,
 		modalProps: formattedModalProps,
 		setModalProps,
 		sortableTreeListProps,

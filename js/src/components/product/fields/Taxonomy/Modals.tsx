@@ -1,7 +1,7 @@
 import { FormItemProps } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import { useWoocommerce } from '@/hooks'
 import { TaxonomyModal } from '@/components/product/fields/Taxonomy/Modal'
+import { useWoocommerce } from 'antd-toolkit/wp'
 
 /*
  * Modal + select 選擇器

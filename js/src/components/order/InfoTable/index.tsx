@@ -1,8 +1,8 @@
 import { Form, Input, Space } from 'antd'
-import { useCountries } from '@/hooks'
 import { TOrderInfo } from '@/pages/admin/Orders/List/types'
 import { INFO_LABEL_MAPPER } from '@/utils'
 import AddressInput from './AddressInput'
+import { useCountries } from 'antd-toolkit/wp'
 
 const { Item } = Form
 

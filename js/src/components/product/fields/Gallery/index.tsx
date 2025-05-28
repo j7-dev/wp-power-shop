@@ -3,10 +3,12 @@ import { Image, Form } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { PlusOutlined, EyeOutlined, CloseOutlined } from '@ant-design/icons'
 import { nanoid } from 'nanoid'
-import { MediaLibraryModal } from '@/components/general'
-import { useApiUrlMediaLibraryModal } from '@/components/general/MediaLibraryModal/hooks'
 import { defaultImage, cn } from 'antd-toolkit'
-import { TImage } from 'antd-toolkit/wp'
+import {
+	TImage,
+	MediaLibraryModal,
+	useMediaLibraryModal,
+} from 'antd-toolkit/wp'
 
 const { Item } = Form
 
@@ -31,9 +33,8 @@ export const Gallery = ({
 	const imageName = id ? [id, 'images'] : ['images']
 	const form = Form.useFormInstance()
 
-	const { open, close, modalProps, ...mediaLibraryProps } =
-		useApiUrlMediaLibraryModal({
-			limit,
+	const { show, close, modalProps, ...mediaLibraryProps } =
+		useMediaLibraryModal({
 			onConfirm: (selectedItems) => {
 				form.setFieldValue(imageName, selectedItems)
 
@@ -96,7 +97,7 @@ export const Gallery = ({
 		form.setFieldValue(imageName, resortImages)
 	}
 
-	const imgSizeClass = 'small' === size ? 'w-10 h-10' : 'w-20 h-20'
+	const imgSizeClass = 'small' === size ? 'w-10 h-10' : 'w-24 h-24'
 
 	return (
 		<>
@@ -149,16 +150,19 @@ export const Gallery = ({
 							'group aspect-square rounded-lg cursor-pointer bg-gray-100 hover:bg-blue-100 border-dashed border-2 border-gray-200 hover:border-blue-200 transition-all duration-300 flex justify-center items-center',
 							imgSizeClass,
 						)}
-						onClick={open}
+						onClick={show}
 					>
 						<PlusOutlined className="text-gray-500 group-hover:text-blue-500 transition-all duration-300" />
 					</div>
 				)}
 			</div>
 			<MediaLibraryModal
-				initialIds={watchImages?.map(({ id: _imageId }) => _imageId)}
 				modalProps={modalProps}
-				mediaLibraryProps={mediaLibraryProps}
+				mediaLibraryProps={{
+					...mediaLibraryProps,
+					initialIds: watchImages?.map(({ id }) => id),
+					limit,
+				}}
 			/>
 		</>
 	)

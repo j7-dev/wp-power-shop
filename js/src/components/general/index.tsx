@@ -1,5 +1,3 @@
 export * from './CopyButton'
 export * from './DescriptionDrawer'
-export * from './BlockNote'
 export * from './Price'
-export * from './MediaLibraryModal'

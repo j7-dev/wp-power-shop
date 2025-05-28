@@ -1,21 +1,17 @@
 import { memo } from 'react'
 import { Form, Tooltip, Statistic, Button, Select, Space } from 'antd'
 import { DEFAULT_IMAGE } from '@/utils'
-import { useWoocommerce } from '@/hooks'
+import {} from '@/hooks'
 import { useSelect } from '@refinedev/antd'
 import { useIsEditing, useRecord } from '@/pages/admin/Orders/Edit/hooks'
 import { InfoTable, OrderNotes } from '@/components/order'
-import {
-	CreditCardOutlined,
-	TruckOutlined,
-	SwapOutlined,
-} from '@ant-design/icons'
+import { CreditCardOutlined, TruckOutlined } from '@ant-design/icons'
 import {
 	// termToOptions,
 	defaultSelectProps,
 	Heading,
 } from 'antd-toolkit'
-import { UserName } from 'antd-toolkit/wp'
+import { UserName, useWoocommerce } from 'antd-toolkit/wp'
 
 const { Item } = Form
 

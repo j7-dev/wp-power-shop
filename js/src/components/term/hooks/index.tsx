@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext, createContext } from 'react'
 import { useList, HttpError } from '@refinedev/core'
 import { PaginationProps } from 'antd'
-import { TTaxonomy } from '@/types/woocommerce'
+import { TTaxonomy } from 'antd-toolkit/wp'
 import { TTerm, TSortableTreeListProps } from '@/components/term/types'
 import { EditForm } from '@/components/term'
 

@@ -27,7 +27,6 @@ import { resources } from '@/resources'
 import { ConfigProvider } from 'antd'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useEnv } from '@/hooks'
-import axios, { AxiosInstance } from 'axios'
 import { BackToWpAdmin, MediaLibraryNotification } from 'antd-toolkit/wp'
 import {
 	dataProvider,
@@ -37,18 +36,10 @@ import {
 
 function App() {
 	const { bunny_data_provider_result } = useBunny()
-	const { KEBAB, API_URL, AXIOS_INSTANCE = axios.create(), NONCE } = useEnv()
-
-	const axiosInstance: AxiosInstance = axios.create({
-		timeout: 30000,
-		headers: {
-			'X-WP-Nonce': NONCE,
-			'Content-Type': 'application/json',
-		},
-	})
+	const { KEBAB, API_URL, AXIOS_INSTANCE } = useEnv()
 
 	// 添加 response 攔截器
-	axiosInstance.interceptors.response.use(
+	AXIOS_INSTANCE.interceptors.response.use(
 		(response) => response,
 		(error) => {
 			// 錯誤響應的處理
@@ -79,12 +70,12 @@ function App() {
 		<HashRouter>
 			<Refine
 				dataProvider={{
-					default: dataProvider(`${API_URL}/v2/powerhouse`, axiosInstance),
-					'wp-rest': dataProvider(`${API_URL}/wp/v2`, axiosInstance),
-					'wc-rest': dataProvider(`${API_URL}/wc/v3`, axiosInstance),
-					'wc-store': dataProvider(`${API_URL}/wc/store/v1`, axiosInstance),
+					default: dataProvider(`${API_URL}/v2/powerhouse`, AXIOS_INSTANCE),
+					'wp-rest': dataProvider(`${API_URL}/wp/v2`, AXIOS_INSTANCE),
+					'wc-rest': dataProvider(`${API_URL}/wc/v3`, AXIOS_INSTANCE),
+					'wc-store': dataProvider(`${API_URL}/wc/store/v1`, AXIOS_INSTANCE),
 					'bunny-stream': bunny_data_provider_result,
-					'power-shop': dataProvider(`${API_URL}/${KEBAB}`, axiosInstance),
+					'power-shop': dataProvider(`${API_URL}/${KEBAB}`, AXIOS_INSTANCE),
 				}}
 				notificationProvider={notificationProvider}
 				routerProvider={routerBindings}

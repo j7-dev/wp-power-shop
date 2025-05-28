@@ -2,7 +2,6 @@ import { Table, TableProps, Form } from 'antd'
 import { TProductRecord, TProductVariation } from '@/components/product/types'
 import { TFormValues } from '@/components/product/ProductEditTable/types'
 import { useWindowSize } from '@uidotdev/usehooks'
-import { useWoocommerce } from '@/hooks'
 import {
 	Gallery,
 	Status,
@@ -19,6 +18,7 @@ import {
 	isVariable,
 	isVariation,
 	TProductType,
+	useWoocommerce,
 } from 'antd-toolkit/wp'
 
 const { Item } = Form

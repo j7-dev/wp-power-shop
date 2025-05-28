@@ -3,9 +3,8 @@ import { Form, Input, Space, Button, UploadFile } from 'antd'
 import { useQueryClient } from '@tanstack/react-query'
 import { TTerm } from '@/components/term/types'
 import { Edit, useForm } from '@refinedev/antd'
-import { TTaxonomy } from '@/types/woocommerce'
 import { toFormData } from 'antd-toolkit'
-import { FileUpload } from 'antd-toolkit/wp'
+import { FileUpload, TTaxonomy } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
 const { Item } = Form
 const { TextArea } = Input

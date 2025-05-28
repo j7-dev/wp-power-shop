@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { useWoocommerce } from '@/hooks'
 import { Statistic, Tabs, TabsProps } from 'antd'
 import { useRecord } from '@/pages/admin/Users/Edit/hooks'
 import { Heading } from 'antd-toolkit'
@@ -9,6 +8,7 @@ import Meta from './Meta'
 import Cart from './Cart'
 import RecentOrders from './RecentOrders'
 import { ContactRemarks } from '@/components/user'
+import { useWoocommerce } from 'antd-toolkit/wp'
 
 const items: TabsProps['items'] = [
 	{

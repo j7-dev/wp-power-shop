@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import { Card, Table } from 'antd'
 import { useDashboard } from '@/pages/admin/Dashboard/hooks'
 import { getLabels, getLeaderBoardLabels } from '@/pages/admin/Dashboard/utils'
-import { useWoocommerce } from '@/hooks'
 import { nanoid } from 'nanoid'
+import { useWoocommerce } from 'antd-toolkit/wp'
 
 const LeaderBoard = ({ type }: { type: 'products' | 'customers' }) => {
 	const {

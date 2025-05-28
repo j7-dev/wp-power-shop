@@ -1,10 +1,10 @@
 import { Tabs, TabsProps, Card } from 'antd'
-import { useWoocommerce } from '@/hooks'
 import {
 	SortableTree,
 	useSortableTreeList,
 	SortableList,
 } from '@/components/term'
+import { useWoocommerce } from 'antd-toolkit/wp'
 
 export const ProductTaxonomies = () => {
 	const { product_taxonomies = [] } = useWoocommerce()

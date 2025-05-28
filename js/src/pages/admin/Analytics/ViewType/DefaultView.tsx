@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid'
 import { TrendIndicator } from 'antd-toolkit'
 
 const Default = () => {
-	const { viewTypeProps, form, isLoading } = useRevenueContext()
+	const { viewTypeProps, form, isFetching } = useRevenueContext()
 	const { revenueData, lastYearRevenueData } = viewTypeProps
 	const isLastYear = form.getFieldValue(['compare_last_year'])
 
@@ -47,7 +47,7 @@ const Default = () => {
 		},
 	}
 
-	if (isLoading) {
+	if (isFetching) {
 		return (
 			<>
 				<div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
@@ -64,8 +64,8 @@ const Default = () => {
 								title={card?.title}
 								extra={
 									<span className="text-sm text-gray-400 flex items-center">
-										共{' '}
-										<span className="bg-gray-200 inline-block w-10 h-4 rounded-md animate-pulse"></span>{' '}
+										共
+										<span className="bg-gray-200 inline-block w-10 h-4 rounded-md mx-2 animate-pulse"></span>
 										{card.unit}
 									</span>
 								}

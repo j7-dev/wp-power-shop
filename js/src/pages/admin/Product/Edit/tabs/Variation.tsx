@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Skeleton, Button, Popconfirm, Select } from 'antd'
-import { safeParse } from '@/utils'
+import { Form, Skeleton, Button, Popconfirm, Select, Alert, Tag } from 'antd'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import { ProductEditTable } from '@/components/product'
 import { TProductRecord } from '@/components/product/types'
@@ -10,6 +9,7 @@ import {
 	ZFormValues,
 } from '@/components/product/ProductEditTable/types'
 import { productsToFields } from '@/components/product/ProductEditTable/utils'
+import { safeParse } from 'antd-toolkit'
 import { notificationProps } from 'antd-toolkit/refine'
 
 const { Item } = Form
@@ -23,7 +23,7 @@ export const Variation = () => {
 
 	const [form] = Form.useForm<TFormValues>()
 	const [formAttr] = Form.useForm<{
-		default_attributes_bottom: Record<string, string>
+		default_attributes: Record<string, string>
 	}>()
 
 	// 虛擬欄位，因為 Table 組件使用虛擬列表，只會 render 部分的欄位，如果用 form.getFieldsValue() 會抓不到所有欄位值，因此使用這個欄位紀錄變化值
@@ -44,6 +44,7 @@ export const Variation = () => {
 		const default_attributes = formAttr.getFieldValue(['default_attributes'])
 		// 取得 values
 		const fields = productsToFields(virtualFields, 'submit')
+		// @ts-ignore
 		safeParse(ZFormValues.array(), Object.values(fields))
 
 		updateVariations({
@@ -88,7 +89,27 @@ export const Variation = () => {
 		<>
 			{!showTable && <Skeleton active />}
 			{showTable && (
-				<>
+				<div style={{ contain: 'layout paint style' }}>
+					<Alert
+						className="mb-4"
+						message="如何建立商品款式？"
+						description={
+							<>
+								<p className="m-0">
+									請先新增商品規格，如 <Tag color="blue">衣服尺寸</Tag> ( S, M,
+									L, XL ) 或是 <Tag color="blue">顏色</Tag> ( 紅,藍,綠
+									)，再點擊下方的「產生商品款式」。
+								</p>
+								<p className="m-0">
+									以上面為例，尺寸有 4 種，顏色有 3 種，即會產生 4 x 3 = 12 ，共
+									12 種商品款式。
+								</p>
+							</>
+						}
+						type="info"
+						showIcon
+						closable
+					/>
 					<Popconfirm
 						title="產生所有商品規格的款式"
 						onConfirm={handleCreateVariations}
@@ -140,7 +161,7 @@ export const Variation = () => {
 							儲存商品款式
 						</Button>
 					</div>
-				</>
+				</div>
 			)}
 		</>
 	)

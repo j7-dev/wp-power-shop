@@ -1,4 +1,4 @@
-import { TTaxonomy } from '@/types/woocommerce'
+import { TTaxonomy } from 'antd-toolkit/wp'
 
 export type TTerm = {
 	id: string
