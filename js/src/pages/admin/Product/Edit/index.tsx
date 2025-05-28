@@ -128,11 +128,11 @@ const EditComponent = () => {
 			label: '連接商品',
 			children: <Linked formProps={formProps} />,
 		},
-		// {
-		// 	key: 'Advanced',
-		// 	label: '進階設定',
-		// 	children: <Advanced formProps={formProps} />,
-		// },
+		{
+			key: 'Advanced',
+			label: '進階設定',
+			children: <Advanced formProps={formProps} />,
+		},
 		// {// TODO
 		// 	key: 'Download',
 		// 	label: '下載管理',

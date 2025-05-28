@@ -59,7 +59,6 @@ final class Plugin {
 				'app_name'    => 'Power Shop',
 				'github_repo' => 'https://github.com/j7-dev/wp-power-shop',
 				'callback'    => [ Bootstrap::class, 'instance' ],
-				'lc' => false
 			]
 		);
 	}
