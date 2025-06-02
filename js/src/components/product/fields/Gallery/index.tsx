@@ -32,9 +32,12 @@ export const Gallery = ({
 }) => {
 	const imageName = id ? [id, 'images'] : ['images']
 	const form = Form.useFormInstance()
+	// 初始的圖片
+	const watchImages: TImage[] = Form.useWatch(imageName, form)
 
 	const { show, close, modalProps, ...mediaLibraryProps } =
 		useMediaLibraryModal({
+			initItems: watchImages,
 			onConfirm: (selectedItems) => {
 				form.setFieldValue(imageName, selectedItems)
 
@@ -54,8 +57,6 @@ export const Gallery = ({
 				}
 			},
 		})
-
-	const watchImages: TImage[] = Form.useWatch(imageName, form)
 
 	/** 移除 form 圖片 */
 	const handleRemove = (_imageId: string) => () => {
@@ -160,8 +161,10 @@ export const Gallery = ({
 				modalProps={modalProps}
 				mediaLibraryProps={{
 					...mediaLibraryProps,
-					initialIds: watchImages?.map(({ id }) => id),
 					limit,
+					uploadProps: {
+						accept: 'image/*',
+					},
 				}}
 			/>
 		</>
