@@ -41,6 +41,7 @@ const SortableTreeComponent = ({
 	const {
 		data: termsData,
 		isLoading: isListLoading,
+		isSuccess: isListSuccess,
 		paginationProps,
 		setPaginationProps,
 	} = useTermsList(taxonomy)
@@ -130,7 +131,7 @@ const SortableTreeComponent = ({
 
 	const { mutate: deleteMany, isLoading: isDeleteManyLoading } = useDeleteMany()
 
-	if (treeData?.length === 0) {
+	if (isListSuccess && treeData?.length === 0) {
 		return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="無資料" />
 	}
 
@@ -148,7 +149,7 @@ const SortableTreeComponent = ({
 				}}
 			>
 				<TaxonomyContext.Provider value={taxonomy}>
-					<div className="mb-8 flex gap-x-4 justify-between items-center">
+					<div className="mb-8 flex gap-x-4 justify-between items-center sticky top-0 z-10 bg-white -mr-2 pr-2">
 						<div className="w-full">
 							<Button
 								type="primary"

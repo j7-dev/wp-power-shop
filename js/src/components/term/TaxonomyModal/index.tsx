@@ -27,14 +27,12 @@ const TaxonomyModalComponent = ({
 
 	return (
 		<SimpleModal {...modalProps} title={`選擇${taxonomy?.label}`}>
-			<div className="max-h-[75vh] overflow-x-hidden overflow-y-auto pr-4">
-				{taxonomy?.hierarchical && (
-					<SortableTree {...sortableTreeListProps} taxonomy={taxonomy} />
-				)}
-				{!taxonomy?.hierarchical && (
-					<SortableList {...sortableTreeListProps} taxonomy={taxonomy} />
-				)}
-			</div>
+			{taxonomy?.hierarchical && (
+				<SortableTree {...sortableTreeListProps} taxonomy={taxonomy} />
+			)}
+			{!taxonomy?.hierarchical && (
+				<SortableList {...sortableTreeListProps} taxonomy={taxonomy} />
+			)}
 		</SimpleModal>
 	)
 }

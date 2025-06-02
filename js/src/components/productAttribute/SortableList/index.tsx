@@ -102,7 +102,7 @@ const SortableListComponent = ({
 		<SelectedTermIdContext.Provider
 			value={{ selectedTermId, setSelectedTermId }}
 		>
-			<div className="mb-8 flex gap-x-4 justify-between items-center">
+			<div className="mb-8 flex gap-x-4 justify-between items-center sticky top-0 z-10 bg-white -mr-2 pr-2">
 				<div className="w-full">
 					<Button
 						type="primary"

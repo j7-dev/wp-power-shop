@@ -84,12 +84,12 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 						formItemProps={{
 							name: ['date_created'],
 							label: '發佈時間',
-							className: 'mb-0',
+							className: 'mb-8',
 							tooltip: '你可以透過控制發布時間，搭配短代碼，控制課程的排列順序',
 						}}
 					/>
 					<Heading>商品圖片</Heading>
-					<div className="mb-6">
+					<div className="mb-8">
 						<Gallery />
 					</div>
 
