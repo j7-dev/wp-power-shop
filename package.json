@@ -1,7 +1,7 @@
 {
 	"name": "create-power-shop",
 	"private": false,
-	"version": "0.0.1",
+	"version": "2.99.99",
 	"type": "module",
 	"scripts": {
 		"bootstrap": "yarn install && composer install --no-interaction",

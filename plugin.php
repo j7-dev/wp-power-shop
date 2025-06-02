@@ -3,7 +3,7 @@
  * Plugin Name:       Power Shop | 讓電商管理更便利
  * Plugin URI:        https://powerhouse.cloud/power-shop/
  * Description:       優化 Woocommerce 操作介面，更人性化的方式管理電商平台
- * Version:           3.0.0-rc4
+ * Version:           2.99.99
  * Requires at least: 5.7
  * Requires PHP:      8.0
  * Author:            J7
@@ -49,7 +49,7 @@ final class Plugin {
 				'name'     => 'Powerhouse',
 				'slug'     => 'powerhouse',
 				'source'   => 'https://github.com/j7-dev/wp-powerhouse/releases/latest/download/powerhouse.zip',
-				'version'  => '3.2.2',
+				'version'  => '3.3.0',
 				'required' => true,
 			],
 		];
