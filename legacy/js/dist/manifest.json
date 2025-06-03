@@ -1,0 +1,116 @@
+{
+  "_index-3d28437d.js": {
+    "file": "assets/index-3d28437d.js",
+    "imports": [
+      "js/src/main.tsx",
+      "_useAjaxNonce-66a214d0.js",
+      "_useModal-28982b15.js",
+      "_useAjax-446ae264.js"
+    ]
+  },
+  "_index-7f75e0c3.js": {
+    "assets": [
+      "assets/defaultImage-08c22dd5.jpg"
+    ],
+    "file": "assets/index-7f75e0c3.js",
+    "imports": [
+      "js/src/main.tsx",
+      "_useAjaxNonce-66a214d0.js"
+    ]
+  },
+  "_useAjax-446ae264.js": {
+    "file": "assets/useAjax-446ae264.js",
+    "imports": [
+      "_useAjaxNonce-66a214d0.js",
+      "js/src/main.tsx"
+    ]
+  },
+  "_useAjaxNonce-66a214d0.js": {
+    "css": [
+      "assets/useAjaxNonce-c370af4c.css"
+    ],
+    "file": "assets/useAjaxNonce-66a214d0.js",
+    "imports": [
+      "js/src/main.tsx"
+    ]
+  },
+  "_useModal-28982b15.js": {
+    "file": "assets/useModal-28982b15.js",
+    "imports": [
+      "js/src/main.tsx",
+      "_useAjaxNonce-66a214d0.js"
+    ]
+  },
+  "js/src/App1.tsx": {
+    "file": "assets/App1-9051201a.js",
+    "imports": [
+      "js/src/main.tsx",
+      "_useAjaxNonce-66a214d0.js",
+      "_index-7f75e0c3.js",
+      "_useModal-28982b15.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "js/src/App1.tsx"
+  },
+  "js/src/App2.tsx": {
+    "file": "assets/App2-e3bea699.js",
+    "imports": [
+      "js/src/main.tsx",
+      "_useAjaxNonce-66a214d0.js",
+      "_index-3d28437d.js",
+      "_useModal-28982b15.js",
+      "_useAjax-446ae264.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "js/src/App2.tsx"
+  },
+  "js/src/App3.css": {
+    "file": "assets/App3-d5374959.css",
+    "src": "js/src/App3.css"
+  },
+  "js/src/App3.tsx": {
+    "css": [
+      "assets/App3-d5374959.css"
+    ],
+    "file": "assets/App3-6874dc25.js",
+    "imports": [
+      "js/src/main.tsx",
+      "_useAjaxNonce-66a214d0.js",
+      "_index-7f75e0c3.js",
+      "_useAjax-446ae264.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "js/src/App3.tsx"
+  },
+  "js/src/App4.tsx": {
+    "file": "assets/App4-3feba925.js",
+    "imports": [
+      "js/src/main.tsx",
+      "_useAjaxNonce-66a214d0.js",
+      "_index-3d28437d.js",
+      "_useModal-28982b15.js",
+      "_useAjax-446ae264.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "js/src/App4.tsx"
+  },
+  "js/src/assets/images/defaultImage.jpg": {
+    "file": "assets/defaultImage-08c22dd5.jpg",
+    "src": "js/src/assets/images/defaultImage.jpg"
+  },
+  "js/src/main.tsx": {
+    "dynamicImports": [
+      "js/src/App1.tsx",
+      "js/src/App2.tsx",
+      "js/src/App3.tsx",
+      "js/src/App4.tsx"
+    ],
+    "file": "assets/main-6a64451b.js",
+    "isEntry": true,
+    "src": "js/src/main.tsx"
+  },
+  "useAjaxNonce.css": {
+    "file": "assets/useAjaxNonce-c370af4c.css",
+    "src": "useAjaxNonce.css"
+  }
+}
