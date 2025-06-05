@@ -64,7 +64,8 @@ final class Entry {
 			return;
 		}
 
-		global $product;
+		global $post;
+		$product    = \wc_get_product( $post->ID );
 		$is_product = $product instanceof \WC_Product;
 
 		if (!$is_product) {
