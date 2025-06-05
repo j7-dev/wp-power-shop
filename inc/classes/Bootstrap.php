@@ -10,7 +10,7 @@ namespace J7\PowerShop;
 use J7\PowerShop\Utils\Base;
 use J7\Powerhouse\Utils\Base as PowerhouseUtils;
 use Kucrut\Vite;
-use J7\Powerhouse\Settings\DTO as SettingsDTO;
+use J7\Powerhouse\Settings\Model\Settings;
 use J7\WpUtils\Classes\General;
 
 if ( class_exists( 'J7\PowerShop\Bootstrap' ) ) {
@@ -93,9 +93,9 @@ final class Bootstrap {
 				'APP_NAME'             => Plugin::$app_name,
 				'KEBAB'                => Plugin::$kebab,
 				'SNAKE'                => Plugin::$snake,
-				'BUNNY_LIBRARY_ID'     => SettingsDTO::instance()->bunny_library_id,
-				'BUNNY_CDN_HOSTNAME'   => SettingsDTO::instance()->bunny_cdn_hostname,
-				'BUNNY_STREAM_API_KEY' => SettingsDTO::instance()->bunny_stream_api_key,
+				'BUNNY_LIBRARY_ID'     => Settings::instance()->bunny_library_id,
+				'BUNNY_CDN_HOSTNAME'   => Settings::instance()->bunny_cdn_hostname,
+				'BUNNY_STREAM_API_KEY' => Settings::instance()->bunny_stream_api_key,
 				'NONCE'                => \wp_create_nonce( 'wp_rest' ),
 				'APP1_SELECTOR'        => Base::APP1_SELECTOR,
 				'ELEMENTOR_ENABLED'    => \in_array( 'elementor/elementor.php', $active_plugins, true ), // 檢查 elementor 是否啟用
