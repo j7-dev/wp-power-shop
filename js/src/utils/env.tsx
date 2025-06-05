@@ -2,7 +2,6 @@
 // @ts-nocheck
 
 import { simpleDecrypt } from 'antd-toolkit'
-import { TWoocommerce } from '@/hooks'
 
 const encryptedEnv = window?.power_shop_data?.env
 export const env = simpleDecrypt(encryptedEnv)

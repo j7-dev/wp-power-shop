@@ -1,5 +1,5 @@
 /* eslint-disable quote-props */
-import { Refine, Link } from '@refinedev/core'
+import { Refine } from '@refinedev/core'
 import { ThemedLayoutV2, ThemedSiderV2, ErrorComponent } from '@refinedev/antd'
 import '@refinedev/antd/dist/reset.css'
 import routerBindings, {
