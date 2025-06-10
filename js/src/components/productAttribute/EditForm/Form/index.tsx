@@ -90,6 +90,11 @@ const index = ({ record }: { record: TProductAttribute }) => {
 			>
 				<Select
 					{...selectProps}
+					// 這邊重新覆蓋 options ，因為如果不這樣做，新增完規格後就算 invalidate 後 selectProps 還是不會更新
+					options={attributeTaxonomies.map((a) => ({
+						label: a.name,
+						value: a.id,
+					}))}
 					optionRender={(option) => {
 						return <NameId name={option.label} id={option.value as string} />
 					}}
@@ -177,7 +182,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 					}}
 				/>
 
-				{isVariable(product?.type) && (
+				{isVariable(product?.type as string) && (
 					<Segmented
 						formItemProps={{
 							name: 'variation',

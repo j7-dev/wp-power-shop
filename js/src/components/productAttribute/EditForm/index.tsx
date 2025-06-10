@@ -77,7 +77,7 @@ const EditFormComponent = ({
 	}, [record])
 
 	// 將 [] 轉為 '[]'，例如，清除原本分類時，如果空的，前端會是 undefined，轉成 formData 時會遺失
-	const handleOnFinish = (values: Partial<TProductAttribute>) => {
+	const handleOnFinish = async (values: Partial<TProductAttribute>) => {
 		const new_attributes = isCreate
 			? [...attributes, values]
 			: attributes.map((a) => {
@@ -88,11 +88,16 @@ const EditFormComponent = ({
 				})
 		const prepared_new_attributes = prepareAttributes(new_attributes)
 
-		onFinish(
+		await onFinish(
 			toFormData({
 				new_attributes: prepared_new_attributes,
 			}),
 		)
+
+		invalidate({
+			resource: 'product-attributes',
+			invalidates: ['list'],
+		})
 	}
 
 	return (
