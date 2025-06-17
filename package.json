@@ -4,7 +4,7 @@
 	"version": "3.0.3",
 	"type": "module",
 	"scripts": {
-		"bootstrap": "pnpm install && composer install --no-interaction",
+		"bootstrap": "composer install --no-interaction",
 		"dev": "vite",
 		"prebuild": "echo 'todo: remove console'",
 		"build": "vite build && node release/mv-manifest.cjs",
