@@ -1,7 +1,8 @@
-import { Form, InputNumber, Select } from 'antd'
+import { Alert, Button, Form, InputNumber, Select } from 'antd'
+import { ExportOutlined } from '@ant-design/icons'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { SwitchSize } from 'antd/es/switch'
-import { Switch } from 'antd-toolkit'
+import { Switch, useEnv } from 'antd-toolkit'
 import {
 	BOOLEAN_OPTIONS,
 	PRODUCT_STOCK_STATUS,
@@ -11,11 +12,38 @@ import {
 const { Item } = Form
 
 export const Stock = ({ id, size }: { id?: string; size?: SizeType }) => {
-	const { notify_low_stock_amount } = useWoocommerce()
+	const { SITE_URL } = useEnv()
+	const { notify_low_stock_amount, manage_stock: canManageStock } =
+		useWoocommerce()
 	const form = Form.useFormInstance()
 	const manageStockName = id ? [id, 'manage_stock'] : ['manage_stock']
 	const watchManageStock = Form.useWatch(manageStockName, form)
 	const enableStockManagement = watchManageStock === 'yes'
+
+	if (!canManageStock) {
+		return (
+			<Alert
+				message={
+					<>
+						您的商店未啟用【庫存管理】
+						<Button
+							color="primary"
+							variant="link"
+							href={`${SITE_URL}/wp-admin/admin.php?page=wc-settings&tab=products&section=inventory`}
+							target="_blank"
+							icon={<ExportOutlined />}
+							iconPosition="end"
+						>
+							前往啟用
+						</Button>
+					</>
+				}
+				type="info"
+				showIcon
+				className="mb-4"
+			/>
+		)
+	}
 
 	return (
 		<>
