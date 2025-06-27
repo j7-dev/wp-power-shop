@@ -6,8 +6,7 @@
 	"scripts": {
 		"bootstrap": "composer install --no-interaction",
 		"dev": "vite",
-		"prebuild": "echo 'todo: remove console'",
-		"build": "vite build && node release/mv-manifest.cjs",
+		"build": "vite build",
 		"preview": "vite preview",
 		"format": "prettier-eslint --write \"js/src/**/*.tsx\"",
 		"lint": "pnpm eslint ./js/src/*.{ts,tsx} --ext .ts,.tsx && phpcbf",
