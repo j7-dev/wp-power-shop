@@ -1,4 +1,3 @@
-import { FormInstance } from 'antd'
 import dayjs from 'dayjs'
 import { TProductType } from 'antd-toolkit/wp'
 
