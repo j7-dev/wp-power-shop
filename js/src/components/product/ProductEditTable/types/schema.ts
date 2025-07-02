@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import * as z from 'zod/v4'
 import { PRODUCT_STATUS, PRODUCT_CATALOG_VISIBILITIES, PRODUCT_STOCK_STATUS } from 'antd-toolkit/wp'
 
 export const ZYesNo = z.enum(['no', 'yes']);

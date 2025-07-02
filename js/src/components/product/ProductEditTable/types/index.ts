@@ -1,6 +1,6 @@
 
 import { ZFormValues } from './schema'
-import { z } from 'zod'
+import * as z from 'zod/v4'
 
 
 export type TFormValues = z.infer<typeof ZFormValues>;
