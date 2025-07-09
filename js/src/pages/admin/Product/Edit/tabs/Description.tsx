@@ -10,6 +10,7 @@ import {
 	CopyText,
 	BlockNoteDrawer,
 	DescriptionDrawer,
+	cn,
 } from 'antd-toolkit'
 import { TProductType, useWoocommerce } from 'antd-toolkit/wp'
 
@@ -56,7 +57,11 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 						/>
 					</Item>
 
-					<div className="grid grid-cols-2 gap-4 mb-8">
+					<div
+						className={cn('grid grid-cols-2 gap-4 mb-8', {
+							'pointer-events-none': record?.isLoading || record?.isFetching,
+						})}
+					>
 						<div>
 							<label className="text-sm pb-2 inline-block">簡短說明</label>
 							<div>
