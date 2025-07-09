@@ -67,7 +67,13 @@ const EditComponent = () => {
 	 */
 	const handleOnFinish = (values: any) => {
 		// 將圖片從 images 轉成 PHP WC_Product 儲存的 key
-		const { images = [], sale_date_range = [], ...rest } = values
+		const {
+			images = [],
+			sale_date_range = [],
+			description,
+			short_description,
+			...rest
+		} = values
 		const [image, ...gallery_images] = images as TImage[]
 
 		const sale_dates = sale_date_range?.every(dayjs.isDayjs)
@@ -163,7 +169,18 @@ const EditComponent = () => {
 
 	return (
 		<div className="sticky-card-actions sticky-tabs-nav">
-			<RecordContext.Provider value={record}>
+			<RecordContext.Provider
+				value={
+					{
+						isLoading: query?.isLoading || false,
+						isFetching: query?.isFetching || false,
+						...record,
+					} as TProductRecord & {
+						isLoading: boolean
+						isFetching: boolean
+					}
+				}
+			>
 				<Edit
 					resource="posts"
 					title={
