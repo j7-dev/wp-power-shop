@@ -49,7 +49,7 @@ final class Plugin {
 				'name'     => 'Powerhouse',
 				'slug'     => 'powerhouse',
 				'source'   => 'https://github.com/j7-dev/wp-powerhouse/releases/latest/download/powerhouse.zip',
-				'version'  => '3.3.6',
+				'version'  => '3.3.20',
 				'required' => true,
 			],
 		];

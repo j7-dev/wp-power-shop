@@ -74,6 +74,7 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 								editorFormItemProps={{
 									label: '商品內容',
 								}}
+								initialEditor={record?.editor as 'power-editor' | 'elementor'}
 							/>
 						</div>
 					</div>
