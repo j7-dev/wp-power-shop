@@ -65,8 +65,11 @@ final class Entry {
 		}
 
 		global $post;
-		$product    = \wc_get_product( $post->ID );
-		$is_product = $product instanceof \WC_Product;
+		$is_product = false;
+		if ($post instanceof \WP_Post) {
+			$product    = \wc_get_product( $post->ID );
+			$is_product = $product instanceof \WC_Product;
+		}
 
 		if (!$is_product) {
 			// 不是商品銷售頁就顯示商品列表
