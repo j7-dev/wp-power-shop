@@ -42,7 +42,7 @@ final class Cart {
 
 	public function handle_add_cart_callback() {
 		// Security check
-		\check_ajax_referer(Plugin::$kebab, 'nonce');
+		// \check_ajax_referer(Plugin::$kebab, 'nonce');
 
 		// global $woocommerce;
 		$post_id = \sanitize_text_field($_POST['post_id'] ?? 0);
@@ -142,7 +142,7 @@ final class Cart {
 
 	public function handle_remove_cart_callback() {
 		// Security check
-		\check_ajax_referer(Plugin::$kebab, 'nonce');
+		// \check_ajax_referer(Plugin::$kebab, 'nonce');
 
 		$cart_item_key = \sanitize_text_field($_POST['cart_item_key'] ?? '');
 
@@ -163,7 +163,7 @@ final class Cart {
 
 	public function handle_get_cart_callback() {
 		// Security check
-		\check_ajax_referer(Plugin::$kebab, 'nonce');
+		// \check_ajax_referer(Plugin::$kebab, 'nonce');
 
 		$totals = \WC()->cart->get_totals();
 

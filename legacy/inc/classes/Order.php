@@ -29,7 +29,7 @@ final class Order {
 	public function handle_get_orders_callback() {
 
 		// Security check
-		\check_ajax_referer(Plugin::$kebab, 'nonce');
+		// \check_ajax_referer(Plugin::$kebab, 'nonce');
 
 		$post_id = \sanitize_text_field($_POST['post_id'] ?? 0);
 
