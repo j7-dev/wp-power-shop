@@ -1,48 +1,48 @@
 {
-	"name": "j7-dev/power-shop",
-	"description": "優化 Woocommerce 操作介面，更人性化的方式管理電商平台",
-	"type": "wordpress-plugin",
-	"license": "GPL-2.0-only",
-	"authors": [
-		{
-			"name": "JerryLiu",
-			"email": "j7.dev.gg@gmail.com",
-			"homepage": "https://github.com/j7-dev",
-			"role": "Developer"
-		}
-	],
-	"repositories": [
-		{
-			"type": "composer",
-			"url": "https://wpackagist.org"
-		}
-	],
-	"autoload": {
-		"psr-4": {
-			"J7\\PowerShop\\": "inc/classes/"
-		}
-	},
-	"config": {
-		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true,
-			"phpstan/extension-installer": true
-		}
-	},
-	"require": {
-		"kucrut/vite-for-wp": "^0.10.0",
-		"j7-dev/wp-plugin-trait": "^0.2.9"
-	},
-	"require-dev": {
-		"squizlabs/php_codesniffer": "@stable",
-		"wp-coding-standards/wpcs": "@stable",
-		"dealerdirect/phpcodesniffer-composer-installer": "@stable",
-		"phpcompatibility/php-compatibility": "@stable",
-		"phpstan/phpstan": "@stable",
-		"php-stubs/woocommerce-stubs": "@stable",
-		"php-stubs/wordpress-stubs": "@stable",
-		"phpstan/extension-installer": "@stable"
-	},
-	"scripts": {
-		"lint": "phpcs"
-	}
+  "name": "j7-dev/power-shop",
+  "description": "優化 Woocommerce 操作介面，更人性化的方式管理電商平台",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-only",
+  "authors": [
+    {
+      "name": "JerryLiu",
+      "email": "j7.dev.gg@gmail.com",
+      "homepage": "https://github.com/j7-dev",
+      "role": "Developer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "J7\\PowerShop\\": "inc/classes/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "phpstan/extension-installer": true
+    }
+  },
+  "require": {
+    "kucrut/vite-for-wp": "^0.10.0",
+    "j7-dev/wp-plugin-trait": "^0.2"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "@stable",
+    "wp-coding-standards/wpcs": "@stable",
+    "dealerdirect/phpcodesniffer-composer-installer": "@stable",
+    "phpcompatibility/php-compatibility": "@stable",
+    "phpstan/phpstan": "@stable",
+    "php-stubs/woocommerce-stubs": "@stable",
+    "php-stubs/wordpress-stubs": "@stable",
+    "phpstan/extension-installer": "@stable"
+  },
+  "scripts": {
+    "lint": "phpcs"
+  }
 }
