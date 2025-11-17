@@ -97,7 +97,7 @@ final class CPT {
 	 */
 	public function init_metabox(): void {
 		\add_action( 'add_meta_boxes', [ $this, 'add_metaboxs' ] );
-		\add_filter( 'rewrite_rules_array', [ $this, 'custom_post_type_rewrite_rules' ] );
+		// \add_filter( 'rewrite_rules_array', [ $this, 'custom_post_type_rewrite_rules' ] );
 	}
 
 	public function custom_post_type_rewrite_rules( $rules ) {
