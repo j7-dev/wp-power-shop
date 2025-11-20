@@ -122,10 +122,10 @@ final class Order {
 		function get_sum_by_date( $date_no, $args ) {
 			// date_default_timezone_set('Asia/Taipei');
 			unset($args['paginate']);
+			$args['limit'] = -1;
 
 			if ($date_no === -1) {
-
-				$sum_args = array_merge($args, [ 'limit' => -1 ]);
+				$sum_args = $args;
 			} else {
 				$sum_args = array_merge($args, [ 'date_created' => date('Y-m-d', strtotime('-' . $date_no . ' day')) . '...' . date('Y-m-d') ]);
 			}
