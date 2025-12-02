@@ -208,762 +208,287 @@ wp scaffold plugin my-plugin
 
 ### 單例模式實作
 
-使用 SingletonTrait 實作單例模式：
+使用 SingletonTrait 實作單例模式（來自 `inc/classes/Admin/Entry.php`）：
 
 ```php
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace J7\MyPlugin;
+namespace J7\PowerShop\Admin;
 
-use J7\WpUtils\Traits\SingletonTrait;
+use J7\WpUtils\Classes\General;
+use J7\PowerShop\Plugin;
+use J7\PowerShop\Bootstrap;
+use J7\PowerShop\Utils\Base;
 
 /**
- * 主要外掛程式類別
+ * Admin Entry
  */
-final class Plugin {
-	use SingletonTrait;
+final class Entry {
+	use \J7\WpUtils\Traits\SingletonTrait;
 
 	/**
-	 * 建構函數
+	 * Constructor
 	 */
 	public function __construct() {
-		$this->register_hooks();
+		\add_action('current_screen', [ $this, 'maybe_output_admin_page' ], 10);
+		\add_action( 'admin_bar_menu', [ $this, 'admin_bar_item' ], 220 );
 	}
 
 	/**
-	 * 註冊 WordPress hooks
-	 *
-	 * @return void
+	 * Output the dashboard admin page.
 	 */
-	public function register_hooks(): void {
-		\add_action('init', [ $this, 'init' ]);
-		\add_action('admin_menu', [ $this, 'add_admin_menu' ]);
-		\add_filter('the_content', [ $this, 'filter_content' ]);
-	}
-
-	/**
-	 * 初始化外掛程式
-	 *
-	 * @return void
-	 */
-	public function init(): void {
-		// 初始化邏輯
-	}
-
-	/**
-	 * 新增管理選單
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		\add_menu_page(
-			'我的外掛程式',
-			'我的外掛程式',
-			'manage_options',
-			'my-plugin',
-			[ $this, 'render_admin_page' ]
-		);
-	}
-
-	/**
-	 * 渲染管理頁面
-	 *
-	 * @return void
-	 */
-	public function render_admin_page(): void {
-		echo '<h1>我的外掛程式設定</h1>';
-	}
-
-	/**
-	 * 過濾內容
-	 *
-	 * @param string $content 文章內容
-	 * @return string 過濾後的內容
-	 */
-	public function filter_content( string $content ): string {
-		return $content . '<p>附加內容</p>';
-	}
-}
-```
-
-### 靜態工具類別
-
-建立靜態工具方法：
-
-```php
-<?php
-
-declare(strict_types = 1);
-
-namespace J7\MyPlugin\Utils;
-
-/**
- * 字串工具類別
- */
-final class StringHelper {
-
-	/**
-	 * 清理字串
-	 *
-	 * @param string $input 輸入字串
-	 * @return string 清理後的字串
-	 */
-	public static function sanitize_string( string $input ): string {
-		return \sanitize_text_field( \trim( $input ) );
-	}
-
-	/**
-	 * 格式化價格
-	 *
-	 * @param float  $price 價格
-	 * @param string $currency 貨幣符號
-	 * @return string 格式化的價格字串
-	 */
-	public static function format_price( float $price, string $currency = 'NT$' ): string {
-		return $currency . \number_format( $price, 2 );
-	}
-
-	/**
-	 * 截斷文字
-	 *
-	 * @param string $text 文字
-	 * @param int    $length 長度
-	 * @param string $suffix 後綴
-	 * @return string 截斷後的文字
-	 */
-	public static function truncate( string $text, int $length = 100, string $suffix = '...' ): string {
-		if ( \mb_strlen( $text ) <= $length ) {
-			return $text;
+	public function maybe_output_admin_page(): void {
+		// Exit if not in admin.
+		if (!\is_admin()) {
+			return;
 		}
 
-		return \mb_substr( $text, 0, $length ) . $suffix;
+		if (!General::in_url([ 'page=power-shop' ])) {
+			return;
+		}
+
+		self::render_page();
+
+		exit;
+	}
+
+	/**
+	 * Output landing page header.
+	 */
+	public static function render_page(): void {
+		Bootstrap::enqueue_script();
+		$blog_name = \get_bloginfo('name');
+		$id        = substr(Base::APP1_SELECTOR, 1);
+		$app_name  = Plugin::$app_name;
+
+		\Powerhouse\Utils\Base::render_admin_layout(
+			[
+				'title' => "{$app_name} | {$blog_name}",
+				'id'    => $id,
+			]
+		);
+	}
+
+	/**
+	 * 在管理員工具列中新增項目
+	 *
+	 * @param \WP_Admin_Bar $admin_bar 管理員工具列物件
+	 *
+	 * @return void
+	 */
+	public function admin_bar_item( \WP_Admin_Bar $admin_bar ): void {
+
+		if ( ! \current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+
+		$admin_bar->add_menu(
+			[
+				'id'     => Plugin::$kebab,
+				'parent' => null,
+				'group'  => null,
+				'title'  => '電商系統',
+				'href'   => \admin_url('admin.php?page=power-shop#/dashboard'),
+				'meta'   => [
+					'title' => \__( '電商系統', 'power_shop' ),
+				],
+			]
+		);
 	}
 }
 ```
 
-### 自訂文章類型註冊
+### 靜態工具類別與常數定義
 
-註冊自訂文章類型：
+建立靜態常數類別（來自 `inc/classes/Utils/Base.php`）：
 
 ```php
 <?php
 
-declare(strict_types = 1);
+declare (strict_types = 1);
 
-namespace J7\MyPlugin\PostTypes;
+namespace J7\PowerShop\Utils;
 
 /**
- * 產品文章類型
+ * Class Utils
  */
-final class Product {
+abstract class Base {
+	const BASE_URL      = '/';
+	const APP1_SELECTOR = '#power_shop';
+	const API_TIMEOUT   = '30000';
+	const DEFAULT_IMAGE = 'http://1.gravatar.com/avatar/1c39955b5fe5ae1bf51a77642f052848?s=96&d=mm&r=g';
+}
+```
+
+### 域載入器模式
+
+使用 Loader 模式載入各個模組（來自 `inc/classes/Domains/Loader.php`）：
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace J7\PowerShop\Domains;
+
+/**
+ * Loader 載入每個 Resource API
+ * 有要做條件載入可以在這邊做
+ */
+final class Loader {
+	use \J7\WpUtils\Traits\SingletonTrait;
 
 	/**
-	 * 註冊文章類型
-	 *
-	 * @return void
+	 * Constructor
 	 */
-	public static function register(): void {
-		\register_post_type(
-			'product',
-			[
-				'labels'              => [
-					'name'          => '產品',
-					'singular_name' => '產品',
-					'add_new'       => '新增產品',
-					'add_new_item'  => '新增產品',
-					'edit_item'     => '編輯產品',
-					'view_item'     => '檢視產品',
-					'search_items'  => '搜尋產品',
-				],
-				'public'              => true,
-				'has_archive'         => true,
-				'publicly_queryable'  => true,
-				'show_ui'             => true,
-				'show_in_menu'        => true,
-				'show_in_rest'        => true,
-				'rest_base'           => 'products',
-				'menu_icon'           => 'dashicons-products',
-				'supports'            => [ 'title', 'editor', 'thumbnail', 'custom-fields' ],
-				'rewrite'             => [ 'slug' => 'products' ],
-				'capability_type'     => 'post',
-				'hierarchical'        => false,
-			]
-		);
-	}
-
-	/**
-	 * 註冊自訂分類法
-	 *
-	 * @return void
-	 */
-	public static function register_taxonomy(): void {
-		\register_taxonomy(
-			'product_category',
-			'product',
-			[
-				'labels'            => [
-					'name'          => '產品分類',
-					'singular_name' => '產品分類',
-					'search_items'  => '搜尋分類',
-					'all_items'     => '所有分類',
-					'edit_item'     => '編輯分類',
-					'add_new_item'  => '新增分類',
-				],
-				'hierarchical'      => true,
-				'show_ui'           => true,
-				'show_admin_column' => true,
-				'show_in_rest'      => true,
-				'rewrite'           => [ 'slug' => 'product-category' ],
-			]
-		);
+	public function __construct() {
+		Report\Dashboard\Core\V2Api::instance();
 	}
 }
 ```
 
 ### REST API 端點
 
-建立自訂 REST API 端點：
+建立自訂 REST API 端點（來自 `inc/classes/Domains/Report/Dashboard/Core/V2Api.php` 簡化版）：
 
 ```php
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace J7\MyPlugin\Api;
+namespace J7\PowerShop\Domains\Report\Dashboard\Core;
 
-/**
- * 產品 API 端點
- */
-final class ProductEndpoint {
-
-	/**
-	 * API 命名空間
-	 */
-	const NAMESPACE = 'my-plugin/v1';
-
-	/**
-	 * 註冊路由
-	 *
-	 * @return void
-	 */
-	public static function register_routes(): void {
-		\register_rest_route(
-			self::NAMESPACE,
-			'/products',
-			[
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ self::class, 'get_products' ],
-				'permission_callback' => [ self::class, 'check_permission' ],
-				'args'                => [
-					'per_page' => [
-						'default'           => 10,
-						'sanitize_callback' => 'absint',
-					],
-					'page'     => [
-						'default'           => 1,
-						'sanitize_callback' => 'absint',
-					],
-				],
-			]
-		);
-
-		\register_rest_route(
-			self::NAMESPACE,
-			'/products/(?P<id>\d+)',
-			[
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ self::class, 'get_product' ],
-				'permission_callback' => [ self::class, 'check_permission' ],
-				'args'                => [
-					'id' => [
-						'validate_callback' => function ( $param ) {
-							return \is_numeric( $param );
-						},
-					],
-				],
-			]
-		);
-	}
-
-	/**
-	 * 取得產品列表
-	 *
-	 * @param \WP_REST_Request $request 請求物件
-	 * @return \WP_REST_Response|\WP_Error 回應或錯誤
-	 */
-	public static function get_products( \WP_REST_Request $request ) {
-		$per_page = $request->get_param( 'per_page' );
-		$page     = $request->get_param( 'page' );
-
-		$args = [
-			'post_type'      => 'product',
-			'posts_per_page' => $per_page,
-			'paged'          => $page,
-			'post_status'    => 'publish',
-		];
-
-		$query = new \WP_Query( $args );
-
-		if ( ! $query->have_posts() ) {
-			return new \WP_Error(
-				'no_products',
-				'找不到產品',
-				[ 'status' => 404 ]
-			);
-		}
-
-		$products = [];
-		foreach ( $query->posts as $post ) {
-			$products[] = [
-				'id'      => $post->ID,
-				'title'   => $post->post_title,
-				'content' => $post->post_content,
-				'date'    => $post->post_date,
-			];
-		}
-
-		return new \WP_REST_Response(
-			[
-				'products' => $products,
-				'total'    => $query->found_posts,
-				'pages'    => $query->max_num_pages,
-			],
-			200
-		);
-	}
-
-	/**
-	 * 取得單一產品
-	 *
-	 * @param \WP_REST_Request $request 請求物件
-	 * @return \WP_REST_Response|\WP_Error 回應或錯誤
-	 */
-	public static function get_product( \WP_REST_Request $request ) {
-		$id   = (int) $request->get_param( 'id' );
-		$post = \get_post( $id );
-
-		if ( ! $post || 'product' !== $post->post_type ) {
-			return new \WP_Error(
-				'product_not_found',
-				'找不到產品',
-				[ 'status' => 404 ]
-			);
-		}
-
-		return new \WP_REST_Response(
-			[
-				'id'      => $post->ID,
-				'title'   => $post->post_title,
-				'content' => $post->post_content,
-				'date'    => $post->post_date,
-			],
-			200
-		);
-	}
-
-	/**
-	 * 檢查權限
-	 *
-	 * @return bool 是否有權限
-	 */
-	public static function check_permission(): bool {
-		return true; // 對於公開 API，返回 true；對於私有 API，檢查使用者權限
-	}
-}
-```
-
-### WooCommerce 擴展
-
-擴展 WooCommerce 功能：
-
-```php
-<?php
-
-declare(strict_types = 1);
-
-namespace J7\MyPlugin\WooCommerce;
+use J7\WpUtils\Classes\ApiBase;
 
 /**
- * WooCommerce 整合類別
+ * Dashboard API
  */
-final class Integration {
+final class V2Api extends ApiBase {
 	use \J7\WpUtils\Traits\SingletonTrait;
 
 	/**
-	 * 建構函數
-	 */
-	public function __construct() {
-		$this->register_hooks();
-	}
-
-	/**
-	 * 註冊 WordPress hooks
+	 * Namespace
 	 *
-	 * @return void
+	 * @var string
 	 */
-	public function register_hooks(): void {
-		// 修改商品價格顯示
-		\add_filter( 'woocommerce_get_price_html', [ $this, 'modify_price_html' ], 10, 2 );
-
-		// 在商品頁面新增自訂內容
-		\add_action( 'woocommerce_after_single_product_summary', [ $this, 'add_custom_content' ], 15 );
-
-		// 修改購物車項目
-		\add_filter( 'woocommerce_cart_item_name', [ $this, 'modify_cart_item_name' ], 10, 2 );
-
-		// 訂單完成後的動作
-		\add_action( 'woocommerce_order_status_completed', [ $this, 'on_order_completed' ] );
-	}
+	protected $namespace = 'power-shop';
 
 	/**
-	 * 修改價格顯示
+	 * APIs
 	 *
-	 * @param string      $price_html 價格 HTML
-	 * @param \WC_Product $product 商品物件
-	 * @return string 修改後的價格 HTML
+	 * @var array{endpoint: string, method: string, permission_callback: ?callable}[]
+	 * - endpoint: string
+	 * - method: 'get' | 'post' | 'patch' | 'delete'
+	 * - permission_callback : callable
 	 */
-	public function modify_price_html( string $price_html, \WC_Product $product ): string {
-		if ( $product->is_on_sale() ) {
-			$price_html .= ' <span class="sale-badge">特價中！</span>';
-		}
-		return $price_html;
-	}
+	protected $apis = [
+		[
+			'endpoint'            => 'reports/dashboard/stats',
+			'method'              => 'get',
+			'permission_callback' => null,
+		],
+	];
 
 	/**
-	 * 新增自訂內容到商品頁面
+	 * Get dashboard stats
 	 *
-	 * @return void
-	 */
-	public function add_custom_content(): void {
-		echo '<div class="custom-product-info">';
-		echo '<h3>額外資訊</h3>';
-		echo '<p>這是自訂的商品資訊區塊。</p>';
-		echo '</div>';
-	}
-
-	/**
-	 * 修改購物車項目名稱
+	 * @param \WP_REST_Request $request Request.
 	 *
-	 * @param string $name 項目名稱
-	 * @param array  $cart_item 購物車項目資料
-	 * @return string 修改後的名稱
+	 * @return \WP_REST_Response
+	 * @phpstan-ignore-next-line
 	 */
-	public function modify_cart_item_name( string $name, array $cart_item ): string {
-		$product = $cart_item['data'];
-		if ( $product && $product->is_on_sale() ) {
-			$name .= ' <span class="sale-indicator">🔥</span>';
-		}
-		return $name;
-	}
+	public function get_reports_dashboard_stats_callback( $request ) { // phpcs:ignore
+		$params = $request->get_query_params();
 
-	/**
-	 * 訂單完成時的處理
-	 *
-	 * @param int $order_id 訂單 ID
-	 * @return void
-	 */
-	public function on_order_completed( int $order_id ): void {
-		$order = \wc_get_order( $order_id );
+		// 取得今日時間的 00:00:00 和 23:59:59
+		$after = new \DateTime('now', new \DateTimeZone(\wp_timezone_string()));
+		$after->setTime(0, 0, 0);
+		$before = new \DateTime('now', new \DateTimeZone(\wp_timezone_string()));
+		$before->setTime(23, 59, 59);
 
-		if ( ! $order ) {
-			return;
-		}
-
-		// 記錄日誌
-		\error_log( sprintf( '訂單 #%d 已完成', $order_id ) );
-
-		// 執行自訂邏輯
-		// 例如：發送自訂通知、更新外部系統等
-	}
-}
-```
-
-### 表單處理與驗證
-
-建立和處理表單：
-
-```php
-<?php
-
-declare(strict_types = 1);
-
-namespace J7\MyPlugin\Admin;
-
-/**
- * 設定頁面類別
- */
-final class SettingsPage {
-
-	/**
-	 * 選項名稱
-	 */
-	const OPTION_NAME = 'my_plugin_settings';
-
-	/**
-	 * 渲染設定頁面
-	 *
-	 * @return void
-	 */
-	public static function render(): void {
-		// 檢查權限
-		if ( ! \current_user_can( 'manage_options' ) ) {
-			\wp_die( '您沒有權限訪問此頁面' );
-		}
-
-		// 處理表單提交
-		if ( isset( $_POST['submit'] ) ) {
-			self::handle_form_submission();
-		}
-
-		// 取得目前設定
-		$settings = \get_option( self::OPTION_NAME, [] );
-
-		?>
-		<div class="wrap">
-			<h1>外掛程式設定</h1>
-
-			<form method="post" action="">
-				<?php \wp_nonce_field( 'my_plugin_settings_action', 'my_plugin_settings_nonce' ); ?>
-
-				<table class="form-table">
-					<tr>
-						<th scope="row">
-							<label for="api_key">API 金鑰</label>
-						</th>
-						<td>
-							<input
-								type="text"
-								id="api_key"
-								name="api_key"
-								value="<?php echo \esc_attr( $settings['api_key'] ?? '' ); ?>"
-								class="regular-text"
-							/>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">
-							<label for="enable_feature">啟用功能</label>
-						</th>
-						<td>
-							<input
-								type="checkbox"
-								id="enable_feature"
-								name="enable_feature"
-								value="1"
-								<?php \checked( $settings['enable_feature'] ?? false, 1 ); ?>
-							/>
-						</td>
-					</tr>
-				</table>
-
-				<?php \submit_button(); ?>
-			</form>
-		</div>
-		<?php
-	}
-
-	/**
-	 * 處理表單提交
-	 *
-	 * @return void
-	 */
-	private static function handle_form_submission(): void {
-		// 驗證 nonce
-		if ( ! isset( $_POST['my_plugin_settings_nonce'] ) ||
-			! \wp_verify_nonce( $_POST['my_plugin_settings_nonce'], 'my_plugin_settings_action' )
-		) {
-			\wp_die( '安全驗證失敗' );
-		}
-
-		// 清理和驗證輸入
-		$api_key        = \sanitize_text_field( $_POST['api_key'] ?? '' );
-		$enable_feature = isset( $_POST['enable_feature'] ) ? 1 : 0;
-
-		// 儲存設定
-		$settings = [
-			'api_key'        => $api_key,
-			'enable_feature' => $enable_feature,
-		];
-
-		\update_option( self::OPTION_NAME, $settings );
-
-		// 顯示成功訊息
-		\add_settings_error(
-			'my_plugin_settings',
-			'settings_updated',
-			'設定已儲存',
-			'updated'
-		);
-	}
-}
-```
-
-### 短代碼開發
-
-建立短代碼：
-
-```php
-<?php
-
-declare(strict_types = 1);
-
-namespace J7\MyPlugin\Shortcodes;
-
-/**
- * 產品列表短代碼
- */
-final class ProductList {
-
-	/**
-	 * 註冊短代碼
-	 *
-	 * @return void
-	 */
-	public static function register(): void {
-		\add_shortcode( 'product_list', [ self::class, 'render' ] );
-	}
-
-	/**
-	 * 渲染短代碼
-	 *
-	 * @param array  $atts 短代碼屬性
-	 * @param string $content 短代碼內容
-	 * @return string 渲染後的 HTML
-	 */
-	public static function render( $atts = [], $content = '' ): string {
-		// 解析屬性
-		$atts = \shortcode_atts(
+		return new \WP_REST_Response(
 			[
-				'count'    => 5,
-				'category' => '',
-				'orderby'  => 'date',
-				'order'    => 'DESC',
-			],
-			$atts,
-			'product_list'
-		);
-
-		// 建立查詢
-		$args = [
-			'post_type'      => 'product',
-			'posts_per_page' => (int) $atts['count'],
-			'orderby'        => \sanitize_text_field( $atts['orderby'] ),
-			'order'          => \sanitize_text_field( $atts['order'] ),
-		];
-
-		if ( ! empty( $atts['category'] ) ) {
-			$args['tax_query'] = [
-				[
-					'taxonomy' => 'product_category',
-					'field'    => 'slug',
-					'terms'    => \sanitize_text_field( $atts['category'] ),
+				'code'    => 'get_reports_dashboard_stats_callback',
+				'message' => 'success',
+				'data'    => [
+					'after'  => $after->format('Y-m-d\TH:i:s'),
+					'before' => $before->format('Y-m-d\TH:i:s'),
 				],
-			];
-		}
-
-		$query = new \WP_Query( $args );
-
-		if ( ! $query->have_posts() ) {
-			return '<p>目前沒有產品</p>';
-		}
-
-		// 開始輸出緩衝
-		\ob_start();
-
-		echo '<div class="product-list">';
-		while ( $query->have_posts() ) {
-			$query->the_post();
-			?>
-			<div class="product-item">
-				<h3><?php \the_title(); ?></h3>
-				<div class="product-excerpt">
-					<?php \the_excerpt(); ?>
-				</div>
-				<a href="<?php \the_permalink(); ?>" class="product-link">
-					查看詳情
-				</a>
-			</div>
-			<?php
-		}
-		echo '</div>';
-
-		\wp_reset_postdata();
-
-		return \ob_get_clean();
+			]
+		);
 	}
 }
 ```
 
-## 測試範例
+### 資料傳輸物件 (DTO)
 
-### 單元測試
+使用 DTO 模式處理資料轉換（來自 `inc/classes/Domains/Report/LeaderBoards/DTO/Row.php`）：
 
 ```php
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace J7\MyPlugin\Tests;
-
-use PHPUnit\Framework\TestCase;
-use J7\MyPlugin\Utils\StringHelper;
+namespace J7\PowerShop\Domains\Report\LeaderBoards\DTO;
 
 /**
- * StringHelper 測試類別
+ * Row
  */
-final class StringHelperTest extends TestCase {
+final class Row {
+
+	/** @var string 名稱 - 商品名稱或用戶名稱 */
+	public string $name;
+
+	/** @var int 數量 */
+	public int $count;
+
+	/** @var float 金額 */
+	public float $total;
 
 	/**
-	 * 測試字串清理
+	 * Constructor
 	 *
-	 * @return void
+	 * @param array{
+	 *    0: array{
+	 *        display: string,
+	 *        value: string
+	 *        format?:string
+	 *    },
+	 *    1: array{
+	 *        display: string,
+	 *        value: int
+	 *        format?:string
+	 *    },
+	 *    2: array{
+	 *        display: string,
+	 *        value: float
+	 *        format?:string
+	 *    },
+	 * } $row
 	 */
-	public function test_sanitize_string(): void {
-		$input    = '  Test String  ';
-		$expected = 'Test String';
-		$result   = StringHelper::sanitize_string( $input );
-
-		$this->assertEquals( $expected, $result );
+	public function __construct( $row ) {
+		$this->name  = isset($row[0]['value']) ? (string) $row[0]['value'] : '';
+		$this->count = isset($row[1]['value']) ? (int) $row[1]['value'] : 0;
+		$this->total = isset($row[2]['value']) ? (float) $row[2]['value'] : 0.0;
 	}
 
 	/**
-	 * 測試價格格式化
+	 * 轉換為陣列
 	 *
-	 * @return void
+	 * @return array{
+	 *     name: string,
+	 *     count: int,
+	 *     total: float
+	 * }
 	 */
-	public function test_format_price(): void {
-		$price    = 1234.56;
-		$expected = 'NT$1,234.56';
-		$result   = StringHelper::format_price( $price );
-
-		$this->assertEquals( $expected, $result );
-	}
-
-	/**
-	 * 測試文字截斷
-	 *
-	 * @return void
-	 */
-	public function test_truncate(): void {
-		$text     = '這是一段很長的文字，需要被截斷';
-		$expected = '這是一段很長的文字...';
-		$result   = StringHelper::truncate( $text, 10 );
-
-		$this->assertEquals( $expected, $result );
-	}
-
-	/**
-	 * 測試不需要截斷的情況
-	 *
-	 * @return void
-	 */
-	public function test_truncate_short_text(): void {
-		$text   = '短文字';
-		$result = StringHelper::truncate( $text, 100 );
-
-		$this->assertEquals( $text, $result );
+	public function to_array(): array {
+		return [
+			'name'  => $this->name,
+			'count' => $this->count,
+			'total' => $this->total,
+		];
 	}
 }
 ```
