@@ -702,7 +702,7 @@ const EditComponent = () => {
 		<IsEditingContext.Provider value={isEditing}>
 			<RecordContext.Provider value={record}>
 				<Edit
-					resource="posts"
+					resource="orders"
 					title={<>訂單 #{record?.id}</>}
 					saveButtonProps={{
 						...saveButtonProps,
@@ -957,7 +957,7 @@ const EditComponent = () => {
 	return (
 		<div className="sticky-card-actions sticky-tabs-nav">
 			<Edit
-				resource="posts"
+				resource="products"
 				title={<>{record?.name} <span className="text-gray-400 text-xs">#{record?.id}</span></>}
 				saveButtonProps={{
 					...saveButtonProps,
