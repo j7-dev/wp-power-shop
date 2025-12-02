@@ -318,11 +318,9 @@ import { useAtom } from 'jotai'
 import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 import { notificationProps } from 'antd-toolkit/refine'
 
-const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪商品'
+const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪訂單'
 
-const DeleteButton = () => {
-	const [products, setProducts] = useAtom(selectedProductsAtom)
-	const ids = products.map((product) => product.id)
+const DeleteButton = ({ selectedRowKeys, setSelectedRowKeys }) => {
 	const { show, modalProps, close } = useModal()
 	const [value, setValue] = useState('')
 	const { mutate: deleteMany, isLoading: isDeleting } = useDeleteMany()
@@ -334,16 +332,16 @@ const DeleteButton = () => {
 				danger
 				icon={<DeleteOutlined />}
 				onClick={show}
-				disabled={!ids.length}
+				disabled={!selectedRowKeys.length}
 				className="m-0"
 			>
-				批次刪除商品
-				{ids.length ? ` (${ids.length})` : ''}
+				批次刪除訂單
+				{selectedRowKeys.length ? ` (${selectedRowKeys.length})` : ''}
 			</Button>
 
 			<Modal
 				{...modalProps}
-				title={`刪除商品 ${ids.map((id) => `#${id}`).join(', ')}`}
+				title={`刪除訂單 ${selectedRowKeys.map((id) => `#${id}`).join(', ')}`}
 				centered
 				okButtonProps={{
 					danger: true,
@@ -354,15 +352,15 @@ const DeleteButton = () => {
 				onOk={() => {
 					deleteMany(
 						{
-							resource: 'products',
-							ids,
+							resource: 'orders',
+							ids: selectedRowKeys as string[],
 							mutationMode: 'optimistic',
 							...notificationProps,
 						},
 						{
 							onSuccess: () => {
 								close()
-								setProducts([])
+								setSelectedRowKeys([])
 							},
 						},
 					)
@@ -374,9 +372,11 @@ const DeleteButton = () => {
 					className="mb-2"
 					description={
 						<>
-							<p>刪除商品影響範圍包含:</p>
+							<p>刪除訂單影響範圍包含:</p>
 							<ol className="pl-6">
-								<li>第三方外掛，可能會因為找不到商品而報錯</li>
+								<li>買過訂單的用戶將不能再存取</li>
+								<li>訂單的章節也將被刪除</li>
+								<li>與訂單連動的商品，將不再連動訂單</li>
 							</ol>
 						</>
 					}
@@ -385,7 +385,7 @@ const DeleteButton = () => {
 				/>
 				<p className="mb-2">
 					您確定要這麼做嗎?
-					如果您已經知曉刪除商品帶來的影響，並仍想要刪除這些商品，請在下方輸入框輸入{' '}
+					如果您已經知曉刪除訂單帶來的影響，並仍想要刪除這些訂單，請在下方輸入框輸入{' '}
 					<b className="italic">{CONFIRM_WORD}</b>{' '}
 				</p>
 				<Input
