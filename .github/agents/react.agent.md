@@ -186,7 +186,7 @@ const EditComponent = () => {
 
 	return (
 		<Edit
-			resource="posts"
+			resource="products"
 			title={<>{record?.name} <span>#{record?.id}</span></>}
 			saveButtonProps={{
 				...saveButtonProps,
@@ -385,7 +385,7 @@ const DeleteButton = () => {
 				/>
 				<p className="mb-2">
 					您確定要這麼做嗎?
-					如果您已經知曉刪除用戶帶來的影響，並仍想要刪除這些用戶，請在下方輸入框輸入{' '}
+					如果您已經知曉刪除商品帶來的影響，並仍想要刪除這些商品，請在下方輸入框輸入{' '}
 					<b className="italic">{CONFIRM_WORD}</b>{' '}
 				</p>
 				<Input
@@ -1238,8 +1238,8 @@ const EditComponent = () => {
 			Price: !['grouped', 'variable'].includes(watchProductType),
 		}
 
-		// @ts-ignore
-		return conditions?.[item.key] !== false
+		// 如果條件為 false，則移除該標籤，不為 false 則保留
+		return conditions[item.key as keyof typeof conditions] !== false
 	})
 
 	const disableSaveButton = ['Attributes', 'Variation', 'Analytics'].includes(
