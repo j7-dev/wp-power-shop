@@ -320,7 +320,13 @@ import { notificationProps } from 'antd-toolkit/refine'
 
 const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪訂單'
 
-const DeleteButton = ({ selectedRowKeys, setSelectedRowKeys }) => {
+const DeleteButton = ({
+	selectedRowKeys,
+	setSelectedRowKeys,
+}: {
+	selectedRowKeys: React.Key[]
+	setSelectedRowKeys: React.Dispatch<React.SetStateAction<React.Key[]>>
+}) => {
 	const { show, modalProps, close } = useModal()
 	const [value, setValue] = useState('')
 	const { mutate: deleteMany, isLoading: isDeleting } = useDeleteMany()
