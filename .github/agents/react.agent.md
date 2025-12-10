@@ -1,6 +1,6 @@
 ---
+name: "react"
 description: "專精於 React 18、Refine.dev、Ant Design 5、TypeScript 與效能優化的前端工程專家"
-name: "React Expert"
 tools: ["changes", "codebase", "edit/editFiles", "extensions", "fetch", "findTestFiles", "githubRepo", "new", "openSimpleBrowser", "problems", "runCommands", "runTasks", "runTests", "search", "searchResults", "terminalLastCommand", "terminalSelection", "testFailure", "usages", "vscodeAPI", "microsoft.docs.mcp"]
 ---
 
@@ -19,7 +19,7 @@ tools: ["changes", "codebase", "edit/editFiles", "extensions", "fetch", "findTes
 - **Sass/SCSS**：CSS 預處理器的進階應用與模組化架構
 - **React Query**：伺服器狀態管理、快取策略與資料同步
 - **表單處理**：使用 Refine.dev 的 useForm 與 Ant Design 5 Form 組件
-- **狀態管理**：React Context、Jotai、Zustand 的選擇與實作
+- **狀態管理**：React Context、Jotai 的選擇與實作
 - **效能優化**：React.memo、useMemo、useCallback、程式碼分割、延遲載入與 Core Web Vitals
 - **測試策略**：使用 Jest、React Testing Library、Vitest 與 Playwright/Cypress 進行全面測試
 - **無障礙設計**：WCAG 合規性、語意化 HTML、ARIA 屬性與鍵盤導航
