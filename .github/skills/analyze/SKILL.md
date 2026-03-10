@@ -29,7 +29,7 @@ origin: custom
 
 ### 2. 確認專案名稱
 - 從 `package.json` 的 `name`、`composer.json` 的 `name`、目錄名稱等來源推斷
-- 用 `ask_user` 向使用者確認最終 `{專案名稱}`
+- 用 `ask_user` 向使用者確認最終 `{project_name}`
 
 ### 3. 檢查 notebooklm（可選）
 - 嘗試查詢 notebooklm 中的 "GitHub Copilot CLI" 筆記本，取得 SKILL 與 instruction 規範的最佳實踐
@@ -115,12 +115,12 @@ origin: custom
 
 ```markdown
 ---
-name: {專案名稱}-{技術層}
+name: {project_name}-{技術層}
 description: "{專案中文描述} — {技術層}開發指引。包含架構概覽、目錄結構、程式碼模式、命名慣例與開發規範。"
 origin: project-analyze
 ---
 
-# {專案名稱} — {技術層} 開發指引
+# {project_name} — {技術層} 開發指引
 
 > {一句話描述此技術層的職責}
 
@@ -177,7 +177,7 @@ origin: project-analyze
 
 ## 相關 SKILL
 
-- `{專案名稱}-{其他技術層}` — {描述}
+- `{project_name}-{其他技術層}` — {描述}
 ```
 
 **SKILL 生成規則：**
@@ -198,7 +198,7 @@ origin: project-analyze
 **copilot-instructions.md 核心內容：**
 
 ```markdown
-# {專案名稱} — 專案開發指引
+# {project_name} — 專案開發指引
 
 ## 專案概述
 {專案目的、核心功能、目標使用者}
@@ -241,9 +241,9 @@ origin: project-analyze
    ```
    .github/
    ├── skills/
-   │   ├── {專案名稱}-{layer1}/
+   │   ├── {project_name}-{layer1}/
    │   │   └── SKILL.md
-   │   ├── {專案名稱}-{layer2}/
+   │   ├── {project_name}-{layer2}/
    │   │   └── SKILL.md
    │   └── ...
    ├── copilot-instructions.md        ← 如果內容 ≤ 300 行
@@ -288,12 +288,12 @@ origin: project-analyze
 ```
 
 **SKILL 命名規則：**
-- `{專案名稱}-php` — PHP / WordPress / Laravel 後端
-- `{專案名稱}-react` / `{專案名稱}-vue` — 前端框架
-- `{專案名稱}-go` / `{專案名稱}-python` — 其他語言後端
-- `{專案名稱}-api` — 純 API 層（無框架分類時）
-- `{專案名稱}-domain` — DDD 領域層
-- `{專案名稱}-infra` — 基礎設施層
+- `{project_name}-php` — PHP / WordPress / Laravel 後端
+- `{project_name}-react` / `{project_name}-vue` — 前端框架
+- `{project_name}-go` / `{project_name}-python` — 其他語言後端
+- `{project_name}-api` — 純 API 層（無框架分類時）
+- `{project_name}-domain` — DDD 領域層
+- `{project_name}-infra` — 基礎設施層
 
 ---
 
