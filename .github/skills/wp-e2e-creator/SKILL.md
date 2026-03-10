@@ -1,19 +1,42 @@
 ---
 name: wp-e2e-creator
-description: 分析 WordPress 外掛程式碼，探索所有使用者情境，並針對邊緣案例生成 Playwright E2E 測試。涵蓋情境探索方法、邊緣案例識別框架、測試生成模式，以及 wp-env + Playwright 技術實作。
+description: 根據 spec 規格文件，識別邊緣案例並生成 Playwright E2E 測試。涵蓋邊緣案例識別框架、測試生成模式，以及 wp-env + Playwright 技術實作。
 ---
 
 # WordPress Plugin E2E 測試生成器
 
-從程式碼分析到測試生成的完整流程：**探索使用者情境 → 識別邊緣案例 → 生成 Playwright E2E 測試**。
+從 spec 規格到測試生成的完整流程：**讀取 spec 規格 → 識別邊緣案例 → 生成 Playwright E2E 測試**。
+
+---
+
+## 前置條件：讀取 spec 規格
+
+> ⚠️ **若 `spec/` 目錄不存在或其中無任何檔案，立即中止任務。**
+> 提示使用者先執行 `@agents/clarifier.agent.md` 進行需求訪談，產生 spec 規格文件後再繼續。
+
+**spec 檔案為所有功能規格與使用者情境的唯一依據，必須優先完整閱讀。**
+
+```bash
+# 列出所有 spec 檔案
+find spec -type f | sort
+
+# 讀取所有 spec 內容
+find spec -type f | xargs cat
+```
+
+從 spec 中提取：
+- **功能模組清單**（每個模組的主要功能）
+- **使用者角色清單**（所有角色及其權限）
+- **使用者情境清單**（所有 user story / 使用流程）
+- **業務規則**（驗證規則、狀態機、限制條件）
 
 ---
 
 ## 核心工作流程
 
 ```
-Step 1: 探索使用者情境
-  └── 分析 REST API 端點、WordPress hooks、頁面模板、使用者角色
+Step 1: 讀取 spec，建立情境清單
+  └── 從 spec 提取使用者角色、功能情境、業務規則
 
 Step 2: 識別邊緣案例
   └── 權限邊界、資料邊界、狀態邊界、整合邊界
@@ -23,96 +46,6 @@ Step 3: 規劃測試矩陣
 
 Step 4: 生成 Playwright 測試
   └── 三階段測試（Admin / Frontend / Integration）
-```
-
----
-
-## Step 1：探索使用者情境
-
-### 1.1 分析 REST API 端點
-
-從 PHP 程式碼找出所有 REST API 路由：
-
-```bash
-# 找出所有 register_rest_route 呼叫
-grep -r "register_rest_route" inc/ --include="*.php" -n
-
-# 找出繼承 ApiBase 或自訂 REST controller 的類別
-grep -r "extends.*Api" inc/ --include="*.php" -l
-```
-
-**為每個端點建立情境清單：**
-
-| 端點 | 方法 | 使用者角色 | 正常情境 | 邊緣案例 |
-|------|------|-----------|---------|---------|
-| `/wp-json/plugin/v1/courses` | GET | 訂閱者、管理員 | 取得課程列表 | 空列表、大量資料、未授權 |
-| `/wp-json/plugin/v1/courses/{id}` | GET | 已購買、未購買 | 取得課程詳情 | ID 不存在、已刪除 |
-
-### 1.2 分析 WordPress Hooks 與觸發點
-
-找出關鍵的業務邏輯觸發點：
-
-```bash
-# 找出所有 do_action（業務事件觸發點）
-grep -r "do_action" inc/ --include="*.php" -n | grep -v "add_action"
-
-# 找出所有 apply_filters（資料轉換點）
-grep -r "apply_filters" inc/ --include="*.php" -n
-```
-
-**Hook 觸發的使用者情境範例：**
-
-```
-do_action('plugin/student_enrolled', $user_id, $course_id)
-  → 情境：使用者購買課程後被加入 → 測試：購買 → 確認存取權限已授予
-
-do_action('plugin/access_expired', $user_id, $course_id)
-  → 情境：存取期限到期 → 測試：設定過去日期 → 確認被拒絕存取
-```
-
-### 1.3 分析頁面模板與 Shortcode
-
-找出所有前端渲染點：
-
-```bash
-# 找出 shortcode 註冊
-grep -r "add_shortcode" inc/ --include="*.php" -n
-
-# 找出 template_redirect 或自訂頁面模板
-grep -r "template_redirect\|get_template_part\|locate_template" inc/ --include="*.php" -n
-
-# 找出 page 或 post_type 的 rewrites
-grep -r "rewrite\|add_rewrite_rule\|flush_rewrite" inc/ --include="*.php" -n
-```
-
-### 1.4 分析使用者角色與存取控制
-
-```bash
-# 找出所有 current_user_can 權限檢查
-grep -r "current_user_can\|user_can\|is_user_logged_in" inc/ --include="*.php" -n
-
-# 找出自訂 capability
-grep -r "add_cap\|remove_cap\|map_meta_cap" inc/ --include="*.php" -n
-```
-
-**角色矩陣：**
-
-```
-未登入訪客      → 只能看公開頁面
-已登入（未購買） → 看到課程介紹，但無法進入教室
-已登入（已購買） → 完整課程存取
-已登入（已過期） → 存取被拒絕，看到提示訊息
-管理員          → 所有存取 + 後台管理功能
-```
-
-### 1.5 分析 WooCommerce 整合點
-
-```bash
-# 找出 WC 訂單狀態 hook
-grep -r "woocommerce_order_status" inc/ --include="*.php" -n
-
-# 找出 WC product/cart/checkout 相關邏輯
-grep -r "WC()\|WC_Order\|WC_Product" inc/ --include="*.php" -n
 ```
 
 ---
