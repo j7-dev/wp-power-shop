@@ -219,9 +219,13 @@ final class ShortCode {
 				const current = Math.floor(Date.now() / 1000);
 
 				if(current < startTime){
-					new FlipDown(startTime).start();
+					new FlipDown(startTime, {
+						headings: ["天", "時", "分", "秒"],
+					}).start();
 				}else if (current > startTime && current < endTime){
-					new FlipDown(endTime).start();
+					new FlipDown(endTime, {
+						headings: ["天", "時", "分", "秒"],
+					}).start();
 				}
 			})(jQuery)
 		</script>
