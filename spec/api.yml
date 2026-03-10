@@ -1,0 +1,1995 @@
+openapi: 3.0.0
+info:
+  title: Power Shop API
+  version: 2.0.0
+  description: >-
+    Power Shop WordPress Plugin REST API。
+    涵蓋自有端點（power-shop namespace）、WooCommerce REST API（wc/v3）、
+    WordPress REST API（wp/v2）。認證使用 X-WP-Nonce header 搭配 WordPress Cookie。
+
+servers:
+  - url: /wp-json
+    description: WordPress REST API 基礎路徑
+
+security:
+  - WPNonce: []
+
+components:
+  securitySchemes:
+    WPNonce:
+      type: apiKey
+      in: header
+      name: X-WP-Nonce
+      description: WordPress REST API Nonce，搭配 Cookie 認證使用。
+
+  schemas:
+
+    Address:
+      type: object
+      description: 地址物件（帳單 / 配送）
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        company:
+          type: string
+        address_1:
+          type: string
+        address_2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postcode:
+          type: string
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 國家代碼
+        email:
+          type: string
+          format: email
+          description: 僅帳單地址使用
+        phone:
+          type: string
+          description: 僅帳單地址使用
+
+    MetaData:
+      type: object
+      description: WooCommerce / WordPress Meta 資料
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        key:
+          type: string
+        value:
+          description: 任意型別（string / number / object / array）
+
+    Image:
+      type: object
+      description: 圖片物件
+      properties:
+        id:
+          type: integer
+        src:
+          type: string
+          format: uri
+        name:
+          type: string
+        alt:
+          type: string
+
+    OrderItem:
+      type: object
+      description: 訂單商品項目
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        product_id:
+          type: integer
+        variation_id:
+          type: integer
+          default: 0
+        quantity:
+          type: integer
+          minimum: 1
+        tax_class:
+          type: string
+        subtotal:
+          type: string
+          description: 商品小計（不含稅）
+        subtotal_tax:
+          type: string
+        total:
+          type: string
+          description: 商品總計（不含稅，含折扣）
+        total_tax:
+          type: string
+        sku:
+          type: string
+          readOnly: true
+        price:
+          type: number
+          readOnly: true
+        meta_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetaData'
+
+    Order:
+      type: object
+      description: 訂單
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: string
+          readOnly: true
+          description: 訂單顯示編號，如 #1001
+        status:
+          type: string
+          enum:
+            - pending
+            - processing
+            - on-hold
+            - completed
+            - cancelled
+            - refunded
+            - failed
+          default: pending
+        customer_id:
+          type: integer
+          nullable: true
+          description: 0 表示訪客訂單
+        billing:
+          $ref: '#/components/schemas/Address'
+        shipping:
+          $ref: '#/components/schemas/Address'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        total:
+          type: string
+          readOnly: true
+        subtotal:
+          type: string
+          readOnly: true
+        total_tax:
+          type: string
+          readOnly: true
+        shipping_total:
+          type: string
+          readOnly: true
+        discount_total:
+          type: string
+          readOnly: true
+        payment_method:
+          type: string
+        payment_method_title:
+          type: string
+        transaction_id:
+          type: string
+        date_created:
+          type: string
+          format: date-time
+          readOnly: true
+        date_modified:
+          type: string
+          format: date-time
+          readOnly: true
+        meta_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetaData'
+
+    OrderNote:
+      type: object
+      description: 訂單備註
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        note:
+          type: string
+        customer_note:
+          type: boolean
+          default: false
+          description: true 表示顯示給顧客並觸發通知 email
+        author:
+          type: string
+          readOnly: true
+        date_created:
+          type: string
+          format: date-time
+          readOnly: true
+
+    VariationAttribute:
+      type: object
+      description: 變體屬性值
+      properties:
+        name:
+          type: string
+        option:
+          type: string
+
+    ProductAttribute:
+      type: object
+      description: 商品屬性
+      properties:
+        id:
+          type: integer
+          default: 0
+        name:
+          type: string
+        position:
+          type: integer
+          default: 0
+        visible:
+          type: boolean
+          default: true
+        variation:
+          type: boolean
+          default: false
+        options:
+          type: array
+          items:
+            type: string
+
+    CategoryRef:
+      type: object
+      description: 分類參照
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          readOnly: true
+        slug:
+          type: string
+          readOnly: true
+
+    TagRef:
+      type: object
+      description: 標籤參照
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          readOnly: true
+        slug:
+          type: string
+          readOnly: true
+
+    Product:
+      type: object
+      description: 商品
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        slug:
+          type: string
+        type:
+          type: string
+          enum:
+            - simple
+            - variable
+            - grouped
+            - external
+            - subscription
+            - variable-subscription
+          default: simple
+        status:
+          type: string
+          enum:
+            - publish
+            - draft
+            - trash
+          default: draft
+        description:
+          type: string
+        short_description:
+          type: string
+        sku:
+          type: string
+        gtin:
+          type: string
+        regular_price:
+          type: string
+          description: 格式為數字字串，如 "299.00"；regular_price >= 0
+        sale_price:
+          type: string
+          description: sale_price <= regular_price；空字串表示無特價
+        date_on_sale_from:
+          type: string
+          format: date-time
+          nullable: true
+        date_on_sale_to:
+          type: string
+          format: date-time
+          nullable: true
+        manage_stock:
+          type: boolean
+          default: false
+        stock_quantity:
+          type: integer
+          nullable: true
+        stock_status:
+          type: string
+          enum:
+            - instock
+            - outofstock
+            - onbackorder
+          default: instock
+        backorders:
+          type: string
+          enum:
+            - 'no'
+            - notify
+            - 'yes'
+          default: 'no'
+        low_stock_amount:
+          type: integer
+          nullable: true
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryRef'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagRef'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductAttribute'
+        variations:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+          description: 變體 ID 陣列（variable 商品，唯讀）
+        upsell_ids:
+          type: array
+          items:
+            type: integer
+        cross_sell_ids:
+          type: array
+          items:
+            type: integer
+        grouped_products:
+          type: array
+          items:
+            type: integer
+          description: grouped 商品子項 ID
+        purchase_note:
+          type: string
+        menu_order:
+          type: integer
+          default: 0
+        external_url:
+          type: string
+          description: external 商品用
+        button_text:
+          type: string
+          description: external 商品按鈕文字
+        meta_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetaData'
+
+    ProductVariation:
+      type: object
+      description: 商品變體
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        parent_id:
+          type: integer
+          readOnly: true
+        sku:
+          type: string
+        regular_price:
+          type: string
+        sale_price:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum:
+            - publish
+            - private
+          default: publish
+        manage_stock:
+          type: boolean
+          default: false
+        stock_quantity:
+          type: integer
+          nullable: true
+        stock_status:
+          type: string
+          enum:
+            - instock
+            - outofstock
+            - onbackorder
+          default: instock
+        image:
+          $ref: '#/components/schemas/Image'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariationAttribute'
+          description: 對應父商品 variation=true 的所有屬性
+        meta_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetaData'
+
+    ProductCategory:
+      type: object
+      description: 商品分類
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        slug:
+          type: string
+        parent:
+          type: integer
+          default: 0
+          description: 0 表示頂層分類；自我參照
+        description:
+          type: string
+        image:
+          $ref: '#/components/schemas/Image'
+        count:
+          type: integer
+          readOnly: true
+          description: 該分類下商品數量（唯讀）
+        menu_order:
+          type: integer
+          default: 0
+
+    Customer:
+      type: object
+      description: 顧客
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        username:
+          type: string
+        role:
+          type: string
+          readOnly: true
+          default: customer
+        billing:
+          $ref: '#/components/schemas/Address'
+        shipping:
+          $ref: '#/components/schemas/Address'
+        is_paying_customer:
+          type: boolean
+          readOnly: true
+          default: false
+        orders_count:
+          type: integer
+          readOnly: true
+          default: 0
+        total_spent:
+          type: string
+          readOnly: true
+          description: 總消費金額，格式為數字字串
+        last_order:
+          type: object
+          nullable: true
+          readOnly: true
+          properties:
+            id:
+              type: integer
+            date:
+              type: string
+              format: date-time
+        avatar_url:
+          type: string
+          format: uri
+          readOnly: true
+        date_created:
+          type: string
+          format: date-time
+          readOnly: true
+        date_modified:
+          type: string
+          format: date-time
+          readOnly: true
+        meta_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetaData'
+
+    CustomerNote:
+      type: object
+      description: 顧客聯繫備註（Power Shop 自有）
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        customer_id:
+          type: integer
+          readOnly: true
+        author_id:
+          type: integer
+          description: 建立備註的操作者 WP User ID
+        author_name:
+          type: string
+          readOnly: true
+        content:
+          type: string
+        date_created:
+          type: string
+          format: date-time
+          readOnly: true
+
+    DashboardStats:
+      type: object
+      description: Dashboard KPI 統計
+      properties:
+        period:
+          type: string
+          enum:
+            - today
+            - yesterday
+            - week
+            - month
+            - year
+            - custom
+        date_start:
+          type: string
+          format: date
+        date_end:
+          type: string
+          format: date
+        total_sales:
+          type: number
+          format: double
+          description: 總銷售額
+        total_orders:
+          type: integer
+          description: 總訂單數
+        total_customers:
+          type: integer
+          description: 新增顧客數
+        average_order_value:
+          type: number
+          format: double
+          description: 平均訂單金額
+        net_revenue:
+          type: number
+          format: double
+          description: 淨營收（扣除退款）
+        refund_total:
+          type: number
+          format: double
+          description: 退款總額
+
+    LeaderboardRow:
+      type: object
+      description: 排行榜單筆資料
+      properties:
+        name:
+          type: string
+        count:
+          type: integer
+        total:
+          type: number
+          format: double
+
+    DashboardLeaderboard:
+      type: object
+      description: Dashboard 排行榜
+      properties:
+        top_products:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeaderboardRow'
+          description: 熱銷商品排行
+        top_customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeaderboardRow'
+          description: 高消費顧客排行
+        top_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeaderboardRow'
+          description: 熱門分類排行
+
+    TrendDataPoint:
+      type: object
+      description: 趨勢圖資料點
+      properties:
+        date:
+          type: string
+          format: date
+        revenue:
+          type: number
+          format: double
+        orders:
+          type: integer
+
+    DashboardTrend:
+      type: object
+      description: Dashboard 趨勢圖資料
+      properties:
+        period:
+          type: string
+        interval:
+          type: string
+          enum:
+            - day
+            - week
+            - month
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendDataPoint'
+
+    RevenueReport:
+      type: object
+      description: 營收分析報表
+      properties:
+        period:
+          type: string
+        date_start:
+          type: string
+          format: date
+        date_end:
+          type: string
+          format: date
+        interval:
+          type: string
+          enum:
+            - day
+            - week
+            - month
+        totals:
+          type: object
+          properties:
+            gross_revenue:
+              type: number
+              format: double
+            net_revenue:
+              type: number
+              format: double
+            refunds:
+              type: number
+              format: double
+            taxes:
+              type: number
+              format: double
+            shipping:
+              type: number
+              format: double
+            orders:
+              type: integer
+        intervals:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendDataPoint'
+
+    BatchOrdersRequest:
+      type: object
+      description: 批量訂單操作請求
+      properties:
+        create:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        update:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        delete:
+          type: array
+          items:
+            type: integer
+          description: 要刪除的訂單 ID 陣列
+
+    BatchVariationsRequest:
+      type: object
+      description: 批量商品變體操作請求
+      properties:
+        create:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVariation'
+        update:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVariation'
+        delete:
+          type: array
+          items:
+            type: integer
+
+    ErrorResponse:
+      type: object
+      description: 錯誤回應
+      properties:
+        code:
+          type: string
+          description: 錯誤代碼
+        message:
+          type: string
+          description: 錯誤訊息
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP 狀態碼
+
+paths:
+
+  # ────────────────────────────
+  # Dashboard
+  # ────────────────────────────
+
+  /power-shop/reports/dashboard/stats:
+    get:
+      tags:
+        - Dashboard
+      summary: 查詢 Dashboard KPI 統計
+      operationId: getDashboardStats
+      security:
+        - WPNonce: []
+      parameters:
+        - name: period
+          in: query
+          description: 統計期間
+          schema:
+            type: string
+            enum:
+              - today
+              - yesterday
+              - week
+              - month
+              - year
+              - custom
+            default: month
+        - name: date_start
+          in: query
+          description: 自訂期間起始日（period=custom 時使用）
+          schema:
+            type: string
+            format: date
+        - name: date_end
+          in: query
+          description: 自訂期間結束日（period=custom 時使用）
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: KPI 統計資料
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardStats'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /power-shop/reports/dashboard/leaderboard:
+    get:
+      tags:
+        - Dashboard
+      summary: 查詢排行榜
+      operationId: getDashboardLeaderboard
+      security:
+        - WPNonce: []
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum:
+              - today
+              - yesterday
+              - week
+              - month
+              - year
+              - custom
+            default: month
+        - name: date_start
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: date_end
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: limit
+          in: query
+          description: 各排行榜最大回傳筆數
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 50
+      responses:
+        '200':
+          description: 排行榜資料
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardLeaderboard'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /power-shop/reports/dashboard/trend:
+    get:
+      tags:
+        - Dashboard
+      summary: 查詢營收趨勢圖表
+      operationId: getDashboardTrend
+      security:
+        - WPNonce: []
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum:
+              - today
+              - yesterday
+              - week
+              - month
+              - year
+              - custom
+            default: month
+        - name: interval
+          in: query
+          description: 資料分組粒度
+          schema:
+            type: string
+            enum:
+              - day
+              - week
+              - month
+            default: day
+        - name: date_start
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: date_end
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: 趨勢圖表資料
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardTrend'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ────────────────────────────
+  # Orders
+  # ────────────────────────────
+
+  /wc/v3/orders:
+    get:
+      tags:
+        - Orders
+      summary: 查詢訂單列表
+      operationId: listOrders
+      security:
+        - WPNonce: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+        - name: search
+          in: query
+          description: 搜尋訂單編號、顧客姓名、Email
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: 篩選訂單狀態
+          schema:
+            type: string
+            enum:
+              - pending
+              - processing
+              - on-hold
+              - completed
+              - cancelled
+              - refunded
+              - failed
+              - any
+        - name: customer
+          in: query
+          description: 篩選特定顧客（customer_id）
+          schema:
+            type: integer
+        - name: date_min
+          in: query
+          description: 建立日期下限（ISO 8601 date）
+          schema:
+            type: string
+            format: date
+        - name: date_max
+          in: query
+          description: 建立日期上限（ISO 8601 date）
+          schema:
+            type: string
+            format: date
+        - name: orderby
+          in: query
+          schema:
+            type: string
+            enum:
+              - date
+              - id
+              - include
+              - title
+              - slug
+            default: date
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+      responses:
+        '200':
+          description: 訂單列表
+          headers:
+            X-WP-Total:
+              description: 符合條件的總筆數
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: 總頁數
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - Orders
+      summary: 建立訂單
+      operationId: createOrder
+      security:
+        - WPNonce: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: 訂單建立成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wc/v3/orders/batch:
+    post:
+      tags:
+        - Orders
+      summary: 批量刪除訂單
+      operationId: batchDeleteOrders
+      description: 透過 delete 陣列批量刪除訂單（WooCommerce batch API）
+      security:
+        - WPNonce: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchOrdersRequest'
+      responses:
+        '200':
+          description: 批量操作結果
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  create:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+                  update:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+                  delete:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wc/v3/orders/{id}:
+    put:
+      tags:
+        - Orders
+      summary: 更新訂單狀態或地址
+      operationId: updateOrder
+      security:
+        - WPNonce: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 訂單 ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: 訂單更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 訂單不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wc/v3/orders/{id}/notes:
+    post:
+      tags:
+        - Orders
+      summary: 新增訂單備註
+      operationId: createOrderNote
+      security:
+        - WPNonce: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 訂單 ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - note
+              properties:
+                note:
+                  type: string
+                  description: 備註內容
+                customer_note:
+                  type: boolean
+                  default: false
+                  description: 是否顯示給顧客
+      responses:
+        '201':
+          description: 備註新增成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderNote'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 訂單不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ────────────────────────────
+  # Products
+  # ────────────────────────────
+
+  /wc/v3/products/categories:
+    get:
+      tags:
+        - Products
+      summary: 查詢商品分類列表
+      operationId: listProductCategories
+      security:
+        - WPNonce: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 100
+            maximum: 100
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: parent
+          in: query
+          description: 篩選指定父分類的子分類（0 = 頂層）
+          schema:
+            type: integer
+        - name: hide_empty
+          in: query
+          description: 隱藏無商品的分類
+          schema:
+            type: boolean
+            default: false
+        - name: orderby
+          in: query
+          schema:
+            type: string
+            enum:
+              - id
+              - include
+              - name
+              - slug
+              - term_group
+              - description
+              - count
+            default: name
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+      responses:
+        '200':
+          description: 商品分類列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductCategory'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - Products
+      summary: 新增商品分類
+      operationId: createProductCategory
+      security:
+        - WPNonce: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCategory'
+      responses:
+        '201':
+          description: 分類建立成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wc/v3/products:
+    get:
+      tags:
+        - Products
+      summary: 查詢商品列表
+      operationId: listProducts
+      security:
+        - WPNonce: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum:
+              - publish
+              - draft
+              - trash
+              - any
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum:
+              - simple
+              - variable
+              - grouped
+              - external
+              - subscription
+              - variable-subscription
+        - name: category
+          in: query
+          description: 分類 slug 或 ID
+          schema:
+            type: string
+        - name: tag
+          in: query
+          description: 標籤 slug 或 ID
+          schema:
+            type: string
+        - name: sku
+          in: query
+          schema:
+            type: string
+        - name: stock_status
+          in: query
+          schema:
+            type: string
+            enum:
+              - instock
+              - outofstock
+              - onbackorder
+        - name: orderby
+          in: query
+          schema:
+            type: string
+            enum:
+              - date
+              - id
+              - include
+              - title
+              - slug
+              - price
+              - popularity
+              - rating
+            default: date
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+      responses:
+        '200':
+          description: 商品列表
+          headers:
+            X-WP-Total:
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - Products
+      summary: 建立草稿商品
+      operationId: createProduct
+      security:
+        - WPNonce: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: 商品建立成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wc/v3/products/{id}:
+    put:
+      tags:
+        - Products
+      summary: 儲存商品資料
+      operationId: updateProduct
+      security:
+        - WPNonce: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 商品 ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: 商品更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 商品不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wc/v3/products/{id}/variations/batch:
+    post:
+      tags:
+        - Products
+      summary: 自動生成/批量管理商品變體
+      operationId: batchProductVariations
+      description: >-
+        透過笛卡爾積自動生成所有屬性組合的變體，或批量更新 / 刪除現有變體。
+        對應前端 ProductEdit 的「自動生成所有變體」功能。
+      security:
+        - WPNonce: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 父商品 ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchVariationsRequest'
+      responses:
+        '200':
+          description: 批量變體操作結果
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  create:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductVariation'
+                  update:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductVariation'
+                  delete:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductVariation'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 商品不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ────────────────────────────
+  # Customers
+  # ────────────────────────────
+
+  /wc/v3/customers:
+    get:
+      tags:
+        - Customers
+      summary: 查詢顧客列表
+      operationId: listCustomers
+      security:
+        - WPNonce: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+        - name: search
+          in: query
+          description: 搜尋姓名、Email、Username
+          schema:
+            type: string
+        - name: role
+          in: query
+          schema:
+            type: string
+            default: customer
+        - name: email
+          in: query
+          schema:
+            type: string
+            format: email
+        - name: orderby
+          in: query
+          schema:
+            type: string
+            enum:
+              - id
+              - include
+              - name
+              - registered_date
+            default: registered_date
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+      responses:
+        '200':
+          description: 顧客列表
+          headers:
+            X-WP-Total:
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wc/v3/customers/{id}:
+    get:
+      tags:
+        - Customers
+      summary: 查詢顧客詳情
+      operationId: getCustomer
+      security:
+        - WPNonce: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 顧客 ID（WP User ID）
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 顧客詳情
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 顧客不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - Customers
+      summary: 編輯顧客資料
+      operationId: updateCustomer
+      security:
+        - WPNonce: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 顧客 ID（WP User ID）
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: 顧客更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 顧客不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /wp/v2/users/{id}:
+    put:
+      tags:
+        - Customers
+      summary: 編輯顧客 UserMeta
+      operationId: updateUserMeta
+      description: 透過 WordPress REST API 更新顧客自訂 UserMeta 欄位。
+      security:
+        - WPNonce: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: WP User ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                meta:
+                  type: object
+                  additionalProperties: true
+                  description: UserMeta key-value 鍵值對
+      responses:
+        '200':
+          description: UserMeta 更新成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  meta:
+                    type: object
+                    additionalProperties: true
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 使用者不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /power-shop/customers/{id}/notes:
+    post:
+      tags:
+        - Customers
+      summary: 新增顧客聯繫備註
+      operationId: createCustomerNote
+      security:
+        - WPNonce: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 顧客 ID（WP User ID）
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  description: 備註內容
+      responses:
+        '201':
+          description: 顧客備註新增成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerNote'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 顧客不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Customers
+      summary: 查詢顧客聯繫備註列表
+      operationId: listCustomerNotes
+      security:
+        - WPNonce: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 顧客 ID（WP User ID）
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: 顧客聯繫備註列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerNote'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 顧客不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ────────────────────────────
+  # Analytics
+  # ────────────────────────────
+
+  /power-shop/reports/revenue:
+    get:
+      tags:
+        - Analytics
+      summary: 查詢營收分析
+      operationId: getRevenueReport
+      security:
+        - WPNonce: []
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum:
+              - today
+              - yesterday
+              - week
+              - month
+              - year
+              - custom
+            default: month
+        - name: interval
+          in: query
+          description: 資料分組粒度
+          schema:
+            type: string
+            enum:
+              - day
+              - week
+              - month
+            default: day
+        - name: date_start
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: date_end
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: order_status
+          in: query
+          description: 篩選特定訂單狀態（逗號分隔多值）
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - pending
+                - processing
+                - on-hold
+                - completed
+                - cancelled
+                - refunded
+                - failed
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: 營收分析報表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RevenueReport'
+        '400':
+          description: 參數錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: 無權限
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

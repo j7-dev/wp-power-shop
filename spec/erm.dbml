@@ -1,0 +1,394 @@
+// Power Shop — Entity Relationship Model (DBML)
+// Generated: 2025-07-10
+// Project: Power Shop WordPress Plugin (WooCommerce Extension)
+// Render at: https://dbdiagram.io  |  npm: @dbml/core
+
+///////////////////////////////////////////////////////////////
+// Enums
+///////////////////////////////////////////////////////////////
+
+Enum order_status {
+  pending     [note: 'API: pending — 待付款']
+  processing  [note: 'API: processing — 處理中']
+  "on-hold"   [note: 'API: on-hold — 保留中']
+  completed   [note: 'API: completed — 已完成']
+  cancelled   [note: 'API: cancelled — 已取消']
+  refunded    [note: 'API: refunded — 已退款']
+  failed      [note: 'API: failed — 失敗']
+}
+
+Enum product_type {
+  simple                  [note: '簡單商品']
+  variable                [note: '可變商品（含變體）']
+  grouped                 [note: '群組商品']
+  external                [note: '外部 / 聯盟商品']
+  subscription            [note: '訂閱商品（WC Subscriptions）']
+  "variable-subscription" [note: '可變訂閱商品']
+}
+
+Enum product_status {
+  publish  [note: '已發佈']
+  draft    [note: '草稿']
+  trash    [note: '垃圾桶（軟刪除）']
+}
+
+Enum stock_status {
+  instock     [note: '有庫存']
+  outofstock  [note: '無庫存']
+  onbackorder [note: '預訂中（允許下訂）']
+}
+
+Enum backorders {
+  no     [note: '不允許預訂']
+  notify [note: '允許預訂但發出通知']
+  yes    [note: '允許預訂']
+}
+
+///////////////////////////////////////////////////////////////
+// Tables
+///////////////////////////////////////////////////////////////
+
+Table orders {
+  id               integer        [pk, increment, note: 'WP Post ID（post_type=shop_order）']
+  number           varchar(50)    [not null, unique, note: '訂單顯示編號，如 #1001']
+  status           order_status   [not null, default: 'pending']
+  customer_id      integer        [null, note: 'FK→customers.id；0 或 NULL 表示訪客訂單']
+  billing          json           [not null, note: 'Address 物件，見 Table Note']
+  shipping         json           [not null, note: 'Address 物件，見 Table Note']
+  line_items       json           [not null, note: 'OrderItem[]，見 Table Note']
+  total            decimal(10,2)  [not null, default: 0]
+  subtotal         decimal(10,2)  [not null, default: 0]
+  total_tax        decimal(10,2)  [not null, default: 0]
+  shipping_total   decimal(10,2)  [not null, default: 0]
+  discount_total   decimal(10,2)  [not null, default: 0]
+  payment_method   varchar(100)   [null, note: '支付方式代碼，如 bacs、paypal']
+  payment_method_title varchar(200) [null]
+  transaction_id   varchar(200)   [null, note: '第三方支付交易 ID']
+  date_created     timestamp      [not null, default: `now()`]
+  date_modified    timestamp      [not null, default: `now()`]
+  meta_data        json           [null, note: 'MetaData[]，見 Table Note']
+
+  Note: '''
+    == 底層儲存 ==
+    wp_posts（post_type=shop_order）+ wp_postmeta
+
+    == billing / shipping JSON 結構 ==
+    {
+      "first_name": string,
+      "last_name":  string,
+      "company":    string,
+      "address_1":  string,
+      "address_2":  string,
+      "city":       string,
+      "state":      string,
+      "postcode":   string,
+      "country":    string (ISO 3166-1 alpha-2),
+      "email":      string (僅 billing),
+      "phone":      string (僅 billing)
+    }
+
+    == line_items JSON 結構 ==
+    [{
+      "id":           integer,
+      "name":         string,
+      "product_id":   integer,
+      "variation_id": integer (0 表示非變體),
+      "quantity":     integer (≥ 1),
+      "subtotal":     string,
+      "subtotal_tax": string,
+      "total":        string,
+      "total_tax":    string,
+      "sku":          string,
+      "price":        number,
+      "meta_data":    MetaData[]
+    }]
+
+    == meta_data JSON 結構 ==
+    [{ "id": integer, "key": string, "value": any }]
+
+    == 財務約束 ==
+    total = subtotal + total_tax + shipping_total - discount_total
+    total >= 0, subtotal >= 0, total_tax >= 0, shipping_total >= 0, discount_total >= 0
+
+    == 狀態流轉規則 ==
+    pending     → processing  （付款後自動）
+    pending     → cancelled   （管理員手動 或 超時未付款）
+    processing  → completed   （管理員手動 或 配送完成）
+    processing  → on-hold     （管理員手動暫停）
+    processing  → refunded    （全額退款後自動）
+    on-hold     → processing  （重新處理）
+    on-hold     → cancelled
+    任何狀態    → failed       （付款失敗）
+    任何狀態    → refunded     （手動退款）
+  '''
+}
+
+Table order_notes {
+  id            integer      [pk, increment, note: 'WP Comment ID（comment_type=order_note）']
+  order_id      integer      [not null, note: 'FK→orders.id']
+  note          text         [not null]
+  customer_note boolean      [not null, default: false, note: 'true = 顯示給顧客並觸發通知 email']
+  author        varchar(200) [not null, default: 'system']
+  date_created  timestamp    [not null, default: `now()`]
+
+  Note: '''
+    == 底層儲存 ==
+    wp_comments（comment_type=order_note）
+
+    == customer_note 行為 ==
+    false：僅後台可見的內部備註
+    true： 顧客可在前台訂單頁看到，並觸發「訂單備註」通知 email
+
+    == author 慣例 ==
+    "system"       → WC 系統自動生成
+    "WooCommerce"  → WC 內建動作觸發
+    其他           → 管理員 / 操作者的顯示名稱
+  '''
+}
+
+Table products {
+  id                integer        [pk, increment, note: 'WP Post ID（post_type=product）']
+  name              varchar(200)   [not null]
+  slug              varchar(200)   [unique, not null]
+  type              product_type   [not null, default: 'simple']
+  status            product_status [not null, default: 'draft']
+  description       text           [null]
+  short_description text           [null]
+  sku               varchar(100)   [null, note: '存入 _sku postmeta；建議全站唯一']
+  gtin              varchar(50)    [null, note: 'Global Trade Item Number（EAN / UPC / ISBN）']
+  regular_price     decimal(10,2)  [null, note: '≥ 0']
+  sale_price        decimal(10,2)  [null, note: '≤ regular_price；NULL = 無特價']
+  date_on_sale_from timestamp      [null, note: 'NULL = 特價立即生效']
+  date_on_sale_to   timestamp      [null, note: 'NULL = 特價無到期']
+  manage_stock      boolean        [not null, default: false]
+  stock_quantity    integer        [null, note: 'manage_stock=false 時忽略']
+  stock_status      stock_status   [not null, default: 'instock']
+  backorders        backorders     [not null, default: 'no']
+  low_stock_amount  integer        [null, note: 'NULL = 使用全站設定']
+  images            json           [null, note: 'Image[]，見 Table Note']
+  categories        json           [null, note: 'CategoryRef[]，見 Table Note']
+  tags              json           [null, note: 'TagRef[]，見 Table Note']
+  attributes        json           [null, note: 'ProductAttribute[]，見 Table Note']
+  variations        json           [null, note: 'integer[]：變體 ID（唯讀，variable 商品）']
+  upsell_ids        json           [null, note: 'integer[]：加購商品 ID']
+  cross_sell_ids    json           [null, note: 'integer[]：交叉銷售商品 ID']
+  grouped_products  json           [null, note: 'integer[]：群組子商品 ID（grouped 商品）']
+  purchase_note     varchar(500)   [null, note: '購買後顯示給顧客的訊息']
+  menu_order        integer        [not null, default: 0]
+  external_url      varchar(500)   [null, note: 'external 商品外部購買連結（必填）']
+  button_text       varchar(200)   [null, note: 'external 商品購買按鈕文字']
+  meta_data         json           [null, note: 'MetaData[]，見 Table Note']
+
+  Note: '''
+    == 底層儲存 ==
+    wp_posts（post_type=product）+ wp_postmeta
+
+    == 價格約束 ==
+    regular_price >= 0
+    sale_price <= regular_price（若非 NULL）
+    date_on_sale_from < date_on_sale_to（若兩者皆非 NULL）
+
+    == images JSON 結構 ==
+    [{ "id": integer, "src": string (URI), "name": string, "alt": string }]
+
+    == categories / tags JSON 結構 ==
+    [{ "id": integer, "name": string, "slug": string }]
+
+    == attributes JSON 結構 ==
+    [{
+      "id":        integer (0 = 自訂屬性),
+      "name":      string,
+      "position":  integer,
+      "visible":   boolean,
+      "variation": boolean,
+      "options":   string[]
+    }]
+
+    == meta_data JSON 結構 ==
+    [{ "id": integer, "key": string, "value": any }]
+
+    == 商品類型特殊規則 ==
+    variable：          attributes 中至少一個 variation=true；variations 不為空
+    grouped：           grouped_products 不為空；無 regular_price
+    external：          external_url 必填
+    subscription：      需 WooCommerce Subscriptions 外掛
+    variable-subscription：同上
+  '''
+}
+
+Table product_variations {
+  id             integer       [pk, increment, note: 'WP Post ID（post_type=product_variation）']
+  parent_id      integer       [not null, note: 'FK→products.id']
+  sku            varchar(100)  [null]
+  regular_price  decimal(10,2) [null, note: '≥ 0；NULL 表示繼承父商品']
+  sale_price     decimal(10,2) [null, note: '≤ regular_price；NULL = 無特價']
+  status         varchar(20)   [not null, default: 'publish', note: 'publish | private']
+  manage_stock   boolean       [not null, default: false]
+  stock_quantity integer       [null]
+  stock_status   stock_status  [not null, default: 'instock']
+  image          json          [null, note: 'Image 物件：{ id, src, name, alt }']
+  attributes     json          [not null, note: 'VariationAttribute[]，見 Table Note']
+  meta_data      json          [null, note: 'MetaData[]']
+
+  Note: '''
+    == 底層儲存 ==
+    wp_posts（post_type=product_variation）+ wp_postmeta
+
+    == attributes JSON 結構 ==
+    [{ "name": string, "option": string }]
+    每個元素對應父商品 attributes 中 variation=true 的一個屬性值。
+    attributes 陣列長度必須等於父商品中 variation=true 的屬性數量。
+
+    == 批量生成規則 ==
+    由前端計算父商品所有 variation=true 屬性的笛卡爾積，
+    透過 POST /wc/v3/products/{id}/variations/batch 的 create 陣列批量建立。
+
+    == 價格繼承 ==
+    regular_price = NULL 時，前台顯示繼承父商品價格。
+  '''
+}
+
+Table product_categories {
+  id          integer      [pk, increment, note: 'WP Term ID']
+  name        varchar(200) [not null]
+  slug        varchar(200) [unique, not null]
+  parent      integer      [not null, default: 0, note: '0 = 頂層分類；自我參照形成樹狀結構']
+  description text         [null]
+  image       json         [null, note: 'Image 物件：{ id, src, name, alt }']
+  count       integer      [not null, default: 0, note: '唯讀，WC 自動統計該分類商品數']
+  menu_order  integer      [not null, default: 0]
+
+  Note: '''
+    == 底層儲存 ==
+    wp_terms + wp_term_taxonomy（taxonomy = product_cat）
+
+    == 樹狀結構 ==
+    parent = 0 表示頂層；parent > 0 自我參照，支援無限層級（建議不超過 3 層）。
+
+    == count 維護 ==
+    count 由 WooCommerce 自動計算並維護，不應手動修改。
+    hide_empty = true 查詢時，count = 0 的分類不回傳。
+  '''
+}
+
+Table customers {
+  id                 integer       [pk, increment, note: 'WP User ID']
+  email              varchar(200)  [unique, not null]
+  first_name         varchar(100)  [null]
+  last_name          varchar(100)  [null]
+  username           varchar(60)   [unique, not null]
+  role               varchar(50)   [not null, default: 'customer']
+  billing            json          [null, note: 'Address 物件（含 email, phone），見 Table Note']
+  shipping           json          [null, note: 'Address 物件（不含 email, phone），見 Table Note']
+  is_paying_customer boolean       [not null, default: false, note: '唯讀；有已完成訂單後自動設為 true']
+  orders_count       integer       [not null, default: 0, note: '唯讀；WC 自動統計']
+  total_spent        decimal(10,2) [not null, default: 0, note: '唯讀；WC 自動統計']
+  last_order         json          [null, note: '唯讀：{ id: integer, date: datetime }']
+  avatar_url         varchar(500)  [null, note: '唯讀；Gravatar URL']
+  date_created       timestamp     [not null, default: `now()`]
+  date_modified      timestamp     [not null, default: `now()`]
+  meta_data          json          [null, note: 'MetaData[]（含自訂 UserMeta）']
+
+  Note: '''
+    == 底層儲存 ==
+    wp_users + wp_usermeta
+
+    == billing / shipping JSON 結構 ==
+    billing：  同 orders.billing（含 email, phone）
+    shipping： 同 orders.shipping（不含 email, phone）
+    地址欄位底層儲存於 usermeta（key: billing_first_name、shipping_city 等）。
+
+    == 唯讀統計欄位 ==
+    is_paying_customer、orders_count、total_spent、last_order 由 WC 自動更新，
+    不可透過 PUT /wc/v3/customers/{id} 直接修改。
+
+    == meta_data 更新 ==
+    自訂 UserMeta 透過 PUT /wp/v2/users/{id} 的 meta 欄位更新。
+  '''
+}
+
+Table customer_notes {
+  id           integer      [pk, increment]
+  customer_id  integer      [not null, note: 'FK→customers.id（被記錄的顧客）']
+  author_id    integer      [not null, note: 'FK→customers.id（建立備註的操作者）']
+  author_name  varchar(200) [not null, note: '唯讀；建立時從 author_id 取得顯示名稱']
+  content      text         [not null]
+  date_created timestamp    [not null, default: `now()`]
+
+  Note: '''
+    == 底層儲存 ==
+    Power Shop 自有資料表（power_shop_customer_notes），非 WooCommerce 標準欄位。
+
+    == 用途 ==
+    記錄客服與顧客的聯繫紀錄（電話記錄、Email 往來、特殊需求等）。
+    顯示於 Users/Edit 頁面的備註 Tab。
+
+    == author_id vs customer_id ==
+    author_id：操作者（通常為管理員或客服人員）的 WP User ID
+    customer_id：被記錄的顧客 WP User ID
+  '''
+}
+
+Table dashboard_stats {
+  period              varchar(20)   [pk, note: '查詢期間識別符（today / month / custom 等）']
+  date_start          date          [null]
+  date_end            date          [null]
+  total_sales         decimal(10,2) [null]
+  total_orders        integer       [null]
+  total_customers     integer       [null]
+  average_order_value decimal(10,2) [null]
+  net_revenue         decimal(10,2) [null]
+  refund_total        decimal(10,2) [null]
+
+  Note: '''
+    非持久化（Non-persistent）
+    此表為概念模型，不對應實際資料庫資料表。
+    資料由 GET /power-shop/reports/dashboard/stats 動態聚合計算後回傳，
+    不寫入資料庫。
+  '''
+}
+
+Table revenue_reports {
+  id            integer       [pk, increment, note: '虛擬 ID，不對應實際資料庫列']
+  period        varchar(20)   [null]
+  date_start    date          [null]
+  date_end      date          [null]
+  interval      varchar(10)   [null, note: 'day | week | month']
+  gross_revenue decimal(10,2) [null]
+  net_revenue   decimal(10,2) [null]
+  refunds       decimal(10,2) [null]
+  taxes         decimal(10,2) [null]
+  shipping      decimal(10,2) [null]
+  orders        integer       [null]
+  intervals     json          [null, note: 'TrendDataPoint[]：[{ date, revenue, orders }]']
+
+  Note: '''
+    非持久化（Non-persistent）
+    此表為概念模型，不對應實際資料庫資料表。
+    資料由 GET /power-shop/reports/revenue 動態聚合計算後回傳，
+    不寫入資料庫。
+  '''
+}
+
+///////////////////////////////////////////////////////////////
+// Refs（關聯定義）
+///////////////////////////////////////////////////////////////
+
+// orders → customers（多對一，訪客訂單 customer_id 為 NULL）
+Ref: orders.customer_id > customers.id
+
+// order_notes → orders（多對一）
+Ref: order_notes.order_id > orders.id
+
+// product_variations → products（多對一）
+Ref: product_variations.parent_id > products.id
+
+// customer_notes → customers（多對一：被記錄的顧客）
+Ref: customer_notes.customer_id > customers.id
+
+// customer_notes → customers（多對一：建立備註的操作者）
+Ref: customer_notes.author_id > customers.id
+
+// product_categories 自我參照（parent 指向同表 id，0 表示頂層）
+// DBML 不支援直接自我參照宣告，以下為說明用途
+// Ref: product_categories.parent > product_categories.id
