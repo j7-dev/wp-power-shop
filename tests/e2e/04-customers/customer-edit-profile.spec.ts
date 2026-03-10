@@ -37,7 +37,8 @@ test.describe('顧客個人資料編輯 PUT /wc/v3/customers/{id}', () => {
     expect(res.status()).toBe(404)
 
     const data = await res.json()
-    expect(data.code).toBe('wc_rest_invalid_id')
+    // WC 可能回傳 wc_rest_invalid_id 或 wc_user_invalid_id
+    expect(data.code).toMatch(/invalid_id/)
   })
 
   test('無效 email 格式回傳 400 錯誤', async ({ request }) => {

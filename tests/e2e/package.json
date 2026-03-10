@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "wp-env:start": "npx wp-env start",
+    "wp-env:stop": "npx wp-env stop",
+    "wp-env:destroy": "npx wp-env destroy"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.52.0",
+    "@wordpress/env": "^11.1.0"
+  }
+}

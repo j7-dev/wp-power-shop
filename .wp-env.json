@@ -1,0 +1,24 @@
+{
+	"core": "WordPress/WordPress#6.8",
+	"phpVersion": "8.2",
+	"port": 8890,
+	"testsEnvironment": false,
+	"plugins": [
+		"https://downloads.wordpress.org/plugin/woocommerce.zip",
+		"https://github.com/j7-dev/wp-powerhouse/releases/latest/download/powerhouse.zip",
+		"."
+	],
+	"config": {
+		"WP_DEBUG": true,
+		"WP_DEBUG_LOG": true,
+		"WP_DEBUG_DISPLAY": false,
+		"SCRIPT_DEBUG": true,
+		"WP_ENVIRONMENT_TYPE": "local"
+	},
+	"mappings": {
+		"wp-content/uploads": "./tests/e2e/.uploads"
+	},
+	"lifecycleScripts": {
+		"afterStart": "npx wp-env run cli -- wp option update blogname PowerShopE2E && npx wp-env run cli -- wp option update blogdescription E2ETesting && npx wp-env run cli -- wp rewrite structure /%postname%/ && npx wp-env run cli -- wp rewrite flush && npx wp-env run cli -- wp language core install zh_TW && npx wp-env run cli -- wp site switch-language zh_TW"
+	}
+}
