@@ -91,6 +91,8 @@ test.describe('商品變體 POST /wc/v3/products/{id}/variations/batch', () => {
       create: [{ regular_price: '100', attributes: [{ name: '顏色', option: '紅色' }] }],
     })
     expect(res.status()).toBe(404)
+    const body = await res.json()
+    expect(body.code).toBe('wc_rest_product_invalid_id')
   })
 
   test('簡單商品不支援變體 → 回傳錯誤', async ({ request }) => {

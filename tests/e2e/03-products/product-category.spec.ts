@@ -144,6 +144,21 @@ test.describe('商品分類 POST /wc/v3/products/categories', () => {
     expect(getBody.slug).toBe(slug)
   })
 
+  test('Power Shop 自有端點 GET /power-shop/product_categories → 200 陣列', async ({ request }) => {
+    const res = await apiGet(request, 'power-shop/product_categories')
+    expect(res.status()).toBe(200)
+
+    const body = await res.json()
+    expect(Array.isArray(body)).toBe(true)
+
+    // 至少包含 global-setup 建立的測試分類
+    if (body.length > 0) {
+      const first = body[0]
+      expect(first).toHaveProperty('id')
+      expect(first).toHaveProperty('name')
+    }
+  })
+
   test('有效建立子分類 → 成為父分類的子項', async ({ request }) => {
     const parentSlug = `e2e-parent-${Date.now()}`
     const childSlug = `e2e-child-${Date.now()}`

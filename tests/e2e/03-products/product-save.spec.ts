@@ -62,7 +62,7 @@ test.describe('商品更新 PUT /wc/v3/products/{id}', () => {
     })
     expect(res.status()).toBe(404)
     const body = await res.json()
-    expect(body.code).toBe('woocommerce_rest_product_invalid_id')
+    expect(body.code).toBe('wc_rest_product_invalid_id')
   })
 
   test('空名稱更新 → 觀察 WC 行為', async ({ request }) => {
@@ -189,8 +189,8 @@ test.describe('商品更新 PUT /wc/v3/products/{id}', () => {
       expect(body.regular_price).toBe('999')
       expect(body.status).toBe('draft')
 
-      // 透過 GET 再次驗證資料已持久化
-      const getRes = await apiGet(request, `wc/v3/products/${productId}`, { status: 'draft' })
+      // 透過 GET 再次驗證資料已持久化（單一商品 GET 不需 status 參數）
+      const getRes = await apiGet(request, `wc/v3/products/${productId}`)
       expect(getRes.status()).toBe(200)
       const getBody = await getRes.json()
       expect(getBody.name).toBe('[E2E] Updated Product Name')

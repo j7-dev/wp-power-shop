@@ -61,16 +61,34 @@ test.describe('商品列表 GET /wc/v3/products', () => {
     }
   })
 
-  test('預設排序為日期降序（新建商品 id 降序）', async ({ request }) => {
+  test('per_page 接受 1–100 任意值（例如 3）', async ({ request }) => {
+    const res = await apiGet(request, 'wc/v3/products', { per_page: '3' })
+    expect(res.status()).toBe(200)
+
+    const products = await res.json()
+    expect(products.length).toBeLessThanOrEqual(3)
+  })
+
+  test('per_page 超過 100 → 回傳 400 錯誤', async ({ request }) => {
+    const res = await apiGet(request, 'wc/v3/products', { per_page: '101' })
+    expect(res.status()).toBe(400)
+
+    const body = await res.json()
+    expect(body.code).toBe('rest_invalid_param')
+  })
+
+  test('預設排序為日期降序（date_created_gmt 遞減）', async ({ request }) => {
     const res = await apiGet(request, 'wc/v3/products', { per_page: '10', orderby: 'date', order: 'desc' })
     expect(res.status()).toBe(200)
 
     const products = await res.json()
     expect(products.length).toBeGreaterThanOrEqual(2)
 
-    // 新建立的商品應該排在前面，id 遞減
+    // 按日期降序排列，比較 date_created_gmt（非 id）
     for (let i = 0; i < products.length - 1; i++) {
-      expect(products[i].id).toBeGreaterThan(products[i + 1].id)
+      const current = new Date(products[i].date_created_gmt).getTime()
+      const next = new Date(products[i + 1].date_created_gmt).getTime()
+      expect(current).toBeGreaterThanOrEqual(next)
     }
   })
 

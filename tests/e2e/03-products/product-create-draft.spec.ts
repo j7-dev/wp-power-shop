@@ -74,6 +74,7 @@ test.describe('商品建立草稿 POST /wc/v3/products', () => {
     const res = await apiPost(request, 'wc/v3/products', {
       name: productName,
       type: 'simple',
+      status: 'draft',
       regular_price: '100',
       sku: `E2E-DRAFT-${Date.now()}`,
     })
@@ -85,9 +86,8 @@ test.describe('商品建立草稿 POST /wc/v3/products', () => {
     expect(body.id).toBeGreaterThan(0)
     expect(body.name).toBe(productName)
     expect(body.type).toBe('simple')
-    // WooCommerce 預設新商品為 draft（除非明確指定 status）
-    // 注意：WC REST API 預設可能是 publish，此處驗證回傳值
-    expect(['draft', 'publish']).toContain(body.status)
+    // 明確指定 status=draft，WC 應原樣回傳
+    expect(body.status).toBe('draft')
     expect(body.regular_price).toBe('100')
   })
 
