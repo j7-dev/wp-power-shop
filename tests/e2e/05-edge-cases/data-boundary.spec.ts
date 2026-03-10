@@ -261,10 +261,63 @@ test.describe('數值邊界', () => {
     expect(product.stock_quantity).toBe(0)
     expect(product.stock_status).toBe('outofstock')
   })
+
+  test('regular_price 為負數 → 不應 500', async ({ request }) => {
+    const { id, status, body } = await createProduct(request, {
+      name: '[E2E] 負價商品',
+      type: 'simple',
+      regular_price: '-100',
+    })
+    productId = id
+
+    // WC 可能接受負價格或自動修正，但絕不應 500
+    expect(status).toBeLessThan(500)
+    if (status === 201) {
+      expect(typeof body.regular_price).toBe('string')
+    }
+  })
 })
 
 // ---------------------------------------------------------------------------
-// 6. 空字串 — 必填欄位
+// 6. 搜尋參數中的特殊字元
+// ---------------------------------------------------------------------------
+test.describe('搜尋參數特殊字元', () => {
+  const specialSearches = [
+    { label: '含 % 萬用字元', search: '%test%' },
+    { label: '含 _ 萬用字元', search: '_test_' },
+    { label: '含引號', search: '"test"' },
+    { label: '含反斜線', search: 'test\\name' },
+    { label: '含角括號', search: '<script>alert</script>' },
+  ]
+
+  for (const { label, search } of specialSearches) {
+    test(`商品搜尋 ${label} → 不應錯誤`, async ({ request }) => {
+      const res = await request.get(`${BASE_URL}/wp-json/wc/v3/products`, {
+        headers: authHeaders(),
+        params: { search },
+      })
+      // WC 正確處理特殊字元，應回傳 200
+      expect(res.status()).toBe(200)
+      const body = await res.json()
+      expect(Array.isArray(body)).toBe(true)
+    })
+  }
+
+  for (const { label, search } of specialSearches) {
+    test(`訂單搜尋 ${label} → 不應錯誤`, async ({ request }) => {
+      const res = await request.get(`${BASE_URL}/wp-json/wc/v3/orders`, {
+        headers: authHeaders(),
+        params: { search },
+      })
+      expect(res.status()).toBe(200)
+      const body = await res.json()
+      expect(Array.isArray(body)).toBe(true)
+    })
+  }
+})
+
+// ---------------------------------------------------------------------------
+// 7. 空字串 — 必填欄位
 // ---------------------------------------------------------------------------
 test.describe('空字串必填欄位', () => {
   test('建立商品分類 name="" → 回傳錯誤', async ({ request }) => {
@@ -304,7 +357,7 @@ test.describe('空字串必填欄位', () => {
 })
 
 // ---------------------------------------------------------------------------
-// 7. 純空白字串
+// 8. 純空白字串
 // ---------------------------------------------------------------------------
 test.describe('純空白字串', () => {
   let productId = 0
@@ -335,7 +388,7 @@ test.describe('純空白字串', () => {
 })
 
 // ---------------------------------------------------------------------------
-// 8. Null byte
+// 9. Null byte
 // ---------------------------------------------------------------------------
 test.describe('Null byte 處理', () => {
   let productId = 0

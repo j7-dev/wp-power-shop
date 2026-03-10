@@ -5,7 +5,6 @@
 import { test, expect, type APIRequestContext } from '@playwright/test'
 import * as fs from 'fs'
 import * as path from 'path'
-import { VALID_ORDER_STATUSES } from '../fixtures/test-data'
 
 const BASE_URL = process.env.WP_BASE_URL || 'http://localhost:8890'
 
@@ -101,10 +100,10 @@ test.describe('同時更新訂單狀態', () => {
     expect(res1.status()).toBeLessThan(500)
     expect(res2.status()).toBeLessThan(500)
 
-    // 讀取最終狀態，應為合法的 WooCommerce 訂單狀態
+    // 讀取最終狀態，應為其中一個寫入的值（last-write-wins）
     const getRes = await request.get(url, { headers: hdrs })
     const order = await getRes.json()
-    expect(VALID_ORDER_STATUSES).toContain(order.status)
+    expect(['processing', 'completed']).toContain(order.status)
   })
 })
 

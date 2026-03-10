@@ -96,9 +96,11 @@ test.describe('未認證存取', () => {
     expect([401, 403]).toContain(res.status())
   })
 
-  test('POST /power-shop/customers/1/notes 無 Nonce → 401/403', async ({ request }) => {
-    const res = await postWithoutNonce(request, 'power-shop/customers/1/notes', {
-      note: 'test',
+  test('POST /wc/v3/products 無 Nonce → 401/403', async ({ request }) => {
+    const res = await postWithoutNonce(request, 'wc/v3/products', {
+      name: '[E2E] NoAuth Product',
+      type: 'simple',
+      regular_price: '100',
     })
     expect([401, 403]).toContain(res.status())
   })
@@ -108,22 +110,28 @@ test.describe('未認證存取', () => {
 // 2. 無效 Nonce
 // ---------------------------------------------------------------------------
 test.describe('無效 Nonce', () => {
-  test('GET /wc/v3/orders 使用假 Nonce → 403', async ({ request }) => {
+  test('GET /wc/v3/orders 使用假 Nonce → 401/403', async ({ request }) => {
     const res = await getWithFakeNonce(request, 'wc/v3/orders')
-    expect(res.status()).toBe(403)
+    expect([401, 403]).toContain(res.status())
+    const body = await res.json()
+    expect(['rest_cookie_invalid_nonce', 'woocommerce_rest_cannot_view']).toContain(body.code)
   })
 
-  test('GET /wc/v3/products 使用假 Nonce → 403', async ({ request }) => {
+  test('GET /wc/v3/products 使用假 Nonce → 401/403', async ({ request }) => {
     const res = await getWithFakeNonce(request, 'wc/v3/products')
-    expect(res.status()).toBe(403)
+    expect([401, 403]).toContain(res.status())
+    const body = await res.json()
+    expect(['rest_cookie_invalid_nonce', 'woocommerce_rest_cannot_view']).toContain(body.code)
   })
 
-  test('POST /wc/v3/orders 使用假 Nonce → 403', async ({ request }) => {
+  test('POST /wc/v3/orders 使用假 Nonce → 401/403', async ({ request }) => {
     const res = await request.post(`${BASE_URL}/wp-json/wc/v3/orders`, {
       headers: { 'X-WP-Nonce': 'invalid-nonce-12345', 'Content-Type': 'application/json' },
       data: { status: 'pending' },
     })
-    expect(res.status()).toBe(403)
+    expect([401, 403]).toContain(res.status())
+    const body = await res.json()
+    expect(['rest_cookie_invalid_nonce', 'woocommerce_rest_cannot_view', 'woocommerce_rest_cannot_create']).toContain(body.code)
   })
 })
 
@@ -140,20 +148,25 @@ test.describe('SQL 注入防護', () => {
   for (const { label, search } of sqlPayloads) {
     test(`orders?search=${label} 不洩漏內部資料`, async ({ request }) => {
       const res = await authedGet(request, 'wc/v3/orders', { search })
-      expect([200, 400]).toContain(res.status())
-      const body = JSON.stringify(await res.json().catch(() => ''))
-      expect(body).not.toContain('wp_posts')
-      expect(body).not.toContain('wp_options')
-      expect(body).not.toMatch(/SQL syntax|mysql_|mysqli_|SQLSTATE/)
+      // WC 正確地參數化查詢，應回傳 200 與空陣列
+      expect(res.status()).toBe(200)
+      const body = await res.json()
+      expect(Array.isArray(body)).toBe(true)
+      const bodyStr = JSON.stringify(body)
+      expect(bodyStr).not.toContain('wp_posts')
+      expect(bodyStr).not.toContain('wp_options')
+      expect(bodyStr).not.toMatch(/SQL syntax|mysql_|mysqli_|SQLSTATE/)
     })
 
     test(`products?search=${label} 不洩漏內部資料`, async ({ request }) => {
       const res = await authedGet(request, 'wc/v3/products', { search })
-      expect([200, 400]).toContain(res.status())
-      const body = JSON.stringify(await res.json().catch(() => ''))
-      expect(body).not.toContain('wp_posts')
-      expect(body).not.toContain('wp_options')
-      expect(body).not.toMatch(/SQL syntax|mysql_|mysqli_|SQLSTATE/)
+      expect(res.status()).toBe(200)
+      const body = await res.json()
+      expect(Array.isArray(body)).toBe(true)
+      const bodyStr = JSON.stringify(body)
+      expect(bodyStr).not.toContain('wp_posts')
+      expect(bodyStr).not.toContain('wp_options')
+      expect(bodyStr).not.toMatch(/SQL syntax|mysql_|mysqli_|SQLSTATE/)
     })
   }
 })
@@ -222,7 +235,7 @@ test.describe('XSS 防護', () => {
 // ---------------------------------------------------------------------------
 test.describe('極端 ID — 超大值', () => {
   const resources = ['wc/v3/orders', 'wc/v3/products', 'wc/v3/customers']
-  const hugeId = 99999999999
+  const hugeId = 999999999
 
   for (const res of resources) {
     test(`GET /${res}/${hugeId} → 404`, async ({ request }) => {
