@@ -6,14 +6,24 @@
 
 ## 目錄結構
 
+### 規格化產出物（Formulation Artifacts）
+
 | 文件 | 說明 |
 |------|------|
-| [Event Storming](./es.md) | Actor、Aggregate、Command、Read Model 業務流程規格 |
+| [Event Storming](./es.md) | Actor、Aggregate、Command、Read Model 業務流程規格（權威來源）|
+| [features/](./features/) | 20 個 Gherkin Feature Files（行為規格，帶 `@ignore` 標籤）|
+| [api.yml](./api.yml) | OpenAPI 3.0 規格（1,995 行，21 個端點）|
+| [erm.dbml](./erm.dbml) | DBML 實體關係模型（394 行，9 Table + 5 Enum）|
+
+### 參考文件
+
+| 文件 | 說明 |
+|------|------|
 | [功能需求](./functional-requirements.md) | 6 大模組的完整功能需求清單 |
 | [非功能需求](./non-functional-requirements.md) | 效能、安全性、相容性、可維護性等品質屬性 |
 | [使用者故事](./user-stories.md) | 以使用者角度描述的故事與驗收標準（Gherkin 風格） |
-| [API 規格](./api-spec.md) | REST API 端點、請求/回應結構、錯誤碼 |
-| [實體模型](./entity-model.md) | 核心領域實體、欄位定義、關聯圖 |
+| [API 規格（舊）](./api-spec.md) | REST API 端點參考（已由 api.yml 取代）|
+| [實體模型（舊）](./entity-model.md) | 核心領域實體欄位定義（已由 erm.dbml 取代）|
 
 ## 專案概述
 
