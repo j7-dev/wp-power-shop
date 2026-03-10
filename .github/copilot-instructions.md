@@ -160,7 +160,7 @@ public function __construct() {
 `ApiBase` auto-resolves callbacks using the HTTP method + endpoint path. For endpoint `products/(?P<id>\d+)` with method `get`:
 - Callback method name: `get_products_with_id_callback`
 
-Pattern: `{method}_{endpoint_segments_underscored}_callback`  
+Pattern: `{method}_{endpoint_segments_underscored}_callback`
 - Slashes (`/`) → `_`
 - Regex groups like `(?P<id>\d+)` → `with_id`
 
