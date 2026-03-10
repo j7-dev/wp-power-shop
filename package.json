@@ -32,5 +32,19 @@
 		"@power/eslint-config": "workspace:*",
 		"@power/tailwind-config": "workspace:*",
 		"@power/typescript-config": "workspace:*"
+	},
+	"dependenciesMeta": {
+		"antd-toolkit": {
+			"injected": true
+		},
+		"@power/eslint-config": {
+			"injected": true
+		},
+		"@power/tailwind-config": {
+			"injected": true
+		},
+		"@power/typescript-config": {
+			"injected": true
+		}
 	}
 }
