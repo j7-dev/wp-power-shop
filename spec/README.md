@@ -8,6 +8,7 @@
 
 | 文件 | 說明 |
 |------|------|
+| [Event Storming](./es.md) | Actor、Aggregate、Command、Read Model 業務流程規格 |
 | [功能需求](./functional-requirements.md) | 6 大模組的完整功能需求清單 |
 | [非功能需求](./non-functional-requirements.md) | 效能、安全性、相容性、可維護性等品質屬性 |
 | [使用者故事](./user-stories.md) | 以使用者角度描述的故事與驗收標準（Gherkin 風格） |
