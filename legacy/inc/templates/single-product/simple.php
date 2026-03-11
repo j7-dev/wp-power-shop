@@ -24,7 +24,8 @@ if (empty($regular_price) && empty($sales_price)) {
 	$sales_price   = $product->get_sale_price();
 }
 
-if (strpos($_SERVER['REQUEST_URI'], Bootstrap::KEBAB) === false) {
+$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? \sanitize_text_field( \wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+if (strpos($request_uri, Bootstrap::KEBAB) === false) {
 	// 如果不包含 Bootstrap::KEBAB 字串，有可能在其他編輯器預覽，則不加入 ps-not-ready class
 	$class = '';
 } else {

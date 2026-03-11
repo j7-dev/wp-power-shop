@@ -65,13 +65,15 @@ final class Entry {
 		}
 
 		global $post;
-		$is_product = false;
+		$product = null;
 		if ($post instanceof \WP_Post) {
-			$product    = \wc_get_product( $post->ID );
-			$is_product = $product instanceof \WC_Product;
+			$maybe_product = \wc_get_product( $post->ID );
+			if ($maybe_product instanceof \WC_Product) {
+				$product = $maybe_product;
+			}
 		}
 
-		if (!$is_product) {
+		if (!$product instanceof \WC_Product) {
 			// 不是商品銷售頁就顯示商品列表
 			$admin_bar->add_menu(
 				[
@@ -88,13 +90,14 @@ final class Entry {
 			return;
 		}
 		// 是商品銷售頁就顯示商品編輯
+		$product_id = $product->get_id();
 		$admin_bar->add_menu(
 			[
 				'id'     => Plugin::$kebab,
 				'parent' => null,
 				'group'  => null,
 				'title'  => '編輯商品', // you can use img tag with image link. it will show the image icon Instead of the title.
-				'href'   => \admin_url("admin.php?page=power-shop#/products/edit/{$product->get_id()}"),
+				'href'   => \admin_url("admin.php?page=power-shop#/products/edit/{$product_id}"),
 				'meta'   => [
 					'title' => \__( '編輯商品', 'power_shop' ), // This title will show on hover
 				],

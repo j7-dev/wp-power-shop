@@ -58,13 +58,6 @@ final class Api {
 				return [
 					'id'   => $product_category->term_id,
 					'name' => $product_category->name,
-					// 'slug' => $product_category->slug,
-					// 'parent' => $product_category->parent,
-					// 'description' => $product_category->description,
-					// 'display' => $product_category->display,
-					// 'image' => $product_category->image,
-					// 'menu_order' => $product_category->menu_order,
-					// 'count' => $product_category->count,
 				];
 			},
 			$product_categories
@@ -73,6 +66,11 @@ final class Api {
 		return \rest_ensure_response( $formatted_product_categories );
 	}
 
+	/**
+	 * Register product categories API
+	 *
+	 * @return void
+	 */
 	public function register_product_categories_api() {
 		$endpoint = self::PRODUCT_CATEGORY_ENDPOINT;
 		\register_rest_route(
@@ -86,6 +84,12 @@ final class Api {
 		);
 	}
 
+	/**
+	 * Postmeta callback
+	 *
+	 * @param \WP_REST_Request $request The request object.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
 	public function postmeta_callback( $request ) {
 		$post_id = $request['id'];
 
@@ -105,6 +109,11 @@ final class Api {
 		}
 	}
 
+	/**
+	 * Register postmeta API
+	 *
+	 * @return void
+	 */
 	public function register_postmeta_api() {
 		$endpoint = self::POSTMETA_API_ENDPOINT;
 		\register_rest_route(
@@ -118,12 +127,22 @@ final class Api {
 		);
 	}
 
+	/**
+	 * Ajax nonce callback
+	 *
+	 * @return \WP_REST_Response
+	 */
 	public function ajaxnonce_callback() {
 		$ajaxNonce = \wp_create_nonce( Plugin::$kebab );
 
 		return \rest_ensure_response( $ajaxNonce );
 	}
 
+	/**
+	 * Register ajax nonce API
+	 *
+	 * @return void
+	 */
 	public function register_ajaxnonce_api() {
 		$endpoint = self::AJAX_NONCE_ENDPOINT;
 		\register_rest_route(
@@ -137,6 +156,11 @@ final class Api {
 		);
 	}
 
+	/**
+	 * Purge Kinsta cache callback
+	 *
+	 * @return \WP_REST_Response
+	 */
 	public function purge_kinsta_cache_callback() {
 		if ( class_exists( 'Kinsta\Cache_Purge' ) ) {
 			try {
@@ -155,6 +179,11 @@ final class Api {
 		return \rest_ensure_response( 'not find kinsta mu-plugin' );
 	}
 
+	/**
+	 * Register purge Kinsta cache API
+	 *
+	 * @return void
+	 */
 	public function register_purge_kinsta_cache_api() {
 		$endpoint = self::PURGE_KINSTA_CACHE_ENDPOINT;
 		\register_rest_route(

@@ -6,14 +6,25 @@ namespace J7\PowerShopV2;
 
 use J7\PowerShop\Plugin;
 
+/**
+ * Class ShortCode
+ */
 final class ShortCode {
 	use \J7\WpUtils\Traits\SingletonTrait;
 
-	function __construct() {
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
 		\add_shortcode( Plugin::$snake . '_products', [ $this, 'products_shortcode_callback' ] );
 		\add_shortcode( Plugin::$snake . '_countdown', [ $this, 'countdown_shortcode_callback' ] );
 	}
 
+	/**
+	 * Products shortcode callback
+	 *
+	 * @return string
+	 */
 	public function products_shortcode_callback(): string {
 		// 每次進到頁面先清空購物車 #45
 		// if (!is_admin()) {
@@ -26,7 +37,8 @@ final class ShortCode {
 		// }
 
 		// 如果不是 power shop 頁面，就不 render
-		if ( strpos( $_SERVER['REQUEST_URI'], Plugin::$kebab ) === false ) {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? \sanitize_text_field( \wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		if ( strpos( $request_uri, Plugin::$kebab ) === false ) {
 			return 'Power Shop 只能在 Power Shop 頁面使用';
 		}
 
@@ -46,7 +58,7 @@ final class ShortCode {
 
 		$btn_color = $settings['btnColor'] ?? '#1677ff';
 
-		$handled_shop_meta = $this->handleShopMeta( $shop_meta );
+		$handled_shop_meta = $this->handle_shop_meta( $shop_meta );
 
 		$html = '';
 		ob_start();
@@ -119,10 +131,10 @@ final class ShortCode {
 	 * 檢查 shop_meta 裡面的商品與 woocommerce 裡面的商品是否 type 一致
 	 * 如果不一致，就更新 shop_meta 裡面的 data
 	 *
-	 * @param array $shop_meta
+	 * @param array $shop_meta The shop meta data.
 	 * @return array
 	 */
-	private function handleShopMeta( array $shop_meta ): array {
+	private function handle_shop_meta( array $shop_meta ): array {
 		$need_update = false;
 		// 檢查當前的 shop_meta 裡面的商品與 woocommerce 裡面的商品是否 type 一致
 		foreach ( $shop_meta as $key => $meta ) {
@@ -181,10 +193,16 @@ final class ShortCode {
 		return $shop_meta;
 	}
 
+	/**
+	 * Countdown shortcode callback
+	 *
+	 * @return string
+	 */
 	public function countdown_shortcode_callback(): string {
 
 		// 如果不是 power shop 頁面，就不 render
-		if ( strpos( $_SERVER['REQUEST_URI'], Plugin::$kebab ) === false ) {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? \sanitize_text_field( \wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		if ( strpos( $request_uri, Plugin::$kebab ) === false ) {
 			return 'Power Shop 只能在 Power Shop 頁面使用';
 		}
 

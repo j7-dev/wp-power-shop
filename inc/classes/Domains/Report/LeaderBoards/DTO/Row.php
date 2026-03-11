@@ -24,25 +24,25 @@ final class Row {
 	 * @param array{
 	 *    0: array{
 	 *        display: string,
-	 *        value: string
-	 *        format?:string
+	 *        value: string,
+	 *        format?: string
 	 *    },
 	 *    1: array{
 	 *        display: string,
-	 *        value: int
-	 *        format?:string
+	 *        value: int,
+	 *        format?: string
 	 *    },
 	 *    2: array{
 	 *        display: string,
-	 *        value: float
-	 *        format?:string
-	 *    },
+	 *        value: float,
+	 *        format?: string
+	 *    }
 	 * } $row
 	 */
-	public function __construct( $row ) {
-		$this->name  = isset($row[0]['value']) ? (string) $row[0]['value'] : '';
-		$this->count = isset($row[1]['value']) ? (int) $row[1]['value'] : 0;
-		$this->total = isset($row[2]['value']) ? (float) $row[2]['value'] : 0.0;
+	public function __construct( array $row ) {
+		$this->name  = (string) $row[0]['value'];
+		$this->count = (int) $row[1]['value'];
+		$this->total = (float) $row[2]['value'];
 	}
 
 	/**

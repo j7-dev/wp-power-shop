@@ -3,14 +3,14 @@
  * Power Shop CPT
  */
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace J7\PowerShopV2;
 
 use J7\PowerShop\Plugin;
 
 /**
- * class CPT
+ * Class CPT
  */
 final class CPT {
 	use \J7\WpUtils\Traits\SingletonTrait;
@@ -29,9 +29,23 @@ final class CPT {
 	const BUY_LICENSE_LINK = Bootstrap::BUY_LICENSE_LINK;
 	const SUPPORT_EMAIL    = Bootstrap::SUPPORT_EMAIL;
 
+	/**
+	 * Count of published and draft posts.
+	 *
+	 * @var int
+	 */
 	private $count = 0;
-	private $iel   = true;
 
+	/**
+	 * Whether the limit is exceeded.
+	 *
+	 * @var bool
+	 */
+	private $iel = true;
+
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		\add_action( 'init', [ $this, 'init' ] );
 		\add_action( 'rest_api_init', [ $this, 'add_post_meta' ] );
@@ -53,11 +67,22 @@ final class CPT {
 		// \add_action('admin_notices', [ $this, 'limit_admin_notices' ], 999);
 	}
 
+	/**
+	 * Add query var for report
+	 *
+	 * @param array $vars The query vars.
+	 * @return array
+	 */
 	public function add_query_for_report( $vars ) {
 		$vars[] = self::VAR;
 		return $vars;
 	}
 
+	/**
+	 * Initialize CPT and rewrite rules
+	 *
+	 * @return void
+	 */
 	public function init(): void {
 		Functions::register_cpt( self::CPT_LABEL );
 
@@ -78,6 +103,11 @@ final class CPT {
 		$this->iel = AXD::gt($this->count);
 	}
 
+	/**
+	 * Add post meta to REST API
+	 *
+	 * @return void
+	 */
 	public function add_post_meta(): void {
 		foreach ( self::POST_META as $meta_key ) {
 			\register_meta(
@@ -100,6 +130,12 @@ final class CPT {
 		// \add_filter( 'rewrite_rules_array', [ $this, 'custom_post_type_rewrite_rules' ] );
 	}
 
+	/**
+	 * Custom post type rewrite rules
+	 *
+	 * @param array $rules The rewrite rules.
+	 * @return array
+	 */
 	public function custom_post_type_rewrite_rules( $rules ) {
 		global $wp_rewrite;
 		if ( is_object( $wp_rewrite ) && ! is_null( $wp_rewrite ) ) {
@@ -115,19 +151,22 @@ final class CPT {
 		Functions::add_metabox(
 			[
 				'id'    => self::RENDER_ID_1,
-				'label' => __( 'Added Products', Plugin::$kebab ),
+				'label' => __( 'Added Products', 'power-shop' ),
 			]
 		);
 		Functions::add_metabox(
 			[
 				'id'    => self::RENDER_ID_2,
-				'label' => __( 'Sales Stats', Plugin::$kebab ),
+				'label' => __( 'Sales Stats', 'power-shop' ),
 			]
 		);
 	}
 
 	/**
 	 * 設定 {Plugin::$kebab}/{slug}/report 的 php template
+	 *
+	 * @param string $template The template path.
+	 * @return string
 	 */
 	public function load_report_template( $template ) {
 		$repor_template_path = Plugin::$dir . '/legacy/inc/templates/report.php';
@@ -142,6 +181,11 @@ final class CPT {
 
 	/**
 	 * 設定預設的 post meta data
+	 *
+	 * @param int      $post_id The post ID.
+	 * @param \WP_Post $post    The post object.
+	 * @param bool     $update  Whether this is an update.
+	 * @return void
 	 */
 	public function set_default_power_shop_meta( $post_id, $post, $update ) {
 		// Get the post object
@@ -158,6 +202,14 @@ final class CPT {
 		}
 	}
 
+	/**
+	 * Limit post publishing
+	 *
+	 * @param int      $post_id   The post ID.
+	 * @param \WP_Post $post       The post object.
+	 * @param string   $old_status The old status.
+	 * @return void
+	 */
 	public function post_published_limit( $post_id, $post, $old_status ) {
 		if ( $this->iel ) {
 			$post = [ 'post_status' => 'draft' ];
@@ -165,6 +217,13 @@ final class CPT {
 		}
 	}
 
+	/**
+	 * Remove row actions
+	 *
+	 * @param array    $actions The actions.
+	 * @param \WP_Post $post    The post object.
+	 * @return array
+	 */
 	public function remove_row_actions( $actions, $post ) {
 		if ( self::CPT_SLUG === $post->post_type ) {
 			unset( $actions['inline hide-if-no-js'] );
@@ -173,6 +232,11 @@ final class CPT {
 		return $actions;
 	}
 
+	/**
+	 * Limit admin head
+	 *
+	 * @return void
+	 */
 	public function limit_admin_head() {
 		$screen = \get_current_screen();
 		if ( 'edit-' . self::CPT_SLUG !== $screen->id ) {
@@ -202,6 +266,11 @@ final class CPT {
 		}
 	}
 
+	/**
+	 * Enqueue limit CSS and JS
+	 *
+	 * @return void
+	 */
 	public function limit_css_and_js() {
 		if ( $this->iel ) {
 			\wp_enqueue_style( self::CPT_SLUG, Plugin::$url . '/legacy/inc/assets/css/main.css' );
@@ -220,6 +289,11 @@ final class CPT {
 		}
 	}
 
+	/**
+	 * Display limit admin notices
+	 *
+	 * @return void
+	 */
 	public function limit_admin_notices() {
 		$screen = \get_current_screen();
 
@@ -253,6 +327,11 @@ EOD;
 		echo $html;
 	}
 
+	/**
+	 * Add license code submenu
+	 *
+	 * @return void
+	 */
 	public function add_lc_submenu() {
 		\add_submenu_page(
 			'edit.php?post_type=' . self::CPT_SLUG,

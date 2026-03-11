@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace J7\PowerShopV2;
 
@@ -8,13 +8,19 @@ use J7\PowerShop\Plugin;
 use J7\PowerShopV2\Functions;
 
 
+/**
+ * Class Order
+ */
 final class Order {
 	use \J7\WpUtils\Traits\SingletonTrait;
 
 
 	const GET_ORDERS_ACTION = 'handle_get_orders';
 
-	function __construct() {
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
 		foreach ([
 			self::GET_ORDERS_ACTION,
 		] as $action) {
@@ -26,27 +32,32 @@ final class Order {
 		\add_action('manage_shop_order_posts_custom_column', [ $this, 'custom_orders_list_column_content' ], 20, 2);
 	}
 
+	/**
+	 * Handle get orders callback
+	 *
+	 * @return void
+	 */
 	public function handle_get_orders_callback() {
 
 		// Security check
 		// \check_ajax_referer(Plugin::$kebab, 'nonce');
 
-		$post_id = \sanitize_text_field($_POST['post_id'] ?? 0);
+		$post_id = \sanitize_text_field( wp_unslash( $_POST['post_id'] ?? 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if (empty($post_id)) {
 			return;
 		}
 
-		$paged           = \sanitize_text_field($_POST['paged'] ?? 1);
-		$limit           = \sanitize_text_field($_POST['limit'] ?? 10);
-		$status_stringfy = \sanitize_text_field($_POST['status'] ?? '[]');
+		$paged           = \sanitize_text_field( wp_unslash( $_POST['paged'] ?? 1 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$limit           = \sanitize_text_field( wp_unslash( $_POST['limit'] ?? 10 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$status_stringfy = \sanitize_text_field( wp_unslash( $_POST['status'] ?? '[]' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$status = Functions::json_parse($status_stringfy, []);
-		$email  = \sanitize_text_field($_POST['email'] ?? '');
+		$email  = \sanitize_text_field( wp_unslash( $_POST['email'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		$date_created = \sanitize_text_field($_POST['date_created'] ?? '');
+		$date_created = \sanitize_text_field( wp_unslash( $_POST['date_created'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		$is_download = \sanitize_text_field($_POST['is_download'] ?? 0);
+		$is_download = \sanitize_text_field( wp_unslash( $_POST['is_download'] ?? 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$args = [
 			'type'         => 'shop_order', // 'shop_order' | 'shop_order_refund'
@@ -73,73 +84,6 @@ final class Order {
 			unset($args['date_created']);
 		}
 
-		function format_orders( $order ) {
-			$items       = $order->get_items() ?? [];
-			$formatItems = [];
-			$i           = 0;
-			foreach ($items as $item) {
-				$formatItems[ $i ]['item_id']      = $item->get_id();
-				$formatItems[ $i ]['name']         = $item->get_name();
-				$formatItems[ $i ]['quantity']     = $item->get_quantity();
-				$formatItems[ $i ]['line_total']   = $order->get_item_meta($item->get_id(), '_line_total', true);
-				$formatItems[ $i ]['total']        = $item->get_total();
-				$formatItems[ $i ]['product_id']   = $item->get_product_id();
-				$formatItems[ $i ]['variation_id'] = $item->get_variation_id();
-				++$i;
-			}
-			$total           = $order->get_total();
-			$status          = $order->get_status();
-			$shipping        = $order->get_shipping_total();
-			$shipping_method = $order->get_shipping_method();
-			$customer        = $order->get_user();
-			if ($customer) {
-				$customer_id           = $customer->ID;
-				$customer_display_name = $customer->display_name;
-			} else {
-				$customer_id           = 0;
-				$customer_display_name = $order->get_billing_email();
-			}
-
-			return [
-				'items'           => $formatItems,
-				'total'           => $total,
-				'status'          => $status,
-				'shipping'        => $shipping,
-				'shipping_method' => $shipping_method,
-				'order_id'        => $order->get_id(),
-				'customer'        => [
-					'id'           => $customer_id,
-					'display_name' => $customer_display_name,
-				],
-				'key'             => $order->get_id(),
-			];
-		}
-
-		function sum_order( $a, $b ) {
-			return $a + $b->get_total();
-		}
-
-		function get_sum_by_date( $date_no, $args ) {
-			// date_default_timezone_set('Asia/Taipei');
-			unset($args['paginate']);
-			$args['limit'] = -1;
-
-			if ($date_no === -1) {
-				$sum_args = $args;
-			} else {
-				$sum_args = array_merge($args, [ 'date_created' => date('Y-m-d', strtotime('-' . $date_no . ' day')) . '...' . date('Y-m-d') ]);
-			}
-
-			$the_orders = \wc_get_orders($sum_args);
-
-			$sum         = array_reduce($the_orders, __NAMESPACE__ . '\\sum_order', 0);
-			$order_count = count($the_orders);
-			return [
-				'sum'       => $sum,
-				'order_qty' => $order_count,
-			];
-		}
-
 		/**
 		 * NOTE order status
 		 * wc-pending
@@ -158,27 +102,14 @@ final class Order {
 
 		$results = \wc_get_orders($args);
 		$orders  = $results->orders ?? [];
-		$list    = array_map(__NAMESPACE__ . '\\format_orders', $orders);
-
-		// TODO 判斷是否為下載EXCEL需求
-		// if (!empty($is_download)) {
-
-		// $return = [
-		// 'message'  => 'success download',
-		// 'data'       => []
-		// ];
-
-		// \wp_send_json($return);
-
-		// \wp_die();
-		// }
+		$list    = array_map([ self::class, 'format_orders' ], $orders);
 
 		$total         = $results->total ?? 0;
 		$max_num_pages = $results->max_num_pages ?? 1;
 
-		$sumTotal       = get_sum_by_date(-1, $args);
-		$sumToday       = get_sum_by_date(0, $args);
-		$sumWeek        = get_sum_by_date(7, $args);
+		$sumTotal       = self::get_sum_by_date(-1, $args);
+		$sumToday       = self::get_sum_by_date(0, $args);
+		$sumWeek        = self::get_sum_by_date(7, $args);
 		$order_statuses = \wc_get_order_statuses();
 		$orderStatuses  = [];
 		$i              = 0;
@@ -208,6 +139,99 @@ final class Order {
 		\wp_die();
 	}
 
+	/**
+	 * Format orders for response
+	 *
+	 * @param \WC_Order $order The order object.
+	 * @return array
+	 */
+	public static function format_orders( $order ) {
+		$items       = $order->get_items() ?? [];
+		$formatItems = [];
+		$i           = 0;
+		foreach ($items as $item) {
+			$formatItems[ $i ]['item_id']      = $item->get_id();
+			$formatItems[ $i ]['name']         = $item->get_name();
+			$formatItems[ $i ]['quantity']     = $item->get_quantity();
+			$formatItems[ $i ]['line_total']   = $order->get_item_meta($item->get_id(), '_line_total', true);
+			$formatItems[ $i ]['total']        = $item->get_total();
+			$formatItems[ $i ]['product_id']   = $item->get_product_id();
+			$formatItems[ $i ]['variation_id'] = $item->get_variation_id();
+			++$i;
+		}
+		$total           = $order->get_total();
+		$status          = $order->get_status();
+		$shipping        = $order->get_shipping_total();
+		$shipping_method = $order->get_shipping_method();
+		$customer        = $order->get_user();
+		if ($customer) {
+			$customer_id           = $customer->ID;
+			$customer_display_name = $customer->display_name;
+		} else {
+			$customer_id           = 0;
+			$customer_display_name = $order->get_billing_email();
+		}
+
+		return [
+			'items'           => $formatItems,
+			'total'           => $total,
+			'status'          => $status,
+			'shipping'        => $shipping,
+			'shipping_method' => $shipping_method,
+			'order_id'        => $order->get_id(),
+			'customer'        => [
+				'id'           => $customer_id,
+				'display_name' => $customer_display_name,
+			],
+			'key'             => $order->get_id(),
+		];
+	}
+
+	/**
+	 * Sum order totals
+	 *
+	 * @param float     $a The accumulated sum.
+	 * @param \WC_Order $b The order.
+	 * @return float
+	 */
+	public static function sum_order( $a, $b ) {
+		return $a + $b->get_total();
+	}
+
+	/**
+	 * Get sum by date
+	 *
+	 * @param int   $date_no The number of days back.
+	 * @param array $args    The query args.
+	 * @return array
+	 */
+	public static function get_sum_by_date( $date_no, $args ) {
+		// date_default_timezone_set('Asia/Taipei');
+		unset($args['paginate']);
+		$args['limit'] = -1;
+
+		if ($date_no === -1) {
+			$sum_args = $args;
+		} else {
+			$sum_args = array_merge($args, [ 'date_created' => date('Y-m-d', strtotime('-' . $date_no . ' day')) . '...' . date('Y-m-d') ]);
+		}
+
+		$the_orders = \wc_get_orders($sum_args);
+
+		$sum         = array_reduce($the_orders, [ self::class, 'sum_order' ], 0);
+		$order_count = count($the_orders);
+		return [
+			'sum'       => $sum,
+			'order_qty' => $order_count,
+		];
+	}
+
+	/**
+	 * Custom shop order column
+	 *
+	 * @param array $columns The columns.
+	 * @return array
+	 */
 	public function custom_shop_order_column( $columns ) {
 		$reordered_columns = [];
 
@@ -216,12 +240,19 @@ final class Order {
 			$reordered_columns[ $key ] = $column;
 			if ($key == 'order_number') {
 				// Inserting after "Status" column
-				$reordered_columns[ Plugin::$snake . '_post_id' ] = \__('Linked Power Shop', Plugin::$kebab);
+				$reordered_columns[ Plugin::$snake . '_post_id' ] = \__('Linked Power Shop', 'power-shop');
 			}
 		}
 		return $reordered_columns;
 	}
 
+	/**
+	 * Custom orders list column content
+	 *
+	 * @param string $column  The column name.
+	 * @param int    $post_id The post ID.
+	 * @return void
+	 */
 	public function custom_orders_list_column_content( $column, $post_id ) {
 		switch ($column) {
 			case Plugin::$snake . '_post_id':

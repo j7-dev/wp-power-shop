@@ -6,6 +6,9 @@ namespace J7\PowerShopV2;
 
 use J7\PowerShop\Plugin;
 
+/**
+ * Class Ajax
+ */
 final class Ajax {
 	use \J7\WpUtils\Traits\SingletonTrait;
 
@@ -13,18 +16,26 @@ final class Ajax {
 	const GET_POST_META_ACTION    = 'ps_handle_get_post_meta';
 	const UPDATE_POST_META_ACTION = 'handle_update_post_meta';
 
-	function __construct() {
-		foreach ([ self::GET_POST_META_ACTION, self::UPDATE_POST_META_ACTION ] as $action) {
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		foreach ( [ self::GET_POST_META_ACTION, self::UPDATE_POST_META_ACTION ] as $action) {
 			\add_action('wp_ajax_' . $action, [ $this, $action . '_callback' ]);
 			\add_action('wp_ajax_nopriv_' . $action, [ $this, $action . '_callback' ]);
 		}
 	}
 
+	/**
+	 * Handle get post meta callback
+	 *
+	 * @return void
+	 */
 	public function ps_handle_get_post_meta_callback() {
 		// Security check
 		// \check_ajax_referer(Plugin::$kebab, 'nonce');
-		$post_id  = \sanitize_text_field($_POST['post_id'] ?? '');
-		$meta_key = \sanitize_text_field($_POST['meta_key'] ?? '');
+		$post_id  = \sanitize_text_field( wp_unslash( $_POST['post_id'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$meta_key = \sanitize_text_field( wp_unslash( $_POST['meta_key'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if (empty($post_id)) {
 			return;
@@ -45,12 +56,17 @@ final class Ajax {
 		\wp_die();
 	}
 
+	/**
+	 * Handle update post meta callback
+	 *
+	 * @return void
+	 */
 	public function handle_update_post_meta_callback() {
 		// Security check
 		// \check_ajax_referer(Plugin::$kebab, 'nonce');
-		$post_id    = \sanitize_text_field($_POST['post_id'] ?? '');
-		$meta_key   = \sanitize_text_field($_POST['meta_key'] ?? '');
-		$meta_value = \sanitize_text_field($_POST['meta_value'] ?? '');
+		$post_id    = \sanitize_text_field( wp_unslash( $_POST['post_id'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$meta_key   = \sanitize_text_field( wp_unslash( $_POST['meta_key'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$meta_value = \sanitize_text_field( wp_unslash( $_POST['meta_value'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if (empty($post_id) || empty($meta_key)) {
 			return;

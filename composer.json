@@ -40,7 +40,8 @@
     "phpstan/phpstan": "@stable",
     "php-stubs/woocommerce-stubs": "@stable",
     "php-stubs/wordpress-stubs": "@stable",
-    "phpstan/extension-installer": "@stable"
+    "phpstan/extension-installer": "@stable",
+    "arts/elementor-stubs": "^3.35"
   },
   "scripts": {
     "lint": "phpcs"

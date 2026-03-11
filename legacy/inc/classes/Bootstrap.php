@@ -11,7 +11,7 @@ use J7\PowerShop\Plugin;
 use Kucrut\Vite;
 
 /**
- * class Bootstrap
+ * Class Bootstrap
  * [ ] - 使用COUPON
  */
 class Bootstrap {
@@ -73,7 +73,8 @@ class Bootstrap {
 			}
 		} else {
 			// 前台網頁必須包含 {Plugin::$kebab} 字串 才引用
-			if ( strpos( $_SERVER['REQUEST_URI'], Plugin::$kebab ) === false ) {
+			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? \sanitize_text_field( \wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+			if ( strpos( $request_uri, Plugin::$kebab ) === false ) {
 				return;
 			}
 		}
@@ -173,6 +174,14 @@ class Bootstrap {
 		\wp_enqueue_style( 'flipdown', Plugin::$url . '/legacy/inc/assets/packages/flipdown/flipdown.min.css', [], Plugin::$version );
 	}
 
+	/**
+	 * Set default value on power shop create
+	 *
+	 * @param int      $post_ID The post ID.
+	 * @param \WP_Post $post    The post object.
+	 * @param bool     $update  Whether this is an existing post being updated.
+	 * @return void
+	 */
 	public function set_default_value_on_power_shop_create( $post_ID, $post, $update ) {
 		// POSTTYPE 為 "power-shop" 且 是新增操作 且 安裝了 Elementor 才執行
 		if ( $post->post_type === Plugin::$kebab && ! $update && defined( 'ELEMENTOR_VERSION' ) ) {

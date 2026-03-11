@@ -78,7 +78,7 @@ final class Bootstrap {
 		);
 
 		$post_id   = \get_the_ID();
-		$permalink = $post_id ? \get_permalink( $post_id ) : '';
+		$permalink = $post_id ? ( \get_permalink( $post_id ) ?: '' ) : '';
 
 		/** @var array<string> $active_plugins */
 		$active_plugins = \get_option( 'active_plugins', [] );

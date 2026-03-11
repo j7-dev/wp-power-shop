@@ -10,7 +10,7 @@ define('CUSTOMER_ID', 1);
 
 
 
-$order_status = [ 'wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed', 'wc-wmp-in-transit', 'wc-wmp-shipped', 'wc-checkout-draft', 'wc-ry-at-cvs', 'wc-ry-out-cvs' ];
+$wc_order_status = [ 'wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed', 'wc-wmp-in-transit', 'wc-wmp-shipped', 'wc-checkout-draft', 'wc-ry-at-cvs', 'wc-ry-out-cvs' ];
 
 // 检查 WooCommerce 是否已激活
 if (!function_exists('WC')) {
@@ -37,26 +37,26 @@ try {
 	for ($i = 0; $i < ORDER_QTY; $i++) {
 		$item_qty = mt_rand(1, 4);
 
-		$order = wc_create_order();
+		$wc_order = wc_create_order();
 		for ($j = 0; $j < $item_qty; $j++) {
-			$order->add_product(wc_get_product(getRandomArray($product_ids)), mt_rand(1, 10));
+			$wc_order->add_product(wc_get_product(get_random_array($product_ids)), mt_rand(1, 10));
 		}
-		$order->set_customer_id(CUSTOMER_ID);
-		$order->calculate_totals();
+		$wc_order->set_customer_id(CUSTOMER_ID);
+		$wc_order->calculate_totals();
 
 		// 設定訂單狀態
-		$order->set_status(getRandomArray($order_status));
+		$wc_order->set_status(get_random_array($wc_order_status));
 
 		// 更新建立日期
-		$order->set_date_created(new WC_DateTime(getRandomTime()));
+		$wc_order->set_date_created(new WC_DateTime(get_random_time()));
 
 		// 更新 meta
-		$order->update_meta_data('power_shop_post_id', SHOP_POST_ID);
+		$wc_order->update_meta_data('power_shop_post_id', SHOP_POST_ID);
 
 		// 保存訂單變更
-		$order->save();
+		$wc_order->save();
 
-		$output_order_ids .= $order->get_id() . ', ';
+		$output_order_ids .= $wc_order->get_id() . ', ';
 	}
 
 

@@ -1,12 +1,15 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace J7\PowerShopV2;
 
 use J7\PowerShop\Plugin;
 use function _\find;
 
+/**
+ * Class Cart
+ */
 final class Cart {
 	use \J7\WpUtils\Traits\SingletonTrait;
 
@@ -15,7 +18,10 @@ final class Cart {
 	const REMOVE_CART_ACTION = 'handle_remove_cart';
 	const GET_CART_ACTION    = 'handle_get_cart';
 
-	function __construct() {
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
 		\add_action('woocommerce_before_calculate_totals', [ $this, 'price_refresh' ]);
 		foreach ([
 			self::ADD_CART_ACTION,
@@ -28,6 +34,12 @@ final class Cart {
 		\add_action('woocommerce_checkout_create_order_line_item', [ $this, 'save_custom_data_to_order_meta' ], 10, 4);
 	}
 
+	/**
+	 * Refresh price based on custom meta
+	 *
+	 * @param \WC_Cart $cart_object The cart object.
+	 * @return void
+	 */
 	public function price_refresh( $cart_object ) {
 
 		foreach ($cart_object->get_cart_contents() as $key => $item) {
@@ -40,12 +52,17 @@ final class Cart {
 		}
 	}
 
+	/**
+	 * Handle add cart callback
+	 *
+	 * @return void
+	 */
 	public function handle_add_cart_callback() {
 		// Security check
 		// \check_ajax_referer(Plugin::$kebab, 'nonce');
 
 		// global $woocommerce;
-		$post_id = \sanitize_text_field($_POST['post_id'] ?? 0);
+		$post_id = \sanitize_text_field( wp_unslash( $_POST['post_id'] ?? 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if (empty($post_id)) {
 			wp_send_json_error(
 				[
@@ -54,10 +71,10 @@ final class Cart {
 				);
 			return;
 		}
-		$product_id         = \sanitize_text_field($_POST['id'] ?? 0);
-		$quantity           = \sanitize_text_field($_POST['quantity'] ?? 1);
-		$variation_id       = \sanitize_text_field($_POST['variation_id'] ?? 0);
-		$variation_stringfy = \sanitize_text_field($_POST['variation'] ?? '[]');
+		$product_id         = \sanitize_text_field( wp_unslash( $_POST['id'] ?? 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$quantity           = \sanitize_text_field( wp_unslash( $_POST['quantity'] ?? 1 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$variation_id       = \sanitize_text_field( wp_unslash( $_POST['variation_id'] ?? 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$variation_stringfy = \sanitize_text_field( wp_unslash( $_POST['variation'] ?? '[]' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$shop_meta_string   = \get_post_meta($post_id, Plugin::$snake . '_meta', true) ?? '[]';
 
 		try {
@@ -76,7 +93,7 @@ final class Cart {
 		$the_product_meta = find($shop_meta, [ 'productId' => $product_id ]) ?? [];
 
 		/**
-		 * @throws Exception Plugins can throw an exception to prevent adding to cart.
+		 * @throws \Exception Plugins can throw an exception to prevent adding to cart.
 		 * @param int   $product_id contains the id of the product to add to the cart.
 		 * @param int   $quantity contains the quantity of the item to add.
 		 * @param int   $variation_id ID of the variation being added to the cart.
@@ -125,13 +142,6 @@ final class Cart {
 				'quantity'     => $quantity,
 				'variation_id' => $variation_id,
 				'variation'    => $variation,
-				// 'variable'           => $_POST,
-				// 'empty'              => empty($variation_id),
-				// 'shop_meta'          => $shop_meta,
-				// 'the_product_meta'   => $the_product_meta,
-				// 'the_variation_meta' => $the_variation_meta,
-				// 'totals'             => $totals,
-				// 'SNAKE'              => Plugin::$snake,
 			],
 		];
 
@@ -140,11 +150,16 @@ final class Cart {
 		\wp_die();
 	}
 
+	/**
+	 * Handle remove cart callback
+	 *
+	 * @return void
+	 */
 	public function handle_remove_cart_callback() {
 		// Security check
 		// \check_ajax_referer(Plugin::$kebab, 'nonce');
 
-		$cart_item_key = \sanitize_text_field($_POST['cart_item_key'] ?? '');
+		$cart_item_key = \sanitize_text_field( wp_unslash( $_POST['cart_item_key'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		\WC()->cart->remove_cart_item($cart_item_key);
 
@@ -152,7 +167,7 @@ final class Cart {
 		$return = [
 			'message' => 'success',
 			'data'    => [
-				'variable' => $_POST,
+				'variable' => \array_map( 'sanitize_text_field', wp_unslash( $_POST ) ), // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			],
 		];
 
@@ -161,6 +176,11 @@ final class Cart {
 		\wp_die();
 	}
 
+	/**
+	 * Handle get cart callback
+	 *
+	 * @return void
+	 */
 	public function handle_get_cart_callback() {
 		// Security check
 		// \check_ajax_referer(Plugin::$kebab, 'nonce');
@@ -171,7 +191,7 @@ final class Cart {
 		$return = [
 			'message' => 'success',
 			'data'    => [
-				'variable' => $_POST,
+				'variable' => \array_map( 'sanitize_text_field', wp_unslash( $_POST ) ), // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				'totals'   => $totals,
 			],
 		];
@@ -181,6 +201,15 @@ final class Cart {
 		\wp_die();
 	}
 
+	/**
+	 * Save custom data to order meta
+	 *
+	 * @param \WC_Order_Item_Product $item          The order item.
+	 * @param string                 $cart_item_key  The cart item key.
+	 * @param array                  $values         The cart item values.
+	 * @param \WC_Order              $order          The order object.
+	 * @return void
+	 */
 	public function save_custom_data_to_order_meta( $item, $cart_item_key, $values, $order ) {
 		$meta_key = Plugin::$snake . '_post_id';
 		if (isset($values[ $meta_key ])) {

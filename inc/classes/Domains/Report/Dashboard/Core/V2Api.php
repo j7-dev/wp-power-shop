@@ -48,7 +48,6 @@ final class V2Api extends ApiBase {
 	 * @param \WP_REST_Request $request Request.
 	 *
 	 * @return \WP_REST_Response
-	 * @phpstan-ignore-next-line
 	 */
 	public function get_reports_dashboard_stats_callback( $request ) { // phpcs:ignore
 		$params = $request->get_query_params();
@@ -85,26 +84,35 @@ final class V2Api extends ApiBase {
 		'compare_value' => $compare_value,
 		] = $args;
 
-		$compare = new Compare( $args );
+		$compare_args = [
+			'after'         => (string) $after,
+			'before'        => (string) $before,
+			'compare_type'  => (string) $compare_type,
+			'compare_value' => (int) $compare_value,
+		];
+		$compare      = new Compare( $compare_args );
 
 		// 取得用戶
-		$leaderboards = new Leaderboards();
-		$customers    = $leaderboards->get_items(
-		[
-			'leaderboard' => 'customers',
-			'after'       => $after,
-			'before'      => $before,
-			'per_page'    => $per_page,
-		]
-		);
-		$products     = $leaderboards->get_items(
-		[
-			'leaderboard' => 'products',
-			'after'       => $after,
-			'before'      => $before,
-			'per_page'    => $per_page,
-		]
-		);
+		$leaderboards   = new Leaderboards();
+		$per_page_int   = (int) $per_page;
+		$after_str      = (string) $after;
+		$before_str     = (string) $before;
+		$all_boards     = $leaderboards->get_leaderboards( $per_page_int, $after_str, $before_str, '' );
+		$customers_data = [];
+		$products_data  = [];
+
+		foreach ( $all_boards as $board ) {
+			if ( ! is_array( $board ) ) {
+				continue;
+			}
+			$board_id = $board['id'] ?? '';
+			if ( $board_id === 'customers' ) {
+				$customers_data = $board['rows'] ?? [];
+			}
+			if ( $board_id === 'products' ) {
+				$products_data = $board['rows'] ?? [];
+			}
+		}
 
 		return new \WP_REST_Response(
 		[
@@ -135,8 +143,8 @@ final class V2Api extends ApiBase {
 				// 前 N 時間區間訂單未付款
 				'orders_count_unpaid_compared'    => Domains\Order\Utils\CRUD::get_order_count_in_range( $compare->after_compared, $compare->before_compared, [ 'pending', 'on-hold' ] ),
 
-				'products'                        => self::format_leaderboards( $products ), // phpstan-ignore-line
-				'customers'                       => self::format_leaderboards( $customers ), // phpstan-ignore-line
+				'products'                        => self::format_leaderboard_rows( $products_data ),
+				'customers'                       => self::format_leaderboard_rows( $customers_data ),
 				'intervals'                       => self::get_intervals_in_range( $compare->after, $compare->before ),
 			],
 		]
@@ -148,7 +156,7 @@ final class V2Api extends ApiBase {
 	 *
 	 * @param \DateTime $start_date 開始日期
 	 * @param \DateTime $end_date 結束日期
-	 * @return array<string, mixed>
+	 * @return list<array<string, mixed>>
 	 */
 	private static function get_intervals_in_range( \DateTime $start_date, \DateTime $end_date ) {
 
@@ -198,33 +206,23 @@ final class V2Api extends ApiBase {
 	}
 
 	/**
-	 * 格式化排行榜
-	 * TODO 因為 WC 預設的 get_items 組好的資料沒有 id, 或其他想要的資料 未來可以可以自己實現 get_items 方法
+	 * 格式化排行榜的 rows
 	 *
-	 * @param \WP_Error|\WP_REST_Response $leaderboards 排行榜
+	 * @param mixed $rows 排行榜 rows 資料
 	 * @return array<array{name: string, count: int, total: float}>
-	 * @throws \Exception 如果排行榜為 WP_Error
 	 */
-	private static function format_leaderboards( $leaderboards ): array {
+	private static function format_leaderboard_rows( mixed $rows ): array {
 
-		if ( \is_wp_error( $leaderboards ) ) {
-			throw new \Exception( $leaderboards->get_error_message() );
-		}
-
-		$leaderboards = $leaderboards->get_data();
-		if ( ! $leaderboards || !is_array( $leaderboards ) ) {
-			return [];
-		}
-
-		$rows = reset( $leaderboards );
-		$rows = $rows['rows'] ?? [];
-
-		if ( ! $rows || !is_array( $rows ) ) {
+		if ( ! is_array( $rows ) ) {
 			return [];
 		}
 
 		$formatted_leaderboards = [];
 		foreach ( $rows as $row ) {
+			if ( ! is_array( $row ) ) {
+				continue;
+			}
+			/** @var array{0: array{display: string, value: string, format?: string}, 1: array{display: string, value: int, format?: string}, 2: array{display: string, value: float, format?: string}} $row */
 			$row_dto                  = new Row( $row );
 			$formatted_leaderboards[] = $row_dto->to_array();
 		}
