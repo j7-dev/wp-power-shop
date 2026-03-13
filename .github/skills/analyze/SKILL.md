@@ -31,9 +31,9 @@ origin: custom
 - 從 `package.json` 的 `name`、`composer.json` 的 `name`、目錄名稱等來源推斷
 - 用 `ask_user` 向使用者確認最終 `{project_name}`
 
-### 3. 檢查 notebooklm（可選）
-- 嘗試查詢 notebooklm 中的 "GitHub Copilot CLI" 筆記本，取得 SKILL 與 instruction 規範的最佳實踐
-- 如果 notebooklm 不可用或找不到筆記本，不阻塞流程，繼續使用內建知識
+### 3. 檢查 notebook-lm（可選）
+- 嘗試查詢 notebook-lm MCP 中的 "GitHub Copilot CLI" 筆記本，取得 SKILL 與 instruction 規範的最佳實踐
+- 如果 notebook-lm 不可用或找不到筆記本，不阻塞流程，繼續使用內建知識
 
 ---
 
@@ -187,53 +187,145 @@ origin: project-analyze
 - 依賴版本必須從 lock file 或設定檔中讀取
 - 如果某個模式只出現一次，不算「慣例」，不需要特別列出
 
-### Phase 5：生成 copilot-instructions.md
+### Phase 5：生成 instructions 檔案
 
-生成專案級的開發指引檔案。
+遵照 [GitHub Copilot 路徑特定指令規範](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-custom-instructions#creating-path-specific-custom-instructions)，生成模組化的 Copilot 指引檔案。
 
-**大小檢查邏輯：**
-- 如果內容 ≤ 300 行 → 放在單一 `.github/copilot-instructions.md`
-- 如果內容 > 300 行 → 拆分放到 `.github/instructions/*.instructions.md`
+**核心原則：**
+- **全域檔案**（`.github/copilot-instructions.md`）只放**跨語言、跨框架**的通用規範
+- **路徑特定檔案**（`.github/instructions/*.md`）只放**該語言/框架的深度細節**
+- 兩者之間嚴禁產生衝突規則（衝突時 Copilot 行為為非決定性）
 
-**copilot-instructions.md 核心內容：**
+---
+
+#### 5-A：生成 `.github/copilot-instructions.md`（全域通用規範）
+
+此檔案套用到儲存庫所有操作，**不加** `applyTo` frontmatter。
+
+**必須包含的內容（聚焦通用，不放語言細節）：**
 
 ```markdown
 # {project_name} — 專案開發指引
 
 ## 專案概述
-{專案目的、核心功能、目標使用者}
+{專案類型（如：WordPress Plugin + React 前端混合專案）、核心功能、目標使用者}
+{前後端溝通方式，如：透過 REST API 溝通，前端不直接連線資料庫}
 
 ## 技術棧總覽
-{列出所有技術層及其技術棧}
+{列出所有技術層及其對應語言/框架，各一行描述}
 
-## 開發環境設定
-{安裝步驟、環境變數、啟動指令}
-
-## 專案架構
-{高層架構圖與說明}
-
-## 程式碼慣例
-{跨技術層的共通規範}
+## 溝通與註解風格
+- 所有程式碼註解使用繁體中文，技術名詞與程式碼維持英文
+- {其他專案溝通慣例}
 
 ## Git 工作流程
-{分支策略、commit 規範、PR 流程}
+- Commit message 格式：{Conventional Commits 或專案慣例}
+- 分支策略：{main/develop/feature 分支規則}
+- PR 基本安全檢查項目：{安全審查重點}
 
-## 測試策略
-{各技術層的測試方式與覆蓋率要求}
+## 通用架構決策
+{高層架構原則，如：MVC 架構、單向資料流、API-first 設計等}
 
-## 部署流程
-{CI/CD、部署指令、環境}
+## 全域建置指令
+```bash
+{根目錄的建置、啟動、測試指令}
+```
 ```
 
-**拆分策略（當內容過長時）：**
+---
 
-| 檔案名稱 | 內容 |
-|-----------|------|
-| `general.instructions.md` | 專案概述、架構、共通規範 |
-| `{tech-layer}.instructions.md` | 各技術層特有的開發規範 |
-| `git-workflow.instructions.md` | Git 工作流程 |
-| `testing.instructions.md` | 測試策略 |
-| `deployment.instructions.md` | 部署流程 |
+#### 5-B：生成 `.github/instructions/react-instructions.md`（React 前端專屬）
+
+**條件：** 只有在專案中偵測到 React / TypeScript 前端時才生成。
+
+開頭必須加上 `applyTo` frontmatter：
+
+```markdown
+---
+applyTo: "**/*.ts,**/*.tsx"
+---
+
+# {project_name} — React 前端開發規範
+
+## 元件寫法
+- 強制使用 Functional Components，嚴禁 Class Components
+- {從實際程式碼觀察到的元件組織方式}
+
+## Hooks 規範
+- `useEffect` 必須明確宣告依賴陣列，不可遺漏依賴項目
+- 效能優化：{從程式碼判斷何時使用 useMemo/useCallback}
+- {觀察到的自訂 hooks 命名與組織慣例}
+
+## 狀態管理
+- {專案使用的狀態管理庫（Redux / Zustand / Context 等）及其使用原則}
+
+## UI 套件
+- {專案使用的 UI 框架（Tailwind CSS / Ant Design / MUI 等）及慣例}
+
+## TypeScript 型別安全
+- 嚴禁使用 `any`，優先定義明確的 `interface` 或 `type`
+- {從程式碼觀察到的型別定義慣例}
+
+## 前端測試
+```bash
+{前端測試指令（Jest / Vitest / React Testing Library）}
+```
+```
+
+---
+
+#### 5-C：生成 `.github/instructions/wordpress-instructions.md`（WordPress 後端專屬）
+
+**條件：** 只有在專案中偵測到 WordPress / PHP 後端時才生成。
+
+開頭必須加上 `applyTo` frontmatter：
+
+```markdown
+---
+applyTo: "**/*.php"
+---
+
+# {project_name} — WordPress 後端開發規範
+
+## WordPress 命名慣例
+- 使用底線命名法（snake_case），與 WordPress Core 保持一致
+- 自訂函式必須加上專屬前綴（如 `{prefix}_function_name()`）以避免命名衝突
+
+## 資安與資料過濾（必須遵守）
+- 所有使用者輸入必須用 WordPress 內建函式清理：`sanitize_text_field()`, `sanitize_email()` 等
+- 所有輸出必須正確跳脫：`esc_html()`, `esc_attr()`, `esc_url()`, `wp_kses_post()`
+- 嚴禁直接輸出未過濾的使用者資料
+
+## 資料庫查詢
+- 嚴禁直接拼接 SQL 字串
+- 使用 `WP_Query` 進行文章查詢，或使用 `$wpdb->prepare()` 防止 SQL Injection
+- {從程式碼觀察到的查詢模式}
+
+## WordPress Hooks 機制
+- 擴充功能優先使用 `add_action()` 與 `add_filter()`，不直接修改 Core 檔案
+- {從程式碼觀察到的 Hook 組織方式與常用 Hook 列表}
+
+## REST API
+- {如有自訂 REST API，記錄 namespace、endpoint 命名與權限檢查慣例}
+
+## PHP 測試
+```bash
+{PHPUnit 或其他測試指令}
+```
+```
+
+---
+
+**生成決策表：**
+
+| 偵測到的技術棧 | 生成的 instructions 檔案 |
+|----------------|--------------------------|
+| 任何專案 | `.github/copilot-instructions.md` |
+| React / TypeScript 前端 | `.github/instructions/react-instructions.md` |
+| WordPress / PHP 後端 | `.github/instructions/wordpress-instructions.md` |
+| Vue / Nuxt 前端 | `.github/instructions/vue-instructions.md`（applyTo: `**/*.vue,**/*.ts`）|
+| Go 後端 | `.github/instructions/go-instructions.md`（applyTo: `**/*.go`）|
+| Python 後端 | `.github/instructions/python-instructions.md`（applyTo: `**/*.py`）|
 
 ### Phase 6：檔案放置與驗證
 
@@ -246,11 +338,11 @@ origin: project-analyze
    │   ├── {project_name}-{layer2}/
    │   │   └── SKILL.md
    │   └── ...
-   ├── copilot-instructions.md        ← 如果內容 ≤ 300 行
-   └── instructions/                   ← 如果內容 > 300 行
-       ├── general.instructions.md
-       ├── {tech-layer}.instructions.md
-       └── ...
+   ├── copilot-instructions.md           ← 全域通用規範（必有）
+   └── instructions/                     ← 路徑特定規範（依技術棧條件生成）
+       ├── react-instructions.md         ← React 專案才生成（applyTo: **/*.ts,**/*.tsx）
+       ├── wordpress-instructions.md     ← WordPress 專案才生成（applyTo: **/*.php）
+       └── {其他技術層}-instructions.md  ← 依偵測結果條件生成
    ```
 
 2. **使用 `create` 工具寫入檔案**
@@ -261,8 +353,10 @@ origin: project-analyze
    - [ ] 程式碼範例來自真實原始碼
    - [ ] 依賴版本正確
    - [ ] SKILL 檔案放在 `.github/skills/{名稱}/SKILL.md`
-   - [ ] 指引檔案放在正確位置
-   - [ ] 如果拆分，每個 `.instructions.md` 不超過 300 行
+   - [ ] `.github/copilot-instructions.md` 已生成且只含跨語言通用規範
+   - [ ] 路徑特定 instructions 檔案開頭有正確的 `applyTo` frontmatter
+   - [ ] 全域檔案與路徑特定檔案之間無衝突規則
+   - [ ] 每個 instructions 檔案不超過 300 行
    - [ ] 沒有遺漏任何技術層
 
 ---
@@ -276,15 +370,13 @@ origin: project-analyze
 .github/
 ├── skills/
 │   ├── power-course-php/
-│   │   └── SKILL.md          # PHP 後端（WordPress Plugin、WooCommerce、REST API）
+│   │   └── SKILL.md                        # PHP 後端（WordPress Plugin、WooCommerce、REST API）
 │   └── power-course-react/
-│       └── SKILL.md          # React 前端（Refine.dev、Ant Design、VidStack）
-├── instructions/
-│   ├── general.instructions.md      # 專案概述與架構
-│   ├── php.instructions.md          # PHP 開發規範
-│   ├── react.instructions.md        # React 開發規範
-│   ├── testing.instructions.md      # 測試策略
-│   └── git-workflow.instructions.md # Git 工作流程
+│       └── SKILL.md                        # React 前端（Refine.dev、Ant Design、VidStack）
+├── copilot-instructions.md                 # 全域通用規範（專案概述、Git 流程、架構原則）
+└── instructions/
+    ├── react-instructions.md               # React 前端專屬（applyTo: **/*.ts,**/*.tsx）
+    └── wordpress-instructions.md           # WordPress 後端專屬（applyTo: **/*.php）
 ```
 
 **SKILL 命名規則：**
