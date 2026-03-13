@@ -1,0 +1,33 @@
+[ACTIVITY] 商品管理流程
+
+[ACTOR] 店舖管理者: 具有 WordPress manage_woocommerce 能力的後台使用者
+
+1. 店舖管理者 在商品列表頁面瀏覽商品
+  -> features/product/query-product-list.feature @query
+
+2. 店舖管理者 選擇操作商品
+  2a. [DECISION] 管理者的操作意圖
+    2a-A. 需要快速建立新商品:
+      3. 店舖管理者 點擊「快速建立」輸入商品名稱
+        -> features/product/create-draft-product.feature @command
+      4. 店舖管理者 進入商品編輯頁面補充完整資料
+        -> features/product/save-product-data.feature @command
+      4a. [DECISION] 商品類型是否為 variable
+        4a-A. 是 variable 商品:
+          5. 店舖管理者 設定規格屬性後點擊「自動生成所有變體」
+            -> features/product/generate-product-variations.feature @command
+        4a-B. 非 variable 商品:
+          （不需生成變體，繼續編輯）
+      4a. [MERGE]
+      -> 1
+    2a-B. 需要編輯現有商品:
+      6. 店舖管理者 點擊商品名稱進入編輯頁面
+      7. 店舖管理者 在各 Tab 修改資料後點擊「儲存」
+        -> features/product/save-product-data.feature @command
+      -> 1
+    2a-C. 需要管理商品分類:
+      8. 店舖管理者 進入分類管理頁面
+      9. 店舖管理者 點擊「新增分類」填寫名稱與父分類
+        -> features/product/create-product-category.feature @command
+      -> 1
+  2a. [MERGE]

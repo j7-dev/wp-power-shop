@@ -1,0 +1,25 @@
+[ACTIVITY] 顧客管理流程
+
+[ACTOR] 店舖管理者: 具有 WordPress manage_woocommerce 能力的後台使用者
+
+1. 店舖管理者 在顧客列表頁面瀏覽顧客
+  -> features/customer/query-customer-list.feature @query
+
+2. 店舖管理者 點擊顧客名稱進入詳情頁面
+  -> features/customer/query-customer-detail.feature @query
+
+3. 店舖管理者 選擇操作
+  3a. [DECISION] 管理者的操作意圖
+    3a-A. 需要編輯顧客基本資料:
+      4. 店舖管理者 修改姓名、Email、地址等欄位後點擊「儲存」
+        -> features/customer/edit-customer-profile.feature @command
+      -> 2
+    3a-B. 需要修改 UserMeta（高風險）:
+      5. 店舖管理者 在 UserMeta 區塊修改鍵值，通過雙重確認
+        -> features/customer/edit-customer-user-meta.feature @command
+      -> 2
+    3a-C. 需要新增聯繫備註:
+      6. 店舖管理者 在聯繫備註區塊輸入內容後點擊「新增備註」
+        -> features/customer/add-customer-note.feature @command
+      -> 2
+  3a. [MERGE]

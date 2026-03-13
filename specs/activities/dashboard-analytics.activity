@@ -1,0 +1,21 @@
+[ACTIVITY] 儀表板與營收分析流程
+
+[ACTOR] 店舖管理者: 具有 WordPress manage_woocommerce 能力的後台使用者
+
+1. 店舖管理者 進入 Dashboard 頁面，系統自動載入 KPI 統計
+  -> features/dashboard/query-dashboard-kpi.feature @query
+
+2. 店舖管理者 查看排行榜區塊（暢銷商品 / 高消費顧客）
+  -> features/dashboard/query-leaderboard.feature @query
+
+3. 店舖管理者 查看營收趨勢圖表，可切換統計區間（日/週/月/年）
+  -> features/dashboard/query-revenue-trend.feature @query
+
+4. 店舖管理者 選擇進一步分析
+  4a. [DECISION] 是否需要深度營收分析
+    4a-A. 需要深度分析:
+      5. 店舖管理者 進入「營收分析」頁面，設定日期範圍與統計區間
+        -> features/dashboard/query-revenue-analytics.feature @query
+    4a-B. 不需要:
+      （結束瀏覽）
+  4a. [MERGE]

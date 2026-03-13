@@ -1,0 +1,32 @@
+[ACTIVITY] 訂單管理流程
+
+[ACTOR] 店舖管理者: 具有 WordPress manage_woocommerce 能力的後台使用者
+
+1. 店舖管理者 在訂單列表頁面查看所有訂單
+  -> features/order/query-order-list.feature @query
+
+2. 店舖管理者 選擇操作訂單
+  2a. [DECISION] 管理者的操作意圖
+    2a-A. 需要建立新訂單:
+      3. 店舖管理者 點擊「建立訂單」填寫顧客與商品明細
+        -> features/order/create-order.feature @command
+      -> 1
+    2a-B. 需要處理現有訂單:
+      4. 店舖管理者 進入訂單詳情頁面
+      4a. [DECISION] 需要執行的操作
+        4a-A. 更新訂單狀態:
+          5. 店舖管理者 從狀態下拉選單變更訂單狀態
+            -> features/order/update-order-status.feature @command
+        4a-B. 編輯訂單地址:
+          6. 店舖管理者 點擊地址區塊的「編輯」修改帳單或運送地址
+            -> features/order/edit-order-address.feature @command
+        4a-C. 新增訂單備註:
+          7. 店舖管理者 在備註區塊輸入內容並選擇是否對顧客可見
+            -> features/order/add-order-note.feature @command
+      4a. [MERGE]
+      -> 1
+    2a-C. 需要批量清理訂單:
+      8. 店舖管理者 勾選多筆訂單後點擊「批量刪除」並確認
+        -> features/order/bulk-delete-orders.feature @command
+      -> 1
+  2a. [MERGE]
