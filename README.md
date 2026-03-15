@@ -63,7 +63,7 @@ cd power-shop
 # 2. Install PHP dependencies
 composer install
 
-# 3. Install JS dependencies (from monorepo root)
+# 3. Install JS dependencies
 pnpm install
 
 # 4. Build assets
@@ -294,7 +294,7 @@ WordPress / WooCommerce
 | `@refinedev/core` | Headless CRUD framework (data layer) |
 | `@refinedev/antd` | Ant Design integration for Refine |
 | `@refinedev/react-router` | Router bindings for Refine |
-| `antd-toolkit` | Internal monorepo package: shared utilities, hooks, WP helpers |
+| `antd-toolkit` | Shared utilities, hooks, WP helpers |
 | `@tanstack/react-query` | Server state management |
 | `echarts` | Charts for analytics views |
 | `react-countup` | Animated number counters in dashboard cards |

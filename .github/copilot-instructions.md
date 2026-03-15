@@ -14,7 +14,6 @@
 - **Text Domain:** `power_shop`
 - **React App Selector:** `#power_shop`
 - **REST API Namespace:** `power-shop` → `/wp-json/power-shop/`
-- **Monorepo location:** `apps/power-shop/` inside a pnpm/Turborepo workspace
 
 ---
 
@@ -416,7 +415,7 @@ pnpm release:minor          # Bump minor + …
 pnpm release:major          # Bump major + …
 ```
 
-Uses `release-it` configured in `release/.release-it.cjs`. Requires a `.env` file at monorepo root with GitHub credentials.
+Uses `release-it` configured in `release/.release-it.cjs`. Requires a `.env` file with GitHub credentials.
 
 ---
 
@@ -449,18 +448,3 @@ Then create the following files (stubs provided below):
 
 ---
 
-## Monorepo Context
-
-This plugin lives inside a pnpm/Turborepo workspace. Shared packages available via workspace imports:
-
-| Import | Package |
-|---|---|
-| `antd-toolkit` | `packages/antd-toolkit` — shared React/Antd utilities, WP helpers, Refine helpers, Bunny provider |
-| `@power/eslint-config` | Shared ESLint config |
-| `@power/tailwind-config` | Shared Tailwind config |
-| `@power/typescript-config` | Shared tsconfig base |
-
-When using `antd-toolkit`, prefer named subpath imports:
-- `antd-toolkit` — core utilities (`simpleDecrypt`, `getGCDItems`, `useEnv`, etc.)
-- `antd-toolkit/refine` — Refine helpers (`dataProvider`, `notificationProvider`, `notificationProps`)
-- `antd-toolkit/wp` — WordPress-specific hooks & components (`useWoocommerce`, `isVariable`, `TImage`, etc.)

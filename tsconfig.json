@@ -1,16 +1,38 @@
 {
-	"extends": "@power/typescript-config/vite.json",
-	"include": [
-		"js/src",
-	],
 	"compilerOptions": {
+		"composite": false,
+		"declaration": true,
+		"declarationMap": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"inlineSources": false,
+		"isolatedModules": true,
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"preserveWatchOutput": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"jsx": "react-jsx",
+		"types": ["react", "react-dom"],
+		"target": "ESNext",
+		"useDefineForClassFields": true,
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		"allowJs": false,
+		"sourceMap": true,
+		"resolveJsonModule": true,
+		"noEmit": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
 		"paths": {
-			"@power/general": [
-				"../../packages/general/index.ts"
-			],
 			"@/*": [
 				"./js/src/*"
 			]
 		}
-	}
+	},
+	"include": [
+		"js/src"
+	],
+	"exclude": ["node_modules"]
 }
