@@ -114,15 +114,19 @@ const { data } = useList({
 Data Provider 設定在 `js/src/App1.tsx` 的 `<Refine>` 元件中：
 
 ```tsx
+import { dataProvider } from 'antd-toolkit/refine'
+
 <Refine
   dataProvider={{
-    default: defaultDataProvider,
-    'wc-rest': wcRestDataProvider,
-    'wc-store': wcStoreDataProvider,
-    'power-shop': powerShopDataProvider,
-    'wp-rest': wpRestDataProvider,
-    'bunny-stream': bunnyStreamDataProvider,
+    default: dataProvider(`${API_URL}/v2/powerhouse`, AXIOS_INSTANCE),
+    'wp-rest': dataProvider(`${API_URL}/wp/v2`, AXIOS_INSTANCE),
+    'wc-rest': dataProvider(`${API_URL}/wc/v3`, AXIOS_INSTANCE),
+    'wc-store': dataProvider(`${API_URL}/wc/store/v1`, AXIOS_INSTANCE),
+    'bunny-stream': bunny_data_provider_result,
+    'power-shop': dataProvider(`${API_URL}/${KEBAB}`, AXIOS_INSTANCE),
   }}
   // ...
 >
 ```
+
+所有 provider（bunny-stream 除外）都使用 `antd-toolkit/refine` 的 `dataProvider()` 工廠函式，傳入不同的 API base URL 和共用的 AXIOS_INSTANCE。

@@ -17,7 +17,7 @@ applyTo: "**/*.ts,**/*.tsx"
 | UI 元件庫 | Ant Design v5 | ConfigProvider theme token |
 | 狀態管理 | Jotai + React Context | atom 跨分頁選取；Context 區域共享 |
 | 資料層 | React Query (via Refine) | 搭配 6 個 Data Provider |
-| 路由 | HashRouter | `#/` 路徑，定義在 App1.tsx |
+| 路由 | HashRouter (react-router v7) | `#/` 路徑，定義在 App1.tsx |
 | 樣式 | Tailwind CSS (`tw-` prefix) | 搭配 Ant Design theme token |
 | 打包 | Vite | HMR port 5178 |
 | 共用套件 | `antd-toolkit` | 子路徑：`antd-toolkit`、`antd-toolkit/refine`、`antd-toolkit/wp` |
@@ -112,7 +112,8 @@ const isEditing = useIsEditing()
 
 | 路由 | 元件 | 說明 |
 |------|------|------|
-| `/` | `Dashboard/Summary` | 總覽頁：KPI 卡片、排行榜、區間圖表 |
+| `/` | → `/dashboard` | NavigateToResource 重定向 |
+| `/dashboard` | `Dashboard/Summary` | 總覽頁：KPI 卡片、排行榜、區間圖表 |
 | `/orders` | `Orders/List` | 訂單列表 |
 | `/orders/edit/:id` | `Orders/Edit` | 訂單編輯 |
 | `/users` | `Users/List` | 顧客列表 |
@@ -121,7 +122,8 @@ const isEditing = useIsEditing()
 | `/products/edit/:id` | `Product/Edit` | 商品編輯（多 Tab） |
 | `/products/taxonomies` | `Product/Taxonomies` | 商品分類/標籤管理 |
 | `/products/attributes` | `Product/Attributes` | 全域商品規格管理 |
-| `/marketing` | `Marketing/OneShop` | OneShop 佔位頁 |
+| `/marketing` | `Product/List` | 行銷分類（index 目前渲染商品列表） |
+| `/marketing/one-shop` | `Marketing/OneShop` | 一頁賣場（即將推出） |
 | `/analytics` | `Analytics` | 營收分析 |
 | `/wp-media-library` | `WPMediaLibraryPage` | WordPress 媒體庫 |
 
@@ -234,7 +236,13 @@ js/src/
 │   ├── types/                # 頁面專用型別
 │   └── components/           # 頁面專用元件
 ├── components/               # 共用元件
-│   └── product/              # 共用商品元件 + 型別
+│   ├── general/              # CopyButton, Price
+│   ├── order/                # InfoTable, OrderNotes
+│   ├── post/                 # PostAction, ToggleVisibility
+│   ├── product/              # Fields, ProductEditTable, ProductTable, ProductSelector
+│   ├── productAttribute/     # EditForm, SortableList (全域屬性)
+│   ├── term/                 # EditForm, SortableList, SortableTree, TaxonomyModal
+│   └── user/                 # ContactRemarks, OrderCustomerTable, UserTable
 ├── hooks/                    # 全域 hooks
 ├── utils/                    # 全域工具函式
 └── api/resources/            # CRUD helper wrappers

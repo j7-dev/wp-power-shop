@@ -1,6 +1,6 @@
 # Power Shop
 
-> **Last Updated:** 2026-03-14
+> **Last Updated:** 2026-03-15
 > **Version:** 3.0.12
 > **Project Type:** WordPress Plugin (WooCommerce extension, React SPA admin UI)
 
@@ -46,7 +46,13 @@ power-shop/
 │   │   └── constants.ts               # INFO_LABEL_MAPPER (address field labels)
 │   ├── api/resources/                  # CRUD helper wrappers (create/get/update/delete)
 │   ├── components/
-│   │   └── product/                   # Shared product components + types
+│   │   ├── general/                   # CopyButton, Price
+│   │   ├── order/                     # InfoTable, OrderNotes
+│   │   ├── post/                      # PostAction, ToggleVisibility
+│   │   ├── product/                   # Fields, ProductEditTable, ProductTable, ProductSelector
+│   │   ├── productAttribute/          # EditForm, SortableList (global attributes)
+│   │   ├── term/                      # EditForm, SortableList, SortableTree, TaxonomyModal
+│   │   └── user/                      # ContactRemarks, OrderCustomerTable, UserTable
 │   └── pages/admin/
 │       ├── Dashboard/                  # Summary: KPI cards, leaderboards, interval chart
 │       ├── Orders/                     # List + Edit
@@ -80,10 +86,11 @@ WordPress loads plugin.php
 
 Request: admin.php?page=power-shop
     └─► Entry::maybe_output_admin_page()
-            └─► Bootstrap::enqueue_script()   ← Vite enqueues js/dist/main.tsx
-                    └─► wp_localize_script('power-shop', 'power_shop_data', { env: encrypted_env })
-            └─► PowerhouseBase::render_admin_layout(['title' => '...', 'id' => 'power_shop'])
-                    └─► outputs <div id="power_shop"></div>
+            └─► Entry::render_page()
+                    ├─► Bootstrap::enqueue_script()   ← Vite enqueues js/dist/main.tsx
+                    │       └─► wp_localize_script('power-shop', 'power_shop_data', { env: encrypted_env })
+                    └─► PowerhouseBase::render_admin_layout(['title' => '...', 'id' => 'power_shop'])
+                            └─► outputs <div id="power_shop"></div>
 
 Browser renders
     └─► main.tsx mounts App1 onto #power_shop

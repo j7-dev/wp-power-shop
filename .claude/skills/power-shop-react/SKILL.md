@@ -203,13 +203,18 @@ const { data, isLoading } = useCustom<TDashboardStats>({
 
 ```
 pages/admin/Dashboard/
-├── Summary/            # 總覽頁入口
-│   ├── index.tsx       # KPI 卡片 + LeaderBoard + IntervalChart
-│   ├── hooks/          # useDashboard 等
-│   └── types/          # TDashboardStats 等
-├── KPICards/           # KPI 統計卡片
-├── LeaderBoard/        # 商品/顧客排行榜
-└── IntervalChart/      # ECharts 區間圖表
+├── index.tsx           # 總覽頁入口（Summary）
+├── DashboardCards.tsx  # KPI 統計卡片
+├── LeaderBoard.tsx     # 商品/顧客排行榜
+├── IntervalChart.tsx   # ECharts 區間圖表
+├── Welcome.tsx         # 歡迎訊息
+├── hooks/
+│   ├── index.tsx
+│   └── useDashboard.tsx
+├── types/
+│   └── index.ts
+└── utils/
+    └── index.ts
 ```
 
 ### LeaderBoard 資料結構
@@ -298,7 +303,8 @@ js/src/
 
 | 路由 | 元件 | Data Provider |
 |------|------|---------------|
-| `/` | Dashboard/Summary | `power-shop` |
+| `/` | → `/dashboard` | NavigateToResource 重定向 |
+| `/dashboard` | Dashboard/Summary | `power-shop` |
 | `/orders` | Orders/List | `wc-rest` |
 | `/orders/edit/:id` | Orders/Edit | `wc-rest` |
 | `/users` | Users/List | `wc-rest` |
@@ -307,7 +313,8 @@ js/src/
 | `/products/edit/:id` | Product/Edit | `wc-rest` |
 | `/products/taxonomies` | Product/Taxonomies | `wc-rest` |
 | `/products/attributes` | Product/Attributes | `wc-rest` |
-| `/marketing` | Marketing/OneShop | — |
+| `/marketing` | Product/List | `wc-rest` |
+| `/marketing/one-shop` | Marketing/OneShop | — |
 | `/analytics` | Analytics | `power-shop` |
 | `/wp-media-library` | WPMediaLibraryPage | `default` |
 
