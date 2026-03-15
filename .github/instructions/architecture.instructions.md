@@ -227,5 +227,28 @@ pnpm release:patch    # 1. bump package.json  2. sync plugin.php  3. build  4. G
 
 ## 相關文件
 
-- `.github/copilot-instructions.md` — 完整開發指引
-- `.github/skills/power-shop/SKILL.md` — 統一 SKILL
+### Instructions（依檔案類型自動套用）
+
+| 檔案 | 適用範圍 | 說明 |
+|------|----------|------|
+| `.github/copilot-instructions.md` | 全域 | 跨語言通用規範 |
+| `.github/instructions/react-instructions.md` | `**/*.ts,**/*.tsx` | React / TypeScript 開發慣例 |
+| `.github/instructions/wordpress-instructions.md` | `**/*.php` | WordPress / PHP 開發慣例 |
+
+### SKILL（按需啟用）
+
+| SKILL | 說明 |
+|-------|------|
+| `.github/skills/power-shop-php/SKILL.md` | PHP 後端：REST API、Domain、DTO 開發 |
+| `.github/skills/power-shop-react/SKILL.md` | React 前端：頁面、元件、Data Provider 開發 |
+| `.github/skills/refine/SKILL.md` | Refine meta-framework 通用指南 |
+
+### 規格文件
+
+| 路徑 | 說明 |
+|------|------|
+| `specs/README.md` | 規格總索引 |
+| `specs/api/api.yml` | OpenAPI 3.0 API 規格 |
+| `specs/entity/erm.dbml` | DBML 資料模型 |
+| `specs/features/**/*.feature` | 20 個 BDD 功能規格 |
+| `specs/ui/*.md` | 9 個 UI 頁面規格 |

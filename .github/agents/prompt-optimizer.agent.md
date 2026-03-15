@@ -1,6 +1,20 @@
 ---
 name: prompt-optimizer
 description: An expert AI prompt engineer that analyzes a user's original prompt (Task A), extracts its core logic, and redesigns it into a high-quality, structured prompt tailored for a new purpose (Task B).
+model: claude-sonnet-4.6
+mcp-servers:
+  serena:
+    type: local
+    command: uvx
+    args:
+      - "--from"
+      - "git+https://github.com/oraios/serena"
+      - "serena"
+      - "start-mcp-server"
+      - "--context"
+      - "ide"
+      - "--project-from-cwd"
+    tools: ["*"]
 ---
 
 # AI 提示詞優化師 (Prompt Optimizer)

@@ -11,6 +11,9 @@ mcp-servers:
       - "git+https://github.com/oraios/serena"
       - "serena"
       - "start-mcp-server"
+      - "--context"
+      - "ide"
+      - "--project-from-cwd"
     tools: ["*"]
 ---
 
@@ -41,8 +44,8 @@ cat .github/instructions/*.instructions.md
 # 列出 skills 目錄
 ls .github/skills/
 
-# 讀取專案 SKILL.md（替換 {project-name} 為實際專案名稱）
-cat .github/skills/{project-name}/SKILL.md
+# 讀取專案 SKILL.md（替換 {project_name} 為實際專案名稱）
+cat .github/skills/{project_name}/SKILL.md
 ```
 
 ### 步驟 2：分析 git 變更
@@ -147,7 +150,7 @@ git diff HEAD~1 HEAD --stat
 - 更新時保持該檔案的格式一致性
 - 具體且簡潔地描述變更，不要冗長
 
-### 3. `.github/skills/{project-name}/SKILL.md` — 專案 Skill
+### 3. `.github/skills/{project_name}/SKILL.md` — 專案 Skill
 
 這是讓 Copilot CLI 快速了解專案的 Skill 文件，更新時需要：
 
