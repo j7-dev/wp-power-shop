@@ -37,11 +37,11 @@ final class Bootstrap {
 	 * Admin Enqueue script
 	 * You can load the script on demand
 	 *
-	 * @param string $hook current page hook
+	 * @param string $_hook current page hook (unused)
 	 *
 	 * @return void
 	 */
-	public static function admin_enqueue_script( $hook ): void {
+	public static function admin_enqueue_script( $_hook ): void {
 		self::enqueue_script();
 	}
 

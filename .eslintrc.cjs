@@ -138,6 +138,9 @@ module.exports = {
 	overrides: [
 		{
 			files: ['*.d.ts'],
+			parserOptions: {
+				project: null,
+			},
 			rules: {
 				'no-undef': 'off',
 				'no-var': 'off',

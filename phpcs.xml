@@ -17,6 +17,9 @@
     <!-- Show progress, show the error codes for each message (source). -->
     <arg value="ps"/>
 
+    <!-- 忽略警告，只報告錯誤 -->
+    <arg name="warning-severity" value="0"/>
+
     <!-- Strip the filepaths down to the relevant bit. 加入這行就會失效了 -->
     <!-- <arg name="basepath" value="."/> -->
 
@@ -78,6 +81,15 @@
 
     <config name="testVersion" value="8.0-"/>
     <rule ref="PHPCompatibility"/>
+
+    <!-- 註冊 WooCommerce 自訂 capabilities -->
+    <rule ref="WordPress.WP.Capabilities">
+        <properties>
+            <property name="custom_capabilities" type="array">
+                <element value="manage_woocommerce"/>
+            </property>
+        </properties>
+    </rule>
 
     <!-- Enforce PSR1 compatible namespaces. -->
     <rule ref="PSR1.Classes.ClassDeclaration"/>
