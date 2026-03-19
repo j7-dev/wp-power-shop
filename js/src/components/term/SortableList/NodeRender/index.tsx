@@ -51,7 +51,14 @@ const NodeRender: FC<{
 		>
 			<div
 				className="flex items-center overflow-hidden"
+				role="button"
+				tabIndex={0}
 				onClick={() => setSelectedTermId(id)}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						setSelectedTermId(id)
+					}
+				}}
 			>
 				<Checkbox className="mr-2" onChange={handleCheck} checked={isChecked} />
 				<PostName className="[&_.at-name]:!text-sm" hideImage record={record} />

@@ -20,7 +20,6 @@ import {
 	SelectedTermIdContext,
 	useTermsList,
 } from '@/components/term/hooks'
-
 import Loading from '@/components/term/SortableTree/Loading'
 import NodeRender from '@/components/term/SortableTree/NodeRender'
 import {
@@ -253,14 +252,14 @@ const SortableTreeComponent = ({
 
 /**
  * 可排序的 term
- * @param {TSortableTreeProps}                                  props                    商品規格
- * @param {TTaxonomy}                                           props.taxonomy           分類
+ * @param {TSortableTreeListProps}                              props                    商品規格
+ * @param {Object}                                              props.taxonomy           分類
  * @param {string[]}                                            props.selectedTermIds    選取的 term
  * @param {React.Dispatch<React.SetStateAction<string[]>>}      props.setSelectedTermIds 設定選取的 term
  * @param {string | null}                                       props.selectedTermId     選取的 term
  * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId  設定選取的 term
- * @param {React.FC<{ record: TTerm; taxonomy: TTaxonomy }>}    props.Edit               編輯的畫面由外部傳入
- * @return {React.FC}
+ * @param {React.FC<{ record: TTerm; taxonomy: object }>}       props.Edit               編輯的畫面由外部傳入
+ * @return {JSX.Element} 可排序的 tree 元件
  */
 export const SortableTree: FC<TSortableTreeListProps> = memo(
 	SortableTreeComponent
@@ -269,8 +268,8 @@ export const SortableTree: FC<TSortableTreeListProps> = memo(
 /**
  * 取得所有展開的 ids
  * 遞迴取得所有 collapsed = false 的 id
- * @param treeData 樹狀結構
- * @return 所有 collapsed = false 的 id
+ * @param  treeData 樹狀結構
+ * @return {string[]} 所有 collapsed = false 的 id
  */
 function getOpenedNodeIds(treeData: TreeData<TTerm>) {
 	// 遞迴取得所有 collapsed = false 的 id
@@ -284,9 +283,9 @@ function getOpenedNodeIds(treeData: TreeData<TTerm>) {
 
 /**
  * 恢復原本的 collapsed 狀態
- * @param treeData      樹狀結構
- * @param openedNodeIds 展開的 ids
- * @return newTreeData 恢復原本的 collapsed 狀態
+ * @param  treeData      樹狀結構
+ * @param  openedNodeIds 展開的 ids
+ * @return {TreeData<TTerm>} newTreeData 恢復原本的 collapsed 狀態
  */
 function restoreOriginCollapsedState(
 	treeData: TreeData<TTerm>,
@@ -312,9 +311,9 @@ function restoreOriginCollapsedState(
 
 /**
  * 取得樹狀結構的最大深度
- * @param treeData 樹狀結構
- * @param depth    當前深度
- * @return 最大深度
+ * @param  treeData 樹狀結構
+ * @param  depth    當前深度
+ * @return {number} 最大深度
  */
 function getMaxDepth(treeData: TreeData<TTerm>, depth = 0) {
 	// 如果沒有資料，回傳當前深度

@@ -16,13 +16,13 @@ import {
 import { useAtom } from 'jotai'
 import React, { memo, useEffect } from 'react'
 
+import { TUserRecord } from '@/components/user/types'
+
 import { selectedUserIdsAtom } from './atom'
 import BulkAction from './BulkAction'
 import Filter, { TFilterValues } from './Filter'
 import useColumns from './hooks/useColumns'
 import { keyLabelMapper } from './utils'
-
-import { TUserRecord } from '@/components/user/types'
 
 const UserTableComponent = ({
 	tableProps: overrideTableProps,
@@ -137,7 +137,7 @@ const UserTableComponent = ({
 				<ActionArea>
 					<div className="flex gap-x-6 justify-between">
 						<div>
-							<label className="tw-block mb-2">批次操作</label>
+							<span className="tw-block mb-2">批次操作</span>
 							<BulkAction />
 						</div>
 					</div>

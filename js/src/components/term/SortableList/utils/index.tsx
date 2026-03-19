@@ -16,7 +16,7 @@ export type TParam = {
  *
  * @param {TTerm[]}         data
  * @param {PaginationProps} paginationProps 分頁參數，用來計算分頁的 order 值
- * @return {TParam[]}
+ * @return {TParam[]} 攤平後的參數陣列
  */
 export function toParams(
 	data: TTerm[],

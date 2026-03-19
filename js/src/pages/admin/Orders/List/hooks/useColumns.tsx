@@ -83,10 +83,10 @@ const useColumns = () => {
 			title: '訂單內容',
 			dataIndex: 'items',
 			render: (items) => {
-				return items.map(({ id, name, quantity, total }) => {
+				return items.map(({ id: itemId, name, quantity, total: itemTotal }) => {
 					return (
-						<div key={id} className="text-sm">
-							<Link to={`/products/edit/${id}`}>{name}</Link> x {quantity}
+						<div key={itemId} className="text-sm">
+							<Link to={`/products/edit/${itemId}`}>{name}</Link> x {quantity}
 						</div>
 					)
 				})

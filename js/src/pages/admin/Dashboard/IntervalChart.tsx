@@ -3,7 +3,7 @@ import { Card, Row, Col, Spin } from 'antd'
 import { useColor } from 'antd-toolkit'
 import { useWoocommerce } from 'antd-toolkit/wp'
 import dayjs from 'dayjs'
-import * as echarts from 'echarts'
+import { init as echartsInit, type ECharts } from 'echarts'
 import { debounce } from 'lodash-es'
 import { useRef, useEffect } from 'react'
 
@@ -20,7 +20,7 @@ const IntervalChart = () => {
 	const { label } = getLabels(query)
 	const { colorPrimary } = useColor()
 	const chartRef = useRef<HTMLDivElement>(null)
-	const chartInstance = useRef<echarts.ECharts>()
+	const chartInstance = useRef<ECharts>()
 	const { width } = useWindowSize()
 
 	// 監聽視窗大小變化
@@ -37,7 +37,7 @@ const IntervalChart = () => {
 	useEffect(() => {
 		if (!chartRef.current) return
 
-		const chart = echarts.init(chartRef.current)
+		const chart = echartsInit(chartRef.current)
 		chartInstance.current = chart
 
 		// 设置初始选项

@@ -3,14 +3,14 @@ import { Heading } from 'antd-toolkit'
 import { useWoocommerce } from 'antd-toolkit/wp'
 import { memo } from 'react'
 
+import { ContactRemarks } from '@/components/user'
+import { useRecord } from '@/pages/admin/Users/Edit/hooks'
+
 import AutoFill from './AutoFill'
 import Basic from './Basic'
 import Cart from './Cart'
 import Meta from './Meta'
 import RecentOrders from './RecentOrders'
-
-import { ContactRemarks } from '@/components/user'
-import { useRecord } from '@/pages/admin/Users/Edit/hooks'
 
 const items: TabsProps['items'] = [
 	{

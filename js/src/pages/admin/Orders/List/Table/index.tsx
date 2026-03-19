@@ -10,17 +10,12 @@ import {
 import { FilterTags, objToCrudFilters } from 'antd-toolkit/refine'
 import { memo } from 'react'
 
-import DeleteButton from './DeleteButton'
-
 import { useEnv } from '@/hooks'
-
-// import Filter, {
-// 	initialFilteredValues,
-// } from '@/components/product/ProductTable/Filter'
-
 import useColumns from '@/pages/admin/Orders/List/hooks/useColumns'
 import useValueLabelMapper from '@/pages/admin/Orders/List/hooks/useValueLabelMapper'
 import { TOrderBaseRecord, TOrderRecord } from '@/pages/admin/Orders/List/types'
+
+import DeleteButton from './DeleteButton'
 
 // import { TFilterProps } from '@/components/product/ProductTable/types'1.3.
 

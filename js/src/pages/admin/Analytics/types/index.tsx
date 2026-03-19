@@ -1,10 +1,12 @@
 import { TProductType } from 'antd-toolkit/wp'
 import dayjs from 'dayjs'
 
-export enum EViewType {
-	DEFAULT = 'default',
-	AREA = 'area', // 面積比較圖
-}
+export const EViewType = {
+	DEFAULT: 'default',
+	AREA: 'area', // 面積比較圖
+} as const
+
+export type TEViewType = (typeof EViewType)[keyof typeof EViewType]
 
 export type TTotals = {
 	orders_count: number

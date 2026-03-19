@@ -11,7 +11,7 @@ import { RANGE_PRESETS, maxDateRange } from '@/pages/admin/Analytics/utils'
 const { RangePicker } = DatePicker
 const { Item } = Form
 
-const index = () => {
+const AnalyticsFilter = () => {
 	const { viewType, setViewType, form, setQuery, context, isFetching } =
 		useRevenueContext()
 
@@ -122,4 +122,4 @@ const index = () => {
 	)
 }
 
-export default index
+export default AnalyticsFilter

@@ -2,10 +2,10 @@ import { ExportOutlined } from '@ant-design/icons'
 import { Tooltip, Button } from 'antd'
 import React, { FC, memo } from 'react'
 
-import ToggleVisibility from './ToggleVisibility'
-
 import { CopyButton } from '@/components/general'
 import { TDocBaseRecord } from '@/pages/admin/Orders/List/types'
+
+import ToggleVisibility from './ToggleVisibility'
 
 export const PostActionComponent: FC<{
 	record: TDocBaseRecord

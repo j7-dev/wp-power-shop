@@ -146,9 +146,9 @@ export const handleValuesChange = (
 						// 是變體，則只改變體商品的狀態
 						if (isVariation(changedProductType)) {
 							if (product?.children?.length) {
-								product?.children?.forEach((variation, index) => {
+								product?.children?.forEach((variation, childIndex) => {
 									// @ts-ignore
-									product.children[index][changedKey] = changedValue
+									product.children[childIndex][changedKey] = changedValue
 								})
 							}
 							return

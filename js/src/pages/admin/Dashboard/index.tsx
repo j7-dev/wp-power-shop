@@ -4,18 +4,18 @@ import dayjs, { Dayjs } from 'dayjs'
 import { NoUndefinedRangeValueType } from 'rc-picker/lib/PickerInput/RangePicker'
 import { useState, createContext } from 'react'
 
+import {
+	RANGE_PRESETS,
+	maxDateRange,
+	FORMAT,
+} from '@/pages/admin/Analytics/utils'
+
 import DashboardCards from './DashboardCards'
 import { defaultDashboard } from './hooks'
 import IntervalChart from './IntervalChart'
 import LeaderBoard from './LeaderBoard'
 import { TDashboardStats, TDashboardContext, TQuery } from './types'
 import Welcome from './Welcome'
-
-import {
-	RANGE_PRESETS,
-	maxDateRange,
-	FORMAT,
-} from '@/pages/admin/Analytics/utils'
 
 const { RangePicker } = DatePicker
 

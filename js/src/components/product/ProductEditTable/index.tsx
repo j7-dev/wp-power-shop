@@ -19,7 +19,6 @@ import { TProductRecord } from '@/components/product/types'
  * 包含同步修改模式，可將變更套用至所有選取的產品。
  *
  * @module ProductEditTable
- * @component
  * @param {Object}                                                 props                  - 組件屬性
  * @param {FormInstance}                                           props.form             - Ant Design 表單實例
  * @param {TProductRecord[]}                                       props.virtualFields    - 虛擬欄位資料，用於記錄表格中所有產品的變更
@@ -76,15 +75,13 @@ const ProductEditTableComponent = ({
 					className="[&.ant-switch-checked]:bg-red-500 [&.ant-switch-checked]:hover:bg-red-400"
 				/>
 				{!syncModeEnabled && (
-					<label>
-						啟用同步修改模式，所有欄位修改，將套用至所有已選取的商品
-					</label>
+					<span>啟用同步修改模式，所有欄位修改，將套用至所有已選取的商品</span>
 				)}
 				{syncModeEnabled && (
-					<label className="text-red-500 font-bold">
+					<span className="text-red-500 font-bold">
 						<ExclamationCircleFilled className="mr-2" />
 						同步修改模式啟用中，所有欄位修改，將套用至所有已選取的商品
-					</label>
+					</span>
 				)}
 			</div>
 
@@ -99,8 +96,7 @@ const ProductEditTableComponent = ({
 						x: 1800,
 						y: (height || 910) - 320,
 					}}
-					// 需要這個 field-xs class 來自訂 style
-					className="field-xs [&_td]:align-baseline"
+					className="field-xs [&_td]:align-baseline" // 需要這個 field-xs class 來自訂 style
 				/>
 			</Form>
 		</>

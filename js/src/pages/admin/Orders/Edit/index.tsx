@@ -6,10 +6,10 @@ import { notificationProps } from 'antd-toolkit/refine'
 import { ORDER_STATUS } from 'antd-toolkit/wp'
 import { memo, useMemo, useState } from 'react'
 
+import { TOrderRecord, TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
+
 import { Detail } from './Detail'
 import { IsEditingContext, RecordContext } from './hooks'
-
-import { TOrderRecord, TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
 
 const EditComponent = () => {
 	const { id } = useParsed()

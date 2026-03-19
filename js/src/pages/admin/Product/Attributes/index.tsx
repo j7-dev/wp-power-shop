@@ -81,8 +81,8 @@ export const ProductAttributes = () => {
 		}
 	}
 
-	const handleEdit = (attribute: TAttributeTaxonomy) => () => {
-		setAttribute(attribute)
+	const handleEdit = (attrItem: TAttributeTaxonomy) => () => {
+		setAttribute(attrItem)
 		show()
 	}
 
@@ -178,14 +178,15 @@ export const ProductAttributes = () => {
 								<DeleteButton
 									resource="product-attributes"
 									recordItemId={attribute?.id}
-									children="刪除"
 									icon={null}
 									confirmTitle="確認刪除"
 									confirmOkText="確認"
 									confirmCancelText="取消"
 									onSuccess={close}
 									{...notificationProps}
-								/>
+								>
+									刪除
+								</DeleteButton>
 							) : (
 								<div></div>
 							)}

@@ -13,7 +13,10 @@ export const OneShop = () => {
 	return (
 		<Result
 			icon={
-				<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzV4MnJ1dXhjOGV6NHdvcWo2eDQ3N3Buank2OWNrb21hM3QydG0zYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oriO7A7bt1wsEP4cw/giphy.gif" />
+				<img
+					src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzV4MnJ1dXhjOGV6NHdvcWo2eDQ3N3Buank2OWNrb21hM3QydG0zYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oriO7A7bt1wsEP4cw/giphy.gif"
+					alt="即將推出"
+				/>
 			}
 			title="全新的一頁賣場即將推出"
 			subTitle={

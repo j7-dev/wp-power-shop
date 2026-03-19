@@ -16,7 +16,6 @@ import { SelectedTermIdContext } from '@/components/productAttribute/hooks'
 import NodeRender from '@/components/productAttribute/SortableList/NodeRender'
 import { prepareAttributes } from '@/components/productAttribute/SortableList/utils'
 import { DEFAULT } from '@/components/productAttribute/types'
-
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 
 export type TSortableListProps = {
@@ -39,7 +38,7 @@ export type TSortableListProps = {
  * setSelectedTermId 一般是以 id 作為唯一符號
  * 但局部商品規格 id 都是 ""，所以用 id + name 作為唯一符號
  * @param {Edit} Edit 編輯的畫面由外部傳入
- * @return {React.FC}
+ * @return {JSX.Element} 可排序的商品規格元件
  */
 const SortableListComponent = ({
 	attributes,
@@ -55,8 +54,8 @@ const SortableListComponent = ({
 		successNotification: false,
 	})
 
-	const handleSave = (attributes: TProductAttribute[]) => {
-		const prepared_attributes = prepareAttributes(attributes)
+	const handleSave = (updatedAttributes: TProductAttribute[]) => {
+		const prepared_attributes = prepareAttributes(updatedAttributes)
 		message.loading({
 			key: 'mutating',
 			content: '排序中...',
@@ -155,6 +154,6 @@ const SortableListComponent = ({
  * @param {string | null}                                       props.selectedTermId    選取的 term
  * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId 設定選取的 term
  * @param {React.FC<{ record: TProductAttribute }>}             props.Edit              編輯的畫面由外部傳入
- * @return {React.FC}
+ * @return {JSX.Element} 可排序的商品規格元件
  */
 export const SortableList: FC<TSortableListProps> = memo(SortableListComponent)

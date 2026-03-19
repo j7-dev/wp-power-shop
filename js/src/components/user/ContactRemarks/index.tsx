@@ -13,8 +13,8 @@ const { Item } = Form
 /**
  * 聯絡註記
  * TODO 目前只能打內部備註，如果要給客戶看，還沒想好要怎麼呈現
- * @param param0
- * @return
+ * @param  param0
+ * @return {JSX.Element} 聯絡註記元件
  */
 export const ContactRemarks: FC<{
 	record: TUserDetails

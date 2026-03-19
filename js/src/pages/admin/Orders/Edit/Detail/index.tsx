@@ -1,23 +1,15 @@
-import { memo } from 'react'
-import { Form, Tooltip, Statistic, Button, Select, Space } from 'antd'
-
-import { DEFAULT_IMAGE } from '@/utils'
-
-import {} from '@/hooks'
 import { CreditCardOutlined, TruckOutlined } from '@ant-design/icons'
 import { useSelect } from '@refinedev/antd'
-import {
-	// termToOptions,
-	defaultSelectProps,
-	Heading,
-} from 'antd-toolkit'
+import { Form, Tooltip, Statistic, Button, Select, Space } from 'antd'
+import { defaultSelectProps, Heading } from 'antd-toolkit'
 import { UserName, useWoocommerce } from 'antd-toolkit/wp'
+import { memo } from 'react'
 
 import { InfoTable, OrderNotes } from '@/components/order'
 import { useIsEditing, useRecord } from '@/pages/admin/Orders/Edit/hooks'
+import { DEFAULT_IMAGE } from '@/utils'
 
 const { Item } = Form
-
 const DetailComponent = () => {
 	const form = Form.useFormInstance()
 	const { currency } = useWoocommerce()
@@ -77,11 +69,18 @@ const DetailComponent = () => {
 						</thead>
 						<tbody>
 							{items?.map(
-								({ id, name, image, quantity, total, product_id }) => {
-									const price = Number(total) / Number(quantity)
+								({
+									id: itemId,
+									name,
+									image,
+									quantity,
+									total: itemTotal,
+									product_id,
+								}) => {
+									const price = Number(itemTotal) / Number(quantity)
 
 									return (
-										<tr key={id}>
+										<tr key={itemId}>
 											<td className="flex w-full items-center gap-x-2">
 												<div className="size-10">
 													<img
@@ -99,7 +98,7 @@ const DetailComponent = () => {
 											</td>
 											<td>{price}</td>
 											<td>{quantity}</td>
-											<td>{total}</td>
+											<td>{itemTotal}</td>
 										</tr>
 									)
 								}

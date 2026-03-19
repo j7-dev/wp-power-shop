@@ -11,10 +11,10 @@ import { notificationProps } from 'antd-toolkit/refine'
 import { TProductAttribute } from 'antd-toolkit/wp'
 import { memo, useEffect } from 'react'
 
-import AttributeTaxonomyForm from './Form'
-
 import { prepareAttributes } from '@/components/productAttribute/SortableList/utils'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
+
+import AttributeTaxonomyForm from './Form'
 
 /**
  * 編輯表單元件
@@ -23,8 +23,8 @@ import { useRecord } from '@/pages/admin/Product/Edit/hooks'
  *
  * @param {Object}              props            - 元件屬性
  * @param {TProductAttribute[]} props.attributes - 商品規格列表
- * @param {TTerm}               props.record     - 要編輯的分類項目資料，如果是新增則傳入預設值
- * @return {React.FC} 編輯表單元件
+ * @param {TProductAttribute}   props.record     - 要編輯的分類項目資料，如果是新增則傳入預設值
+ * @return {JSX.Element} 編輯表單元件
  */
 const EditFormComponent = ({
 	attributes,

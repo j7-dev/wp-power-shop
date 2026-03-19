@@ -5,17 +5,18 @@ import React, { memo, useEffect } from 'react'
 
 const { Item } = Form
 
-export enum SUBSCRIPTION {
-	PRICE = 'subscription_price', // 訂閱價格每 M 個月 [N 元] - number
-	PERIOD_INTERVAL = 'subscription_period_interval', // 訂閱價格每 [M 個] 月 N 元 - number
-	PERIOD = 'subscription_period', // 訂閱價格每 M 個 [月] N 元 - day | week | month | year
-	LENGTH = 'subscription_length', // 續訂截止日，0 = 無期限 - number
-	SIGN_UP_FEE = 'subscription_sign_up_fee', // 註冊費 - number
-	TRIAL_LENGTH = 'subscription_trial_length', // 免費試用 [N] 天 - number
-	TRIAL_PERIOD = 'subscription_trial_period', // 免費試用 N [天] - day | week | month | year
-	// LIMIT = '_subscription_limit', // 續訂限制 - number
-	// ONE_TIME_SHIPPING = '_subscription_one_time_shipping', // 一次性運費 - number
-}
+export const SUBSCRIPTION = {
+	PRICE: 'subscription_price', // 訂閱價格每 M 個月 [N 元] - number
+	PERIOD_INTERVAL: 'subscription_period_interval', // 訂閱價格每 [M 個] 月 N 元 - number
+	PERIOD: 'subscription_period', // 訂閱價格每 M 個 [月] N 元 - day | week | month | year
+	LENGTH: 'subscription_length', // 續訂截止日，0 = 無期限 - number
+	SIGN_UP_FEE: 'subscription_sign_up_fee', // 註冊費 - number
+	TRIAL_LENGTH: 'subscription_trial_length', // 免費試用 [N] 天 - number
+	TRIAL_PERIOD: 'subscription_trial_period', // 免費試用 N [天] - day | week | month | year
+
+	// LIMIT: '_subscription_limit', // 續訂限制 - number
+	// ONE_TIME_SHIPPING: '_subscription_one_time_shipping', // 一次性運費 - number
+} as const
 
 const PERIOD_OPTIONS = [
 	{
@@ -66,7 +67,7 @@ const Subscription = ({ id, size }: { id?: string; size?: SizeType }) => {
 
 			<div className="ant-form-item">
 				<div className="ant-form-item-label">
-					<label className="tw-block mb-2">訂閱價格 ({symbol})</label>
+					<span className="tw-block mb-2">訂閱價格 ({symbol})</span>
 				</div>
 				<Space.Compact block>
 					<Item
@@ -101,7 +102,7 @@ const Subscription = ({ id, size }: { id?: string; size?: SizeType }) => {
 
 			<div className="ant-form-item">
 				<div className="ant-form-item-label">
-					<label className="tw-block mb-2">續訂截止日(扣款期數)</label>
+					<span className="tw-block mb-2">續訂截止日(扣款期數)</span>
 				</div>
 				<Space.Compact block>
 					<Item
@@ -131,7 +132,7 @@ const Subscription = ({ id, size }: { id?: string; size?: SizeType }) => {
 
 			<div className="ant-form-item">
 				<div className="ant-form-item-label">
-					<label className="tw-block mb-2">免費試用</label>
+					<span className="tw-block mb-2">免費試用</span>
 				</div>
 				<Space.Compact block>
 					<Item

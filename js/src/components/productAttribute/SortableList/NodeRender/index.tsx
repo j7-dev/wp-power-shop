@@ -56,7 +56,14 @@ const NodeRender: FC<{
 		>
 			<div
 				className="flex items-center overflow-hidden"
+				role="button"
+				tabIndex={0}
 				onClick={() => setSelectedTermId(`${id}-${name}`)}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						setSelectedTermId(`${id}-${name}`)
+					}
+				}}
 			>
 				<PostName className="[&_.at-name]:!text-sm" hideImage record={record} />
 			</div>

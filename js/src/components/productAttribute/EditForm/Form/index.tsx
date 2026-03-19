@@ -5,14 +5,18 @@ import { NameId, Segmented } from 'antd-toolkit'
 import { isVariable, TProductAttribute } from 'antd-toolkit/wp'
 import { useEffect, useState } from 'react'
 
-import { useAttributeTaxonomyOptions } from './hooks'
-
 import { TAttributeTaxonomy } from '@/pages/admin/Product/Attributes'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 
+import { useAttributeTaxonomyOptions } from './hooks'
+
 const { Item } = Form
 
-const index = ({ record }: { record: TProductAttribute }) => {
+const AttributeTaxonomyFormContent = ({
+	record,
+}: {
+	record: TProductAttribute
+}) => {
 	const form = Form.useFormInstance()
 	const product = useRecord()
 	const watchId = Form.useWatch('id', form)
@@ -80,20 +84,27 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				label="從現有的全局商品規格加入"
 				name="id"
 				help={
-					<p
+					<span
 						className="mt-0 mb-2 text-blue-500 cursor-pointer"
+						role="button"
+						tabIndex={0}
 						onClick={() => {
 							setShowCreateFields(true)
 							form.resetFields()
 						}}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter' || e.key === ' ') {
+								setShowCreateFields(true)
+								form.resetFields()
+							}
+						}}
 					>
 						或創建新的商品規格
-					</p>
+					</span>
 				}
 			>
 				<Select
-					{...selectProps}
-					// 這邊重新覆蓋 options ，因為如果不這樣做，新增完規格後就算 invalidate 後 selectProps 還是不會更新
+					{...selectProps} // 這邊重新覆蓋 options
 					options={attributeTaxonomies.map((a) => ({
 						label: a.name,
 						value: a.id,
@@ -115,15 +126,23 @@ const index = ({ record }: { record: TProductAttribute }) => {
 				help={
 					showCreateFields &&
 					isCreate && (
-						<p
+						<span
 							className="mt-0 mb-2 text-blue-500 cursor-pointer"
+							role="button"
+							tabIndex={0}
 							onClick={() => {
 								setShowCreateFields(false)
 								form.resetFields()
 							}}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter' || e.key === ' ') {
+									setShowCreateFields(false)
+									form.resetFields()
+								}
+							}}
 						>
 							從現有的全局商品規格加入
-						</p>
+						</span>
 					)
 				}
 			>
@@ -210,4 +229,4 @@ const index = ({ record }: { record: TProductAttribute }) => {
 	)
 }
 
-export default index
+export default AttributeTaxonomyFormContent

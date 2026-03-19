@@ -12,7 +12,7 @@ export const RecordContext = createContext<
 
 /**
  * 取得商品記錄
- * @return TProductRecord & { isLoading: boolean, isFetching: boolean } | undefined
+ * @return {TProductRecord | undefined} TProductRecord & { isLoading: boolean, isFetching: boolean } | undefined
  */
 export const useRecord = ():
 	| (TProductRecord & {

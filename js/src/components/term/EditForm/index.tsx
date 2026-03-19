@@ -17,9 +17,8 @@ const { TextArea } = Input
  *
  * @param {Object} props        - 元件屬性
  * @param {TTerm}  props.record - 要編輯的分類項目資料，如果是新增則傳入預設值
- * @return {React.FC} 編輯表單元件
+ * @return {JSX.Element} 編輯表單元件
  */
-
 const EditFormComponent = ({
 	record,
 	taxonomy,
@@ -167,7 +166,7 @@ const EditFormComponent = ({
 				</Item>
 
 				<div className="w-40 [&_.ant-upload-text]:tw-hidden [&_.ant-upload-hint]:text-xs">
-					<label className="mb-3 tw-block">縮圖</label>
+					<span className="mb-3 tw-block ant-form-item-label">縮圖</span>
 					<FileUpload
 						fileList={fileList}
 						setFileList={setFileList}

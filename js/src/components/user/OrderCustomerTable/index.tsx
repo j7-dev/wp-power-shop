@@ -5,8 +5,8 @@ import { TOrderCustomer } from '@/pages/admin/Orders/List/types'
 /**
  * 訂單客戶詳細資訊表格
  * 目前沒有使用到
- * @param param0
- * @return
+ * @param  param0
+ * @return {JSX.Element} 訂單客戶詳細資訊表格元件
  */
 export const OrderCustomerTable = ({
 	customer,

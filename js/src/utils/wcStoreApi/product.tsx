@@ -4,9 +4,9 @@ import { TProduct, TProductVariationAttribute } from '@/types/wcStoreApi'
 
 /**
  * @deprecated 棄用 wcstore api
- * @param      product
- * @param      attributes
- * @return
+ * @param  product
+ * @param  attributes
+ * @return {number | null} 變體 ID
  */
 export const getVariationIdByAttributes = (
 	product: TProduct,

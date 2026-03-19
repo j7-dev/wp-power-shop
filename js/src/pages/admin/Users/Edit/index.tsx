@@ -7,10 +7,10 @@ import { notificationProps } from 'antd-toolkit/refine'
 import { UserName } from 'antd-toolkit/wp'
 import { memo, useMemo, useState, useEffect } from 'react'
 
+import { TUserDetails } from '@/components/user/types'
+
 import { Detail } from './Detail'
 import { IsEditingContext, RecordContext } from './hooks'
-
-import { TUserDetails } from '@/components/user/types'
 
 const EditComponent = () => {
 	const { id } = useParsed()

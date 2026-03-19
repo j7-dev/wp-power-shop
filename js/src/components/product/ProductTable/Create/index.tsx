@@ -2,7 +2,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import { useCreate } from '@refinedev/core'
 import { Button } from 'antd'
 
-const index = ({ className }: { className?: string }) => {
+const CreateButton = ({ className }: { className?: string }) => {
 	const { mutate, isLoading } = useCreate({
 		resource: 'products',
 		invalidates: ['list'],
@@ -29,4 +29,4 @@ const index = ({ className }: { className?: string }) => {
 	)
 }
 
-export default index
+export default CreateButton

@@ -64,7 +64,7 @@ export const Description = ({ formProps }: { formProps: FormProps }) => {
 						})}
 					>
 						<div>
-							<label className="text-sm pb-2 inline-block">簡短說明</label>
+							<span className="text-sm pb-2 inline-block">簡短說明</span>
 							<div>
 								<BlockNoteDrawer resource="products" />
 							</div>

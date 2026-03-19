@@ -25,7 +25,7 @@ import { TSortableTreeListProps, TTerm, DEFAULT } from '@/components/term/types'
 /**
  * 可排序的 term
  * @param {Edit} Edit 編輯的畫面由外部傳入
- * @return {React.FC}
+ * @return {JSX.Element} 可排序的 term 元件
  */
 const SortableListComponent = ({
 	taxonomy,
@@ -202,14 +202,14 @@ const SortableListComponent = ({
 
 /**
  * 可排序的 term
- * @param {TSortableTreeProps}                                  props                    商品規格
- * @param {TTaxonomy}                                           props.taxonomy           分類
+ * @param {TSortableTreeListProps}                              props                    商品規格
+ * @param {Object}                                              props.taxonomy           分類
  * @param {string[]}                                            props.selectedTermIds    選取的 term
  * @param {React.Dispatch<React.SetStateAction<string[]>>}      props.setSelectedTermIds 設定選取的 term
  * @param {string | null}                                       props.selectedTermId     選取的 term
  * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId  設定選取的 term
- * @param {React.FC<{ record: TTerm; taxonomy: TTaxonomy }>}    props.Edit               編輯的畫面由外部傳入
- * @return {React.FC}
+ * @param {React.FC<{ record: TTerm; taxonomy: object }>}       props.Edit               編輯的畫面由外部傳入
+ * @return {JSX.Element} 可排序的 term 元件
  */
 export const SortableList: FC<TSortableTreeListProps> = memo(
 	SortableListComponent

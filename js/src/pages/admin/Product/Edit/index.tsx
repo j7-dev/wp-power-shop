@@ -88,7 +88,7 @@ const EditComponent = () => {
 			...rest,
 			image_id: image ? image?.id : '0',
 			gallery_image_ids: gallery_images?.length
-				? gallery_images?.map(({ id }) => id)
+				? gallery_images?.map(({ id: imgId }) => imgId)
 				: '[]',
 			...sale_dates,
 		})

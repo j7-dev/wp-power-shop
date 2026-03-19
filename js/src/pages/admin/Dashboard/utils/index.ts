@@ -1,8 +1,8 @@
 import dayjs from 'dayjs'
 
-import { TQuery } from '../types'
-
 import { FORMAT } from '@/pages/admin/Analytics/utils'
+
+import { TQuery } from '../types'
 
 type TTimeSegment = {
 	key: 'Dawn' | 'Morning' | 'Afternoon' | 'Evening'
@@ -14,10 +14,10 @@ type TTimeSegment = {
  * 獲取瀏覽器當前小時並分為4等分
  * 只考慮小時(hour)，更加簡潔
  *
- * @return {Object} 返回時間段資訊
- * @return {string} returns.key - 時間段的英文標識 (Dawn/Morning/Afternoon/Evening)
- * @return {string} returns.label - 時間段的中文名稱 (凌晨/上午/下午/晚上)
- * @return {number} returns.currentHour - 當前小時數 (0-23)
+ * @return {TTimeSegment} 返回時間段資訊
+ *         - 時間段的英文標識 (Dawn/Morning/Afternoon/Evening)
+ *       - 時間段的中文名稱 (凌晨/上午/下午/晚上)
+ * - 當前小時數 (0-23)
  */
 export function getCurrentTimeSegment(): TTimeSegment {
 	// 獲取當前小時
@@ -55,9 +55,9 @@ export function getCurrentTimeSegment(): TTimeSegment {
 
 /**
  * 獲取當前時間段的問候語
- * @param display_name 使用者顯示名稱
- * @param segmentKey   時間段 key
- * @return 問候語
+ * @param  display_name 使用者顯示名稱
+ * @param  segmentKey   時間段 key
+ * @return {string} 問候語
  */
 export function getGreetings(
 	display_name: string,

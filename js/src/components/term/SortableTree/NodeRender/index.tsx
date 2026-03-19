@@ -69,7 +69,14 @@ const NodeRender: FC<{
 		>
 			<div
 				className="flex items-center overflow-hidden"
+				role="button"
+				tabIndex={0}
 				onClick={() => setSelectedTermId(record?.id)}
+				onKeyDown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						setSelectedTermId(record?.id)
+					}
+				}}
 			>
 				{showPlaceholder && <div className="w-[28px] h-[28px]"></div>}
 				<Checkbox className="mr-2" onChange={handleCheck} checked={isChecked} />

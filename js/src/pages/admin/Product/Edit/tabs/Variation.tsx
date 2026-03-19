@@ -135,23 +135,25 @@ export const Variation = () => {
 							<p className="text-sm m-0 text-nowrap">預設規格</p>
 							<Form form={formAttr} className="field-xs w-full">
 								<div className="flex flex-wrap gap-2">
-									{attributes?.map(({ id, name, taxonomy, options }) => (
-										<Item
-											key={`${id}-${name}`}
-											name={['default_attributes', taxonomy || name]}
-											label={name}
-											className="mb-0"
-											initialValue={defaultAttributes?.[taxonomy || name]}
-										>
-											<Select
-												className="min-w-40"
-												options={options}
-												placeholder="沒有預設"
-												size="small"
-												allowClear
-											/>
-										</Item>
-									))}
+									{attributes?.map(
+										({ id: attrId, name, taxonomy, options }) => (
+											<Item
+												key={`${attrId}-${name}`}
+												name={['default_attributes', taxonomy || name]}
+												label={name}
+												className="mb-0"
+												initialValue={defaultAttributes?.[taxonomy || name]}
+											>
+												<Select
+													className="min-w-40"
+													options={options}
+													placeholder="沒有預設"
+													size="small"
+													allowClear
+												/>
+											</Item>
+										)
+									)}
 								</div>
 							</Form>
 						</div>

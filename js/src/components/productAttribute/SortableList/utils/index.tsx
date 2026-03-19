@@ -5,7 +5,7 @@ import { TProductAttribute } from 'antd-toolkit/wp'
  * 1. 將 options 轉為 string[]
  *
  * @param {Partial<TProductAttribute>[]} attributes
- * @return {(Omit<Partial<TProductAttribute>, 'options'> & { options: string[] })[]}
+ * @return {(Omit<Partial<TProductAttribute>, 'options'> & { options: string[] })[]} 轉換後的屬性陣列
  */
 export function prepareAttributes(
 	attributes: Partial<TProductAttribute>[]
@@ -19,11 +19,11 @@ export function prepareAttributes(
  * 1. 將 options 轉為 string[]
  *
  * @param {TProductAttribute} attribute
- * @return {(Omit<TProductAttribute, 'options'> & { options: string[] })}
+ * @return {(Omit<TProductAttribute, 'options'> & { options: string[] })} 轉換後的屬性
  */
 export function prepareAttribute(
 	attribute: Partial<TProductAttribute>,
-	index: number = 0
+	position: number = 0
 ): Omit<Partial<TProductAttribute>, 'options'> & { options: string[] } {
 	const options = attribute?.options || []
 	const newAttr = {
@@ -34,7 +34,7 @@ export function prepareAttribute(
 			}
 			return o?.label
 		}),
-		position: index,
+		position,
 	}
 
 	return newAttr

@@ -24,7 +24,6 @@ import { memo, useEffect } from 'react'
 import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 import BulkAction from '@/components/product/ProductTable/BulkAction'
 import CreateButton from '@/components/product/ProductTable/Create'
-
 import {
 	useValueLabelMapper,
 	useColumns,

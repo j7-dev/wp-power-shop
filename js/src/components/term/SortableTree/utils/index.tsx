@@ -7,7 +7,7 @@ import { TTerm } from '@/components/term/types'
  * 將章節 TTerm 傳換成 TreeNode<TTerm>
  *
  * @param {TTerm} term
- * @return {TreeNode<TTerm>}
+ * @return {TreeNode<TTerm>} 轉換後的 TreeNode
  */
 
 export function termToTreeNode(term: TTerm): TreeNode<TTerm> {
@@ -40,7 +40,7 @@ export type TParam = {
  * @param {PaginationProps} paginationProps 分頁參數，用來計算分頁的 order 值，只有最上層需要加上 pageSize
  * @param {string}          parentId        父節點 id
  * @param {number}          depth           深度
- * @return {TParam[]}
+ * @return {TParam[]} 攤平後的參數陣列
  */
 export function treeToParams(
 	treeData: TreeData<TTerm>,

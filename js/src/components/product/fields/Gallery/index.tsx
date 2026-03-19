@@ -105,9 +105,7 @@ export const Gallery = ({
 	return (
 		<>
 			{'small' !== size && (
-				<label className="text-sm font-normal inline-block pb-2">
-					商品圖片
-				</label>
+				<span className="text-sm font-normal inline-block pb-2">商品圖片</span>
 			)}
 			<Item name={imageName} hidden />
 			<div className={wrapClassName}>
@@ -131,12 +129,19 @@ export const Gallery = ({
 												/>
 											</div>
 											{'small' !== size && (
-												<p
+												<span
 													className="m-0 text-xs"
+													role="button"
+													tabIndex={0}
 													onClick={handleSetThumbnail(_imageId)}
+													onKeyDown={(e) => {
+														if (e.key === 'Enter' || e.key === ' ') {
+															handleSetThumbnail(_imageId)()
+														}
+													}}
 												>
 													{index === 0 ? '封面' : '設為封面'}
-												</p>
+												</span>
 											)}
 										</div>
 									),
@@ -153,7 +158,14 @@ export const Gallery = ({
 							'group aspect-square rounded-lg cursor-pointer bg-gray-100 hover:bg-blue-100 border-dashed border-2 border-gray-200 hover:border-blue-200 transition-all duration-300 flex justify-center items-center',
 							imgSizeClass
 						)}
+						role="button"
+						tabIndex={0}
 						onClick={show}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter' || e.key === ' ') {
+								show()
+							}
+						}}
 					>
 						<PlusOutlined className="text-gray-500 group-hover:text-blue-500 transition-all duration-300" />
 					</div>

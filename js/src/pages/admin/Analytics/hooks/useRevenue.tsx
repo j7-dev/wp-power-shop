@@ -106,10 +106,9 @@ const useRevenue = ({ initialQuery, context }: TUseRevenueParams) => {
 
 /**
  * 格式化 result
- * @param result
- * @param dataLabel
- * @param isLastYear
- * @return
+ * @param  result
+ * @param  isLastYear
+ * @return {QueryObserverResult} 格式化後的查詢結果
  */
 function getFormattedResult(
 	result: QueryObserverResult<CustomResponse<TRevenue>, HttpError> &
