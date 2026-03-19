@@ -1,7 +1,4 @@
-import React from 'react'
 import { Form, Input, Select, FormProps } from 'antd'
-import { TaxonomyModals, Other, Gallery } from '@/components/product/fields'
-import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 import {
 	Heading,
 	DatePicker,
@@ -13,6 +10,10 @@ import {
 	cn,
 } from 'antd-toolkit'
 import { TProductType, useWoocommerce } from 'antd-toolkit/wp'
+import React from 'react'
+
+import { TaxonomyModals, Other, Gallery } from '@/components/product/fields'
+import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 
 const { Item } = Form
 

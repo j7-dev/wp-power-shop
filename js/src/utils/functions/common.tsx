@@ -13,11 +13,11 @@ export const handleClearZero = (e: React.MouseEvent<HTMLInputElement>) => {
 
 export const getCopyableJson = (variable: any) => {
 	const jsonStringStrippedEscapeC = JSON.stringify(
-		JSON.stringify(variable || '{}'),
+		JSON.stringify(variable || '{}')
 	).replace(/\\/g, '')
 	const jsonString = jsonStringStrippedEscapeC.slice(
 		1,
-		jsonStringStrippedEscapeC.length - 1,
+		jsonStringStrippedEscapeC.length - 1
 	)
 
 	if (typeof variable === 'object') {
@@ -36,7 +36,7 @@ export const getQueryString = (name: string) => {
 
 export const filterObjKeys = (
 	obj: object,
-	arr: (string | number | boolean | undefined | null)[] = [undefined],
+	arr: (string | number | boolean | undefined | null)[] = [undefined]
 ) => {
 	for (const key in obj) {
 		if (arr.includes(obj[key as keyof typeof obj])) {

@@ -1,14 +1,15 @@
-import { TFormValues } from '@/components/product/ProductEditTable/types'
+import { PlusOutlined, EyeOutlined, CloseOutlined } from '@ant-design/icons'
 import { Image, Form } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import { PlusOutlined, EyeOutlined, CloseOutlined } from '@ant-design/icons'
-import { nanoid } from 'nanoid'
 import { defaultImage, cn } from 'antd-toolkit'
 import {
 	TImage,
 	MediaLibraryModal,
 	useMediaLibraryModal,
 } from 'antd-toolkit/wp'
+import { nanoid } from 'nanoid'
+
+import { TFormValues } from '@/components/product/ProductEditTable/types'
 
 const { Item } = Form
 
@@ -27,11 +28,12 @@ export const Gallery = ({
 		changedValues: {
 			[key: string]: Partial<TFormValues>
 		},
-		allValues: TFormValues[],
+		allValues: TFormValues[]
 	) => void
 }) => {
 	const imageName = id ? [id, 'images'] : ['images']
 	const form = Form.useFormInstance()
+
 	// 初始的圖片
 	const watchImages: TImage[] = Form.useWatch(imageName, form)
 
@@ -52,7 +54,7 @@ export const Gallery = ({
 						} as {
 							[key: string]: Partial<TFormValues>
 						},
-						allValues,
+						allValues
 					)
 				}
 			},
@@ -62,7 +64,7 @@ export const Gallery = ({
 	const handleRemove = (_imageId: string) => () => {
 		form.setFieldValue(
 			imageName,
-			watchImages.filter(({ id: imageId }) => imageId !== _imageId),
+			watchImages.filter(({ id: imageId }) => imageId !== _imageId)
 		)
 
 		if (onValuesChange && id) {
@@ -72,13 +74,13 @@ export const Gallery = ({
 					[id]: {
 						//@ts-ignore
 						images: watchImages.filter(
-							({ id: imageId }) => imageId !== _imageId,
+							({ id: imageId }) => imageId !== _imageId
 						),
 					},
 				} as {
 					[key: string]: Partial<TFormValues>
 				},
-				allValues,
+				allValues
 			)
 		}
 	}
@@ -116,7 +118,7 @@ export const Gallery = ({
 								key={`${_imageId}-${nanoid(4)}`}
 								className={cn(
 									'product-image aspect-square rounded-lg object-cover',
-									imgSizeClass,
+									imgSizeClass
 								)}
 								preview={{
 									mask: (
@@ -143,13 +145,13 @@ export const Gallery = ({
 								src={url || defaultImage}
 								fallback={defaultImage}
 							/>
-						),
+						)
 				)}
 				{watchImages?.length < limit && (
 					<div
 						className={cn(
 							'group aspect-square rounded-lg cursor-pointer bg-gray-100 hover:bg-blue-100 border-dashed border-2 border-gray-200 hover:border-blue-200 transition-all duration-300 flex justify-center items-center',
-							imgSizeClass,
+							imgSizeClass
 						)}
 						onClick={show}
 					>

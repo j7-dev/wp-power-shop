@@ -1,5 +1,5 @@
-import dayjs from 'dayjs'
 import { TProductType } from 'antd-toolkit/wp'
+import dayjs from 'dayjs'
 
 export enum EViewType {
 	DEFAULT = 'default',

@@ -1,16 +1,17 @@
-import { FC } from 'react'
-import { TTerm } from '@/components/term/types'
-import { Checkbox, CheckboxProps, Tooltip, Button } from 'antd'
 import { ExportOutlined } from '@ant-design/icons'
+import { useDelete } from '@refinedev/core'
+import { Checkbox, CheckboxProps, Tooltip, Button } from 'antd'
+import { PopconfirmDelete } from 'antd-toolkit'
+import { notificationProps } from 'antd-toolkit/refine'
+import { ProductName as PostName } from 'antd-toolkit/wp'
+import { FC } from 'react'
+
 import {
 	useTaxonomy,
 	useSelectedTermId,
 	useSelectedTermIds,
 } from '@/components/term/hooks'
-import { useDelete } from '@refinedev/core'
-import { PopconfirmDelete } from 'antd-toolkit'
-import { ProductName as PostName } from 'antd-toolkit/wp'
-import { notificationProps } from 'antd-toolkit/refine'
+import { TTerm } from '@/components/term/types'
 
 const NodeRender: FC<{
 	record: TTerm

@@ -1,11 +1,12 @@
-import React, { memo } from 'react'
+import { Area, AreaConfig } from '@ant-design/plots'
 import { Card, Form } from 'antd'
 import dayjs from 'dayjs'
-import { TTotals, TIntervalBase } from '@/pages/admin/Analytics/types'
-import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
-import { cards, tickFilter } from '@/pages/admin/Analytics/utils'
-import { Area, AreaConfig } from '@ant-design/plots'
 import { nanoid } from 'nanoid'
+import React, { memo } from 'react'
+
+import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
+import { TTotals, TIntervalBase } from '@/pages/admin/Analytics/types'
+import { cards, tickFilter } from '@/pages/admin/Analytics/utils'
 
 type TData = {
 	interval: string
@@ -16,7 +17,7 @@ type TData = {
 }
 
 function formatStackedAreaData(
-	intervals: (TIntervalBase & TTotals)[],
+	intervals: (TIntervalBase & TTotals)[]
 ): TData[] {
 	if (!Array.isArray(intervals)) return []
 	if (!intervals.length) return []
@@ -83,7 +84,7 @@ const AreaView = () => {
 	if (isFetching) {
 		const randomArray = Array.from(
 			{ length: 12 },
-			() => Math.floor(Math.random() * 8) + 2,
+			() => Math.floor(Math.random() * 8) + 2
 		)
 		return (
 			<Card variant="borderless">

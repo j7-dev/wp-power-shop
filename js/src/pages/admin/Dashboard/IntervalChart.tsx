@@ -1,13 +1,14 @@
-import { Card, Row, Col, Spin } from 'antd'
-import * as echarts from 'echarts'
-import { useRef, useEffect } from 'react'
-import { useDashboard } from '@/pages/admin/Dashboard/hooks'
-import { getLabels } from '@/pages/admin/Dashboard/utils'
 import { useWindowSize } from '@uidotdev/usehooks'
-import { debounce } from 'lodash-es'
-import dayjs from 'dayjs'
+import { Card, Row, Col, Spin } from 'antd'
 import { useColor } from 'antd-toolkit'
 import { useWoocommerce } from 'antd-toolkit/wp'
+import dayjs from 'dayjs'
+import * as echarts from 'echarts'
+import { debounce } from 'lodash-es'
+import { useRef, useEffect } from 'react'
+
+import { useDashboard } from '@/pages/admin/Dashboard/hooks'
+import { getLabels } from '@/pages/admin/Dashboard/utils'
 
 const IntervalChart = () => {
 	const {
@@ -118,6 +119,7 @@ const IntervalChart = () => {
 					itemStyle: {
 						color: '#2db7f5',
 					},
+
 					// smooth: true,
 				},
 			],
@@ -141,6 +143,7 @@ const IntervalChart = () => {
 					const end = dayjs(date_end)
 					const queryStart = dayjs(query.after)
 					const queryEnd = dayjs(query.before)
+
 					// 計算差異天數
 					const diffDays = queryEnd.diff(queryStart, 'day')
 					if (diffDays <= 1) {
@@ -152,6 +155,7 @@ const IntervalChart = () => {
 						// 顯示小時
 						return `${start.format('MM/DD HH:mm')} - ${end.format('MM/DD HH:mm')}`
 					}
+
 					// 只顯示天數
 					return `${start.format('MM/DD')} - ${end.format('MM/DD')}`
 				}),

@@ -1,10 +1,11 @@
-import React from 'react'
-import { Table, TableProps, Tag, Tooltip, Button } from 'antd'
-import { TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
-import { FaWordpress } from 'react-icons/fa'
 import { Link } from '@refinedev/core'
-import { ORDER_STATUS, ProductPrice, UserName } from 'antd-toolkit/wp'
+import { Table, TableProps, Tag, Tooltip, Button } from 'antd'
 import { cn, NameId } from 'antd-toolkit'
+import { ORDER_STATUS, ProductPrice, UserName } from 'antd-toolkit/wp'
+import React from 'react'
+import { FaWordpress } from 'react-icons/fa'
+
+import { TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
 
 const useColumns = () => {
 	const columns: TableProps<TOrderBaseRecord>['columns'] = [
@@ -62,6 +63,7 @@ const useColumns = () => {
 				)
 			},
 		},
+
 		// {
 		// 	title: '送貨狀態',
 		// 	align: 'center',

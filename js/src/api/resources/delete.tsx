@@ -1,7 +1,8 @@
 import { axiosInstance as axios } from 'antd-toolkit/refine'
-import { API_URL, getDataProviderUrlParams } from '@/utils'
-import { TDataProvider } from '@/types'
 import { AxiosRequestConfig } from 'axios'
+
+import { TDataProvider } from '@/types'
+import { API_URL, getDataProviderUrlParams } from '@/utils'
 
 export const deleteResource = async ({
 	resource,
@@ -17,7 +18,7 @@ export const deleteResource = async ({
 	const dataProviderUrlParams = getDataProviderUrlParams(dataProvider)
 	const deleteResult = await axios.delete(
 		`${API_URL}/${dataProviderUrlParams}/${resource}/${pathParams.join('/')}`,
-		config,
+		config
 	)
 
 	return deleteResult

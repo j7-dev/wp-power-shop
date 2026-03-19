@@ -1,15 +1,16 @@
-import { FC } from 'react'
-import { TTerm, DEFAULT } from '@/components/term/types'
+import { ExportOutlined } from '@ant-design/icons'
 import { FlattenNode, useSortableTree } from '@ant-design/pro-editor'
 import { Checkbox, CheckboxProps, Tooltip, Button } from 'antd'
-import { ExportOutlined } from '@ant-design/icons'
+import { PopconfirmDelete } from 'antd-toolkit'
+import { ProductName as PostName } from 'antd-toolkit/wp'
+import { FC } from 'react'
+
 import {
 	useTaxonomy,
 	useSelectedTermId,
 	useSelectedTermIds,
 } from '@/components/term/hooks'
-import { PopconfirmDelete } from 'antd-toolkit'
-import { ProductName as PostName } from 'antd-toolkit/wp'
+import { TTerm, DEFAULT } from '@/components/term/types'
 
 const NodeRender: FC<{
 	node: FlattenNode<TTerm>
@@ -53,7 +54,7 @@ const NodeRender: FC<{
 			setSelectedTermIds((prev) => [...prev, ...flattenTermsIds])
 		} else {
 			setSelectedTermIds((prev) =>
-				prev.filter((c) => !flattenTermsIds.includes(c)),
+				prev.filter((c) => !flattenTermsIds.includes(c))
 			)
 		}
 	}

@@ -1,11 +1,12 @@
-import { useMemo } from 'react'
 import { useOne } from '@refinedev/core'
+import { useEnv } from 'antd-toolkit'
+import { useMemo } from 'react'
+
 import { TUserDetails } from '@/components/user/types'
 import {
 	getCurrentTimeSegment,
 	getGreetings,
 } from '@/pages/admin/Dashboard/utils'
-import { useEnv } from 'antd-toolkit'
 
 const Welcome = () => {
 	const { CURRENT_USER_ID } = useEnv()
@@ -19,7 +20,7 @@ const Welcome = () => {
 	const { key: segmentKey } = getCurrentTimeSegment()
 	const greetings = useMemo(
 		() => getGreetings(display_name, segmentKey),
-		[display_name, segmentKey],
+		[display_name, segmentKey]
 	)
 
 	if (isLoading) {

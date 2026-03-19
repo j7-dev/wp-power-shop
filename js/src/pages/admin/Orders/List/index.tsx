@@ -1,4 +1,5 @@
 import { memo } from 'react'
+
 import Table from '@/pages/admin/Orders/List/Table'
 
 const ListComponent = () => {

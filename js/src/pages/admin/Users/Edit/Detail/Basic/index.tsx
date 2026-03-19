@@ -1,12 +1,13 @@
+import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons'
+import { Form, Input, Space, Select, Button, DatePicker } from 'antd'
+import { Heading } from 'antd-toolkit'
+import dayjs, { Dayjs } from 'dayjs'
 import { useState, useEffect } from 'react'
+
+import ResetPassButton from '@/components/user/UserTable/BulkAction/ResetPassButton'
 import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
 import { useOptions } from '@/pages/admin/Users/List/hooks'
-import ResetPassButton from '@/components/user/UserTable/BulkAction/ResetPassButton'
-import { Form, Input, Space, Select, Button, DatePicker } from 'antd'
-import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons'
 import { INFO_LABEL_MAPPER } from '@/utils'
-import dayjs, { Dayjs } from 'dayjs'
-import { Heading } from 'antd-toolkit'
 
 const { Item } = Form
 const { TextArea } = Input

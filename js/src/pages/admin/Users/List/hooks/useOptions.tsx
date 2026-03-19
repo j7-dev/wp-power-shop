@@ -1,6 +1,6 @@
 import { useCustom, useApiUrl } from '@refinedev/core'
-import { USER_ROLES } from 'antd-toolkit/wp'
 import { SelectProps } from 'antd'
+import { USER_ROLES } from 'antd-toolkit/wp'
 
 export const useOptions = () => {
 	const apiUrl = useApiUrl()

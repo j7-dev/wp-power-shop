@@ -1,7 +1,13 @@
-import { Table, TableProps, Form } from 'antd'
-import { TProductRecord, TProductVariation } from '@/components/product/types'
-import { TFormValues } from '@/components/product/ProductEditTable/types'
 import { useWindowSize } from '@uidotdev/usehooks'
+import { Table, TableProps, Form } from 'antd'
+import {
+	ProductName,
+	isVariable,
+	isVariation,
+	TProductType,
+	useWoocommerce,
+} from 'antd-toolkit/wp'
+
 import {
 	Gallery,
 	Status,
@@ -13,13 +19,8 @@ import {
 	Other,
 	Taxonomy,
 } from '@/components/product/fields'
-import {
-	ProductName,
-	isVariable,
-	isVariation,
-	TProductType,
-	useWoocommerce,
-} from 'antd-toolkit/wp'
+import { TFormValues } from '@/components/product/ProductEditTable/types'
+import { TProductRecord, TProductVariation } from '@/components/product/types'
 
 const { Item } = Form
 
@@ -32,7 +33,7 @@ export const useColumns = ({
 		changedValues: {
 			[key: string]: Partial<TFormValues>
 		},
-		allValues: TFormValues[],
+		allValues: TFormValues[]
 	) => void
 }) => {
 	const {
@@ -79,7 +80,7 @@ export const useColumns = ({
 			),
 		},
 		{
-			title: `狀態`,
+			title: '狀態',
 			dataIndex: 'status',
 			width: 100,
 			render: (_, { id, type }) =>

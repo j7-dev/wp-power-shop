@@ -1,13 +1,14 @@
-import { useState } from 'react'
-import { Button, Space, Select, Form } from 'antd'
 import { ArrowsAltOutlined } from '@ant-design/icons'
-import { useUpdateMany } from '@refinedev/core'
 import { useModal } from '@refinedev/antd'
+import { useUpdateMany } from '@refinedev/core'
+import { Button, Space, Select, Form } from 'antd'
+import { notificationProps } from 'antd-toolkit/refine'
+import { PRODUCT_STATUS, PRODUCT_CATALOG_VISIBILITIES } from 'antd-toolkit/wp'
 import { useAtomValue } from 'jotai'
+import { useState } from 'react'
+
 import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 import ModalForm from '@/components/product/ProductTable/BulkAction/UpdateButton/ModalForm'
-import { PRODUCT_STATUS, PRODUCT_CATALOG_VISIBILITIES } from 'antd-toolkit/wp'
-import { notificationProps } from 'antd-toolkit/refine'
 
 const { Item } = Form
 
@@ -39,10 +40,10 @@ const UpdateButton = () => {
 	// 用來判斷是否可以按下修改按鈕
 	const handleValuesChange = (
 		changedValues: TSimpleFormValues,
-		allValues: TSimpleFormValues,
+		allValues: TSimpleFormValues
 	) => {
 		const keys = Object.keys(allValues).filter(
-			(key) => !!allValues[key as keyof TSimpleFormValues],
+			(key) => !!allValues[key as keyof TSimpleFormValues]
 		)
 		setCanUpdate(keys.length > 0)
 	}

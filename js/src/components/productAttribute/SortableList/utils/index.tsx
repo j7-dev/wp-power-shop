@@ -8,7 +8,7 @@ import { TProductAttribute } from 'antd-toolkit/wp'
  * @return {(Omit<Partial<TProductAttribute>, 'options'> & { options: string[] })[]}
  */
 export function prepareAttributes(
-	attributes: Partial<TProductAttribute>[],
+	attributes: Partial<TProductAttribute>[]
 ): (Omit<Partial<TProductAttribute>, 'options'> & { options: string[] })[] {
 	const new_attributes = attributes.map(prepareAttribute)
 	return new_attributes
@@ -23,7 +23,7 @@ export function prepareAttributes(
  */
 export function prepareAttribute(
 	attribute: Partial<TProductAttribute>,
-	index: number = 0,
+	index: number = 0
 ): Omit<Partial<TProductAttribute>, 'options'> & { options: string[] } {
 	const options = attribute?.options || []
 	const newAttr = {

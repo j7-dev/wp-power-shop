@@ -1,13 +1,14 @@
+import { Card, Row, Col, Statistic, StatisticProps } from 'antd'
+import { useColor, TrendIndicator, cn } from 'antd-toolkit'
+import { useWoocommerce } from 'antd-toolkit/wp'
+import CountUp from 'react-countup'
 import { LiaShippingFastSolid } from 'react-icons/lia'
 import { LuUsers } from 'react-icons/lu'
 import { MdOutlinePayments } from 'react-icons/md'
 import { RiMoneyDollarCircleLine } from 'react-icons/ri'
-import { Card, Row, Col, Statistic, StatisticProps } from 'antd'
-import CountUp from 'react-countup'
+
 import { useDashboard } from '@/pages/admin/Dashboard/hooks'
 import { getLabels } from '@/pages/admin/Dashboard/utils'
-import { useWoocommerce } from 'antd-toolkit/wp'
-import { useColor, TrendIndicator, cn } from 'antd-toolkit'
 
 const DashboardCards = () => {
 	const {
@@ -74,7 +75,7 @@ const DashboardCards = () => {
 					<Card
 						className={cn(
 							'w-full h-full relative overflow-hidden',
-							isFetching ? 'animate-pulse grayscale' : '',
+							isFetching ? 'animate-pulse grayscale' : ''
 						)}
 						variant="borderless"
 					>

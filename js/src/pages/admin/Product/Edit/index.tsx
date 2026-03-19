@@ -1,8 +1,13 @@
-import { memo, useState } from 'react'
-import { Tabs, TabsProps, Form, Switch, Button, FormProps } from 'antd'
 import { Edit, useForm } from '@refinedev/antd'
 import { useParsed } from '@refinedev/core'
+import { Tabs, TabsProps, Form, Switch, Button, FormProps } from 'antd'
+import { notificationProps } from 'antd-toolkit/refine'
+import { TImage, isVariable, useWoocommerce } from 'antd-toolkit/wp'
 import dayjs from 'dayjs'
+import { memo, useState } from 'react'
+
+import { TProductRecord } from '@/components/product/types'
+import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
 import {
 	Description,
 	Stock,
@@ -13,10 +18,6 @@ import {
 	Advanced,
 	Analytics,
 } from '@/pages/admin/Product/Edit/tabs'
-import { TProductRecord } from '@/components/product/types'
-import { RecordContext } from '@/pages/admin/Product/Edit/hooks'
-import { TImage, isVariable, useWoocommerce } from 'antd-toolkit/wp'
-import { notificationProps } from 'antd-toolkit/refine'
 
 const { Item } = Form
 
@@ -139,6 +140,7 @@ const EditComponent = () => {
 			label: '進階設定',
 			children: <Advanced formProps={formProps} />,
 		},
+
 		// {// TODO
 		// 	key: 'Download',
 		// 	label: '下載管理',
@@ -154,6 +156,7 @@ const EditComponent = () => {
 		const conditions = {
 			// 如果不是變體商品，移除 Variation 標籤
 			Variation: isVariable(watchProductType),
+
 			// 如果是可變商品或組合商品，沒有自己的價格，移除 Price 標籤
 			Price: !['grouped', 'variable'].includes(watchProductType),
 		}
@@ -164,7 +167,7 @@ const EditComponent = () => {
 	})
 
 	const disableSaveButton = ['Attributes', 'Variation', 'Analytics'].includes(
-		activeKey,
+		activeKey
 	)
 
 	return (

@@ -1,12 +1,14 @@
-import { useState } from 'react'
-import { useRecord } from '@/pages/admin/Product/Edit/hooks'
-import { SortableList } from '@/components/productAttribute/SortableList'
 import { Alert, Tag } from 'antd'
+import { useState } from 'react'
+
 import { EditForm } from '@/components/productAttribute/EditForm'
+import { SortableList } from '@/components/productAttribute/SortableList'
+import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 
 export const Attributes = () => {
 	const record = useRecord()
 	const attributes = record?.attributes
+
 	/** 編輯的規格有值時，表示編輯模式，沒有就是新增 */
 	const [selectedTermId, setSelectedTermId] = useState<string | null>(null)
 

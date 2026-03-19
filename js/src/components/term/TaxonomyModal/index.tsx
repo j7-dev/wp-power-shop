@@ -1,8 +1,9 @@
-import React, { memo, useEffect } from 'react'
-import { SortableTree, SortableList } from '@/components/term'
-import { TSortableTreeListProps } from '@/components/term/types'
 import { SimpleModal, TSimpleModalProps } from 'antd-toolkit'
 import { TTaxonomy } from 'antd-toolkit/wp'
+import React, { memo, useEffect } from 'react'
+
+import { SortableTree, SortableList } from '@/components/term'
+import { TSortableTreeListProps } from '@/components/term/types'
 
 export * from '@/components/term/TaxonomyModal/hooks'
 

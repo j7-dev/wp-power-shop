@@ -1,5 +1,3 @@
-
-
 export type TOrderCustomer = {
 	id: string
 	ip_address: string
@@ -19,81 +17,75 @@ export type TOrderCustomer = {
 }
 
 export type TOrderNote = {
-	id: number,
-	date_created: string,
-	content: string,
-	customer_note: boolean,
-	added_by: string,
+	id: number
+	date_created: string
+	content: string
+	customer_note: boolean
+	added_by: string
 	order_id: number
 }
 
 export type TOrderInfo = {
-	first_name: string,
-	last_name: string,
-	email: string,
-	phone: string,
+	first_name: string
+	last_name: string
+	email: string
+	phone: string
 	company?: string
-	postcode: string,
-	country: string,
-	state: string,
-	city: string,
-	address_1: string,
-	address_2: string,
+	postcode: string
+	country: string
+	state: string
+	city: string
+	address_1: string
+	address_2: string
 }
-
 
 // List 只會拿基本的欄位
 export type TOrderBaseRecord = {
 	id: string
 	order_number: string
-	customer: TOrderCustomer,
-	items :{
+	customer: TOrderCustomer
+	items: {
+		id: number
+		order_id: number
+		name: string
+		product_id: number
+		variation_id: number
+		quantity: number
+		tax_class: string
+		subtotal: string
+		subtotal_tax: string
+		total: string
+		total_tax: string
+		taxes: {
+			total: string[]
+			subtotal: string[]
+		}
+		meta_data: {
 			id: number
-			order_id: number
-			name: string
-			product_id: number
-			variation_id: number
-			quantity: number
-			tax_class: string
-			subtotal: string
-			subtotal_tax: string
-			total: string
-			total_tax: string
-			taxes: {
-				total: string[]
-				subtotal: string[]
-			}
-			meta_data: {
-				id: number
-				key: string
-				value: string
-			}[]
-		}[],
-		date_created: string
-		date_modified: string
-		status: string
-		formatted_order_total:string
-		payment_method_title:string
-		payment_complete:boolean
-		date_paid:string
-		created_via: string
-		edit_url:string
-		shipping_total:number
-		shipping_method:string
-		subtotal:number
-		total_discount:number
-		total_fees:number
-		total_tax:number
-		total: number
-		order_notes:TOrderNote[]
-		billing:TOrderInfo
-		shipping:TOrderInfo
-	}
-
-
-
-
+			key: string
+			value: string
+		}[]
+	}[]
+	date_created: string
+	date_modified: string
+	status: string
+	formatted_order_total: string
+	payment_method_title: string
+	payment_complete: boolean
+	date_paid: string
+	created_via: string
+	edit_url: string
+	shipping_total: number
+	shipping_method: string
+	subtotal: number
+	total_discount: number
+	total_fees: number
+	total_tax: number
+	total: number
+	order_notes: TOrderNote[]
+	billing: TOrderInfo
+	shipping: TOrderInfo
+}
 
 // Edit, Show, Create 會拿全部的欄位
-export type TOrderRecord = TOrderBaseRecord & {
-}
+export type TOrderRecord = TOrderBaseRecord & {}

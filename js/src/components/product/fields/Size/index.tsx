@@ -1,7 +1,8 @@
 import { Form, InputNumber, Select } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import { useProductsOptions } from '@/hooks'
 import { useWoocommerce } from 'antd-toolkit/wp'
+
+import { useProductsOptions } from '@/hooks'
 
 const { Item } = Form
 

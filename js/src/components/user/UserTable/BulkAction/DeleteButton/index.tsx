@@ -1,12 +1,14 @@
-import { memo, useState } from 'react'
-import { useModal } from '@refinedev/antd'
-import { Button, Alert, Modal, Input } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
-import { trim } from 'lodash-es'
+import { useModal } from '@refinedev/antd'
 import { useDeleteMany } from '@refinedev/core'
-import { useAtom } from 'jotai'
-import { selectedUserIdsAtom } from '@/components/user/UserTable/atom'
+import { Button, Alert, Modal, Input } from 'antd'
 import { notificationProps } from 'antd-toolkit/refine'
+import { useAtom } from 'jotai'
+import { trim } from 'lodash-es'
+import { memo, useState } from 'react'
+
+import { selectedUserIdsAtom } from '@/components/user/UserTable/atom'
+
 const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪用戶'
 
 const DeleteButton = () => {
@@ -52,7 +54,7 @@ const DeleteButton = () => {
 								close()
 								setSelectedUserIds([])
 							},
-						},
+						}
 					)
 				}}
 				confirmLoading={isDeleting}

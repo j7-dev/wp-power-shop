@@ -1,28 +1,30 @@
-import { memo, useEffect } from 'react'
-import { Form } from 'antd'
-import { prepareAttributes } from '@/components/productAttribute/SortableList/utils'
-import AttributeTaxonomyForm from './Form'
+import { Edit, useForm } from '@refinedev/antd'
 import {
 	useInvalidate,
 	CreateResponse,
 	UpdateResponse,
 	BaseRecord,
 } from '@refinedev/core'
-import { Edit, useForm } from '@refinedev/antd'
-import { useRecord } from '@/pages/admin/Product/Edit/hooks'
+import { Form } from 'antd'
 import { toFormData } from 'antd-toolkit'
-import { TProductAttribute } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
+import { TProductAttribute } from 'antd-toolkit/wp'
+import { memo, useEffect } from 'react'
+
+import AttributeTaxonomyForm from './Form'
+
+import { prepareAttributes } from '@/components/productAttribute/SortableList/utils'
+import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 
 /**
  * 編輯表單元件
  *
  * 用於編輯或新增分類項目（term）的表單元件。
  *
- * @param {Object} props - 元件屬性
+ * @param {Object}              props            - 元件屬性
  * @param {TProductAttribute[]} props.attributes - 商品規格列表
- * @param {TTerm} props.record - 要編輯的分類項目資料，如果是新增則傳入預設值
- * @returns {React.FC} 編輯表單元件
+ * @param {TTerm}               props.record     - 要編輯的分類項目資料，如果是新增則傳入預設值
+ * @return {React.FC} 編輯表單元件
  */
 const EditFormComponent = ({
 	attributes,
@@ -34,10 +36,11 @@ const EditFormComponent = ({
 	onMutationSuccess?: (
 		data: CreateResponse<BaseRecord> | UpdateResponse<BaseRecord>,
 		variables: any,
-		isCreate: boolean,
+		isCreate: boolean
 	) => void
 }) => {
 	const product = useRecord()
+
 	// 如果傳入的 record 是 DEFAULT 那就是代表是新增
 	const { id = '', name = '' } = record
 	const isCreate = !id && !name
@@ -47,7 +50,7 @@ const EditFormComponent = ({
 	// 初始化資料
 	const { formProps, form, saveButtonProps, mutation, onFinish } = useForm({
 		action: 'edit',
-		resource: `products/attributes`,
+		resource: 'products/attributes',
 		id: product?.id,
 		redirect: false,
 		queryOptions: {
@@ -91,7 +94,7 @@ const EditFormComponent = ({
 		await onFinish(
 			toFormData({
 				new_attributes: prepared_new_attributes,
-			}),
+			})
 		)
 
 		invalidate({
@@ -121,7 +124,7 @@ const EditFormComponent = ({
 			}
 			saveButtonProps={{
 				...saveButtonProps,
-				children: isCreate ? `新增商品規格` : `儲存商品規格`,
+				children: isCreate ? '新增商品規格' : '儲存商品規格',
 				icon: null,
 				loading: mutation?.isLoading,
 			}}

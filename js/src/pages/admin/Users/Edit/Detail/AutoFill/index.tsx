@@ -1,6 +1,7 @@
 import { Heading } from 'antd-toolkit'
-import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
+
 import { InfoTable } from '@/components/order'
+import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
 
 const AutoFill = () => {
 	const isEditing = useIsEditing()

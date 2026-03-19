@@ -1,10 +1,11 @@
-import { FC } from 'react'
+import { DeleteButton } from '@refinedev/antd'
+import { useCreate, useInvalidate } from '@refinedev/core'
 import { Timeline, Input, Form, Switch, Button, Badge } from 'antd'
 import { cn, renderHTML } from 'antd-toolkit'
-import { TUserDetails, TUserContactRemark } from '@/components/user/types'
-import { useCreate, useInvalidate } from '@refinedev/core'
-import { DeleteButton } from '@refinedev/antd'
 import dayjs from 'dayjs'
+import { FC } from 'react'
+
+import { TUserDetails, TUserContactRemark } from '@/components/user/types'
 
 const { TextArea } = Input
 const { Item } = Form
@@ -13,7 +14,7 @@ const { Item } = Form
  * 聯絡註記
  * TODO 目前只能打內部備註，如果要給客戶看，還沒想好要怎麼呈現
  * @param param0
- * @returns
+ * @return
  */
 export const ContactRemarks: FC<{
 	record: TUserDetails
@@ -41,7 +42,7 @@ export const ContactRemarks: FC<{
 						<div
 							className={cn(
 								'p-4 relative mb-4',
-								customer_note ? 'bg-yellow-50' : 'bg-blue-50',
+								customer_note ? 'bg-yellow-50' : 'bg-blue-50'
 							)}
 						>
 							{renderHTML(content)}
@@ -70,7 +71,7 @@ export const ContactRemarks: FC<{
 							</p>
 						</div>
 					</Badge.Ribbon>
-				),
+				)
 			),
 			dot: (
 				<p className="text-xs text-right mb-0 relative right-[1rem] text-gray-400">
@@ -103,7 +104,7 @@ export const ContactRemarks: FC<{
 						id: record?.id,
 					})
 				},
-			},
+			}
 		)
 	}
 
@@ -171,13 +172,13 @@ export const ContactRemarks: FC<{
 
 /**
  * 按日期分組項目
- * @param {Array} items - 包含日期的項目陣列
+ * @param {Array}  items      - 包含日期的項目陣列
  * @param {string} dateFormat - 日期格式，預設為 'YYYY-MM-DD'
- * @returns {Object} - 以日期為鍵的分組物件
+ * @return {Object} - 以日期為鍵的分組物件
  */
 function groupItemsByDate(
 	items: TUserDetails['contact_remarks'],
-	dateFormat = 'YYYY-MM-DD',
+	dateFormat = 'YYYY-MM-DD'
 ) {
 	// 使用 reduce 方法進行分組
 	const groupedItems = items?.reduce(
@@ -195,7 +196,7 @@ function groupItemsByDate(
 
 			return groups
 		},
-		{} as Record<string, TUserContactRemark[]>,
+		{} as Record<string, TUserContactRemark[]>
 	)
 
 	return groupedItems

@@ -1,11 +1,22 @@
 /* eslint-disable quote-props */
-import { Refine } from '@refinedev/core'
 import { ThemedLayoutV2, ThemedSiderV2, ErrorComponent } from '@refinedev/antd'
+import { Refine } from '@refinedev/core'
 import '@refinedev/antd/dist/reset.css'
 import routerBindings, {
 	UnsavedChangesNotifier,
 	NavigateToResource,
 } from '@refinedev/react-router'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ConfigProvider } from 'antd'
+import {
+	dataProvider,
+	notificationProvider,
+	useBunny,
+} from 'antd-toolkit/refine'
+import { BackToWpAdmin, MediaLibraryNotification } from 'antd-toolkit/wp'
+import { HashRouter, Outlet, Route, Routes } from 'react-router'
+
+import { useEnv } from '@/hooks'
 import {
 	OrdersList,
 	OrdersEdit,
@@ -20,18 +31,7 @@ import {
 	Summary,
 	OneShop,
 } from '@/pages/admin'
-
-import { HashRouter, Outlet, Route, Routes } from 'react-router'
 import { resources } from '@/resources'
-import { ConfigProvider } from 'antd'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { useEnv } from '@/hooks'
-import { BackToWpAdmin, MediaLibraryNotification } from 'antd-toolkit/wp'
-import {
-	dataProvider,
-	notificationProvider,
-	useBunny,
-} from 'antd-toolkit/refine'
 
 function App() {
 	const { bunny_data_provider_result } = useBunny()

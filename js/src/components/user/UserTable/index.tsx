@@ -1,14 +1,6 @@
-import React, { memo, useEffect } from 'react'
 import { useTable } from '@refinedev/antd'
-import { TUserRecord } from '@/components/user/types'
-import { Table, TableProps, FormInstance, CardProps } from 'antd'
-import useColumns from './hooks/useColumns'
-import Filter, { TFilterValues } from './Filter'
 import { HttpError } from '@refinedev/core'
-import { keyLabelMapper } from './utils'
-import { selectedUserIdsAtom } from './atom'
-import { useAtom } from 'jotai'
-import BulkAction from './BulkAction'
+import { Table, TableProps, FormInstance, CardProps } from 'antd'
 import {
 	useRowSelection,
 	getDefaultPaginationProps,
@@ -21,6 +13,16 @@ import {
 	ActionArea,
 	SelectedItem,
 } from 'antd-toolkit/refine'
+import { useAtom } from 'jotai'
+import React, { memo, useEffect } from 'react'
+
+import { selectedUserIdsAtom } from './atom'
+import BulkAction from './BulkAction'
+import Filter, { TFilterValues } from './Filter'
+import useColumns from './hooks/useColumns'
+import { keyLabelMapper } from './utils'
+
+import { TUserRecord } from '@/components/user/types'
 
 const UserTableComponent = ({
 	tableProps: overrideTableProps,
@@ -59,12 +61,12 @@ const UserTableComponent = ({
 
 			/** @type string[] 不在這頁的已選擇用戶 */
 			const selectedUserIdsNotInCurrentPage = selectedUserIds.filter(
-				(selectedUserId) => !currentAllKeys.includes(selectedUserId),
+				(selectedUserId) => !currentAllKeys.includes(selectedUserId)
 			)
 
 			/** @type string[] 在這頁的已選擇用戶 */
 			const currentSelectedRowKeysStringify = currentSelectedRowKeys.map(
-				(key) => key.toString(),
+				(key) => key.toString()
 			)
 
 			setSelectedUserIds(() => {

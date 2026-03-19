@@ -1,26 +1,26 @@
-import { useEffect, memo, FC } from 'react'
 import { SortableList as SortableListAntd } from '@ant-design/pro-editor'
-import { TTerm, DEFAULT } from '@/components/term/types'
-import { message, Button, Pagination, Empty } from 'antd'
-import NodeRender from '@/components/term/SortableList/NodeRender'
 import {
 	useCustomMutation,
 	useApiUrl,
 	useInvalidate,
 	useDeleteMany,
 } from '@refinedev/core'
+import { message, Button, Pagination, Empty } from 'antd'
+import { PopconfirmDelete } from 'antd-toolkit'
+import { notificationProps } from 'antd-toolkit/refine'
 import { isEqual as _isEqual } from 'lodash-es'
-import { toParams } from '@/components/term/SortableList/utils'
+import { useEffect, memo, FC } from 'react'
+
 import {
 	useTermsList,
 	TaxonomyContext,
 	SelectedTermIdsContext,
 	SelectedTermIdContext,
 } from '@/components/term/hooks'
-import { TSortableTreeListProps } from '@/components/term/types'
 import Loading from '@/components/term/SortableList/Loading'
-import { PopconfirmDelete } from 'antd-toolkit'
-import { notificationProps } from 'antd-toolkit/refine'
+import NodeRender from '@/components/term/SortableList/NodeRender'
+import { toParams } from '@/components/term/SortableList/utils'
+import { TSortableTreeListProps, TTerm, DEFAULT } from '@/components/term/types'
 
 /**
  * 可排序的 term
@@ -97,7 +97,7 @@ const SortableListComponent = ({
 						invalidates: ['list'],
 					})
 				},
-			},
+			}
 		)
 	}
 
@@ -145,7 +145,7 @@ const SortableListComponent = ({
 											onSuccess: () => {
 												setSelectedTermIds([])
 											},
-										},
+										}
 									),
 							}}
 							buttonProps={{
@@ -202,15 +202,15 @@ const SortableListComponent = ({
 
 /**
  * 可排序的 term
- * @param {TSortableTreeProps} props 商品規格
- * @param {TTaxonomy} props.taxonomy 分類
- * @param {string[]} props.selectedTermIds 選取的 term
- * @param {React.Dispatch<React.SetStateAction<string[]>>} props.setSelectedTermIds 設定選取的 term
- * @param {string | null} props.selectedTermId 選取的 term
- * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId 設定選取的 term
- * @param {React.FC<{ record: TTerm; taxonomy: TTaxonomy }>} props.Edit 編輯的畫面由外部傳入
+ * @param {TSortableTreeProps}                                  props                    商品規格
+ * @param {TTaxonomy}                                           props.taxonomy           分類
+ * @param {string[]}                                            props.selectedTermIds    選取的 term
+ * @param {React.Dispatch<React.SetStateAction<string[]>>}      props.setSelectedTermIds 設定選取的 term
+ * @param {string | null}                                       props.selectedTermId     選取的 term
+ * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId  設定選取的 term
+ * @param {React.FC<{ record: TTerm; taxonomy: TTaxonomy }>}    props.Edit               編輯的畫面由外部傳入
  * @return {React.FC}
  */
 export const SortableList: FC<TSortableTreeListProps> = memo(
-	SortableListComponent,
+	SortableListComponent
 )

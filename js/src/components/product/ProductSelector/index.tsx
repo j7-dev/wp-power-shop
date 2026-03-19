@@ -1,8 +1,9 @@
-import { Select, Form, Tag, FormItemProps } from 'antd'
 import { useSelect } from '@refinedev/antd'
-import { TProductSelectOption } from '@/pages/admin/Analytics/types'
+import { Select, Form, Tag, FormItemProps } from 'antd'
 import { defaultSelectProps, NameId } from 'antd-toolkit'
 import { useWoocommerce } from 'antd-toolkit/wp'
+
+import { TProductSelectOption } from '@/pages/admin/Analytics/types'
 
 const { Item } = Form
 
@@ -46,10 +47,10 @@ export const ProductSelector = ({
 				placeholder="可多選，可搜尋關鍵字，輸入數字的話會搜尋商品 ID"
 				optionRender={({ value, label }) => {
 					const option = productSelectOptions.find(
-						(productOption) => productOption?.id === value,
+						(productOption) => productOption?.id === value
 					)
 					const productType = product_types.find(
-						(pt) => pt?.value === option?.type,
+						(pt) => pt?.value === option?.type
 					)
 					return (
 						<div className="flex items-center gap-x-2 justify-between pr-4">

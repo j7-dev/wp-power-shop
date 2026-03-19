@@ -1,7 +1,8 @@
-import React from 'react'
 import { Form, FormProps, Input } from 'antd'
-import { Price as PriceField } from '@/components/product/fields'
 import { TProductType } from 'antd-toolkit/wp'
+import React from 'react'
+
+import { Price as PriceField } from '@/components/product/fields'
 
 const { Item } = Form
 export const Price = ({ formProps }: { formProps: FormProps }) => {

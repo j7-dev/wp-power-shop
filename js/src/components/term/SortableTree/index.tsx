@@ -1,31 +1,33 @@
-import { useState, useEffect, memo, FC } from 'react'
 import {
 	SortableTree as SortableTreeAntd,
 	TreeData,
 } from '@ant-design/pro-editor'
-import { TTerm, DEFAULT, TSortableTreeListProps } from '@/components/term/types'
-import { message, Button, Pagination, Empty } from 'antd'
-import NodeRender from '@/components/term/SortableTree/NodeRender'
-import {
-	termToTreeNode,
-	treeToParams,
-} from '@/components/term/SortableTree/utils'
 import {
 	useCustomMutation,
 	useApiUrl,
 	useInvalidate,
 	useDeleteMany,
 } from '@refinedev/core'
+import { message, Button, Pagination, Empty } from 'antd'
+import { PopconfirmDelete } from 'antd-toolkit'
+import { notificationProps } from 'antd-toolkit/refine'
 import { isEqual as _isEqual } from 'lodash-es'
-import { useTermsList } from '@/components/term/hooks'
+import { useState, useEffect, memo, FC } from 'react'
+
 import {
 	TaxonomyContext,
 	SelectedTermIdsContext,
 	SelectedTermIdContext,
+	useTermsList,
 } from '@/components/term/hooks'
+
 import Loading from '@/components/term/SortableTree/Loading'
-import { PopconfirmDelete } from 'antd-toolkit'
-import { notificationProps } from 'antd-toolkit/refine'
+import NodeRender from '@/components/term/SortableTree/NodeRender'
+import {
+	termToTreeNode,
+	treeToParams,
+} from '@/components/term/SortableTree/utils'
+import { TTerm, DEFAULT, TSortableTreeListProps } from '@/components/term/types'
 
 // 定義最大深度
 export const MAX_DEPTH = 2
@@ -80,7 +82,7 @@ const SortableTreeComponent = ({
 			}, [] as TTerm[])
 
 			setSelectedTermId(
-				flattenTerms.find((c) => c.id === selectedTermId)?.id || null,
+				flattenTerms.find((c) => c.id === selectedTermId)?.id || null
 			)
 		}
 	}, [isListLoading, terms])
@@ -91,6 +93,7 @@ const SortableTreeComponent = ({
 		const isEqual = _isEqual(from_tree, to_tree)
 
 		if (isEqual) return
+
 		// 這個儲存只存新增，不存章節的細部資料
 		message.loading({
 			content: '排序儲存中...',
@@ -125,7 +128,7 @@ const SortableTreeComponent = ({
 						invalidates: ['list'],
 					})
 				},
-			},
+			}
 		)
 	}
 
@@ -183,7 +186,7 @@ const SortableTreeComponent = ({
 											onSuccess: () => {
 												setSelectedTermIds([])
 											},
-										},
+										}
 									),
 							}}
 							buttonProps={{
@@ -250,24 +253,24 @@ const SortableTreeComponent = ({
 
 /**
  * 可排序的 term
- * @param {TSortableTreeProps} props 商品規格
- * @param {TTaxonomy} props.taxonomy 分類
- * @param {string[]} props.selectedTermIds 選取的 term
- * @param {React.Dispatch<React.SetStateAction<string[]>>} props.setSelectedTermIds 設定選取的 term
- * @param {string | null} props.selectedTermId 選取的 term
- * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId 設定選取的 term
- * @param {React.FC<{ record: TTerm; taxonomy: TTaxonomy }>} props.Edit 編輯的畫面由外部傳入
+ * @param {TSortableTreeProps}                                  props                    商品規格
+ * @param {TTaxonomy}                                           props.taxonomy           分類
+ * @param {string[]}                                            props.selectedTermIds    選取的 term
+ * @param {React.Dispatch<React.SetStateAction<string[]>>}      props.setSelectedTermIds 設定選取的 term
+ * @param {string | null}                                       props.selectedTermId     選取的 term
+ * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId  設定選取的 term
+ * @param {React.FC<{ record: TTerm; taxonomy: TTaxonomy }>}    props.Edit               編輯的畫面由外部傳入
  * @return {React.FC}
  */
 export const SortableTree: FC<TSortableTreeListProps> = memo(
-	SortableTreeComponent,
+	SortableTreeComponent
 )
 
 /**
  * 取得所有展開的 ids
  * 遞迴取得所有 collapsed = false 的 id
  * @param treeData 樹狀結構
- * @returns 所有 collapsed = false 的 id
+ * @return 所有 collapsed = false 的 id
  */
 function getOpenedNodeIds(treeData: TreeData<TTerm>) {
 	// 遞迴取得所有 collapsed = false 的 id
@@ -281,17 +284,17 @@ function getOpenedNodeIds(treeData: TreeData<TTerm>) {
 
 /**
  * 恢復原本的 collapsed 狀態
- * @param treeData 樹狀結構
+ * @param treeData      樹狀結構
  * @param openedNodeIds 展開的 ids
- * @returns newTreeData 恢復原本的 collapsed 狀態
+ * @return newTreeData 恢復原本的 collapsed 狀態
  */
 function restoreOriginCollapsedState(
 	treeData: TreeData<TTerm>,
-	openedNodeIds: string[],
+	openedNodeIds: string[]
 ) {
 	// 遞迴恢復原本的 collapsed 狀態
 	const newTreeData: TreeData<TTerm> = treeData?.map((item) => {
-		let newItem = item
+		const newItem = item
 		if (openedNodeIds.includes(item.id as string)) {
 			newItem.collapsed = false
 		}
@@ -299,7 +302,7 @@ function restoreOriginCollapsedState(
 		if (item?.children?.length) {
 			newItem.children = restoreOriginCollapsedState(
 				item.children,
-				openedNodeIds,
+				openedNodeIds
 			)
 		}
 		return item
@@ -310,8 +313,8 @@ function restoreOriginCollapsedState(
 /**
  * 取得樹狀結構的最大深度
  * @param treeData 樹狀結構
- * @param depth 當前深度
- * @returns 最大深度
+ * @param depth    當前深度
+ * @return 最大深度
  */
 function getMaxDepth(treeData: TreeData<TTerm>, depth = 0) {
 	// 如果沒有資料，回傳當前深度

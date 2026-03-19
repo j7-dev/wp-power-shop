@@ -1,7 +1,7 @@
-import React, { memo, useEffect } from 'react'
 import { Form, Input, InputNumber, Select, Space } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
 import { useWoocommerce } from 'antd-toolkit/wp'
+import React, { memo, useEffect } from 'react'
 
 const { Item } = Form
 

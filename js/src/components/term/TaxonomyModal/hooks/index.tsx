@@ -1,11 +1,12 @@
 import { Button, Form, FormItemProps } from 'antd'
-import { useSortableTreeList } from '@/components/term'
 import { useSimpleModal, TSimpleModalProps } from 'antd-toolkit'
+
+import { useSortableTreeList } from '@/components/term'
 import { TSortableTreeListProps } from '@/components/term/types'
 
 /** 控制媒體庫 modal 的 props */
 export const useTaxonomyModal = (
-	name: FormItemProps['name'],
+	name: FormItemProps['name']
 ): {
 	show: () => void
 	close: () => void

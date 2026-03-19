@@ -1,9 +1,10 @@
-import React from 'react'
-import { DatePicker, Button, Select, Form, Checkbox, Tooltip } from 'antd'
-import { ProductSelector } from '@/components/product'
-import dayjs from 'dayjs'
-import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
 import { AreaChartOutlined, LineChartOutlined } from '@ant-design/icons'
+import { DatePicker, Button, Select, Form, Checkbox, Tooltip } from 'antd'
+import dayjs from 'dayjs'
+import React from 'react'
+
+import { ProductSelector } from '@/components/product'
+import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
 import { EViewType } from '@/pages/admin/Analytics/types'
 import { RANGE_PRESETS, maxDateRange } from '@/pages/admin/Analytics/utils'
 

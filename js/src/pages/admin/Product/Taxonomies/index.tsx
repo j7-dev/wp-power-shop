@@ -1,10 +1,11 @@
 import { Tabs, TabsProps, Card } from 'antd'
+import { useWoocommerce } from 'antd-toolkit/wp'
+
 import {
 	SortableTree,
 	useSortableTreeList,
 	SortableList,
 } from '@/components/term'
-import { useWoocommerce } from 'antd-toolkit/wp'
 
 export const ProductTaxonomies = () => {
 	const { product_taxonomies = [] } = useWoocommerce()
@@ -17,7 +18,7 @@ export const ProductTaxonomies = () => {
 						const { value, label, hierarchical } = taxonomy
 						return {
 							key: value,
-							label: label,
+							label,
 							children: hierarchical ? (
 								<SortableTree {...sortableTreeListProps} taxonomy={taxonomy} />
 							) : (

@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import { MediaLibrary, TAttachment, TImage } from 'antd-toolkit/wp'
+import { useState } from 'react'
 
 export const WPMediaLibraryPage = () => {
 	const [selectedItems, setSelectedItems] = useState<(TAttachment | TImage)[]>(
-		[],
+		[]
 	)
 
 	return (

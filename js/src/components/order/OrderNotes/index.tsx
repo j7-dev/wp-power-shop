@@ -1,10 +1,11 @@
-import { FC } from 'react'
+import { DeleteButton } from '@refinedev/antd'
+import { useCreate, useInvalidate } from '@refinedev/core'
 import { Timeline, Input, Form, Switch, Button, Badge } from 'antd'
 import { cn, renderHTML } from 'antd-toolkit'
-import { TOrderRecord, TOrderNote } from '@/pages/admin/Orders/List/types'
-import { useCreate, useInvalidate } from '@refinedev/core'
-import { DeleteButton } from '@refinedev/antd'
 import dayjs from 'dayjs'
+import { FC } from 'react'
+
+import { TOrderRecord, TOrderNote } from '@/pages/admin/Orders/List/types'
 
 const { TextArea } = Input
 const { Item } = Form
@@ -41,7 +42,7 @@ export const OrderNotes: FC<{
 						<div
 							className={cn(
 								'p-4 relative mb-4',
-								customer_note ? 'bg-yellow-50' : 'bg-blue-50',
+								customer_note ? 'bg-yellow-50' : 'bg-blue-50'
 							)}
 						>
 							{renderHTML(content)}
@@ -70,7 +71,7 @@ export const OrderNotes: FC<{
 							</p>
 						</div>
 					</Badge.Ribbon>
-				),
+				)
 			),
 			dot: (
 				<p className="text-xs text-right mb-0 relative right-[1rem] text-gray-400">
@@ -101,7 +102,7 @@ export const OrderNotes: FC<{
 						id: record?.id,
 					})
 				},
-			},
+			}
 		)
 	}
 
@@ -169,13 +170,13 @@ export const OrderNotes: FC<{
 
 /**
  * 按日期分組項目
- * @param {Array} items - 包含日期的項目陣列
+ * @param {Array}  items      - 包含日期的項目陣列
  * @param {string} dateFormat - 日期格式，預設為 'YYYY-MM-DD'
- * @returns {Object} - 以日期為鍵的分組物件
+ * @return {Object} - 以日期為鍵的分組物件
  */
 function groupItemsByDate(
 	items: TOrderRecord['order_notes'],
-	dateFormat = 'YYYY-MM-DD',
+	dateFormat = 'YYYY-MM-DD'
 ) {
 	// 使用 reduce 方法進行分組
 	const groupedItems = items?.reduce(
@@ -193,7 +194,7 @@ function groupItemsByDate(
 
 			return groups
 		},
-		{} as Record<string, TOrderNote[]>,
+		{} as Record<string, TOrderNote[]>
 	)
 
 	return groupedItems

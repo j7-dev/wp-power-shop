@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useUpdateMany } from '@refinedev/core'
 import { ModalProps, Modal, Form, Skeleton } from 'antd'
 import { useAtomValue } from 'jotai'
-import { useUpdateMany } from '@refinedev/core'
-import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
+import { useEffect, useState } from 'react'
+
 import { ProductEditTable } from '@/components/product'
 import {
 	TFormValues,
 	ZFormValues,
 } from '@/components/product/ProductEditTable/types'
-import { TProductRecord } from '@/components/product/types'
-
 import { productsToFields } from '@/components/product/ProductEditTable/utils'
+import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
+import { TProductRecord } from '@/components/product/types'
 
 const ModalForm = ({ modalProps }: { modalProps: ModalProps }) => {
 	const products = useAtomValue(selectedProductsAtom)

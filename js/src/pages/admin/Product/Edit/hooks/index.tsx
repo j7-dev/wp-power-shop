@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react'
+
 import { TProductRecord } from '@/components/product/types'
 
 export const RecordContext = createContext<
@@ -11,7 +12,7 @@ export const RecordContext = createContext<
 
 /**
  * 取得商品記錄
- * @returns TProductRecord & { isLoading: boolean, isFetching: boolean } | undefined
+ * @return TProductRecord & { isLoading: boolean, isFetching: boolean } | undefined
  */
 export const useRecord = ():
 	| (TProductRecord & {

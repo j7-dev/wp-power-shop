@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
 import { Result, Button } from 'antd'
 import { useEnv } from 'antd-toolkit'
+import React, { useEffect } from 'react'
 
 export const OneShop = () => {
 	const { SITE_URL } = useEnv()

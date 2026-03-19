@@ -1,4 +1,3 @@
-import { Tag } from 'antd'
 import {
 	RadarChartOutlined,
 	LineChartOutlined,
@@ -8,10 +7,11 @@ import {
 	MailOutlined,
 	TagsOutlined,
 } from '@ant-design/icons'
-import { FaPhotoVideo } from 'react-icons/fa'
 import { ResourceProps } from '@refinedev/core'
-import { LiaClipboardListSolid } from 'react-icons/lia'
+import { Tag } from 'antd'
 import { BsBox2 } from 'react-icons/bs'
+import { FaPhotoVideo } from 'react-icons/fa'
+import { LiaClipboardListSolid } from 'react-icons/lia'
 
 export const resources: ResourceProps[] = [
 	{
@@ -38,6 +38,7 @@ export const resources: ResourceProps[] = [
 			label: '訂單管理',
 		},
 	},
+
 	// {
 	// 	parentName: 'order-management',
 	// 	name: 'subscriptions',
@@ -96,6 +97,7 @@ export const resources: ResourceProps[] = [
 			icon: <TagsOutlined />,
 		},
 	},
+
 	// {
 	// 	parentName: 'marketing',
 	// 	name: 'coupons',
@@ -109,6 +111,7 @@ export const resources: ResourceProps[] = [
 		parentName: 'marketing',
 		name: 'one-shop',
 		list: '/marketing/one-shop',
+
 		// edit: '/one_shop/edit/:id',
 		meta: {
 			label: (
@@ -129,6 +132,7 @@ export const resources: ResourceProps[] = [
 			icon: <LineChartOutlined />,
 		},
 	},
+
 	// {
 	// 	name: 'emails',
 	// 	list: '/emails',
@@ -162,6 +166,7 @@ export const resources: ResourceProps[] = [
 			icon: <FaPhotoVideo />,
 		},
 	},
+
 	// {
 	// 	name: 'shortcodes',
 	// 	list: '/shortcodes',

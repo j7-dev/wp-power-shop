@@ -1,7 +1,8 @@
-import { useRecord } from '@/pages/admin/Users/Edit/hooks'
-import { Price } from '@/components/general'
 import { Tag } from 'antd'
 import { ORDER_STATUS } from 'antd-toolkit/wp'
+
+import { Price } from '@/components/general'
+import { useRecord } from '@/pages/admin/Users/Edit/hooks'
 
 const RecentOrders = () => {
 	const record = useRecord()
@@ -11,7 +12,7 @@ const RecentOrders = () => {
 			{recent_orders?.map(
 				({ order_id, order_date, order_total, order_status, order_items }) => {
 					const findStatus = ORDER_STATUS.find(
-						(item) => item.value === order_status,
+						(item) => item.value === order_status
 					)
 					return (
 						<div
@@ -48,7 +49,7 @@ const RecentOrders = () => {
 										<span>x</span>
 										<span className="text-right">{quantity}</span>
 									</div>
-								),
+								)
 							)}
 							<div className="bg-gray-200 h-[1px] w-full my-2" />
 							<div className="flex justify-between items-center text-xs">
@@ -57,7 +58,7 @@ const RecentOrders = () => {
 							</div>
 						</div>
 					)
-				},
+				}
 			)}
 		</div>
 	)

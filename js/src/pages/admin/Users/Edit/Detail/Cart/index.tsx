@@ -1,6 +1,7 @@
-import { useRecord } from '@/pages/admin/Users/Edit/hooks'
-import { Price } from '@/components/general'
 import { Empty } from 'antd'
+
+import { Price } from '@/components/general'
+import { useRecord } from '@/pages/admin/Users/Edit/hooks'
 
 const RecentOrders = () => {
 	const record = useRecord()

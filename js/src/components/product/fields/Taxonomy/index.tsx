@@ -1,7 +1,8 @@
 import { Form, Select } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import { useProductsOptions } from '@/hooks'
 import { defaultSelectProps } from 'antd-toolkit'
+
+import { useProductsOptions } from '@/hooks'
 
 const { Item } = Form
 

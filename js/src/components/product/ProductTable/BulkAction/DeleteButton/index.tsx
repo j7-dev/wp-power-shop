@@ -1,12 +1,13 @@
-import { memo, useState } from 'react'
-import { useModal } from '@refinedev/antd'
-import { Button, Alert, Modal, Input } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
-import { trim } from 'lodash-es'
+import { useModal } from '@refinedev/antd'
 import { useDeleteMany } from '@refinedev/core'
-import { useAtom } from 'jotai'
-import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
+import { Button, Alert, Modal, Input } from 'antd'
 import { notificationProps } from 'antd-toolkit/refine'
+import { useAtom } from 'jotai'
+import { trim } from 'lodash-es'
+import { memo, useState } from 'react'
+
+import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
 
 const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪商品'
 
@@ -54,7 +55,7 @@ const DeleteButton = () => {
 								close()
 								setProducts([])
 							},
-						},
+						}
 					)
 				}}
 				confirmLoading={isDeleting}

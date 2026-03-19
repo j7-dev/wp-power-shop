@@ -1,11 +1,12 @@
-import { FC } from 'react'
 import { useUpdate, useInvalidate } from '@refinedev/core'
+import { PopconfirmDelete, toFormData } from 'antd-toolkit'
+import { notificationProps } from 'antd-toolkit/refine'
+import { ProductName as PostName, TProductAttribute } from 'antd-toolkit/wp'
+import { FC } from 'react'
+
 import { useSelectedTermId } from '@/components/productAttribute/hooks'
 import { prepareAttributes } from '@/components/productAttribute/SortableList/utils'
 import { useRecord } from '@/pages/admin/Product/Edit/hooks'
-import { PopconfirmDelete, toFormData } from 'antd-toolkit'
-import { ProductName as PostName, TProductAttribute } from 'antd-toolkit/wp'
-import { notificationProps } from 'antd-toolkit/refine'
 
 const NodeRender: FC<{
 	attributes: TProductAttribute[]
@@ -23,12 +24,12 @@ const NodeRender: FC<{
 		}
 
 		const new_attributes = prepareAttributes(attributes)?.filter(
-			(a) => `${a.id}-${a.name}` !== `${id}-${name}`,
+			(a) => `${a.id}-${a.name}` !== `${id}-${name}`
 		)
 
 		deleteAttribute(
 			{
-				resource: `products/attributes`,
+				resource: 'products/attributes',
 				id: product?.id,
 				values: toFormData({
 					new_attributes,
@@ -43,7 +44,7 @@ const NodeRender: FC<{
 						id: product?.id,
 					})
 				},
-			},
+			}
 		)
 	}
 
@@ -68,7 +69,7 @@ const NodeRender: FC<{
 						className: 'mr-0',
 						loading: isDeleting,
 					}}
-					tooltipProps={{ title: `刪除` }}
+					tooltipProps={{ title: '刪除' }}
 					popconfirmProps={{
 						onConfirm: handleDelete,
 						placement: 'right',

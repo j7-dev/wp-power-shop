@@ -1,15 +1,16 @@
-import { useEffect, useState, memo } from 'react'
-import { Table, TableProps, Form, Switch, FormInstance } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
-import { TProductRecord } from '@/components/product/types'
-import { TFormValues } from '@/components/product/ProductEditTable/types'
-import { useColumns } from '@/components/product/ProductEditTable/hooks'
 import { useWindowSize } from '@uidotdev/usehooks'
+import { Table, TableProps, Form, Switch, FormInstance } from 'antd'
+import { defaultTableProps } from 'antd-toolkit'
+import { useEffect, useState, memo } from 'react'
+
+import { useColumns } from '@/components/product/ProductEditTable/hooks'
+import { TFormValues } from '@/components/product/ProductEditTable/types'
 import {
 	productsToFields,
 	handleValuesChange,
 } from '@/components/product/ProductEditTable/utils'
-import { defaultTableProps } from 'antd-toolkit'
+import { TProductRecord } from '@/components/product/types'
 
 /**
  * 產品批量編輯表格組件
@@ -19,11 +20,11 @@ import { defaultTableProps } from 'antd-toolkit'
  *
  * @module ProductEditTable
  * @component
- * @param {Object} props - 組件屬性
- * @param {FormInstance} props.form - Ant Design 表單實例
- * @param {TProductRecord[]} props.virtualFields - 虛擬欄位資料，用於記錄表格中所有產品的變更
+ * @param {Object}                                                 props                  - 組件屬性
+ * @param {FormInstance}                                           props.form             - Ant Design 表單實例
+ * @param {TProductRecord[]}                                       props.virtualFields    - 虛擬欄位資料，用於記錄表格中所有產品的變更
  * @param {React.Dispatch<React.SetStateAction<TProductRecord[]>>} props.setVirtualFields - 更新虛擬欄位的函數
- * @returns {JSX.Element} 產品編輯表格組件
+ * @return {JSX.Element} 產品編輯表格組件
  */
 const ProductEditTableComponent = ({
 	form,
@@ -43,7 +44,7 @@ const ProductEditTableComponent = ({
 		changedValues: {
 			[key: string]: Partial<TFormValues>
 		},
-		allValues: TFormValues[],
+		allValues: TFormValues[]
 	) => {
 		handleValuesChange(
 			changedValues as any,
@@ -51,7 +52,7 @@ const ProductEditTableComponent = ({
 			syncModeEnabled,
 			virtualFields,
 			setVirtualFields,
-			context,
+			context
 		)
 	}
 
@@ -107,5 +108,5 @@ const ProductEditTableComponent = ({
 }
 
 export const ProductEditTable = memo(
-	ProductEditTableComponent,
+	ProductEditTableComponent
 ) as typeof ProductEditTableComponent

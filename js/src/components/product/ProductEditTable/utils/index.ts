@@ -1,9 +1,12 @@
-import { TProductRecord } from '@/components/product/types'
+import { isVariable, isVariation, TImage } from 'antd-toolkit/wp'
 import { Dayjs } from 'dayjs'
-import { isVariable } from 'antd-toolkit/wp'
-import { ZFormValues, TFormValues } from '@/components/product/ProductEditTable/types'
 import { produce } from 'immer'
-import { isVariation, TImage } from 'antd-toolkit/wp'
+
+import {
+	ZFormValues,
+	TFormValues,
+} from '@/components/product/ProductEditTable/types'
+import { TProductRecord } from '@/components/product/types'
 
 /**
  * 修改產品資料的函數
@@ -11,10 +14,10 @@ import { isVariation, TImage } from 'antd-toolkit/wp'
  * 根據提供的變更鍵和值來更新產品物件。
  * 特別處理促銷日期範圍，將其轉換為 Unix 時間戳記。
  *
- * @param {Object} params - 函數參數
- * @param {string} params.changedKey - 要修改的產品屬性鍵名
- * @param {any} params.changedValue - 新的屬性值
- * @param {TProductRecord | undefined} params.product - 要修改的產品物件
+ * @param {Object}                     params              - 函數參數
+ * @param {string}                     params.changedKey   - 要修改的產品屬性鍵名
+ * @param {any}                        params.changedValue - 新的屬性值
+ * @param {TProductRecord | undefined} params.product      - 要修改的產品物件
  * @throws {Error} 當產品物件未定義時拋出錯誤
  */
 export function mutateProduct({
@@ -32,7 +35,6 @@ export function mutateProduct({
 
 	//  sale_date_range 要單獨處理轉換為 date_on_sale_from & date_on_sale_to
 	if (changedKey === 'sale_date_range') {
-
 		product.date_on_sale_from = changedValue
 			? (changedValue[0] as Dayjs).unix()
 			: undefined
@@ -45,7 +47,10 @@ export function mutateProduct({
 	}
 }
 
-export function productsToFields(products: TProductRecord[], context?: 'submit') {
+export function productsToFields(
+	products: TProductRecord[],
+	context?: 'submit'
+) {
 	// 組成表單資料
 	const fieldsData = products.reduce((acc, product) => {
 		// date_on_sale_from, date_on_sale_to 要轉換為 sale_date_range 欄位
@@ -68,36 +73,36 @@ export function productsToFields(products: TProductRecord[], context?: 'submit')
  * 將單一產品資料轉換為表單欄位資料
  *
  * @param {TProductRecord[]} products - 產品資料陣列
- * @returns {Record<string, any>} 轉換後的表單欄位資料，以產品ID為鍵
+ * @return {Record<string, any>} 轉換後的表單欄位資料，以產品ID為鍵
  * @description 將產品資料轉換為表單欄位資料，包含變體產品的子產品
  */
 export function productToFields(product: TProductRecord, context?: 'submit') {
 	const allowFields = ZFormValues.keyof().options
+
 	// 只保留 product 中的 allowFields 欄位，重組一個物件出來
 	const formattedProduct = Object.keys(product).reduce(
 		(acc, key) => {
 			// @ts-ignore
 			if (allowFields.includes(key)) {
-				if('shipping_class_id' === key){
+				if ('shipping_class_id' === key) {
 					acc[key] = product[key as keyof typeof product] || '0'
 					return acc
 				}
 
-				if('images' === key && 'submit' === context){
+				if ('images' === key && 'submit' === context) {
 					const images = product[key as keyof typeof product] || []
 					const [image, ...gallery_images] = images as TImage[]
-					acc['image_id'] = image ? image?.id : '0'
-					acc['gallery_image_ids'] = gallery_images?.length
-					? gallery_images?.map(({ id }) => id)
-					: '[]'
+					acc.image_id = image ? image?.id : '0'
+					acc.gallery_image_ids = gallery_images?.length
+						? gallery_images?.map(({ id }) => id)
+						: '[]'
 					return acc
 				}
 				acc[key] = product[key as keyof typeof product]
-
 			}
 			return acc
 		},
-		{} as Record<string, any>,
+		{} as Record<string, any>
 	)
 
 	formattedProduct.sale_date_range = [
@@ -107,17 +112,17 @@ export function productToFields(product: TProductRecord, context?: 'submit') {
 	return formattedProduct
 }
 
-
 export const handleValuesChange = (
 	changedValues: Partial<TFormValues>[],
 	allValues: TFormValues[],
 	syncModeEnabled: boolean,
 	virtualFields: TProductRecord[],
 	setVirtualFields: React.Dispatch<React.SetStateAction<TProductRecord[]>>,
-	context?: 'detail',
+	context?: 'detail'
 ) => {
 	try {
 		const changedProductId = Object.keys(changedValues)[0]
+
 		//@ts-ignore
 		const changedProductType = allValues?.[changedProductId]?.type
 
@@ -175,7 +180,7 @@ export const handleValuesChange = (
 				if (!isVariation(changedProductType) || 'detail' === context) {
 					// 非變體，直接找到 row 位置修改就好
 					const findRowIndex = virtualFields.findIndex(
-						(product) => product.id === changedProductId,
+						(product) => product.id === changedProductId
 					)
 
 					mutateProduct({
@@ -193,14 +198,14 @@ export const handleValuesChange = (
 				// @ts-ignore
 				const parentId = allValues?.[changedProductId]?.parent_id
 				const findRowIndex = virtualFields.findIndex(
-					(product) => product.id === parentId,
+					(product) => product.id === parentId
 				)
 
 				// 如果找到上層可變商品
 				if (findRowIndex > 0) {
 					const findVariationIndex =
 						draft[findRowIndex]?.children?.findIndex(
-							(variation) => variation.id === changedProductId,
+							(variation) => variation.id === changedProductId
 						) || 0
 
 					mutateProduct({
@@ -208,7 +213,6 @@ export const handleValuesChange = (
 						changedValue,
 						product: draft?.[findRowIndex]?.children?.[findVariationIndex],
 					})
-					return
 				}
 			}
 		})

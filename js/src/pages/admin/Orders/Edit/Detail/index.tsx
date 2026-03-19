@@ -1,17 +1,20 @@
 import { memo } from 'react'
 import { Form, Tooltip, Statistic, Button, Select, Space } from 'antd'
+
 import { DEFAULT_IMAGE } from '@/utils'
+
 import {} from '@/hooks'
-import { useSelect } from '@refinedev/antd'
-import { useIsEditing, useRecord } from '@/pages/admin/Orders/Edit/hooks'
-import { InfoTable, OrderNotes } from '@/components/order'
 import { CreditCardOutlined, TruckOutlined } from '@ant-design/icons'
+import { useSelect } from '@refinedev/antd'
 import {
 	// termToOptions,
 	defaultSelectProps,
 	Heading,
 } from 'antd-toolkit'
 import { UserName, useWoocommerce } from 'antd-toolkit/wp'
+
+import { InfoTable, OrderNotes } from '@/components/order'
+import { useIsEditing, useRecord } from '@/pages/admin/Orders/Edit/hooks'
 
 const { Item } = Form
 
@@ -99,7 +102,7 @@ const DetailComponent = () => {
 											<td>{total}</td>
 										</tr>
 									)
-								},
+								}
 							)}
 						</tbody>
 						<tfoot style={{ borderTop: '1px solid #ddd' }}>

@@ -1,6 +1,6 @@
-import React from 'react'
 import { Amount } from 'antd-toolkit'
 import { round } from 'lodash-es'
+import React from 'react'
 
 type TPriceProps = {
 	amount: number

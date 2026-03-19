@@ -1,11 +1,12 @@
-import { Form, Tag } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
+import { Form, Tag } from 'antd'
 import { TTaxonomy } from 'antd-toolkit/wp'
-import { useProductsOptions } from '@/hooks'
+
 import {
 	TaxonomyModal as TaxonomyModalComponent,
 	useTaxonomyModal,
 } from '@/components/term'
+import { useProductsOptions } from '@/hooks'
 
 const { Item } = Form
 
@@ -35,7 +36,7 @@ export const TaxonomyModal = ({
 	const handleCloseItem = (value: string) => {
 		form.setFieldValue(
 			name,
-			watchIds.filter((id) => id !== value),
+			watchIds.filter((id) => id !== value)
 		)
 	}
 

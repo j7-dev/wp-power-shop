@@ -16,8 +16,7 @@ export type TTerm = {
 	thumbnail_id: string
 }
 
-
-export const  DEFAULT: TTerm = {
+export const DEFAULT: TTerm = {
 	id: '',
 	name: '',
 	slug: '',
@@ -32,8 +31,6 @@ export const  DEFAULT: TTerm = {
 	children: null,
 	thumbnail_id: '',
 }
-
-
 
 export type TSortableTreeListProps = {
 	taxonomy: TTaxonomy

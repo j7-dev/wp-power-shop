@@ -1,7 +1,8 @@
 import { axiosInstance as axios } from 'antd-toolkit/refine'
-import { API_URL, getDataProviderUrlParams } from '@/utils'
-import { TDataProvider } from '@/types'
 import { AxiosRequestConfig } from 'axios'
+
+import { TDataProvider } from '@/types'
+import { API_URL, getDataProviderUrlParams } from '@/utils'
 
 export const getResource = async ({
 	resource,
@@ -19,9 +20,9 @@ export const getResource = async ({
 	const dataProviderUrlParams = getDataProviderUrlParams(dataProvider)
 	const getResult = await axios.get(
 		`${API_URL}/${dataProviderUrlParams}/${resource}/${pathParams.join(
-			'/',
+			'/'
 		)}?${new URLSearchParams(args).toString()}`,
-		config,
+		config
 	)
 
 	return getResult
@@ -43,9 +44,9 @@ export const getResources = async ({
 	const dataProviderUrlParams = getDataProviderUrlParams(dataProvider)
 	const getResult = await axios.get(
 		`${API_URL}/${dataProviderUrlParams}/${resource}/${pathParams.join(
-			'/',
+			'/'
 		)}?${new URLSearchParams(args).toString()}`,
-		config,
+		config
 	)
 
 	return getResult

@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { Form, Skeleton, Button, Popconfirm, Select, Alert, Tag } from 'antd'
-import { useRecord } from '@/pages/admin/Product/Edit/hooks'
-import { ProductEditTable } from '@/components/product'
-import { TProductRecord } from '@/components/product/types'
 import { useUpdate, useInvalidate } from '@refinedev/core'
+import { Form, Skeleton, Button, Popconfirm, Select, Alert, Tag } from 'antd'
+import { safeParse } from 'antd-toolkit'
+import { notificationProps } from 'antd-toolkit/refine'
+import React, { useState, useEffect } from 'react'
+
+import { ProductEditTable } from '@/components/product'
 import {
 	TFormValues,
 	ZFormValues,
 } from '@/components/product/ProductEditTable/types'
 import { productsToFields } from '@/components/product/ProductEditTable/utils'
-import { safeParse } from 'antd-toolkit'
-import { notificationProps } from 'antd-toolkit/refine'
+import { TProductRecord } from '@/components/product/types'
+import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 
 const { Item } = Form
 
@@ -42,8 +43,10 @@ export const Variation = () => {
 
 	const handleUpdate = () => {
 		const default_attributes = formAttr.getFieldValue(['default_attributes'])
+
 		// 取得 values
 		const fields = productsToFields(virtualFields, 'submit')
+
 		// @ts-ignore
 		safeParse(ZFormValues.array(), Object.values(fields))
 
@@ -81,7 +84,7 @@ export const Variation = () => {
 						id: parentProduct?.id,
 					})
 				},
-			},
+			}
 		)
 	}
 

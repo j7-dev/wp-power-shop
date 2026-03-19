@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react'
 import {
 	useCustom,
 	useApiUrl,
@@ -7,7 +6,12 @@ import {
 	UseLoadingOvertimeReturnType,
 } from '@refinedev/core'
 import { QueryObserverResult } from '@tanstack/react-query'
+import { Form } from 'antd'
+import { objToCrudFilters } from 'antd-toolkit/refine'
 import dayjs from 'dayjs'
+import { round } from 'lodash-es'
+import React, { useState, useEffect } from 'react'
+
 import {
 	TRevenue,
 	TFormattedRevenue,
@@ -16,9 +20,6 @@ import {
 	TQuery,
 	defaultQuery,
 } from '@/pages/admin/Analytics/types'
-import { Form } from 'antd'
-import { round } from 'lodash-es'
-import { objToCrudFilters } from 'antd-toolkit/refine'
 
 export type TUseRevenueParams = {
 	initialQuery?: Partial<TQuery>
@@ -68,6 +69,7 @@ const useRevenue = ({ initialQuery, context }: TUseRevenueParams) => {
 	// 取得 response header 上的 X-WP-TotalPages
 	// @ts-ignore
 	const totalPages = Number(result?.data?.headers?.['x-wp-totalpages']) || 1
+
 	// @ts-ignore
 	const total = Number(result?.data?.headers?.['x-wp-total']) || 1
 
@@ -112,7 +114,7 @@ const useRevenue = ({ initialQuery, context }: TUseRevenueParams) => {
 function getFormattedResult(
 	result: QueryObserverResult<CustomResponse<TRevenue>, HttpError> &
 		UseLoadingOvertimeReturnType,
-	isLastYear: boolean,
+	isLastYear: boolean
 ): QueryObserverResult<CustomResponse<TFormattedRevenue>, HttpError> &
 	UseLoadingOvertimeReturnType {
 	const intervals = result?.data?.data?.intervals || []
@@ -130,7 +132,7 @@ function getFormattedResult(
 			Object.entries(subtotals).map(([key, value]) => [
 				key,
 				round(value as number, 2),
-			]),
+			])
 		)
 
 		// 建立新物件而不是修改原物件

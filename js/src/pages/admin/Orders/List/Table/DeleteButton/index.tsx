@@ -1,10 +1,10 @@
-import { memo, useState } from 'react'
-import { useModal } from '@refinedev/antd'
-import { Button, Alert, Modal, Input } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
-import { trim } from 'lodash-es'
+import { useModal } from '@refinedev/antd'
 import { useDeleteMany } from '@refinedev/core'
+import { Button, Alert, Modal, Input } from 'antd'
 import { notificationProps } from 'antd-toolkit/refine'
+import { trim } from 'lodash-es'
+import { memo, useState } from 'react'
 
 const CONFIRM_WORD = '沒錯，誰來阻止我都沒有用，我就是要刪訂單'
 
@@ -56,7 +56,7 @@ const DeleteButton = ({
 								close()
 								setSelectedRowKeys([])
 							},
-						},
+						}
 					)
 				}}
 				confirmLoading={isDeleting}

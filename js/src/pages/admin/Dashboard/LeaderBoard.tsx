@@ -1,9 +1,10 @@
-import { useMemo } from 'react'
 import { Card, Table } from 'antd'
+import { useWoocommerce } from 'antd-toolkit/wp'
+import { nanoid } from 'nanoid'
+import { useMemo } from 'react'
+
 import { useDashboard } from '@/pages/admin/Dashboard/hooks'
 import { getLabels, getLeaderBoardLabels } from '@/pages/admin/Dashboard/utils'
-import { nanoid } from 'nanoid'
-import { useWoocommerce } from 'antd-toolkit/wp'
 
 const LeaderBoard = ({ type }: { type: 'products' | 'customers' }) => {
 	const {
@@ -17,7 +18,7 @@ const LeaderBoard = ({ type }: { type: 'products' | 'customers' }) => {
 				...p,
 				key: nanoid(6),
 			})),
-		[products],
+		[products]
 	)
 	const customerDataSource = useMemo(
 		() =>
@@ -25,7 +26,7 @@ const LeaderBoard = ({ type }: { type: 'products' | 'customers' }) => {
 				...c,
 				key: nanoid(6),
 			})),
-		[customers],
+		[customers]
 	)
 
 	const { label } = getLabels(query)

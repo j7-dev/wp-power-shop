@@ -1,4 +1,3 @@
-
 export const INFO_LABEL_MAPPER = {
 	first_name: '名',
 	last_name: '姓',
@@ -9,4 +8,3 @@ export const INFO_LABEL_MAPPER = {
 	address_1: '地址1',
 	address_2: '地址2',
 }
-

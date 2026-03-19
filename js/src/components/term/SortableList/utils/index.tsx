@@ -1,5 +1,6 @@
-import { TTerm } from '@/components/term/types'
 import { PaginationProps } from 'antd'
+
+import { TTerm } from '@/components/term/types'
 
 export type TParam = {
 	id: string
@@ -13,13 +14,13 @@ export type TParam = {
  * 將 TTerm[] 轉換成 Create API 傳送的參數
  * 攤平 array
  *
- * @param {TTerm[]} data
+ * @param {TTerm[]}         data
  * @param {PaginationProps} paginationProps 分頁參數，用來計算分頁的 order 值
  * @return {TParam[]}
  */
 export function toParams(
 	data: TTerm[],
-	paginationProps: PaginationProps,
+	paginationProps: PaginationProps
 ): TParam[] {
 	const { current = 1, pageSize = 50 } = paginationProps
 	return data.map((term, index) => ({

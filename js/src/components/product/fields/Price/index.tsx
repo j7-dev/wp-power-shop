@@ -1,12 +1,13 @@
 import { Form, Input } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import Subscription from '@/components/product/fields/Price/Subscription'
+import { RangePicker } from 'antd-toolkit'
 import {
 	TProductType,
 	isSubscription as checkIsSubscription,
 	useWoocommerce,
 } from 'antd-toolkit/wp'
-import { RangePicker } from 'antd-toolkit'
+
+import Subscription from '@/components/product/fields/Price/Subscription'
 
 const { Item } = Form
 

@@ -30,7 +30,7 @@ const useValueLabelMapper = () => {
 	const valueLabelMapper = (value: string) => {
 		const label =
 			[...formattedTerms, ...formattedExtraMapper]?.find(
-				(formattedTerm) => formattedTerm?.value === value,
+				(formattedTerm) => formattedTerm?.value === value
 			)?.label || value
 		return label as string
 	}

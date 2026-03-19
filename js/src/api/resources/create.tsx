@@ -1,7 +1,8 @@
 import { axiosInstance as axios } from 'antd-toolkit/refine'
-import { API_URL, getDataProviderUrlParams } from '@/utils'
-import { TDataProvider } from '@/types'
 import { AxiosRequestConfig } from 'axios'
+
+import { TDataProvider } from '@/types'
+import { API_URL, getDataProviderUrlParams } from '@/utils'
 
 export const createResource = async ({
 	resource,
@@ -20,7 +21,7 @@ export const createResource = async ({
 	const createResult = await axios.post(
 		`${API_URL}/${dataProviderUrlParams}/${resource}`,
 		args,
-		config,
+		config
 	)
 
 	return createResult

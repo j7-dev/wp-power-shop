@@ -1,11 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { StyleProvider } from '@ant-design/cssinjs'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ConfigProvider } from 'antd'
-import { APP1_SELECTOR, env } from '@/utils'
-import { StyleProvider } from '@ant-design/cssinjs'
 import { EnvProvider } from 'antd-toolkit'
 import { BunnyProvider } from 'antd-toolkit/refine'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
+import { APP1_SELECTOR, env } from '@/utils'
 
 const App1 = React.lazy(() => import('./App1'))
 
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 								</EnvProvider>
 							</StyleProvider>
 						</QueryClientProvider>
-					</React.StrictMode>,
+					</React.StrictMode>
 				)
 			})
 		}

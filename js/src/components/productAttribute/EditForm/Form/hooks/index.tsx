@@ -1,4 +1,5 @@
 import { useList, HttpError } from '@refinedev/core'
+
 import { TTerm } from '@/components/term/types'
 
 /**
@@ -6,9 +7,9 @@ import { TTerm } from '@/components/term/types'
  *
  * @param {string | undefined} taxonomyName - 全局商品規格(Attribute Taxonomy)的名稱
  * @return {options: {label: string, value: string}[], isLoading: boolean}}
- * */
+ */
 export const useAttributeTaxonomyOptions = (
-	taxonomyName: string | undefined,
+	taxonomyName: string | undefined
 ) => {
 	const { data, isLoading } = useList<TTerm, HttpError>({
 		resource: `terms/${taxonomyName}`,

@@ -1,14 +1,16 @@
-import { memo } from 'react'
 import { Statistic, Tabs, TabsProps } from 'antd'
-import { useRecord } from '@/pages/admin/Users/Edit/hooks'
 import { Heading } from 'antd-toolkit'
-import Basic from './Basic'
-import AutoFill from './AutoFill'
-import Meta from './Meta'
-import Cart from './Cart'
-import RecentOrders from './RecentOrders'
-import { ContactRemarks } from '@/components/user'
 import { useWoocommerce } from 'antd-toolkit/wp'
+import { memo } from 'react'
+
+import AutoFill from './AutoFill'
+import Basic from './Basic'
+import Cart from './Cart'
+import Meta from './Meta'
+import RecentOrders from './RecentOrders'
+
+import { ContactRemarks } from '@/components/user'
+import { useRecord } from '@/pages/admin/Users/Edit/hooks'
 
 const items: TabsProps['items'] = [
 	{

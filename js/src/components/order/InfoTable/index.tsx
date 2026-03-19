@@ -1,8 +1,10 @@
 import { Form, Input, Space } from 'antd'
+import { useCountries } from 'antd-toolkit/wp'
+
+import AddressInput from './AddressInput'
+
 import { TOrderInfo } from '@/pages/admin/Orders/List/types'
 import { INFO_LABEL_MAPPER } from '@/utils'
-import AddressInput from './AddressInput'
-import { useCountries } from 'antd-toolkit/wp'
 
 const { Item } = Form
 
@@ -10,7 +12,7 @@ const { Item } = Form
  * Shipping, Billing 資料欄位
  * ENHANCE 手機加上國碼
  * @param param0
- * @returns
+ * @return
  */
 export const InfoTable = ({
 	type = 'billing',

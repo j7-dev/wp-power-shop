@@ -1,14 +1,16 @@
-import { memo, useMemo, useState, useEffect } from 'react'
-import { Edit, useForm } from '@refinedev/antd'
-import { Form, Button, Space } from 'antd'
-import { Detail } from './Detail'
-import { TUserDetails } from '@/components/user/types'
-import { useParsed } from '@refinedev/core'
 import { EditOutlined } from '@ant-design/icons'
-import { IsEditingContext, RecordContext } from './hooks'
-import { UserName } from 'antd-toolkit/wp'
+import { Edit, useForm } from '@refinedev/antd'
+import { useParsed } from '@refinedev/core'
+import { Form, Button, Space } from 'antd'
 import { NameId } from 'antd-toolkit'
 import { notificationProps } from 'antd-toolkit/refine'
+import { UserName } from 'antd-toolkit/wp'
+import { memo, useMemo, useState, useEffect } from 'react'
+
+import { Detail } from './Detail'
+import { IsEditingContext, RecordContext } from './hooks'
+
+import { TUserDetails } from '@/components/user/types'
 
 const EditComponent = () => {
 	const { id } = useParsed()
@@ -26,7 +28,7 @@ const EditComponent = () => {
 
 	const record: TUserDetails | undefined = useMemo(
 		() => query?.data?.data,
-		[query?.isFetching],
+		[query?.isFetching]
 	)
 
 	useEffect(() => {
@@ -44,7 +46,7 @@ const EditComponent = () => {
 				const renamedInfo = Object.fromEntries(
 					Object.entries(newValues?.[type]).map(([key, value]) => {
 						return [`${type}_${key}`, value]
-					}),
+					})
 				)
 				newValues = {
 					...newValues,

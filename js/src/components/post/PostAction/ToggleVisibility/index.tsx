@@ -1,9 +1,10 @@
-import { FC } from 'react'
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons'
-import { TDocBaseRecord } from '@/pages/admin/Orders/List/types'
-import { Tooltip, Button } from 'antd'
 import { useUpdate } from '@refinedev/core'
+import { Tooltip, Button } from 'antd'
 import { toFormData } from 'antd-toolkit'
+import { FC } from 'react'
+
+import { TDocBaseRecord } from '@/pages/admin/Orders/List/types'
 
 const ToggleVisibility: FC<{
 	record: TDocBaseRecord

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
-import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
 import { Form, Input, Alert, Button } from 'antd'
+import { useState, useEffect } from 'react'
+
+import { useIsEditing, useRecord } from '@/pages/admin/Users/Edit/hooks'
 
 const { Item } = Form
 const { TextArea } = Input
@@ -78,7 +79,7 @@ const Meta = () => {
 										)}
 									</td>
 								</tr>
-							),
+							)
 						)}
 					</tbody>
 				</table>

@@ -1,5 +1,5 @@
-import React from 'react'
 import { Form, Input, Select, FormInstance, Switch } from 'antd'
+import React from 'react'
 
 const { Item } = Form
 

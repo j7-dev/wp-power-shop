@@ -1,10 +1,11 @@
-import { useProductsOptions } from '@/hooks'
 import {
 	PRODUCT_STATUS,
 	PRODUCT_DATE_FIELDS,
 	BACKORDERS,
 	PRODUCT_STOCK_STATUS,
 } from 'antd-toolkit/wp'
+
+import { useProductsOptions } from '@/hooks'
 
 /** 額外 key-value 映射 */
 const extraMapper = {}
@@ -31,7 +32,7 @@ export const useValueLabelMapper = () => {
 	const valueLabelMapper = (value: string) => {
 		const label =
 			[...formattedTerms, ...formattedExtraMapper]?.find(
-				(formattedTerm) => formattedTerm?.value === value,
+				(formattedTerm) => formattedTerm?.value === value
 			)?.label || value
 		return label as string
 	}

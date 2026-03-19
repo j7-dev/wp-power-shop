@@ -1,5 +1,7 @@
-import { TQuery } from '../types'
 import dayjs from 'dayjs'
+
+import { TQuery } from '../types'
+
 import { FORMAT } from '@/pages/admin/Analytics/utils'
 
 type TTimeSegment = {
@@ -12,10 +14,10 @@ type TTimeSegment = {
  * 獲取瀏覽器當前小時並分為4等分
  * 只考慮小時(hour)，更加簡潔
  *
- * @returns {Object} 返回時間段資訊
- * @returns {string} returns.key - 時間段的英文標識 (Dawn/Morning/Afternoon/Evening)
- * @returns {string} returns.label - 時間段的中文名稱 (凌晨/上午/下午/晚上)
- * @returns {number} returns.currentHour - 當前小時數 (0-23)
+ * @return {Object} 返回時間段資訊
+ * @return {string} returns.key - 時間段的英文標識 (Dawn/Morning/Afternoon/Evening)
+ * @return {string} returns.label - 時間段的中文名稱 (凌晨/上午/下午/晚上)
+ * @return {number} returns.currentHour - 當前小時數 (0-23)
  */
 export function getCurrentTimeSegment(): TTimeSegment {
 	// 獲取當前小時
@@ -54,12 +56,12 @@ export function getCurrentTimeSegment(): TTimeSegment {
 /**
  * 獲取當前時間段的問候語
  * @param display_name 使用者顯示名稱
- * @param segmentKey 時間段 key
- * @returns 問候語
+ * @param segmentKey   時間段 key
+ * @return 問候語
  */
 export function getGreetings(
 	display_name: string,
-	segmentKey: 'Dawn' | 'Morning' | 'Afternoon' | 'Evening',
+	segmentKey: 'Dawn' | 'Morning' | 'Afternoon' | 'Evening'
 ): string {
 	let greetings: string[] = []
 	switch (segmentKey) {
@@ -120,10 +122,9 @@ export function getGreetings(
 	return greetings[Math.floor(Math.random() * greetings.length)]
 }
 
-
-export function getLabels(query: TQuery){
+export function getLabels(query: TQuery) {
 	let compareLabel = ''
-	switch(query.compare_type){
+	switch (query.compare_type) {
 		case 'day':
 			compareLabel = '相比昨天'
 			break
@@ -140,14 +141,12 @@ export function getLabels(query: TQuery){
 			compareLabel = '相比去年'
 	}
 
-
-
 	const before = dayjs(query.before, FORMAT)
 	const after = dayjs(query.after, FORMAT)
 	const startOfDay = dayjs().startOf('day')
 
 	let label = ''
-	if(before.isSame(startOfDay, 'day') && after.isSame(startOfDay, 'day')){
+	if (before.isSame(startOfDay, 'day') && after.isSame(startOfDay, 'day')) {
 		label = '今日'
 	}
 
@@ -157,11 +156,8 @@ export function getLabels(query: TQuery){
 	}
 }
 
-
-
-
-export function getLeaderBoardLabels(type: 'products' | 'customers'){
-	switch(type){
+export function getLeaderBoardLabels(type: 'products' | 'customers') {
+	switch (type) {
 		case 'products':
 			return {
 				title: '商品熱銷',

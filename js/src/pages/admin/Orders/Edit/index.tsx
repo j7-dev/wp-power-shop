@@ -1,13 +1,15 @@
-import { memo, useMemo, useState } from 'react'
-import { Edit, useForm } from '@refinedev/antd'
-import { Form, Tag, Button, Space } from 'antd'
-import { Detail } from './Detail'
-import { TOrderRecord, TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
-import { useParsed } from '@refinedev/core'
 import { EditOutlined } from '@ant-design/icons'
-import { IsEditingContext, RecordContext } from './hooks'
-import { ORDER_STATUS } from 'antd-toolkit/wp'
+import { Edit, useForm } from '@refinedev/antd'
+import { useParsed } from '@refinedev/core'
+import { Form, Tag, Button, Space } from 'antd'
 import { notificationProps } from 'antd-toolkit/refine'
+import { ORDER_STATUS } from 'antd-toolkit/wp'
+import { memo, useMemo, useState } from 'react'
+
+import { Detail } from './Detail'
+import { IsEditingContext, RecordContext } from './hooks'
+
+import { TOrderRecord, TOrderBaseRecord } from '@/pages/admin/Orders/List/types'
 
 const EditComponent = () => {
 	const { id } = useParsed()
@@ -21,16 +23,16 @@ const EditComponent = () => {
 			id,
 			redirect: false,
 			...notificationProps,
-		},
+		}
 	)
 
 	const record: TOrderBaseRecord | undefined = useMemo(
 		() => query?.data?.data,
-		[query?.isFetching],
+		[query?.isFetching]
 	)
 
 	const status = ORDER_STATUS.find(
-		(order_status) => order_status.value === record?.status,
+		(order_status) => order_status.value === record?.status
 	)
 
 	return (

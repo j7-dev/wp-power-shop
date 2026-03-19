@@ -1,4 +1,12 @@
+import {
+	CustomResponse,
+	HttpError,
+	UseLoadingOvertimeReturnType,
+} from '@refinedev/core'
+import { QueryObserverResult } from '@tanstack/react-query'
+import { FormInstance } from 'antd'
 import React, { createContext, useContext } from 'react'
+
 import {
 	EViewType,
 	TFilterProps,
@@ -6,14 +14,6 @@ import {
 	TViewTypeProps,
 	TFormattedRevenue,
 } from '@/pages/admin/Analytics/types'
-
-import { FormInstance } from 'antd'
-import { QueryObserverResult } from '@tanstack/react-query'
-import {
-	CustomResponse,
-	HttpError,
-	UseLoadingOvertimeReturnType,
-} from '@refinedev/core'
 
 export const RevenueContext = createContext<
 	| {

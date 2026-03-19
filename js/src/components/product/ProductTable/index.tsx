@@ -1,24 +1,12 @@
-import { memo, useEffect } from 'react'
 import { useTable } from '@refinedev/antd'
-import { Table, FormInstance, TableProps, CardProps } from 'antd'
 import { HttpError } from '@refinedev/core'
-import { TProductRecord } from '@/components/product/types'
-import {
-	useValueLabelMapper,
-	useColumns,
-} from '@/components/product/ProductTable/hooks'
-import { useProductsOptions } from '@/hooks'
-import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
-import { useAtom } from 'jotai'
-import BulkAction from '@/components/product/ProductTable/BulkAction'
-import CreateButton from '@/components/product/ProductTable/Create'
+import { Table, FormInstance, TableProps, CardProps } from 'antd'
 import {
 	useRowSelection,
 	defaultTableProps,
 	getDefaultPaginationProps,
 	Card,
 } from 'antd-toolkit'
-import { productKeyLabelMapper, isVariation } from 'antd-toolkit/wp'
 import {
 	ProductFilter,
 	TProductFilterProps,
@@ -29,6 +17,20 @@ import {
 	ActionArea,
 	SelectedItem,
 } from 'antd-toolkit/refine'
+import { productKeyLabelMapper, isVariation } from 'antd-toolkit/wp'
+import { useAtom } from 'jotai'
+import { memo, useEffect } from 'react'
+
+import { selectedProductsAtom } from '@/components/product/ProductTable/atom'
+import BulkAction from '@/components/product/ProductTable/BulkAction'
+import CreateButton from '@/components/product/ProductTable/Create'
+
+import {
+	useValueLabelMapper,
+	useColumns,
+} from '@/components/product/ProductTable/hooks'
+import { TProductRecord } from '@/components/product/types'
+import { useProductsOptions } from '@/hooks'
 
 const ProductTableComponent = ({
 	cardProps,
@@ -77,12 +79,12 @@ const ProductTableComponent = ({
 
 			/** @type TProductRecord[] 不在這頁的已選擇商品 */
 			const selectedProductsNotInCurrentPage = selectedProducts?.filter(
-				(p) => !currentAllKeys?.includes(p?.id),
+				(p) => !currentAllKeys?.includes(p?.id)
 			)
 
 			/** @type string[] 在這頁的已選擇商品 ids */
 			const selectedProductIdsInCurrentPage = currentSelectedRowKeys?.map(
-				(key) => key?.toString(),
+				(key) => key?.toString()
 			)
 
 			const selectedProductsInCurrentPage =

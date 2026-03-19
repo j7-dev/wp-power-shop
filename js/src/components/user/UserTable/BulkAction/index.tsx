@@ -1,6 +1,8 @@
+import { useAtomValue } from 'jotai'
+
 import DeleteButton from './DeleteButton'
 import ResetPassButton from './ResetPassButton'
-import { useAtomValue } from 'jotai'
+
 import { selectedUserIdsAtom } from '@/components/user/UserTable/atom'
 
 const BulkAction = () => {

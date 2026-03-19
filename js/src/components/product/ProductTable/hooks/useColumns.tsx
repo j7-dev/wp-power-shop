@@ -1,9 +1,6 @@
-import { Table, TableProps, Tag } from 'antd'
 import { useNavigation } from '@refinedev/core'
-import { TProductRecord, TProductVariation } from '@/components/product/types'
 import { useWindowSize } from '@uidotdev/usehooks'
-import { useProductsOptions } from '@/hooks'
-import { ProductActions } from '@/components/product/ProductTable/ProductActions'
+import { Table, TableProps, Tag } from 'antd'
 import {
 	ProductName,
 	ProductPrice,
@@ -14,6 +11,10 @@ import {
 	POST_STATUS,
 	isVariation,
 } from 'antd-toolkit/wp'
+
+import { ProductActions } from '@/components/product/ProductTable/ProductActions'
+import { TProductRecord, TProductVariation } from '@/components/product/types'
+import { useProductsOptions } from '@/hooks'
 
 export const useColumns = () => {
 	const { width } = useWindowSize()
@@ -77,10 +78,10 @@ export const useColumns = () => {
 			dataIndex: 'category_ids',
 			render: (_, { category_ids = [], tag_ids = [] }) => {
 				const categories = product_cats.filter(({ value }) =>
-					category_ids.includes(value),
+					category_ids.includes(value)
 				)
 				const tags = product_tags.filter(({ value }) =>
-					tag_ids?.includes(value),
+					tag_ids?.includes(value)
 				)
 				return <ProductCat categories={categories} tags={tags} />
 			},

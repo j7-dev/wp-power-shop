@@ -1,8 +1,9 @@
-import React from 'react'
 import { Form, FormProps } from 'antd'
-import { ProductSelector } from '@/components/product'
-import upsell_ids_img from '@/assets/images/upsell_ids.jpg'
+import React from 'react'
+
 import cross_sell_ids_img from '@/assets/images/cross_sell_ids.jpg'
+import upsell_ids_img from '@/assets/images/upsell_ids.jpg'
+import { ProductSelector } from '@/components/product'
 
 export const Linked = ({ formProps }: { formProps: FormProps }) => {
 	const watchProductType = Form.useWatch(['type'], formProps.form)

@@ -1,11 +1,12 @@
-import { memo, useEffect, useState } from 'react'
-import { Form, Input, Space, Button, UploadFile } from 'antd'
-import { useQueryClient } from '@tanstack/react-query'
-import { TTerm } from '@/components/term/types'
 import { Edit, useForm } from '@refinedev/antd'
+import { useQueryClient } from '@tanstack/react-query'
+import { Form, Input, Space, Button, UploadFile } from 'antd'
 import { toFormData } from 'antd-toolkit'
-import { FileUpload, TTaxonomy } from 'antd-toolkit/wp'
 import { notificationProps } from 'antd-toolkit/refine'
+import { FileUpload, TTaxonomy } from 'antd-toolkit/wp'
+import { memo, useEffect, useState } from 'react'
+
+import { TTerm } from '@/components/term/types'
 const { Item } = Form
 const { TextArea } = Input
 
@@ -14,9 +15,9 @@ const { TextArea } = Input
  *
  * 用於編輯或新增分類項目（term）的表單元件。
  *
- * @param {Object} props - 元件屬性
- * @param {TTerm} props.record - 要編輯的分類項目資料，如果是新增則傳入預設值
- * @returns {React.FC} 編輯表單元件
+ * @param {Object} props        - 元件屬性
+ * @param {TTerm}  props.record - 要編輯的分類項目資料，如果是新增則傳入預設值
+ * @return {React.FC} 編輯表單元件
  */
 
 const EditFormComponent = ({
@@ -74,7 +75,7 @@ const EditFormComponent = ({
 			toFormData({
 				...values,
 				taxonomy: taxonomy.value,
-			}),
+			})
 		)
 	}
 

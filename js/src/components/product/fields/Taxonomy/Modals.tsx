@@ -1,7 +1,8 @@
 import { FormItemProps } from 'antd'
 import { SizeType } from 'antd/es/config-provider/SizeContext'
-import { TaxonomyModal } from '@/components/product/fields/Taxonomy/Modal'
 import { useWoocommerce } from 'antd-toolkit/wp'
+
+import { TaxonomyModal } from '@/components/product/fields/Taxonomy/Modal'
 
 /*
  * Modal + select 選擇器
@@ -29,6 +30,6 @@ export const TaxonomyModals = ({
 	return taxonomies.map(({ type, taxonomy, name }) =>
 		taxonomy ? (
 			<TaxonomyModal key={type} type={type} taxonomy={taxonomy} name={name} />
-		) : null,
+		) : null
 	)
 }

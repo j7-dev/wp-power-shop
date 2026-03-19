@@ -1,8 +1,4 @@
-import { memo, FC } from 'react'
 import { SortableList as SortableListAntd } from '@ant-design/pro-editor'
-import { DEFAULT } from '@/components/productAttribute/types'
-import { Button, Empty, message } from 'antd'
-import NodeRender from '@/components/productAttribute/SortableList/NodeRender'
 import {
 	useUpdate,
 	useInvalidate,
@@ -10,12 +6,18 @@ import {
 	UpdateResponse,
 	BaseRecord,
 } from '@refinedev/core'
-import { isEqual as _isEqual } from 'lodash-es'
-import { prepareAttributes } from '@/components/productAttribute/SortableList/utils'
-import { SelectedTermIdContext } from '@/components/productAttribute/hooks'
-import { useRecord } from '@/pages/admin/Product/Edit/hooks'
-import { TProductAttribute } from 'antd-toolkit/wp'
+import { Button, Empty, message } from 'antd'
 import { toFormData } from 'antd-toolkit'
+import { TProductAttribute } from 'antd-toolkit/wp'
+import { isEqual as _isEqual } from 'lodash-es'
+import { memo, FC } from 'react'
+
+import { SelectedTermIdContext } from '@/components/productAttribute/hooks'
+import NodeRender from '@/components/productAttribute/SortableList/NodeRender'
+import { prepareAttributes } from '@/components/productAttribute/SortableList/utils'
+import { DEFAULT } from '@/components/productAttribute/types'
+
+import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 
 export type TSortableListProps = {
 	attributes: TProductAttribute[]
@@ -27,7 +29,7 @@ export type TSortableListProps = {
 		onMutationSuccess: (
 			data: CreateResponse<BaseRecord> | UpdateResponse<BaseRecord>,
 			variables: any,
-			isCreate: boolean,
+			isCreate: boolean
 		) => void
 	}>
 }
@@ -49,7 +51,7 @@ const SortableListComponent = ({
 	const invalidate = useInvalidate()
 
 	const { mutate } = useUpdate({
-		resource: `products/attributes`,
+		resource: 'products/attributes',
 		successNotification: false,
 	})
 
@@ -84,14 +86,14 @@ const SortableListComponent = ({
 						content: '排序失敗',
 					})
 				},
-			},
+			}
 		)
 	}
 
 	const onMutationSuccess = (
 		data: CreateResponse<BaseRecord> | UpdateResponse<BaseRecord>,
 		variables: any,
-		isCreate: boolean,
+		isCreate: boolean
 	) => {
 		if (isCreate) {
 			setSelectedTermId(null)
@@ -135,7 +137,7 @@ const SortableListComponent = ({
 						attributes={attributes}
 						record={
 							attributes.find(
-								({ id, name }) => `${id}-${name}` === selectedTermId,
+								({ id, name }) => `${id}-${name}` === selectedTermId
 							) || DEFAULT
 						}
 						onMutationSuccess={onMutationSuccess}
@@ -148,11 +150,11 @@ const SortableListComponent = ({
 
 /**
  * 可排序的 term
- * @param {TSortableListProps} props 商品規格
- * @param {TProductAttribute[]} props.attributes 商品規格
- * @param {string | null} props.selectedTermId 選取的 term
+ * @param {TSortableListProps}                                  props                   商品規格
+ * @param {TProductAttribute[]}                                 props.attributes        商品規格
+ * @param {string | null}                                       props.selectedTermId    選取的 term
  * @param {React.Dispatch<React.SetStateAction<string | null>>} props.setSelectedTermId 設定選取的 term
- * @param {React.FC<{ record: TProductAttribute }>} props.Edit 編輯的畫面由外部傳入
+ * @param {React.FC<{ record: TProductAttribute }>}             props.Edit              編輯的畫面由外部傳入
  * @return {React.FC}
  */
 export const SortableList: FC<TSortableListProps> = memo(SortableListComponent)

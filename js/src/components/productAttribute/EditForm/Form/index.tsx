@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react'
-import { Form, Select, Input } from 'antd'
 import { WarningOutlined } from '@ant-design/icons'
-import { TAttributeTaxonomy } from '@/pages/admin/Product/Attributes'
 import { useSelect } from '@refinedev/antd'
-import { useRecord } from '@/pages/admin/Product/Edit/hooks'
-import { useAttributeTaxonomyOptions } from './hooks'
+import { Form, Select, Input } from 'antd'
 import { NameId, Segmented } from 'antd-toolkit'
 import { isVariable, TProductAttribute } from 'antd-toolkit/wp'
+import { useEffect, useState } from 'react'
+
+import { useAttributeTaxonomyOptions } from './hooks'
+
+import { TAttributeTaxonomy } from '@/pages/admin/Product/Attributes'
+import { useRecord } from '@/pages/admin/Product/Edit/hooks'
 
 const { Item } = Form
 
@@ -34,7 +36,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 
 	// 已選擇的全局商品規格
 	const chosenAttributeTaxonomy = attributeTaxonomies.find(
-		(a) => a.id === watchId,
+		(a) => a.id === watchId
 	)
 
 	// 已選擇的全局商品規格選項 terms options
@@ -62,6 +64,7 @@ const index = ({ record }: { record: TProductAttribute }) => {
 
 	useEffect(() => {
 		setShowCreateFields(false)
+
 		// 如果是新增，則不顯示創建為全局商品規格
 		if (!record?.name) {
 			form.resetFields()

@@ -1,5 +1,5 @@
-import dayjs from 'dayjs'
 import { DatePickerProps, TimeRangePickerProps } from 'antd'
+import dayjs from 'dayjs'
 
 export const FORMAT = 'YYYY-MM-DDTHH:mm:ss'
 
@@ -42,7 +42,7 @@ export const RANGE_PRESETS: TimeRangePickerProps['presets'] = [
 // Disabled 732 days from the selected date
 export const maxDateRange: DatePickerProps['disabledDate'] = (
 	current,
-	{ from, type },
+	{ from, type }
 ) => {
 	if (current && current > dayjs().endOf('day')) {
 		return true
@@ -58,7 +58,7 @@ export const maxDateRange: DatePickerProps['disabledDate'] = (
 export const tickFilter = (
 	datum: string,
 	index: number,
-	datums: string[],
+	datums: string[]
 ): boolean => {
 	const length = datums?.length || 0
 	if (length > 12 && (length % 3 === 0 || length % 4 === 0)) {

@@ -1,10 +1,11 @@
-import React, { FC, memo } from 'react'
-import { TProductRecord, TProductVariation } from '@/components/product/types'
 import { ExportOutlined } from '@ant-design/icons'
 import { Tooltip, Button } from 'antd'
-import { FaWordpress } from 'react-icons/fa'
-import { CopyButton } from '@/components/general'
 import { cn } from 'antd-toolkit'
+import React, { FC, memo } from 'react'
+import { FaWordpress } from 'react-icons/fa'
+
+import { CopyButton } from '@/components/general'
+import { TProductRecord, TProductVariation } from '@/components/product/types'
 
 export const ProductActionsComponent: FC<{
 	record: TProductRecord | TProductVariation

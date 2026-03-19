@@ -1,13 +1,14 @@
-import { memo } from 'react'
-import { Card, Form, Tooltip } from 'antd'
-import { Line, LineConfig } from '@ant-design/plots'
-import dayjs from 'dayjs'
-import { TTotals } from '@/pages/admin/Analytics/types'
-import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
-import { cards, tickFilter } from '@/pages/admin/Analytics/utils'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { nanoid } from 'nanoid'
+import { Line, LineConfig } from '@ant-design/plots'
+import { Card, Form, Tooltip } from 'antd'
 import { TrendIndicator } from 'antd-toolkit'
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid'
+import { memo } from 'react'
+
+import { useRevenueContext } from '@/pages/admin/Analytics/hooks'
+import { TTotals } from '@/pages/admin/Analytics/types'
+import { cards, tickFilter } from '@/pages/admin/Analytics/utils'
 
 const Default = () => {
 	const { viewTypeProps, form, isFetching } = useRevenueContext()
@@ -55,7 +56,7 @@ const Default = () => {
 						// 隨機產生 10 個 2~15 的 array
 						const randomArray = Array.from(
 							{ length: 12 },
-							() => Math.floor(Math.random() * 8) + 2,
+							() => Math.floor(Math.random() * 8) + 2
 						)
 
 						return (

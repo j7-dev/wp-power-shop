@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { EditOutlined } from '@ant-design/icons'
+import { useModal, DeleteButton } from '@refinedev/antd'
+import { useCreate, useUpdate, useList } from '@refinedev/core'
 import {
 	Tabs,
 	TabsProps,
@@ -10,17 +12,15 @@ import {
 	Alert,
 	Tag,
 } from 'antd'
-import { useCreate, useUpdate } from '@refinedev/core'
-import { EditOutlined } from '@ant-design/icons'
-import { useModal, DeleteButton } from '@refinedev/antd'
-import { useList } from '@refinedev/core'
+import { useEnv } from 'antd-toolkit'
+import { notificationProps } from 'antd-toolkit/refine'
+import { TTaxonomy } from 'antd-toolkit/wp'
+import { useState, useEffect } from 'react'
+
 import { SortableList, useSortableTreeList } from '@/components/term'
 import AttributesForm, {
 	TFormValues,
 } from '@/pages/admin/Product/Attributes/Form'
-import { useEnv } from 'antd-toolkit'
-import { TTaxonomy } from 'antd-toolkit/wp'
-import { notificationProps } from 'antd-toolkit/refine'
 
 export type TAttributeTaxonomy = {
 	id: string
@@ -33,6 +33,7 @@ export type TAttributeTaxonomy = {
 
 export const ProductAttributes = () => {
 	const sortableTreeListProps = useSortableTreeList()
+
 	/** 編輯的商品規格有值時，表示編輯模式，沒有就是新增 */
 	const [attribute, setAttribute] = useState<TAttributeTaxonomy | null>(null)
 	const { SITE_URL } = useEnv()
@@ -67,7 +68,7 @@ export const ProductAttributes = () => {
 					values,
 					...notificationProps,
 				},
-				options,
+				options
 			)
 		} else {
 			create(
@@ -75,7 +76,7 @@ export const ProductAttributes = () => {
 					values,
 					...notificationProps,
 				},
-				options,
+				options
 			)
 		}
 	}

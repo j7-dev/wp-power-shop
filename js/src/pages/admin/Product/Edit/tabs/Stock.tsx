@@ -1,6 +1,7 @@
 import { Form, FormProps } from 'antd'
-import { Size, Stock as StockField, Sku } from '@/components/product/fields'
 import { Heading } from 'antd-toolkit'
+
+import { Size, Stock as StockField, Sku } from '@/components/product/fields'
 
 export const Stock = ({ formProps }: { formProps: FormProps }) => {
 	const type = Form.useWatch(['type'], formProps.form)

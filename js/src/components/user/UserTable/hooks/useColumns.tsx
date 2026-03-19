@@ -1,8 +1,9 @@
-import { TableProps } from 'antd'
-import { TUserRecord } from '@/components/user/types'
-import { UserName, UserRole } from 'antd-toolkit/wp'
-import { Price } from '@/components/general'
 import { useNavigation } from '@refinedev/core'
+import { TableProps } from 'antd'
+import { UserName, UserRole } from 'antd-toolkit/wp'
+
+import { Price } from '@/components/general'
+import { TUserRecord } from '@/components/user/types'
 
 const useColumns = () => {
 	const { edit } = useNavigation()
@@ -67,6 +68,7 @@ const useColumns = () => {
 				</>
 			),
 		},
+
 		// TODO 操作
 	]
 
