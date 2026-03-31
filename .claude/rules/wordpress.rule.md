@@ -4,7 +4,7 @@ applyTo: "**/*.php"
 
 # Power Shop — WordPress / PHP 開發指引
 
-> 適用於所有 `.php` 檔案。通用規範請參閱 `CLAUDE.md`。
+> 適用於所有 `.php` 檔案。架構概覽見 `architecture.rule.md`。
 
 ---
 
@@ -34,6 +34,34 @@ applyTo: "**/*.php"
 ---
 
 ## 3. REST API 開發
+
+### 現有端點速查
+
+**自有端點（`/wp-json/power-shop/`）：**
+
+| Method | 端點 | 說明 |
+|--------|------|------|
+| GET | `reports/dashboard/stats` | KPI 統計 |
+| GET | `reports/dashboard/leaderboard` | 排行榜 |
+| GET | `reports/dashboard/trend` | 趨勢圖表 |
+| GET | `reports/revenue` | 營收分析 |
+| POST | `customers/{id}/notes` | 新增顧客備註 |
+| GET | `customers/{id}/notes` | 顧客備註列表 |
+
+**WooCommerce 端點（`/wp-json/wc/v3/`）：**
+
+| Method | 端點 | 說明 |
+|--------|------|------|
+| GET/POST | `orders` | 訂單列表/建立 |
+| PUT | `orders/{id}` | 更新訂單 |
+| POST | `orders/batch` | 批量刪除 |
+| POST | `orders/{id}/notes` | 新增備註 |
+| GET/POST | `products` | 商品列表/建立 |
+| PUT | `products/{id}` | 更新商品 |
+| POST | `products/{id}/variations/batch` | 批量變體 |
+| GET/POST | `products/categories` | 分類列表/建立 |
+| GET | `customers` | 顧客列表 |
+| GET/PUT | `customers/{id}` | 顧客詳情/更新 |
 
 ### ApiBase Pattern
 
@@ -126,6 +154,13 @@ final class MyDto {
 }
 ```
 
+在 V2Api callback 中使用 DTO：
+
+```php
+$dto = new MyDto( $raw_data );
+return new \WP_REST_Response([ 'code' => 'success', 'data' => $dto->to_array() ]);
+```
+
 ---
 
 ## 5. Domain 組織結構
@@ -193,8 +228,19 @@ $encrypt_env = PowerhouseUtils::simple_encrypt([
 
 1. **Nonce 驗證** — 所有 REST 呼叫透過 `X-WP-Nonce` header 驗證。
 2. **Capability 檢查** — `permission_callback` 使用 Powerhouse 預設認證（`manage_woocommerce`）。
-3. **輸入清理** — 所有 REST request params 使用 `WP::sanitize_text_field_deep()`。
-4. **輸出跳脫** — `\esc_html()`、`\esc_attr()`、`\esc_url()` 用於所有 PHP 輸出。
+3. **環境加密** — API key、nonce 等透過 `SimpleEncrypt` 加密傳遞到前端。
+4. **輸入清理** — 所有 REST request params 使用 `WP::sanitize_text_field_deep()`。
+5. **輸出跳脫** — `\esc_html()`、`\esc_attr()`、`\esc_url()` 用於所有 PHP 輸出。
+
+**新增 REST API 完成清單：**
+
+- [ ] `declare(strict_types=1)` 在檔案頂部
+- [ ] `WP::sanitize_text_field_deep()` 處理所有輸入
+- [ ] `\esc_html()` / `\esc_attr()` / `\esc_url()` 處理所有輸出
+- [ ] `permission_callback` 已設定（`null` = Powerhouse 預設認證）
+- [ ] 新 API class 已在 `Domains/Loader.php` 註冊
+- [ ] `composer lint` 通過
+- [ ] `vendor/bin/phpstan analyse inc` 通過
 
 ---
 
@@ -206,24 +252,9 @@ $encrypt_env = PowerhouseUtils::simple_encrypt([
 
 ---
 
-## 10. 程式碼品質工具
+## 10. 程式碼品質
 
-```bash
-# PHP linting（WPCS 規則，設定檔：phpcs.xml）
-composer lint
+- **PHPCS** (`phpcs.xml`) — WordPress-Core、WordPress-Docs、WordPress-Extra（排除短陣列、Yoda 條件等）。
+- **PHPStan** (`phpstan.neon`) — level 9，包含 WordPress + WooCommerce stubs 及 `powerhouse` plugin stubs。
 
-# PHP 靜態分析（PHPStan level 9，設定檔：phpstan.neon）
-vendor/bin/phpstan analyse inc --memory-limit=1G
-```
-
-- **PHPCS** — WordPress-Core、WordPress-Docs、WordPress-Extra（排除短陣列、Yoda 條件等）。
-- **PHPStan** — level 9，包含 WordPress + WooCommerce stubs 及 `powerhouse` plugin stubs。
-
----
-
-## 11. 參考規格文件
-
-- **API 規格：** `specs/api/api.yml`（OpenAPI 3.0，完整端點定義）
-- **資料模型：** `specs/entity/erm.dbml`（9 資料表）
-- **功能規格：** `specs/features/**/*.feature`（20 個 Feature）
-- **業務流程：** `specs/activities/*.activity`（4 個流程）
+> Lint 指令見 `CLAUDE.md`。
