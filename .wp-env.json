@@ -5,7 +5,7 @@
 	"testsEnvironment": false,
 	"plugins": [
 		"https://downloads.wordpress.org/plugin/woocommerce.zip",
-		"https://github.com/j7-dev/wp-powerhouse/releases/latest/download/powerhouse.zip",
+		"https://github.com/p9-cloud/wp-powerhouse/releases/latest/download/powerhouse.zip",
 		"."
 	],
 	"config": {

@@ -21,11 +21,11 @@
 
 2. 隨你喜好，任你挑選<br>
    在快速商店裡面，可以隨意挑選你想要的商品<br>
-   <img src="https://github.com/j7-dev/power-shop.wp-plugin/assets/9213776/a03a2fd0-813c-4cfa-977a-cdc14b773eb5" />
+   <img src="https://github.com/p9-cloud/power-shop.wp-plugin/assets/9213776/a03a2fd0-813c-4cfa-977a-cdc14b773eb5" />
 
 3. 自訂商品的價格<br>
    挑選完商品，你可以看到每個商品的預設價格，但你可以自己決定自己挑選的商品要賣多少<br>
-   <img src="https://github.com/j7-dev/power-shop.wp-plugin/assets/9213776/861903f9-2238-474c-9c82-cd65a1d57c6c" />
+   <img src="https://github.com/p9-cloud/power-shop.wp-plugin/assets/9213776/861903f9-2238-474c-9c82-cd65a1d57c6c" />
 
 4. 更流暢的購物車<br>
    使用 "樂觀變更" (optimistic mutate) 即，畫面 UI 先更新，再發送請求，而不是等待請求回傳後再更新畫面，這樣可以讓使用者的購物體驗更加流暢<br>
@@ -33,7 +33,7 @@
 
 5. 統計每一個快速商店的訂單<br>
    每一筆訂單都會紀錄是由哪一個快速商店產生的，在每一頁快速商店頁面底下也會統計近期的銷售與訂單狀態，方便統計分潤<br>
-   <img src="https://github.com/j7-dev/power-shop.wp-plugin/assets/9213776/b3887d76-ac1d-40f1-bbeb-03bc7814db64" />
+   <img src="https://github.com/p9-cloud/power-shop.wp-plugin/assets/9213776/b3887d76-ac1d-40f1-bbeb-03bc7814db64" />
 
 <br><br><br>
 

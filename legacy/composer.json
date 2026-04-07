@@ -1,5 +1,5 @@
 {
-  "name": "j7-dev/wp-power-shop",
+  "name": "p9-cloud/wp-power-shop",
   "description": "Power Shop 是一個 WordPress 套件，安裝後，可以讓你的 Woocommerce 商店變成可以提供給多人使用的一頁商店，並且可以讓使用者自訂商品的價格，以及統計每個一頁商店的訂單狀態與銷售額",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-only",

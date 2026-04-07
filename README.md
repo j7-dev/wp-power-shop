@@ -2,7 +2,7 @@
 
 > 優化 WooCommerce 操作介面，以更人性化的方式管理電商平台
 
-[![Version](https://img.shields.io/badge/version-3.0.11-blue)](https://github.com/j7-dev/wp-power-shop/releases)
+[![Version](https://img.shields.io/badge/version-3.0.11-blue)](https://github.com/p9-cloud/wp-power-shop/releases)
 [![PHP](https://img.shields.io/badge/PHP-8.0%2B-777BB4)](https://www.php.net/)
 [![WordPress](https://img.shields.io/badge/WordPress-5.7%2B-21759B)](https://wordpress.org/)
 [![WooCommerce](https://img.shields.io/badge/WooCommerce-7.6.0%2B-96588A)](https://woocommerce.com/)
@@ -40,7 +40,7 @@ The plugin is part of the **Powerhouse** ecosystem — a suite of premium WordPr
 | PHP | 8.0 |
 | WordPress | 5.7 |
 | WooCommerce | 7.6.0 |
-| [Powerhouse](https://github.com/j7-dev/wp-powerhouse) | 3.3.20 |
+| [Powerhouse](https://github.com/p9-cloud/wp-powerhouse) | 3.3.20 |
 
 ---
 
@@ -48,7 +48,7 @@ The plugin is part of the **Powerhouse** ecosystem — a suite of premium WordPr
 
 ### From Release ZIP (Recommended)
 
-1. Download the latest release from [GitHub Releases](https://github.com/j7-dev/wp-power-shop/releases).
+1. Download the latest release from [GitHub Releases](https://github.com/p9-cloud/wp-power-shop/releases).
 2. In WordPress admin → **Plugins → Add New → Upload Plugin**, upload the ZIP.
 3. Activate **Power Shop**.
 4. Ensure **WooCommerce** and **Powerhouse** are also active.
@@ -57,7 +57,7 @@ The plugin is part of the **Powerhouse** ecosystem — a suite of premium WordPr
 
 ```bash
 # 1. Clone into your WordPress plugins directory
-git clone https://github.com/j7-dev/wp-power-shop.git power-shop
+git clone https://github.com/p9-cloud/wp-power-shop.git power-shop
 cd power-shop
 
 # 2. Install PHP dependencies

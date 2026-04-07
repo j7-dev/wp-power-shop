@@ -48,7 +48,7 @@ final class Plugin {
 			[
 				'name'     => 'Powerhouse',
 				'slug'     => 'powerhouse',
-				'source'   => 'https://github.com/j7-dev/wp-powerhouse/releases/latest/download/powerhouse.zip',
+				'source'   => 'https://github.com/p9-cloud/wp-powerhouse/releases/latest/download/powerhouse.zip',
 				'version'  => '3.3.20',
 				'required' => true,
 			],
@@ -57,7 +57,7 @@ final class Plugin {
 		$this->init(
 			[
 				'app_name'    => 'Power Shop',
-				'github_repo' => 'https://github.com/j7-dev/wp-power-shop',
+				'github_repo' => 'https://github.com/p9-cloud/wp-power-shop',
 				'callback'    => [ Bootstrap::class, 'instance' ],
 			]
 		);
