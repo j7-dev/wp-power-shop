@@ -28,7 +28,7 @@ class Bootstrap {
 	const RENDER_ID_3      = 'power_shop_products_app';
 	const RENDER_ID_4      = 'power_shop_report_app';
 	const API_TIMEOUT      = '30000';
-	const GITHUB_REPO      = 'https://github.com/p9-cloud/wp-power-shop';
+	const GITHUB_REPO      = 'https://github.com/zenbuapps/wp-power-shop';
 
 
 	/**
