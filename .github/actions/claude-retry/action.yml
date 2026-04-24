@@ -14,7 +14,7 @@ inputs:
     default: ''
   model:
     description: 'Claude model to use'
-    default: 'claude-opus-4-6'
+    default: 'opus'
   claude_code_oauth_token:
     description: 'Claude Code OAuth token'
     required: true

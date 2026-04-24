@@ -166,7 +166,7 @@ jobs:
           claude_args: |
             --dangerously-skip-permissions
             --max-turns 50
-            --model claude-opus-4-6
+            --model opus
 
       - name: "等待重試 (attempt 1 failed)"
         if: >-
@@ -196,7 +196,7 @@ jobs:
           claude_args: |
             --dangerously-skip-permissions
             --max-turns 50
-            --model claude-opus-4-6
+            --model opus
 
       - name: "等待重試 (attempt 2 failed)"
         if: >-
@@ -226,4 +226,4 @@ jobs:
           claude_args: |
             --dangerously-skip-permissions
             --max-turns 50
-            --model claude-opus-4-6
+            --model opus
