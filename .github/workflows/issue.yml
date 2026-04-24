@@ -4,6 +4,10 @@ on:
   issues:
     types: [opened, edited]
 
+concurrency:
+  group: issue-expand-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
 jobs:
   expand-requirements:
     # 粗篩：body 包含 @claude 才進 job，精確關鍵字由 step 1 的 grep 判斷
@@ -20,15 +24,15 @@ jobs:
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
-          # 擷取 @claude 後面的文字
-          AFTER_CLAUDE=$(echo "$ISSUE_BODY" | grep -oP '@claude\s+\K.*' || echo "")
+          # 擷取 @claude 後面的文字（改用 sed 以避免 PCRE \K 相依 GNU grep）
+          AFTER_CLAUDE=$(echo "$ISSUE_BODY" | sed -n 's/.*@claude[[:space:]]\+//p' | head -1 || echo "")
 
-          # 比對觸發關鍵字（新增關鍵字只需在這裡加）
-          if echo "$AFTER_CLAUDE" | grep -qiP '(展開|探討|dev|工程|領域)'; then
+          # 比對觸發關鍵字（新增關鍵字只需在這裡加；改用 ERE -E 避免 -P 相依）
+          if echo "$AFTER_CLAUDE" | grep -qiE '(展開|探討|dev|工程|領域)'; then
             echo "matched=true" >> $GITHUB_OUTPUT
 
             # 判斷模式：包含 dev 或 工程 → DEV，否則 → PM（預設）
-            if echo "$AFTER_CLAUDE" | grep -qiP '(dev|工程|領域)'; then
+            if echo "$AFTER_CLAUDE" | grep -qiE '(dev|工程|領域)'; then
               echo "mode=dev" >> $GITHUB_OUTPUT
               echo "✅ DEV 模式：$AFTER_CLAUDE"
             else
@@ -149,81 +153,15 @@ jobs:
             echo 'GHEOF'
           } >> $GITHUB_ENV
 
-      # ── 8. Run Claude Code（3 次重試）─────────────────────
-      - name: "Run Claude Code (attempt 1/3)"
-        id: claude_attempt_1
+      # ── 8. Run Claude Code（3 次重試，使用 composite action）───
+      - name: "Run Claude Code (with retry)"
         if: steps.check_keyword.outputs.matched == 'true' && steps.guard.outputs.already_expanded != 'true'
-        continue-on-error: true
-        uses: anthropics/claude-code-action@v1
+        uses: ./.github/actions/claude-retry
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          settings: .claude/settings.json
-          plugin_marketplaces: |
-            https://github.com/j7-dev/wp-workflows.git
-          plugins: |
-            wp-workflows@wp-workflows
           prompt: ${{ env.EXPAND_PROMPT }}
-          claude_args: |
-            --dangerously-skip-permissions
-            --max-turns 50
-            --model opus
-
-      - name: "等待重試 (attempt 1 failed)"
-        if: >-
-          steps.check_keyword.outputs.matched == 'true' &&
-          steps.guard.outputs.already_expanded != 'true' &&
-          steps.claude_attempt_1.outcome == 'failure'
-        run: |
-          echo "⚠️ 第 1 次嘗試失敗，等待 30 秒後重試..."
-          sleep 30
-
-      - name: "Run Claude Code (attempt 2/3)"
-        id: claude_attempt_2
-        if: >-
-          steps.check_keyword.outputs.matched == 'true' &&
-          steps.guard.outputs.already_expanded != 'true' &&
-          steps.claude_attempt_1.outcome == 'failure'
-        continue-on-error: true
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          max_turns: '50'
+          model: opus
           settings: .claude/settings.json
-          plugin_marketplaces: |
-            https://github.com/j7-dev/wp-workflows.git
-          plugins: |
-            wp-workflows@wp-workflows
-          prompt: ${{ env.EXPAND_PROMPT }}
-          claude_args: |
-            --dangerously-skip-permissions
-            --max-turns 50
-            --model opus
-
-      - name: "等待重試 (attempt 2 failed)"
-        if: >-
-          steps.check_keyword.outputs.matched == 'true' &&
-          steps.guard.outputs.already_expanded != 'true' &&
-          steps.claude_attempt_1.outcome == 'failure' &&
-          steps.claude_attempt_2.outcome == 'failure'
-        run: |
-          echo "⚠️ 第 2 次嘗試失敗，等待 60 秒後重試..."
-          sleep 60
-
-      - name: "Run Claude Code (attempt 3/3 - final)"
-        if: >-
-          steps.check_keyword.outputs.matched == 'true' &&
-          steps.guard.outputs.already_expanded != 'true' &&
-          steps.claude_attempt_1.outcome == 'failure' &&
-          steps.claude_attempt_2.outcome == 'failure'
-        uses: anthropics/claude-code-action@v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          settings: .claude/settings.json
-          plugin_marketplaces: |
-            https://github.com/j7-dev/wp-workflows.git
-          plugins: |
-            wp-workflows@wp-workflows
-          prompt: ${{ env.EXPAND_PROMPT }}
-          claude_args: |
-            --dangerously-skip-permissions
-            --max-turns 50
-            --model opus
+          plugins: wp-workflows@wp-workflows
+          plugin_marketplaces: https://github.com/j7-dev/wp-workflows.git

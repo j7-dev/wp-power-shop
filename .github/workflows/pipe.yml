@@ -47,6 +47,12 @@ jobs:
       pr_mode: ${{ steps.check_result.outputs.pr_mode }}
       run_integration_tests: ${{ steps.check_result.outputs.run_integration_tests }}
     steps:
+      - name: 驗證必要 secrets
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          [ -n "${CLAUDE_CODE_OAUTH_TOKEN}" ] || { echo "::error::缺 CLAUDE_CODE_OAUTH_TOKEN"; exit 1; }
+
       - name: 👀 對觸發留言加上 eyes reaction
         if: github.event_name == 'issue_comment' || github.event_name == 'pull_request_review_comment'
         env:
@@ -160,7 +166,7 @@ jobs:
             PIPELINE_MODE="true"
           elif echo "$AFTER_CLAUDE" | grep -qiE '(^|[^[:alnum:]])PR([^[:alnum:]]|$)'; then
             PR_MODE="true"
-          elif echo "$AFTER_CLAUDE" | grep -qiE '開工|確認|沒問題|開始|\b(OK|go|start)\b'; then
+          elif echo "$AFTER_CLAUDE" | grep -qE '開工|確認|沒問題|開始|\b(OK|GO|START|Start|Go|Ok)\b'; then
             PIPELINE_MODE="true"
           fi
 
@@ -1114,9 +1120,11 @@ jobs:
               });
             }
 
-      # ── 自動建立 PR（AI 驗收未失敗才發）─────────────────
+      # ── 自動建立 PR（測試通過且 AI 驗收未失敗才發）─────────────────
       - name: 自動建立 PR
-        if: steps.run_ai_acceptance.outcome != 'failure'
+        if: >-
+          steps.final_result.outputs.status == 'passed' &&
+          steps.run_ai_acceptance.outcome != 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

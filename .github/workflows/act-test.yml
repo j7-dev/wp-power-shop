@@ -32,8 +32,19 @@ jobs:
     outputs:
       e2e_ok: ${{ steps.mock_e2e.outcome }}
     steps:
+      # LOCAL-ONLY：此 workflow 僅供本機 act 使用，拒絕在真實 GitHub runner 執行
+      - name: 確認 LOCAL-ONLY（僅 act 環境可執行）
+        env:
+          ACT: ${{ env.ACT }}
+        run: |
+          if [ "${ACT:-false}" != "true" ]; then
+            echo "::error::act-test.yml 僅供本機 act 執行，禁止在 GitHub runner 上跑"
+            exit 1
+          fi
+          echo "✅ 偵測到 act 環境，繼續執行"
+
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: 設定 Node.js
         uses: actions/setup-node@v4
@@ -93,7 +104,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: 設定 Node.js
         uses: actions/setup-node@v4

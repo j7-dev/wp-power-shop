@@ -17,12 +17,13 @@ UPLOAD_OK=true
 for file in "${SOURCE_DIR}"/*; do
   [ -f "$file" ] || continue
   filename=$(basename "$file")
-  HTTP_CODE=$(curl --fail --silent --output /dev/null --write-out "%{http_code}" \
+  # 不使用 --fail：遇到 4xx/5xx 讓 curl 仍輸出 http_code，配合 || echo "000" 防止 set -e 中斷
+  HTTP_CODE=$(curl --silent --output /dev/null --write-out "%{http_code}" \
     --request PUT \
     --url "https://${BUNNY_STORAGE_HOST}/${BUNNY_STORAGE_ZONE}/${MEDIA_PREFIX}/${filename}" \
     --header "AccessKey: ${BUNNY_STORAGE_PASSWORD}" \
     --header "Content-Type: application/octet-stream" \
-    --data-binary "@${file}")
+    --data-binary "@${file}" || echo "000")
   if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
     echo "Uploaded: ${filename} (HTTP ${HTTP_CODE})"
   else
