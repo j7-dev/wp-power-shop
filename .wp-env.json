@@ -2,7 +2,6 @@
 	"core": "WordPress/WordPress#6.8",
 	"phpVersion": "8.2",
 	"port": 8890,
-	"testsEnvironment": false,
 	"plugins": [
 		"https://downloads.wordpress.org/plugin/woocommerce.zip",
 		"https://github.com/zenbuapps/wp-powerhouse/releases/latest/download/powerhouse.zip",
@@ -19,6 +18,7 @@
 		"wp-content/uploads": "./tests/e2e/.uploads"
 	},
 	"lifecycleScripts": {
-		"afterStart": "npx wp-env run cli -- wp option update blogname PowerShopE2E && npx wp-env run cli -- wp option update blogdescription E2ETesting && npx wp-env run cli -- wp rewrite structure /%postname%/ && npx wp-env run cli -- wp rewrite flush && npx wp-env run cli -- wp language core install zh_TW && npx wp-env run cli -- wp site switch-language zh_TW"
-	}
+		"afterStart": "npx wp-env run cli --env-cwd=wp-content/plugins/power-shop -- composer install --no-interaction 2>/dev/null || true; npx wp-env run cli -- wp option update blogname PowerShopE2E && npx wp-env run cli -- wp option update blogdescription E2ETesting && npx wp-env run cli -- wp rewrite structure /%postname%/ && npx wp-env run cli -- wp rewrite flush && npx wp-env run cli -- wp language core install zh_TW && npx wp-env run cli -- wp site switch-language zh_TW"
+	},
+	"testsPort": 8900
 }

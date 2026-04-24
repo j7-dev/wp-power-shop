@@ -1,0 +1,229 @@
+name: Issue Requirement Expansion
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  expand-requirements:
+    # 粗篩：body 包含 @claude 才進 job，精確關鍵字由 step 1 的 grep 判斷
+    if: contains(github.event.issue.body, '@claude')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+    steps:
+      # ── 1. 關鍵字比對（grep 精確匹配）────────────────────
+      - name: 檢查觸發關鍵字
+        id: check_keyword
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          # 擷取 @claude 後面的文字
+          AFTER_CLAUDE=$(echo "$ISSUE_BODY" | grep -oP '@claude\s+\K.*' || echo "")
+
+          # 比對觸發關鍵字（新增關鍵字只需在這裡加）
+          if echo "$AFTER_CLAUDE" | grep -qiP '(展開|探討|dev|工程|領域)'; then
+            echo "matched=true" >> $GITHUB_OUTPUT
+
+            # 判斷模式：包含 dev 或 工程 → DEV，否則 → PM（預設）
+            if echo "$AFTER_CLAUDE" | grep -qiP '(dev|工程|領域)'; then
+              echo "mode=dev" >> $GITHUB_OUTPUT
+              echo "✅ DEV 模式：$AFTER_CLAUDE"
+            else
+              echo "mode=pm" >> $GITHUB_OUTPUT
+              echo "✅ PM 模式（預設）：$AFTER_CLAUDE"
+            fi
+          else
+            echo "matched=false" >> $GITHUB_OUTPUT
+            echo "mode=pm" >> $GITHUB_OUTPUT
+            echo "⚠️ 未匹配到觸發關鍵字，跳過後續步驟"
+          fi
+
+      # ── 2. Eyes reaction ────────────────────────────────
+      - name: 👀 對 Issue 加上 eyes reaction
+        if: steps.check_keyword.outputs.matched == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/reactions \
+            -f content=eyes --silent
+
+      # ── 3. 重複展開防護 ─────────────────────────────────
+      - name: 檢查是否已展開過需求
+        if: steps.check_keyword.outputs.matched == 'true'
+        id: guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          MARKER="<!-- issue-creator-expanded -->"
+          EXISTING=$(gh api repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments \
+            --paginate --jq '.[].body' 2>/dev/null | grep -c "$MARKER" || echo "0")
+          if [ "$EXISTING" -gt "0" ]; then
+            echo "already_expanded=true" >> $GITHUB_OUTPUT
+            echo "⚠️ 此 Issue 已經展開過需求，跳過重複執行"
+          else
+            echo "already_expanded=false" >> $GITHUB_OUTPUT
+            echo "✅ 尚未展開過，繼續執行"
+          fi
+
+      # ── 4. Checkout（需要讀 specs 目錄）──────────────────
+      - name: Checkout repository
+        if: steps.check_keyword.outputs.matched == 'true' && steps.guard.outputs.already_expanded != 'true'
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      # ── 5. HTTPS git config ─────────────────────────────
+      - name: 強制 Git 使用 HTTPS（避免 plugin 安裝 SSH 失敗）
+        if: steps.check_keyword.outputs.matched == 'true' && steps.guard.outputs.already_expanded != 'true'
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+
+      # ── 6. 擷取 Issue 內容 ──────────────────────────────
+      - name: 擷取 Issue 內容
+        if: steps.check_keyword.outputs.matched == 'true' && steps.guard.outputs.already_expanded != 'true'
+        id: fetch_issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ISSUE_NUM="${{ github.event.issue.number }}"
+          ISSUE_TITLE=$(gh issue view "$ISSUE_NUM" --json title --jq '.title' 2>/dev/null || echo "")
+          ISSUE_BODY=$(gh issue view "$ISSUE_NUM" --json body --jq '.body' 2>/dev/null || echo "")
+          {
+            echo 'ISSUE_CONTENT<<GHEOF'
+            echo "# Issue #${ISSUE_NUM}: ${ISSUE_TITLE}"
+            echo ""
+            echo "${ISSUE_BODY}"
+            echo 'GHEOF'
+          } >> $GITHUB_ENV
+          echo "issue_num=$ISSUE_NUM" >> $GITHUB_OUTPUT
+
+      # ── 7. 組合 Prompt ──────────────────────────────────
+      - name: 組合 Issue 展開 Prompt
+        if: steps.check_keyword.outputs.matched == 'true' && steps.guard.outputs.already_expanded != 'true'
+        run: |
+          ISSUE_NUM="${{ steps.fetch_issue.outputs.issue_num }}"
+          {
+            echo 'EXPAND_PROMPT<<GHEOF'
+            echo "$ISSUE_CONTENT"
+            echo ""
+            echo "---"
+            echo ""
+            echo "你是需求展開助手，在 CI 環境中運作。"
+            echo "上方是用戶在 Issue #${ISSUE_NUM} 提出的粗略需求。"
+            echo ""
+            echo "### 任務"
+            MODE="${{ steps.check_keyword.outputs.mode }}"
+            if [ "$MODE" = "dev" ]; then
+              echo "1. 使用 /wp-workflows:issue-creator skill（DEV 開發者模式）將上方粗略需求展開為結構化的完整需求文件"
+              echo "   ⚠️ 重要：此為 DEV 模式，產出內容面向開發者，需包含技術細節、影響檔案範圍、API 規格等"
+            else
+              echo "1. 使用 /wp-workflows:issue-creator skill（PM 客服模式）將上方粗略需求展開為結構化的完整需求文件"
+              echo "   ⚠️ 重要：此為 PM 模式（預設），產出內容面向非技術人員，使用用戶旅程、業務價值描述"
+            fi
+            echo "2. issue-creator 會自動讀取 ./specs 目錄下的既有規格作為專案上下文"
+            echo "3. 展開完成後，將結果作為 Issue 留言發表（使用 gh issue comment）"
+            echo ""
+            echo "### 輸出方式"
+            echo "使用以下指令發表留言："
+            echo "  gh issue comment ${ISSUE_NUM} --body \"\$(cat <<'COMMENT_EOF'"
+            echo "  <!-- issue-creator-expanded -->"
+            echo "  （展開的完整需求內容放在這裡）"
+            echo "  COMMENT_EOF"
+            echo "  )\""
+            echo ""
+            echo "### 留言格式要求"
+            echo "- 留言開頭第一行必須是 HTML 註解標記：<!-- issue-creator-expanded -->"
+            echo "- 這個標記用於防止重複展開，不可省略"
+            echo "- 標記後面接上展開的完整需求文件內容"
+            echo ""
+            echo "### 嚴禁事項"
+            echo "- 嚴禁修改任何程式碼檔案"
+            echo "- 嚴禁建立 Git 分支"
+            echo "- 嚴禁執行 git commit"
+            echo "- 嚴禁建立 Pull Request"
+            echo "- 你的唯一輸出方式是透過 gh issue comment 發表留言"
+            echo 'GHEOF'
+          } >> $GITHUB_ENV
+
+      # ── 8. Run Claude Code（3 次重試）─────────────────────
+      - name: "Run Claude Code (attempt 1/3)"
+        id: claude_attempt_1
+        if: steps.check_keyword.outputs.matched == 'true' && steps.guard.outputs.already_expanded != 'true'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          settings: .claude/settings.json
+          plugin_marketplaces: |
+            https://github.com/j7-dev/wp-workflows.git
+          plugins: |
+            wp-workflows@wp-workflows
+          prompt: ${{ env.EXPAND_PROMPT }}
+          claude_args: |
+            --dangerously-skip-permissions
+            --max-turns 50
+            --model claude-opus-4-6
+
+      - name: "等待重試 (attempt 1 failed)"
+        if: >-
+          steps.check_keyword.outputs.matched == 'true' &&
+          steps.guard.outputs.already_expanded != 'true' &&
+          steps.claude_attempt_1.outcome == 'failure'
+        run: |
+          echo "⚠️ 第 1 次嘗試失敗，等待 30 秒後重試..."
+          sleep 30
+
+      - name: "Run Claude Code (attempt 2/3)"
+        id: claude_attempt_2
+        if: >-
+          steps.check_keyword.outputs.matched == 'true' &&
+          steps.guard.outputs.already_expanded != 'true' &&
+          steps.claude_attempt_1.outcome == 'failure'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          settings: .claude/settings.json
+          plugin_marketplaces: |
+            https://github.com/j7-dev/wp-workflows.git
+          plugins: |
+            wp-workflows@wp-workflows
+          prompt: ${{ env.EXPAND_PROMPT }}
+          claude_args: |
+            --dangerously-skip-permissions
+            --max-turns 50
+            --model claude-opus-4-6
+
+      - name: "等待重試 (attempt 2 failed)"
+        if: >-
+          steps.check_keyword.outputs.matched == 'true' &&
+          steps.guard.outputs.already_expanded != 'true' &&
+          steps.claude_attempt_1.outcome == 'failure' &&
+          steps.claude_attempt_2.outcome == 'failure'
+        run: |
+          echo "⚠️ 第 2 次嘗試失敗，等待 60 秒後重試..."
+          sleep 60
+
+      - name: "Run Claude Code (attempt 3/3 - final)"
+        if: >-
+          steps.check_keyword.outputs.matched == 'true' &&
+          steps.guard.outputs.already_expanded != 'true' &&
+          steps.claude_attempt_1.outcome == 'failure' &&
+          steps.claude_attempt_2.outcome == 'failure'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          settings: .claude/settings.json
+          plugin_marketplaces: |
+            https://github.com/j7-dev/wp-workflows.git
+          plugins: |
+            wp-workflows@wp-workflows
+          prompt: ${{ env.EXPAND_PROMPT }}
+          claude_args: |
+            --dangerously-skip-permissions
+            --max-turns 50
+            --model claude-opus-4-6
