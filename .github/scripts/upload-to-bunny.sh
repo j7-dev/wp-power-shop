@@ -4,7 +4,9 @@
 #
 # Required env vars: BUNNY_STORAGE_HOST, BUNNY_STORAGE_ZONE,
 #                    BUNNY_STORAGE_PASSWORD, BUNNY_CDN_URL
-# Outputs to $GITHUB_OUTPUT: screenshot_files, video_files, media_url_prefix, has_media
+# Outputs to $GITHUB_OUTPUT: screenshot_files, video_files, media_url_prefix, has_media, upload_ok
+#   - has_media:  true 若 source-dir 內有任何 .png / .webm 檔案
+#   - upload_ok:  true 若所有上傳的檔案 HTTP 2xx（無媒體時保持 true，代表「無錯誤」）
 
 set -euo pipefail
 
@@ -32,7 +34,15 @@ done
 SCREENSHOT_FILES=$(ls "${SOURCE_DIR}"/*.png 2>/dev/null | xargs -I{} basename {} | tr '\n' ',' || echo "")
 VIDEO_FILES=$(ls "${SOURCE_DIR}"/*.webm 2>/dev/null | xargs -I{} basename {} | tr '\n' ',' || echo "")
 
+# has_media: 純粹判斷有無媒體檔（語意：是否需要發佈報告）
+if [ -n "${SCREENSHOT_FILES}${VIDEO_FILES}" ]; then
+  HAS_MEDIA=true
+else
+  HAS_MEDIA=false
+fi
+
 echo "screenshot_files=${SCREENSHOT_FILES}" >> "$GITHUB_OUTPUT"
 echo "video_files=${VIDEO_FILES}" >> "$GITHUB_OUTPUT"
 echo "media_url_prefix=${BUNNY_CDN_URL}/${MEDIA_PREFIX}" >> "$GITHUB_OUTPUT"
-echo "has_media=${UPLOAD_OK}" >> "$GITHUB_OUTPUT"
+echo "has_media=${HAS_MEDIA}" >> "$GITHUB_OUTPUT"
+echo "upload_ok=${UPLOAD_OK}" >> "$GITHUB_OUTPUT"
