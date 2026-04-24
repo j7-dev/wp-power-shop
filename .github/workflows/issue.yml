@@ -83,8 +83,9 @@ jobs:
       - name: 強制 Git 使用 HTTPS（避免 plugin 安裝 SSH 失敗）
         if: steps.check_keyword.outputs.matched == 'true' && steps.guard.outputs.already_expanded != 'true'
         run: |
-          git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+          # 需用 --add，否則第二行 insteadOf 會覆寫第一行（同 key 的 plain set 是替換）
+          git config --global --add url."https://github.com/".insteadOf "git@github.com:"
+          git config --global --add url."https://github.com/".insteadOf "ssh://git@github.com/"
 
       # ── 6. 擷取 Issue 內容 ──────────────────────────────
       - name: 擷取 Issue 內容

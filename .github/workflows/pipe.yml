@@ -127,8 +127,9 @@ jobs:
 
       - name: 強制 Git 使用 HTTPS（避免 plugin 安裝 SSH 失敗）
         run: |
-          git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+          # 需用 --add，否則第二行 insteadOf 會覆寫第一行（同 key 的 plain set 是替換）
+          git config --global --add url."https://github.com/".insteadOf "git@github.com:"
+          git config --global --add url."https://github.com/".insteadOf "ssh://git@github.com/"
 
       - name: 儲存初始 Git SHA
         id: save_sha
@@ -528,8 +529,9 @@ jobs:
 
       - name: 強制 Git 使用 HTTPS（避免 plugin 安裝 SSH 失敗）
         run: |
-          git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+          # 需用 --add，否則第二行 insteadOf 會覆寫第一行（同 key 的 plain set 是替換）
+          git config --global --add url."https://github.com/".insteadOf "git@github.com:"
+          git config --global --add url."https://github.com/".insteadOf "ssh://git@github.com/"
 
       # ── 測試環境設置 ─────────────────────────────────
       - name: 設定 Node.js
