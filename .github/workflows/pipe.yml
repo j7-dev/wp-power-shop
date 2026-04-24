@@ -647,7 +647,7 @@ jobs:
           claude_args: |
             --dangerously-skip-permissions
             --max-turns 60
-            --model claude-opus-4-6
+            --model opus
 
       # ── 測試循環 2/3 ─────────────────────────────────
       - name: "Playwright E2E 測試 (cycle 2/3)"
@@ -702,7 +702,7 @@ jobs:
           claude_args: |
             --dangerously-skip-permissions
             --max-turns 60
-            --model claude-opus-4-6
+            --model opus
 
       # ── 測試循環 3/3（最終測試，無修復）───────────────
       - name: "Playwright E2E 測試 (cycle 3/3 - final)"
@@ -921,7 +921,7 @@ jobs:
           claude_args: |
             --dangerously-skip-permissions
             --max-turns 200
-            --model claude-opus-4-6
+            --model opus
             --agent wp-workflows:browser-tester
 
       # ── Smoke Test 媒體收集 + 上傳到 Bunny CDN ──
