@@ -543,7 +543,7 @@ jobs:
           version: 10
 
       - name: 安裝 Node 依賴
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: 安裝 Composer 依賴（主機端）
         run: composer install --no-interaction --prefer-dist
@@ -984,8 +984,10 @@ jobs:
           BUNNY_STORAGE_ZONE: ${{ secrets.BUNNY_STORAGE_ZONE }}
           BUNNY_STORAGE_PASSWORD: ${{ secrets.BUNNY_STORAGE_PASSWORD }}
           BUNNY_CDN_URL: ${{ secrets.BUNNY_CDN_URL }}
+          WORKING_BRANCH: ${{ needs.claude.outputs.branch_name }}
         run: |
-          BRANCH_DIR=$(echo "${{ github.ref_name }}" | sed 's/[^a-zA-Z0-9._-]/-/g')
+          # 使用 job 1 實際 checkout 的分支名稱，避免 issue_comment 事件下 github.ref_name 固定為 master 導致不同分支互相覆蓋
+          BRANCH_DIR=$(echo "${WORKING_BRANCH:-${GITHUB_REF_NAME}}" | sed 's/[^a-zA-Z0-9._-]/-/g')
           bash .github/scripts/upload-to-bunny.sh /tmp/smoke-media "ci/${BRANCH_DIR}/smoke-test"
 
       - name: 上傳 Smoke Test 媒體 Artifact (備份)
