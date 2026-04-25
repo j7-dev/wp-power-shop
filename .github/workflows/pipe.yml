@@ -9,7 +9,7 @@ on:
     types: [submitted]
 
 concurrency:
-  group: claude-pipe-${{ github.event.issue.number || github.event.pull_request.number }}-${{ github.event.sender.type }}
+  group: claude-pipe-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}-${{ github.event.sender.type }}
   cancel-in-progress: true
 
 jobs:
@@ -167,7 +167,7 @@ jobs:
             PIPELINE_MODE="true"
           elif echo "$AFTER_CLAUDE" | grep -qiE '(^|[^[:alnum:]])PR([^[:alnum:]]|$)'; then
             PR_MODE="true"
-          elif echo "$AFTER_CLAUDE" | grep -qE '開工|確認|沒問題|開始|\b(OK|GO|START|Start|Go|Ok)\b'; then
+          elif echo "$AFTER_CLAUDE" | grep -qiE '開工|確認|沒問題|開始|\b(OK|go|start)\b'; then
             PIPELINE_MODE="true"
           fi
 
@@ -482,6 +482,10 @@ jobs:
 
           if [ "$LOCAL_SHA" = "$REMOTE_SHA" ]; then
             echo "ℹ️ Local 與 remote 已同步，無需推送"
+          elif [ "$REMOTE_SHA" = "none" ]; then
+            echo "🔄 Remote 分支尚未建立，首次推送 local commits（local: ${LOCAL_SHA:0:7}）"
+            git push origin "HEAD:${BRANCH}"
+            echo "✅ 首次推送完成"
           else
             echo "🔄 偵測到 local commits 未推送（local: ${LOCAL_SHA:0:7}, remote: ${REMOTE_SHA:0:7}）"
             git push origin "HEAD:${BRANCH}" --force-with-lease
@@ -1093,9 +1097,19 @@ jobs:
               combinedMd += `<details>\n<summary><b>${groupTitle}</b></summary>\n\n${groupContent}</details>\n\n`;
             }
 
+            // run_ai_acceptance 可能是 success / failure / skipped（條件 detect_smoke.needed 未觸發時）
             const smokeStatus = '${{ steps.run_ai_acceptance.outcome }}';
-            const emoji = smokeStatus === 'success' ? '✅' : '⚠️';
-            const statusText = smokeStatus === 'success' ? '通過' : '異常';
+            let emoji, statusText;
+            if (smokeStatus === 'success') {
+              emoji = '✅';
+              statusText = '通過';
+            } else if (smokeStatus === 'skipped' || smokeStatus === '') {
+              emoji = 'ℹ️';
+              statusText = '未觸發';
+            } else {
+              emoji = '⚠️';
+              statusText = '異常';
+            }
 
             const mainContent = processedReport
               ? processedReport
@@ -1205,30 +1219,30 @@ jobs:
             AI_BADGE="⏭️ AI 驗收狀態: ${AI_OUTCOME}"
           fi
 
-          # 建立 PR
+          # 建立 PR — 用 printf 拼 body，避免 heredoc 結束標記縮排與 YAML block scalar 衝突。
+          PR_BODY=$(printf '%s\n' \
+            '## Summary' \
+            "${CLOSE_LINE}" \
+            '' \
+            '由 Claude Code 根據 Issue 需求自動實作。' \
+            '' \
+            '## 測試結果' \
+            "${TEST_BADGE}" \
+            '' \
+            '## AI 驗收' \
+            "${AI_BADGE}" \
+            '' \
+            '## Checklist' \
+            '- [ ] Code review 完成' \
+            '- [ ] 測試通過確認' \
+            '- [ ] 無安全性疑慮' \
+            '' \
+            '---' \
+            '*🤖 此 PR 由 Claude Code CI 自動建立*')
+
           gh pr create \
             --title "$PR_TITLE" \
-            --body "$(cat <<EOF
-          ## Summary
-          ${CLOSE_LINE}
-
-          由 Claude Code 根據 Issue 需求自動實作。
-
-          ## 測試結果
-          ${TEST_BADGE}
-
-          ## AI 驗收
-          ${AI_BADGE}
-
-          ## Checklist
-          - [ ] Code review 完成
-          - [ ] 測試通過確認
-          - [ ] 無安全性疑慮
-
-          ---
-          *🤖 此 PR 由 Claude Code CI 自動建立*
-          EOF
-          )" \
+            --body "$PR_BODY" \
             --base master \
             --head "$CURRENT_BRANCH"
 
