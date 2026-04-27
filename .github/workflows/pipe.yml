@@ -490,6 +490,10 @@ jobs:
           LOCAL_SHA=$(git rev-parse HEAD)
           REMOTE_SHA=$(git rev-parse "origin/${BRANCH}" 2>/dev/null || echo "none")
 
+          # claude-code-action@v1 post-cleanup 會移除 git auth header，
+          # 必須重新設定 remote URL 以確保 push 認證正常
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
+
           if [ "$LOCAL_SHA" = "$REMOTE_SHA" ]; then
             echo "ℹ️ Local 與 remote 已同步，無需推送"
           elif [ "$REMOTE_SHA" = "none" ]; then
