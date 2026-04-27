@@ -13,6 +13,9 @@ Clarifier 已完成需求釐清，規格文件位於 ./specs 目錄。
 - 測試策略（Playwright E2E；若涉及 REST API 也標註手動驗證方式）
 - 風險評估與注意事項（尤其 WooCommerce 相容性、HPOS、REST API nonce）
 
+### Commit 語言
+- 所有 git commit message 必須使用繁體中文撰寫
+
 ### 重要規則
 - 只做規劃，不要實作程式碼
 - 計畫要具體到可以直接交給 tdd-coordinator 執行

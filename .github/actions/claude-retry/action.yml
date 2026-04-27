@@ -9,7 +9,7 @@ inputs:
     description: 'Max conversation turns'
     default: '120'
   agent:
-    description: 'Agent name (e.g. wp-workflows:clarifier)'
+    description: 'Agent name (e.g. zenbu-powers:clarifier)'
     required: false
     default: ''
   model:
@@ -23,10 +23,10 @@ inputs:
     default: '.claude/settings.json'
   plugins:
     description: 'Plugin list'
-    default: 'wp-workflows@wp-workflows'
+    default: 'zenbu-powers@zenbu-powers'
   plugin_marketplaces:
     description: 'Plugin marketplace URLs'
-    default: 'https://github.com/j7-dev/wp-workflows.git'
+    default: 'https://github.com/zenbuapps/zenbu-powers.git'
 
 outputs:
   success:

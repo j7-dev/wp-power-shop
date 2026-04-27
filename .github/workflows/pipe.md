@@ -38,7 +38,7 @@
 
 | output | 意義 |
 |--------|------|
-| `branch_name` / `issue_num` | 本輪 `issue/{N}-{timestamp}` 分支與 issue 編號 |
+| `branch_name` / `issue_num` | 本輪 `issue/{N}` 分支與 issue 編號（fallback 到舊格式 `issue/{N}-*`） |
 | `initial_sha` | 進入 workflow 時的 HEAD（用於偵測變更） |
 | `claude_ok` | clarifier + (planner/tdd) 整體成敗；skipped 視為 OK |
 | `has_changes` | 是否有 commit 或 working tree 變動 |
@@ -50,12 +50,12 @@
 
 | 段 | 核心動作 |
 |----|---------|
-| **A** 前置 | eyes reaction → checkout(fetch-depth 0) → `resolve_branch`（找或建 `issue/{N}-*`）→ HTTPS → `save_sha` |
+| **A** 前置 | eyes reaction → checkout(fetch-depth 0) → `resolve_branch`（找或建 `issue/{N}`，fallback 舊格式 `issue/{N}-*`）→ HTTPS → `save_sha` |
 | **B** 模式解析 | `parse_agent` 設 `PIPELINE_MODE`/`FULL_AUTO_MODE`/`PR_MODE` → `fetch_context`（issue 上下文）→ 組 clarifier prompt（`PR_MODE=true` 則跳過） |
-| **C** Clarifier | `claude-retry` composite action，agent=`wp-workflows:clarifier`，`max_turns=200`(pipeline)/`120`(interactive)；`PR_MODE=true` 跳過 |
-| **D** 橋接 | `detect_specs`（比對 `specs/` diff）→ `dynamic_upgrade`（interactive + 生成 specs → 升級 pipeline_mode）→ 通知留言 |
-| **E** Planner | `specs_available && pipeline_mode` 才跑；agent=`wp-workflows:planner`，`max_turns=120` |
-| **F** TDD | `planner_ok=true` 才跑；agent=`wp-workflows:tdd-coordinator`，`max_turns=200` |
+| **C** Clarifier | `claude-retry` composite action，agent=`zenbu-powers:clarifier`，`max_turns=200`(pipeline)/`120`(interactive)；`PR_MODE=true` 跳過 |
+| **D** 橋接 | `detect_specs`（比對 `specs/` diff，early exit 時設 `specs_available=false`）→ `dynamic_upgrade`（`PR_MODE!=true` && interactive + 生成 specs → 升級 pipeline_mode）→ 通知留言 |
+| **E** Planner | `PR_MODE!=true` && `specs_available && pipeline_mode` 才跑；agent=`zenbu-powers:planner`，`max_turns=120` |
+| **F** TDD | `PR_MODE!=true` && `planner_ok=true` 才跑；agent=`zenbu-powers:tdd-coordinator`，`max_turns=200` |
 | **G** 收尾 | `check_result` 匯整 outputs → 若有變更 `git push --force-with-lease` 兜底推送 |
 
 ---
@@ -83,7 +83,7 @@ run_integration_tests == 'true' &&
 | **I** Playwright 安裝 | apt-get noto-cjk → `tests/e2e` 內 `npm install` + `playwright install chromium --with-deps` |
 | **J** E2E 3 循環 | `test_cycle_1`（`npx playwright test --reporter=list`）失敗 → `claude_fix_1` → `test_cycle_2`（含重 build）失敗 → `claude_fix_2` → `test_cycle_3`（final，無修復）。所有步驟 `continue-on-error: true`，fix 走 `anthropics/claude-code-action@v1` |
 | **K** 彙整 | `final_result` 推導 cycle/status → 用 `templates/test-result-comment.md` 渲染留言 |
-| **L** AI 驗收 | `detect_smoke` 檢查 diff 有無動到 `js/src/`、`inc/classes/` → 標記 `.e2e-progress.json`（無 LC bypass）→ 建立輸出目錄 → `run_ai_acceptance`（agent=`wp-workflows:browser-tester`） |
+| **L** AI 驗收 | `detect_smoke` 檢查 diff 有無動到 `js/src/`、`inc/classes/` → 標記 `.e2e-progress.json`（無 LC bypass）→ 建立輸出目錄 → `run_ai_acceptance`（agent=`zenbu-powers:browser-tester`） |
 | **M** 媒體 | `collect_smoke_media` 集中到 `/tmp/smoke-media` → 上傳 Bunny CDN（`ci/{branch}/smoke-test`）→ Artifact 備份 7 天 → 發 Smoke Test 報告留言（**已修正 power-course 範本的條件 bug**：`if` 改為引用 `collect_smoke_media.outputs.has_media`） |
 | **N** PR 守門 | `run_ai_acceptance.outcome != 'failure'` → `gh pr create`；反之發「驗收失敗不自動開 PR」通知 |
 
@@ -101,7 +101,7 @@ run_integration_tests == 'true' &&
 | Prompt 模板 | `.github/prompts/{clarifier-pipeline,clarifier-interactive,planner,tdd-coordinator}.md` |
 | 留言模板 | `.github/templates/{pipeline-upgrade-comment,test-result-comment,acceptance-comment}.md` |
 | Shell script | `.github/scripts/upload-to-bunny.sh` |
-| Marketplace | `https://github.com/j7-dev/wp-workflows.git` |
+| Marketplace | `https://github.com/zenbuapps/zenbu-powers.git` |
 | Secrets | `CLAUDE_CODE_OAUTH_TOKEN`、`BUNNY_STORAGE_{HOST,ZONE,PASSWORD}`、`BUNNY_CDN_URL` |
 
 ---
@@ -115,6 +115,9 @@ run_integration_tests == 'true' &&
 5. **AI 驗收 prompt 寫死 `http://localhost:8890`**：與 `.wp-env.json` port 耦合（power-shop 使用 8890）。
 6. **修改前端後須重 build**：`test_cycle_2/3` 已內建 `pnpm run build` 重建，但 `test_cycle_1` 未做（依賴 H 段的 build）；fix step 改完 React 後若不重 build，wp-env 會繼續載入舊 dist。
 7. **wp-env env-cwd 路徑**：對應 `.wp-env.json` 的 `mappings`（uploads → `./tests/e2e/.uploads`），plugin 路徑為 `wp-content/plugins/power-shop`（與目錄名一致）。
+8. **分支命名格式**：新分支使用 `issue/{N}`（無時間戳），`resolve_branch` 會優先匹配 `origin/issue/{N}`，fallback 到舊格式 `origin/issue/{N}-*`。
+9. **Commit 語言**：所有 prompt 檔案均要求 agent 以繁體中文撰寫 commit message。
+10. **PR_MODE 防護**：`dynamic_upgrade`、Planner、`detect_planner`、TDD 步驟均加上 `env.PR_MODE != 'true'` 條件，避免 PR 模式誤觸實作管線。
 
 ---
 

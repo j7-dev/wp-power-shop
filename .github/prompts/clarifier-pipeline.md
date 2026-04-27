@@ -9,6 +9,9 @@
 - 完成後 commit specs 到當前分支
 - 使用 `gh issue comment {{ISSUE_NUM}} --body "..."` 回報規格生成進度
 
+### Commit 語言
+- 所有 git commit message 必須使用繁體中文撰寫
+
 ### 嚴禁
 - 不要實作功能程式碼（實作由後續 workflow step 的 tdd-coordinator 負責）
 - 不要啟動任何 sub-agent（planner、tdd-coordinator 等）

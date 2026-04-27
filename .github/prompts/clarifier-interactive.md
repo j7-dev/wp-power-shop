@@ -53,6 +53,9 @@
   3. 使用 `gh issue comment {{ISSUE_NUM}} --body "..."` 回報規格生成進度
   4. 結束本次 run（後續 workflow step 會自動啟動 tdd-coordinator）
 
+### Commit 語言
+- 所有 git commit message 必須使用繁體中文撰寫
+
 ### 嚴禁
 - 第一輪提問嚴禁少於 5 個問題
 - 第一輪嚴禁判斷「需求已夠清晰」

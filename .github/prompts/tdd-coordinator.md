@@ -12,6 +12,9 @@ Clarifier 已完成需求釐清，Planner 已制定實作計畫。
 4. 所有變更 commit 到當前分支
 5. 使用 `gh issue comment {{ISSUE_NUM}} --body "..."` 回報每個階段的進度
 
+### Commit 語言
+- 所有 git commit message 必須使用繁體中文撰寫
+
 ### 重要規則
 - 在 CI 環境中直接在當前分支工作
 - 每個有意義的實作步驟都要 commit

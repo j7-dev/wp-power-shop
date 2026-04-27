@@ -104,10 +104,18 @@ jobs:
             exit 0
           fi
 
-          # 尋找最新的 issue/{N}-* 分支
+          # 尋找已存在的 issue/{N} 分支（優先精確匹配，fallback 到 issue/{N}-* 舊格式）
           git fetch origin 'refs/heads/issue/*:refs/remotes/origin/issue/*' 2>/dev/null || true
-          EXISTING_BRANCH=$(git branch -r --list "origin/issue/${ISSUE_NUM}-*" \
-            --sort=-committerdate | head -1 | tr -d ' ')
+
+          # 優先：精確匹配 origin/issue/{N}
+          EXISTING_BRANCH=""
+          if git rev-parse --verify "origin/issue/${ISSUE_NUM}" >/dev/null 2>&1; then
+            EXISTING_BRANCH="origin/issue/${ISSUE_NUM}"
+          else
+            # Fallback：匹配舊格式 origin/issue/{N}-*
+            EXISTING_BRANCH=$(git branch -r --list "origin/issue/${ISSUE_NUM}-*" \
+              --sort=-committerdate | head -1 | tr -d ' ')
+          fi
 
           if [ -n "$EXISTING_BRANCH" ]; then
             LOCAL_BRANCH=$(echo "$EXISTING_BRANCH" | sed 's|origin/||')
@@ -118,7 +126,7 @@ jobs:
           else
             echo "ℹ️ 無已存在的 issue 分支，建立新分支"
 
-            NEW_BRANCH="issue/${ISSUE_NUM}-$(date +%Y%m%d-%H%M%S)"
+            NEW_BRANCH="issue/${ISSUE_NUM}"
             echo "🌿 建立新分支: $NEW_BRANCH"
             git checkout -b "$NEW_BRANCH"
             echo "branch_switched=true" >> $GITHUB_OUTPUT
@@ -240,7 +248,7 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: ${{ env.CLARIFIER_PROMPT }}
           max_turns: ${{ env.PIPELINE_MODE == 'true' && '200' || '120' }}
-          agent: wp-workflows:clarifier
+          agent: zenbu-powers:clarifier
 
       # ══════════════════════════════════════════════════
       # Stage 1→2 橋接：偵測 Specs 變更
@@ -254,6 +262,7 @@ jobs:
 
           if [ "$CLARIFIER_OK" != "true" ]; then
             echo "specs_changed=false" >> $GITHUB_OUTPUT
+            echo "specs_available=false" >> $GITHUB_OUTPUT
             echo "❌ Clarifier 全部失敗，跳過 tdd-coordinator"
             exit 0
           fi
@@ -264,6 +273,7 @@ jobs:
           # 檢查 1：是否有任何 commit
           if [ "$CURRENT_SHA" = "$INITIAL_SHA" ]; then
             echo "specs_changed=false" >> $GITHUB_OUTPUT
+            echo "specs_available=false" >> $GITHUB_OUTPUT
             echo "ℹ️ 無任何 commit，clarifier 可能只是提問"
             exit 0
           fi
@@ -302,7 +312,7 @@ jobs:
 
       - name: 動態升級為管線模式（clarifier 已完成規格生成）
         id: dynamic_upgrade
-        if: env.PIPELINE_MODE == 'false' && steps.detect_specs.outputs.specs_changed == 'true'
+        if: env.PR_MODE != 'true' && env.PIPELINE_MODE == 'false' && steps.detect_specs.outputs.specs_changed == 'true'
         run: |
           echo "🔄 Clarifier 已生成 specs，動態升級為管線模式"
           echo "PIPELINE_MODE=true" >> $GITHUB_ENV
@@ -325,7 +335,7 @@ jobs:
       # ══════════════════════════════════════════════════
 
       - name: 組合 Planner Prompt
-        if: steps.detect_specs.outputs.specs_available == 'true' && env.PIPELINE_MODE == 'true'
+        if: env.PR_MODE != 'true' && steps.detect_specs.outputs.specs_available == 'true' && env.PIPELINE_MODE == 'true'
         run: |
           ISSUE_NUM="${{ steps.resolve_branch.outputs.issue_num }}"
           {
@@ -339,13 +349,13 @@ jobs:
 
       - name: "Stage 2: Planner"
         id: planner
-        if: steps.detect_specs.outputs.specs_available == 'true' && env.PIPELINE_MODE == 'true'
+        if: env.PR_MODE != 'true' && steps.detect_specs.outputs.specs_available == 'true' && env.PIPELINE_MODE == 'true'
         uses: ./.github/actions/claude-retry
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: ${{ env.PLANNER_PROMPT }}
           max_turns: '120'
-          agent: wp-workflows:planner
+          agent: zenbu-powers:planner
 
       # ══════════════════════════════════════════════════
       # Stage 2→3 橋接：偵測 Planner 結果
@@ -353,7 +363,7 @@ jobs:
 
       - name: 偵測 Planner 結果
         id: detect_planner
-        if: steps.detect_specs.outputs.specs_available == 'true' && env.PIPELINE_MODE == 'true'
+        if: env.PR_MODE != 'true' && steps.detect_specs.outputs.specs_available == 'true' && env.PIPELINE_MODE == 'true'
         run: |
           echo "planner_ok=${{ steps.planner.outputs.success }}" >> $GITHUB_OUTPUT
           echo "📋 Planner 結果: ${{ steps.planner.outputs.success }}"
@@ -363,7 +373,7 @@ jobs:
       # ══════════════════════════════════════════════════
 
       - name: 組合 tdd-coordinator Prompt
-        if: steps.detect_planner.outputs.planner_ok == 'true'
+        if: env.PR_MODE != 'true' && steps.detect_planner.outputs.planner_ok == 'true'
         run: |
           ISSUE_NUM="${{ steps.resolve_branch.outputs.issue_num }}"
           {
@@ -377,13 +387,13 @@ jobs:
 
       - name: "Stage 3: TDD Coordinator"
         id: tdd
-        if: steps.detect_planner.outputs.planner_ok == 'true'
+        if: env.PR_MODE != 'true' && steps.detect_planner.outputs.planner_ok == 'true'
         uses: ./.github/actions/claude-retry
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: ${{ env.TDD_PROMPT }}
           max_turns: '200'
-          agent: wp-workflows:tdd-coordinator
+          agent: zenbu-powers:tdd-coordinator
 
       # ══════════════════════════════════════════════════
       # 檢查整體結果
@@ -640,9 +650,9 @@ jobs:
             actions: read
           settings: .claude/settings.json
           plugin_marketplaces: |
-            https://github.com/j7-dev/wp-workflows.git
+            https://github.com/zenbuapps/zenbu-powers.git
           plugins: |
-            wp-workflows@wp-workflows
+            zenbu-powers@zenbu-powers
           prompt: |
             Playwright E2E 測試失敗了。請根據以下測試輸出修復程式碼。
 
@@ -696,9 +706,9 @@ jobs:
             actions: read
           settings: .claude/settings.json
           plugin_marketplaces: |
-            https://github.com/j7-dev/wp-workflows.git
+            https://github.com/zenbuapps/zenbu-powers.git
           plugins: |
-            wp-workflows@wp-workflows
+            zenbu-powers@zenbu-powers
           prompt: |
             Playwright E2E 測試第二次仍然失敗。請更仔細分析根本原因並修復。
 
@@ -875,9 +885,9 @@ jobs:
             actions: read
           settings: .claude/settings.json
           plugin_marketplaces: |
-            https://github.com/j7-dev/wp-workflows.git
+            https://github.com/zenbuapps/zenbu-powers.git
           plugins: |
-            wp-workflows@wp-workflows
+            zenbu-powers@zenbu-powers
           prompt: |
             你是 browser-tester，在 CI 環境中運作。
             這是一個 WordPress 外掛（Power Shop — WooCommerce 管理介面延伸），在 wp-env Docker 環境中運行。
@@ -936,7 +946,7 @@ jobs:
             --dangerously-skip-permissions
             --max-turns 200
             --model opus
-            --agent wp-workflows:browser-tester
+            --agent zenbu-powers:browser-tester
 
       # ── Smoke Test 媒體收集 + 上傳到 Bunny CDN ──
 

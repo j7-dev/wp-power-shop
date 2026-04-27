@@ -123,10 +123,10 @@ jobs:
             echo "### 任務"
             MODE="${{ steps.check_keyword.outputs.mode }}"
             if [ "$MODE" = "dev" ]; then
-              echo "1. 使用 /wp-workflows:issue-creator skill（DEV 開發者模式）將上方粗略需求展開為結構化的完整需求文件"
+              echo "1. 使用 /zenbu-powers:issue-creator skill（DEV 開發者模式）將上方粗略需求展開為結構化的完整需求文件"
               echo "   ⚠️ 重要：此為 DEV 模式，產出內容面向開發者，需包含技術細節、影響檔案範圍、API 規格等"
             else
-              echo "1. 使用 /wp-workflows:issue-creator skill（PM 客服模式）將上方粗略需求展開為結構化的完整需求文件"
+              echo "1. 使用 /zenbu-powers:issue-creator skill（PM 客服模式）將上方粗略需求展開為結構化的完整需求文件"
               echo "   ⚠️ 重要：此為 PM 模式（預設），產出內容面向非技術人員，使用用戶旅程、業務價值描述"
             fi
             echo "2. issue-creator 會自動讀取 ./specs 目錄下的既有規格作為專案上下文"
@@ -164,5 +164,5 @@ jobs:
           max_turns: '50'
           model: opus
           settings: .claude/settings.json
-          plugins: wp-workflows@wp-workflows
-          plugin_marketplaces: https://github.com/j7-dev/wp-workflows.git
+          plugins: zenbu-powers@zenbu-powers
+          plugin_marketplaces: https://github.com/zenbuapps/zenbu-powers.git
