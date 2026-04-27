@@ -555,8 +555,6 @@ jobs:
 
       - name: 設定 pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: 安裝 Node 依賴
         run: pnpm install --frozen-lockfile
