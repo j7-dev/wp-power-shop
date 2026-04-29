@@ -645,6 +645,10 @@ jobs:
         if: steps.test_cycle_1.outcome == 'failure'
         continue-on-error: true
         uses: anthropics/claude-code-action@v1
+        env:
+          CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"
+          MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES: "3"
+          ZENBU_HOOKS_ENABLED: "1"
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
@@ -701,6 +705,10 @@ jobs:
         if: steps.test_cycle_2.outcome == 'failure'
         continue-on-error: true
         uses: anthropics/claude-code-action@v1
+        env:
+          CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"
+          MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES: "3"
+          ZENBU_HOOKS_ENABLED: "1"
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
@@ -880,6 +888,10 @@ jobs:
         if: steps.detect_smoke.outputs.needed == 'true'
         continue-on-error: true
         uses: anthropics/claude-code-action@v1
+        env:
+          CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"
+          MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES: "3"
+          ZENBU_HOOKS_ENABLED: "1"
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 

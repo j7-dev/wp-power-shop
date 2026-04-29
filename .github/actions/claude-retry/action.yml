@@ -41,6 +41,10 @@ runs:
       id: attempt_1
       continue-on-error: true
       uses: anthropics/claude-code-action@v1
+      env:
+        CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"
+        MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES: "3"
+        ZENBU_HOOKS_ENABLED: "1"
       with:
         claude_code_oauth_token: ${{ inputs.claude_code_oauth_token }}
         additional_permissions: |
@@ -69,6 +73,10 @@ runs:
       if: steps.attempt_1.outcome == 'failure'
       continue-on-error: true
       uses: anthropics/claude-code-action@v1
+      env:
+        CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"
+        MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES: "3"
+        ZENBU_HOOKS_ENABLED: "1"
       with:
         claude_code_oauth_token: ${{ inputs.claude_code_oauth_token }}
         additional_permissions: |
@@ -97,6 +105,10 @@ runs:
       if: steps.attempt_1.outcome == 'failure' && steps.attempt_2.outcome == 'failure'
       continue-on-error: true
       uses: anthropics/claude-code-action@v1
+      env:
+        CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"
+        MAX_CONSECUTIVE_AUTOCOMPACT_FAILURES: "3"
+        ZENBU_HOOKS_ENABLED: "1"
       with:
         claude_code_oauth_token: ${{ inputs.claude_code_oauth_token }}
         additional_permissions: |
