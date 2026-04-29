@@ -1064,11 +1064,11 @@ jobs:
                 .replace(/\(screenshots\//g, `(${urlPrefix}/`)
                 .replace(/\(videos\//g, `(${urlPrefix}/`);
               processedReport = processedReport.replace(
-                /`(\d{2}-[^`]+\.webm)`/g,
+                /`(?:videos\/)?(\d{2}-[^`]+\.webm)`/g,
                 (_, fn) => `[▶️ 觀看操作影片](${urlPrefix}/${fn})`
               );
               processedReport = processedReport.replace(
-                /`(\d{2}-[^`]+\.png)`/g,
+                /`(?:screenshots\/)?(\d{2}-[^`]+\.png)`/g,
                 (_, fn) => `![${fn.replace('.png', '')}](${urlPrefix}/${fn})`
               );
             }
